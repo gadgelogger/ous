@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/NavBar.dart';
+import 'package:ous/test/debug.dart';
 import 'package:ous/test/gakubu.dart';
 import 'package:ous/test/kiban.dart';
 import 'package:ous/test/kyousyoku.dart';
@@ -70,7 +71,18 @@ class _TestState extends State<Test> {
                   launch('https://docs.google.com/forms/d/e/1FAIpQLSdhv3t-MJ7nh1J7p47ovwJKAdTRrKpTHkoHK2Ar13DMEh7UTg/viewform?usp=sf_link');
                 }
               ),
-            ),          ],
+            ),
+            Card(
+              child: ListTile(
+                  tileColor: Colors.lightGreen,
+                  leading: Icon(Icons.warning_amber_outlined),
+                  title: Text('debug',style: TextStyle(fontSize: 15) ,),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => debug(),
+                )),
+              ),
+            ),
+          ],
         ),
 
       ),

@@ -85,30 +85,30 @@ class _RigakubuState extends State<Rigakubu> {
                                           child:Padding(padding: EdgeInsets.only(
                                             top: 19,
                                           ),
-                                             child: Text(snapshot.data!.docs[index].get('zyugyoumei'),style: TextStyle(fontSize: 20.sp
-                                             ),
-                                          )
-                                        ),
+                                              child: Text(snapshot.data!.docs[index].get('zyugyoumei'),style: TextStyle(fontSize: 20.sp
+                                              ),
+                                              )
+                                          ),
                                         ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            left: 8, //左８
-                                            right: 8, //右８
+                                          left: 8, //左８
+                                          right: 8, //右８
                                         ),
                                         child: Text(''),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            left: 8, //左８
-                                            right: 8, //右８
+                                          left: 8, //左８
+                                          right: 8, //右８
                                         ),
                                         child: Text(snapshot.data!.docs[index].get('gakki'),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            left: 8, //左８
-                                            right: 8, //右８
+                                          left: 8, //左８
+                                          right: 8, //右８
                                         ),
                                         child: Text(snapshot.data!.docs[index].get('kousimei')),
                                       ),

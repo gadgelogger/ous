@@ -39,7 +39,10 @@ class _importantState extends State<important> {
         .querySelectorAll("dl > dd > a  ")
         .map((element) => 'https://www.ous.ac.jp/topics/${element.getAttribute("href")}')
         .toList();
-    print('Count: ${titles.length}');
+    final dates = document
+        .querySelectorAll("div > .p10 > dt")
+        .map((element) => element.innerText)
+        .toList();
 
     setState((){
       articles = List.generate(
@@ -47,6 +50,7 @@ class _importantState extends State<important> {
             (index) => Article(
           title: titles[index],
           url: urls[index],
+          date:dates[index],
         ),
       );
     });
@@ -55,27 +59,29 @@ class _importantState extends State<important> {
     return Scaffold(
         body: RefreshIndicator(
           onRefresh: () async {
+
             print('Loading New Data');
             await getWebsiteData();
           },
           child: ListView.builder(
-          padding: const EdgeInsets.all(12),
-          itemCount: articles.length,
-          itemBuilder: (context, index) {
-            final article = articles[index];
-            return Column(
-              children:[
-                ListTile(
-                  title: Text(article.title),
-                  subtitle: Text(article.url.replaceAll('./detail', '/detail')),
-                  onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
+            padding: const EdgeInsets.all(12),
+            itemCount: articles.length,
+            itemBuilder: (context, index) {
+              final article = articles[index];
+              return Column(
+                children:[
+                  ListTile(
+                    title: Text(article.title),
+                    subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                    onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
 
-                ),
-                Divider(),//区切り線
-              ],
-            );
-          },
-        ),
+                  ),
+                  Divider(),
+                  //区切り線
+                ],
+              );
+            },
+          ),
         )
     );
   }
@@ -85,10 +91,12 @@ class _importantState extends State<important> {
 class Article {
   final String url;
   final String title;
+  final String date;
 
   const Article({
     required this.url,
     required this.title,
+    required this.date,
 
   });
 }

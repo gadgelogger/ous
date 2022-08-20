@@ -5,6 +5,7 @@ import 'package:ous/info/2.dart';
 import 'package:ous/info/3.dart';
 import 'package:ous/info/4.dart';
 import 'package:ous/info/5.dart';
+import 'package:ous/info/6.dart';
 import 'package:ous/info/all.dart';
 class Info extends StatelessWidget {
   const Info({Key? key}) : super(key: key);
@@ -12,7 +13,7 @@ class Info extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -48,6 +49,11 @@ class Info extends StatelessWidget {
                     fontSize: 15.0,
                   ),
                 ),
+                Text('おかりかチャンネル',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                  ),
+                ),
               ]),
         ),
         body: TabBarView(
@@ -57,6 +63,7 @@ class Info extends StatelessWidget {
             news(),
             Departmentreport(),
             report(),
+            movie(),
           ],
         ),
       ),

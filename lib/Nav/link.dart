@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ous/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main.dart';
+
 
 class Link extends StatelessWidget {
   const Link({Key? key}) : super(key: key);
@@ -11,12 +13,13 @@ class Link extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       leading: IconButton(
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.arrow_back_ios),
         onPressed: (){
-          Navigator.pop(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => home()),
-          );
+            MaterialPageRoute(builder: (context) {
+              return MyHomePage(title: 'home');
+            }),          );
         },
       ),
       title: Text('リンク集'),

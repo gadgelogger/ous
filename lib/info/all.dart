@@ -40,7 +40,7 @@ class _allState extends State<all> {
         .map((element) => 'https://www.ous.ac.jp/topics/${element.getAttribute("href")}')
         .toList();
     final dates = document
-        .querySelectorAll("dl > dd > a  ")
+        .querySelectorAll("div > .p10 > dt")
         .map((element) => element.innerText)
         .toList();
 
@@ -72,7 +72,7 @@ class _allState extends State<all> {
               children:[
                 ListTile(
                   title: Text(article.title),
-                  subtitle: Text(article.url.replaceAll('./detail', '/detail')),
+                  subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                   onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
 
                 ),

@@ -65,7 +65,7 @@ dependencies:
   dynamic_theme: ^1.0.1
   shared_preferences: ^0.5.7+3
   syncfusion_flutter_gauges: ^20.2.39
-
+  package_info_plus: ^1.4.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -100,6 +100,7 @@ flutter:
   - assets/images/home.jpg
   - assets/images/homedark.jpeg
   - assets/images/icon.png
+  - assets/images/icon.jpeg
   - assets/kouka.mp3
   - assets/kouka.jpeg
   - assets/images/理学部.jpg

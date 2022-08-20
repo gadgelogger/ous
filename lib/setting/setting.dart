@@ -10,6 +10,9 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+import '../main.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -20,18 +23,48 @@ class Setting extends StatefulWidget {
 class _SettingState extends State<Setting> {
   ThemeData current = ThemeData.light();
   bool _isDark = false;
+
+  void showLicensePage({
+    required BuildContext context,
+    String? applicationName,
+    String? applicationVersion,
+    Widget? applicationIcon,
+    String? applicationLegalese,
+    bool useRootNavigator = false,
+  }) {
+    assert(context != null);
+    assert(useRootNavigator != null);
+    Navigator.of(context, rootNavigator: useRootNavigator).push(MaterialPageRoute<void>(
+      builder: (BuildContext context) =>
+          LicensePage(
+        applicationName: "非公式岡理アプリ",
+        applicationIcon:
+       Container(
+          width: 100,
+          height: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100.0),
+              child: Image.asset('assets/images/icon.jpeg'),
+            ),
+        ),
+        applicationLegalese: "@TAN_Q_BOT_LOCAL",
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     drawer: NavBar(),
     appBar: AppBar(
       title: Text('アプリの設定'),
       leading: IconButton(
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.arrow_back_ios),
         onPressed: () {
-          Navigator.pop(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => home()),
-          );
+            MaterialPageRoute(builder: (context) {
+              return MyHomePage(title: 'home');
+            }),          );
         },
       ),
     ),
@@ -93,6 +126,18 @@ class _SettingState extends State<Setting> {
                   inAppReview.requestReview();
                 }
               },
+            ),
+            SettingsTile.navigation(
+              leading: Icon(Icons.terminal),
+              title: Text('ライセンスについて'),
+                onPressed: (context) {
+                  showLicensePage(
+                    context: context,
+                    applicationName: "非公式岡理アプリ",
+                    applicationIcon:Image.asset("assets/icon/icon.png"),
+                    applicationLegalese: "@TAN_Q_BOT_LOCAL",
+                  );
+                }
             ),
           ],
         ),

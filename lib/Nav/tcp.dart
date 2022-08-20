@@ -14,12 +14,13 @@ class tcp extends StatelessWidget {
       title: Text('TCP'),
       automaticallyImplyLeading: false,
       leading: IconButton(
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.arrow_back_ios),
         onPressed: (){
-          Navigator.pop(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => home()),
-          );
+            MaterialPageRoute(builder: (context) {
+              return MyHomePage(title: 'home');
+            }),          );
         },
       ),
     ),

@@ -634,26 +634,26 @@ PODS:
     - Firebase/Storage (= 9.2.0)
     - firebase_core
     - Flutter
-  - FirebaseAppCheckInterop (9.2.0)
+  - FirebaseAppCheckInterop (9.4.0)
   - FirebaseAuth (9.2.0):
     - FirebaseCore (~> 9.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
     - GoogleUtilities/Environment (~> 7.7)
     - GTMSessionFetcher/Core (< 3.0, >= 1.7)
-  - FirebaseAuthInterop (9.2.0)
+  - FirebaseAuthInterop (9.4.0)
   - FirebaseCore (9.2.0):
     - FirebaseCoreDiagnostics (~> 9.0)
     - FirebaseCoreInternal (~> 9.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (9.2.0):
+  - FirebaseCoreDiagnostics (9.4.0):
     - GoogleDataTransport (< 10.0.0, >= 9.1.4)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseCoreExtension (9.2.0):
+  - FirebaseCoreExtension (9.4.0):
     - FirebaseCore (~> 9.0)
-  - FirebaseCoreInternal (9.2.0):
+  - FirebaseCoreInternal (9.4.0):
     - "GoogleUtilities/NSData+zlib (~> 7.7)"
   - FirebaseFirestore (9.2.0):
     - abseil/algorithm (~> 1.20211102.0)
@@ -674,7 +674,7 @@ PODS:
     - FirebaseCore (~> 9.0)
     - FirebaseCoreExtension (~> 9.0)
     - FirebaseStorageInternal (~> 9.0)
-  - FirebaseStorageInternal (9.2.0):
+  - FirebaseStorageInternal (9.4.0):
     - FirebaseCore (~> 9.0)
     - GTMSessionFetcher/Core (< 3.0, >= 1.7)
   - Flutter (1.0.0)
@@ -694,7 +694,7 @@ PODS:
   - google_sign_in_ios (0.0.1):
     - Flutter
     - GoogleSignIn (~> 6.2)
-  - GoogleDataTransport (9.1.4):
+  - GoogleDataTransport (9.2.0):
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
@@ -789,6 +789,8 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - OrderedSet (5.0.0)
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
   - PromisesObjC (2.1.1)
@@ -816,6 +818,7 @@ DEPENDENCIES:
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - syncfusion_flutter_pdfviewer (from `.symlinks/plugins/syncfusion_flutter_pdfviewer/ios`)
@@ -877,6 +880,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   shared_preferences:
@@ -899,23 +904,23 @@ SPEC CHECKSUMS:
   firebase_auth: 1093e604044edc89df1e9119daeb82a5b0ef5fac
   firebase_core: 9e09bbfbf5467e459822850732f5fb648f5b1927
   firebase_storage: 866ba3ca47efe4c4ea66aff966dda0d47984dc28
-  FirebaseAppCheckInterop: 003b4882460c2827d1e2a1a81b65e88440eb01fa
+  FirebaseAppCheckInterop: 63119cdfc94b16c3e9421513c17f597aee2ea225
   FirebaseAuth: 1c574ab64a051dd86dbe7fd5a3f86b58155b3482
-  FirebaseAuthInterop: aa9cf4d66b00e9f1e48a1aaa2aefa821fc741127
+  FirebaseAuthInterop: 826d3d772b554e3675ceaab8c665008277ca9d1c
   FirebaseCore: 0e27f2a15d8f7b7ef11e7d93e23b1cbab55d748c
-  FirebaseCoreDiagnostics: ad3f6c68b7c5b63b7cf15b0785d7137f05f32268
-  FirebaseCoreExtension: 20a42c79703ec89f0dd578c28659eaf9fe62eade
-  FirebaseCoreInternal: cb966328b6985dbd6f535e1461291063e1c4a00f
+  FirebaseCoreDiagnostics: aaa87098082c4d4bdd1a9557b1186d18ca85ce8c
+  FirebaseCoreExtension: 2cf8c542b54ad3c2d4b746c22e8828b670dcd9b0
+  FirebaseCoreInternal: a13302b0088fbf5f38b79b6ece49c2af7d3e05d6
   FirebaseFirestore: de27d96de10596ebc114adf25c6aa7d36dd91f2f
   FirebaseStorage: b47b4a04062ab07911063571241c103a8a2a2332
-  FirebaseStorageInternal: 50c963664bc73739b68eb2d8427c91de5168dbcf
+  FirebaseStorageInternal: 425c7dc7de44d9b7e07a9f8d6515bab0f1266b87
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   google_sign_in_ios: 90eec6616c4c2105b9f9fe5c774773d13565b504
-  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleSignIn: 3c68388ac221f379676e8f1cb115df3aaf73b93f
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
@@ -928,6 +933,7 @@ SPEC CHECKSUMS:
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d

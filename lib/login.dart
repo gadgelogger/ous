@@ -266,5 +266,6 @@ class _AuthPageState extends State<AuthPage> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
+
   }
 }

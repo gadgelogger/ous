@@ -6,14 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 
-class Departmentreport extends StatefulWidget {
-  const Departmentreport({Key? key}) : super(key: key);
+class movie extends StatefulWidget {
+  const movie({Key? key}) : super(key: key);
 
   @override
-  State<Departmentreport> createState() => _DepartmentreportState();
+  State<movie> createState() => _movieState();
 }
 
-class _DepartmentreportState extends State<Departmentreport> {
+class _movieState extends State<movie> {
   List<Article> articles = [];
   @override
   void initState(){
@@ -23,26 +23,24 @@ class _DepartmentreportState extends State<Departmentreport> {
 
   }
   Future getWebsiteData() async {
+    print('Loading New Data');
     final controller = WindowController();
     await controller.openHttp(
       method: 'GET',
-      uri: Uri.parse('https://www.ous.ac.jp/topics/?cat=7'),
+      uri: Uri.parse('https://www.youtube.com/channel/UCMuC2oINOXry-Ya6Lw7Pu4Q/videos'),
     );
     final document = controller.window!.document;
 
     final titles = document
-        .querySelectorAll("dl > dd >a")
-        .map((element) => element.innerText)
+        .querySelectorAll("ytd-grid-video-renderer < div< h3 < a")
+        .map((element) => element.id)
         .toList();
 
     final urls = document
-        .querySelectorAll("dl > dd > a  ")
-        .map((element) => 'https://www.ous.ac.jp/topics/${element.getAttribute("href")}')
+        .querySelectorAll("ytd-grid-video-renderer < div < h3 < a")
+        .map((element) => element.id)
         .toList();
-    final dates = document
-        .querySelectorAll("div > .p10 > dt")
-        .map((element) => element.innerText)
-        .toList();
+    print('Count: ${titles.length}');
 
     setState((){
       articles = List.generate(
@@ -50,7 +48,6 @@ class _DepartmentreportState extends State<Departmentreport> {
             (index) => Article(
           title: titles[index],
           url: urls[index],
-          date:dates[index],
         ),
       );
     });
@@ -59,7 +56,6 @@ class _DepartmentreportState extends State<Departmentreport> {
     return Scaffold(
         body: RefreshIndicator(
           onRefresh: () async {
-
             print('Loading New Data');
             await getWebsiteData();
           },
@@ -72,12 +68,11 @@ class _DepartmentreportState extends State<Departmentreport> {
                 children:[
                   ListTile(
                     title: Text(article.title),
-                    subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                    subtitle: Text(article.url.replaceAll('./detail', '/detail')),
                     onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
 
                   ),
-                  Divider(),
-                  //区切り線
+                  Divider(),//区切り線
                 ],
               );
             },
@@ -91,12 +86,10 @@ class _DepartmentreportState extends State<Departmentreport> {
 class Article {
   final String url;
   final String title;
-  final String date;
 
   const Article({
     required this.url,
     required this.title,
-    required this.date,
 
   });
 }

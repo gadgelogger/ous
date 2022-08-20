@@ -9,12 +9,13 @@ class Call extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       leading: IconButton(
-        icon: Icon(Icons.home),
+        icon: Icon(Icons.arrow_back_ios),
         onPressed: (){
-          Navigator.pop(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => home()),
-          );
+            MaterialPageRoute(builder: (context) {
+              return MyHomePage(title: 'home');
+            }),          );
         },
       ),
       title: Text('各種連絡先'),
