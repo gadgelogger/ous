@@ -11,6 +11,9 @@ import 'package:ous/test/kyousyoku.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class Test extends StatefulWidget {
   const Test({Key? key}) : super(key: key);
@@ -21,6 +24,26 @@ class Test extends StatefulWidget {
 
 class _TestState extends State<Test> {
   late File _image;
+
+  final userID = FirebaseAuth.instance.currentUser?.uid ?? '';
+
+
+  void uploadPic() async {
+    try {
+      /// 画像を選択
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      File file = File(image!.path);
+
+      /// Firebase Cloud Storageにアップロード
+      String uploadName = 'image.png';
+      final storageRef =
+      FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+      final task = await storageRef.putFile(file);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,9 +150,7 @@ class _TestState extends State<Test> {
                                     leading: Icon(Icons.photo_library),
                                     trailing: Icon(Icons.chevron_right),
                                     title: Text('アルバムから選択'),
-                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => kiban(),
-                                    )),
+                                    onTap: uploadPic,
                                   ),
                                 ),
                                 Card(
