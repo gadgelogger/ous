@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/files.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/login.dart';
 import 'package:ous/main.dart';
@@ -72,6 +73,12 @@ class NavBar extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => Call()),
               );
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.launch),
+            title: Text('Mylogはこちら\n（ブラウザで開きます）'),
+              onTap: () => launch('https://mylog.pub.ous.ac.jp/uprx/up/pk/pky501/Pky50101.xhtml')
+
           ),
           ListTile(
             leading: Icon(Icons.launch),

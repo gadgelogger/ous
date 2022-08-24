@@ -14,13 +14,13 @@ import 'package:path_provider/path_provider.dart';
 
 class Test extends StatefulWidget {
   const Test({Key? key}) : super(key: key);
+
   @override
   State<Test> createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
   late File _image;
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +64,25 @@ class _TestState extends State<Test> {
             ),
             Card(
               child: ListTile(
-                tileColor: Colors.lightGreen,
-                leading: Icon(Icons.warning_amber_outlined),
-                title: Text('削除フォーム(教授向け）',style: TextStyle(fontSize: 15) ,),
-                onTap: (){
-                  launch('https://docs.google.com/forms/d/e/1FAIpQLSdhv3t-MJ7nh1J7p47ovwJKAdTRrKpTHkoHK2Ar13DMEh7UTg/viewform?usp=sf_link');
-                }
-              ),
+                  tileColor: Colors.lightGreen,
+                  leading: Icon(Icons.warning_amber_outlined),
+                  title: Text(
+                    '削除フォーム(教授向け）',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  onTap: () {
+                    launch(
+                        'https://docs.google.com/forms/d/e/1FAIpQLSdhv3t-MJ7nh1J7p47ovwJKAdTRrKpTHkoHK2Ar13DMEh7UTg/viewform?usp=sf_link');
+                  }),
             ),
             Card(
               child: ListTile(
-                  tileColor: Colors.lightGreen,
-                  leading: Icon(Icons.warning_amber_outlined),
-                  title: Text('debug',style: TextStyle(fontSize: 15) ,),
+                tileColor: Colors.lightGreen,
+                leading: Icon(Icons.warning_amber_outlined),
+                title: Text(
+                  'debug',
+                  style: TextStyle(fontSize: 15),
+                ),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => debug(),
                 )),
@@ -84,10 +90,80 @@ class _TestState extends State<Test> {
             ),
           ],
         ),
-
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => launch('https://forms.gle/7Jtu8svujxtRa4yg7'),
+        onPressed: () {
+          showModalBottomSheet(
+              //モーダルの背景の色、透過
+              backgroundColor: Colors.transparent,
+              //ドラッグ可能にする（高さもハーフサイズからフルサイズになる様子）
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                    margin: EdgeInsets.only(top: 450),
+                    decoration: BoxDecoration(
+                      //モーダル自体の色
+                      color: Colors.white,
+                      //角丸にする
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.all(15),
+                      child: (
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('過去問をアップロード',style: TextStyle(fontSize:30,fontWeight: FontWeight.bold),),
+                          LimitedBox(
+                            maxHeight: 200,
+                            child: ListView(
+                              children: [
+                                Card(
+                                  child: ListTile(
+                                    leading: Icon(Icons.photo_library),
+                                    trailing: Icon(Icons.chevron_right),
+                                    title: Text('アルバムから選択'),
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => kiban(),
+                                    )),
+                                  ),
+                                ),
+                                Card(
+                                  child: ListTile(
+                                    leading: Icon(Icons.camera),
+                                    trailing: Icon(Icons.chevron_right),
+                                    title: Text('写真を撮る'),
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Gakubu(),
+                                    )),
+                                  ),
+                                ),
+                                Card(
+                                  child: ListTile(
+                                    leading: Icon(Icons.file_copy_outlined),
+                                    trailing: Icon(Icons.chevron_right),
+                                    title: Text('ファイル（PDF,wordなど）'),
+                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => kyousyoku(),
+                                    )),
+                                  ),
+                                ),
+                              ],
+
+                            ),
+                          ),
+                          Text('投稿ありがとうございます！',style: TextStyle(fontSize:20,fontWeight: FontWeight.normal),),
+                        ],
+                      )
+                      ),
+                    )
+                );
+              });
+        },
         child: const Icon(Icons.upload_rounded),
       ),
     );
