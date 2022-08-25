@@ -29,6 +29,31 @@ class _TestState extends State<Test> {
   final userID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
 
+  Text? _text;
+
+
+  _myDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        title: const Text("アップロード完了"),
+        content: const Text("アップロードありがとうございます！\nファイルは一週間以内に反映されます。"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("close"),
+          )
+        ],
+      ),
+    );
+  }
+
+
   void uploadPic() async {
     try {
       /// 画像を選択
@@ -49,6 +74,10 @@ class _TestState extends State<Test> {
         final storageRef =
         FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
         final task = await storageRef.putFile(file);
+      if(mounted) { // ←これを追加！！
+        setState(() => _text =  _myDialog()
+        );
+      }
       }
     catch (e) {
       print(e);
@@ -75,8 +104,12 @@ class _TestState extends State<Test> {
       final storageRef =
       FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
+      if(mounted) { // ←これを追加！！
+        setState(() => _text =  _myDialog()
+        );
+      }
     }
-    catch (e) {
+    catch (e)  {
       print(e);
     }
   }
@@ -176,7 +209,7 @@ class _TestState extends State<Test> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('過去問をアップロード',style: TextStyle(fontSize:30,fontWeight: FontWeight.bold),),
+                          Text('過去問をアップロード',style: TextStyle(fontSize:30,color:Colors.black,fontWeight: FontWeight.bold),),
                           LimitedBox(
                             maxHeight: 200,
                             child: ListView(
@@ -203,16 +236,15 @@ class _TestState extends State<Test> {
                                     leading: Icon(Icons.file_copy_outlined),
                                     trailing: Icon(Icons.chevron_right),
                                     title: Text('ファイル（PDF,wordなど）'),
-                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => kyousyoku(),
-                                    )),
+                                    onTap: () =>
+                                        launch('https://forms.gle/3JZkTzo1t3TuHpTs5'),
                                   ),
                                 ),
                               ],
 
                             ),
                           ),
-                          Text('投稿ありがとうございます！',style: TextStyle(fontSize:20,fontWeight: FontWeight.normal),),
+                          Text('投稿ありがとうございます！',style: TextStyle(fontSize:20,color:Colors.black,fontWeight: FontWeight.normal),),
                         ],
                       )
                       ),
@@ -225,3 +257,5 @@ class _TestState extends State<Test> {
     );
   }
 }
+
+
