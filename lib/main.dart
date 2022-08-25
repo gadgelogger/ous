@@ -16,7 +16,21 @@ import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 
 
+
+
+
 void main() async {
+  //Setting SysemUIOverlay
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemStatusBarContrastEnforced: true,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark)
+  );
+
+//Setting SystmeUIMode
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   await Firebase.initializeApp(
@@ -162,3 +176,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 }
+
+

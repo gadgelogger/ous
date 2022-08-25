@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:path_provider/path_provider.dart';
+import 'dart:math';
 
 
 class Test extends StatefulWidget {
@@ -35,12 +36,47 @@ class _TestState extends State<Test> {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       File file = File(image!.path);
 
+
       /// Firebase Cloud Storageにアップロード
-      String uploadName = 'image.png';
+      String generateNonce([int length = 32]) {
+        const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+        final random = Random.secure();
+        final randomStr = List.generate(
+            length, (_) => charset[random.nextInt(charset.length)]).join();
+        return randomStr;
+      }
+        String uploadName = generateNonce();
+        final storageRef =
+        FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+        final task = await storageRef.putFile(file);
+      }
+    catch (e) {
+      print(e);
+    }
+  }
+
+  void uploadcamera() async {
+    try {
+      /// 画像を選択
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.camera);
+      File file = File(image!.path);
+
+
+      /// Firebase Cloud Storageにアップロード
+      String generateNonce([int length = 32]) {
+        const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+        final random = Random.secure();
+        final randomStr = List.generate(
+            length, (_) => charset[random.nextInt(charset.length)]).join();
+        return randomStr;
+      }
+      String uploadName = generateNonce();
       final storageRef =
       FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
-    } catch (e) {
+    }
+    catch (e) {
       print(e);
     }
   }
@@ -158,9 +194,8 @@ class _TestState extends State<Test> {
                                     leading: Icon(Icons.camera),
                                     trailing: Icon(Icons.chevron_right),
                                     title: Text('写真を撮る'),
-                                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => Gakubu(),
-                                    )),
+                                    onTap: uploadcamera,
+
                                   ),
                                 ),
                                 Card(

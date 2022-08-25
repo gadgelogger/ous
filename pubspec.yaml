@@ -66,6 +66,7 @@ dependencies:
   shared_preferences: ^0.5.7+3
   syncfusion_flutter_gauges: ^20.2.39
   package_info_plus: ^1.4.3
+  camera: ^0.10.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
