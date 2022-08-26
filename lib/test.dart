@@ -68,16 +68,17 @@ class _TestState extends State<Test> {
         final random = Random.secure();
         final randomStr = List.generate(
             length, (_) => charset[random.nextInt(charset.length)]).join();
+        if(mounted) { // ←これを追加！！
+          setState(() => _text =  _myDialog()
+          );
+        }
         return randomStr;
+
       }
         String uploadName = generateNonce();
         final storageRef =
         FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
         final task = await storageRef.putFile(file);
-      if(mounted) { // ←これを追加！！
-        setState(() => _text =  _myDialog()
-        );
-      }
       }
     catch (e) {
       print(e);
@@ -98,16 +99,17 @@ class _TestState extends State<Test> {
         final random = Random.secure();
         final randomStr = List.generate(
             length, (_) => charset[random.nextInt(charset.length)]).join();
+        if(mounted) { // ←これを追加！！
+          setState(() => _text =  _myDialog()
+          );
+        }
         return randomStr;
       }
       String uploadName = generateNonce();
       final storageRef =
       FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
-      if(mounted) { // ←これを追加！！
-        setState(() => _text =  _myDialog()
-        );
-      }
+
     }
     catch (e)  {
       print(e);
