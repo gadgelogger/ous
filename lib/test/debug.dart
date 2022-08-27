@@ -11,8 +11,7 @@ import 'package:ous/main.dart';
 import 'package:dio/dio.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'image_page.dart';
-import 'firebase_api.dart';
-import 'firebase_file.dart';
+import 'debug_api.dart';
 
 class debug extends StatefulWidget {
   const debug({Key? key}) : super(key: key);
@@ -28,7 +27,7 @@ class _debugState extends State<debug> {
   void initState() {
     super.initState();
 
-    futureFiles = FirebaseApi.listAll('学部別（専門科目）/経営学部/');
+    futureFiles = DownloadFirebaseApi.listAll('経営学部');
   }
 
   Widget build(BuildContext context) => Scaffold(
@@ -93,11 +92,7 @@ class _debugState extends State<debug> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => ImagePage(file: file),
-            ),
-          )));
+          ));
 
   Widget buildHeader(int length) => ListTile(
     tileColor: Colors.lightGreen,
