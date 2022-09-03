@@ -15,7 +15,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:math';
 
-
 class Test extends StatefulWidget {
   const Test({Key? key}) : super(key: key);
 
@@ -28,9 +27,7 @@ class _TestState extends State<Test> {
 
   final userID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-
   Text? _text;
-
 
   _myDialog() {
     showDialog(
@@ -53,7 +50,6 @@ class _TestState extends State<Test> {
     );
   }
 
-
   void uploadPic() async {
     try {
       /// 画像を選択
@@ -61,26 +57,25 @@ class _TestState extends State<Test> {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       File file = File(image!.path);
 
-
       /// Firebase Cloud Storageにアップロード
       String generateNonce([int length = 32]) {
-        const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+        const charset =
+            '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
         final random = Random.secure();
         final randomStr = List.generate(
             length, (_) => charset[random.nextInt(charset.length)]).join();
-        if(mounted) { // ←これを追加！！
-          setState(() => _text =  _myDialog()
-          );
+        if (mounted) {
+          // ←これを追加！！
+          setState(() => _text = _myDialog());
         }
         return randomStr;
+      }
 
-      }
-        String uploadName = generateNonce();
-        final storageRef =
-        FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
-        final task = await storageRef.putFile(file);
-      }
-    catch (e) {
+      String uploadName = generateNonce();
+      final storageRef =
+          FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+      final task = await storageRef.putFile(file);
+    } catch (e) {
       print(e);
     }
   }
@@ -92,26 +87,25 @@ class _TestState extends State<Test> {
       final XFile? image = await picker.pickImage(source: ImageSource.camera);
       File file = File(image!.path);
 
-
       /// Firebase Cloud Storageにアップロード
       String generateNonce([int length = 32]) {
-        const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+        const charset =
+            '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
         final random = Random.secure();
         final randomStr = List.generate(
             length, (_) => charset[random.nextInt(charset.length)]).join();
-        if(mounted) { // ←これを追加！！
-          setState(() => _text =  _myDialog()
-          );
+        if (mounted) {
+          // ←これを追加！！
+          setState(() => _text = _myDialog());
         }
         return randomStr;
       }
+
       String uploadName = generateNonce();
       final storageRef =
-      FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+          FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
-
-    }
-    catch (e)  {
+    } catch (e) {
       print(e);
     }
   }
@@ -198,7 +192,8 @@ class _TestState extends State<Test> {
                     margin: EdgeInsets.only(top: 450),
                     decoration: BoxDecoration(
                       //モーダル自体の色
-                      color: Colors.white,
+                      color: Theme.of(context).brightness == Brightness.light ?  Colors.white :  Color(
+                          0xFF424242),
                       //角丸にする
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -207,11 +202,15 @@ class _TestState extends State<Test> {
                     ),
                     child: Container(
                       margin: EdgeInsets.all(15),
-                      child: (
-                      Column(
+                      child: (Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text('過去問をアップロード',style: TextStyle(fontSize:30,color:Colors.black,fontWeight: FontWeight.bold),),
+                          Text(
+                            '過去問をアップロード',
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold),
+                          ),
                           LimitedBox(
                             maxHeight: 200,
                             child: ListView(
@@ -230,7 +229,6 @@ class _TestState extends State<Test> {
                                     trailing: Icon(Icons.chevron_right),
                                     title: Text('写真を撮る'),
                                     onTap: uploadcamera,
-
                                   ),
                                 ),
                                 Card(
@@ -238,20 +236,22 @@ class _TestState extends State<Test> {
                                     leading: Icon(Icons.file_copy_outlined),
                                     trailing: Icon(Icons.chevron_right),
                                     title: Text('ファイル（PDF,wordなど）'),
-                                    onTap: () =>
-                                        launch('https://forms.gle/3JZkTzo1t3TuHpTs5'),
+                                    onTap: () => launch(
+                                        'https://forms.gle/3JZkTzo1t3TuHpTs5'),
                                   ),
                                 ),
                               ],
-
                             ),
                           ),
-                          Text('投稿ありがとうございます！',style: TextStyle(fontSize:20,color:Colors.black,fontWeight: FontWeight.normal),),
+                          Text(
+                            '投稿ありがとうございます！',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.normal),
+                          ),
                         ],
-                      )
-                      ),
-                    )
-                );
+                      )),
+                    ));
               });
         },
         child: const Icon(Icons.upload_rounded),
@@ -259,5 +259,3 @@ class _TestState extends State<Test> {
     );
   }
 }
-
-

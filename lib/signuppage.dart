@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ous/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,9 +13,11 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   // メッセージ表示用
   String infoText = '';
+
   // 入力したメールアドレス・パスワード
   String email = '';
   String password = '';
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -29,7 +32,7 @@ class _SignupPageState extends State<SignupPage> {
                   child: Text(
                     'Signup',
                     style:
-                    TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 80.0, fontWeight: FontWeight.bold),
                   ),
                 ),
                 Container(
@@ -84,6 +87,15 @@ class _SignupPageState extends State<SignupPage> {
                     },
                   ),
                   SizedBox(height: 50.0),
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
+                      child: Text(
+                        infoText,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ),
                   Container(
                       height: 40.0,
                       child: Material(
@@ -113,7 +125,8 @@ class _SignupPageState extends State<SignupPage> {
                                 infoText = "ログインに失敗しました：${e.toString()}";
                               });
                             }
-                          },                                            child: Center(
+                          },
+                          child: Center(
                             child: Text(
                               'サインアップ',
                               style: TextStyle(
@@ -141,17 +154,14 @@ class _SignupPageState extends State<SignupPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => AuthPage()),
-                          );                        },
-                        child:
-
-                        Center(
+                          );
+                        },
+                        child: Center(
                           child: Text('戻る',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Montserrat')),
                         ),
-
-
                       ),
                     ),
                   ),
@@ -179,5 +189,13 @@ class _SignupPageState extends State<SignupPage> {
           //   ],
           // )
         ]));
+  }
+}
+
+extension EmailValidator on String {
+  bool isValidEmail() {
+    return RegExp(
+            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+        .hasMatch(this);
   }
 }
