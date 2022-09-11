@@ -13,8 +13,17 @@ class _postState extends State<post> {
   String? isbumon = 'ラク単';
   String? isnendo = '2022';
   String? isgakki = '春１';
+  String? iszyugyoumei ='';
+  String? iskousimei = '';
   String? istanni = '1';
   String? iszyugyoukeisiki = 'オンライン(VOD)';
+  String? issougouhyouka = '';
+  String? isomosirosa = '';
+  String? istoriyasusa = '';
+  String? issyusseki = '';
+  String? iskyoukasyo = '';
+  String? istesutokeisiki = '';
+
 
   TextEditingController _textEditingController = TextEditingController();
 

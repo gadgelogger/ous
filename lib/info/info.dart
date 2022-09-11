@@ -54,6 +54,7 @@ class Info extends StatelessWidget {
                     fontSize: 15.0,
                   ),
                 ),
+
               ]),
         ),
         body: TabBarView(
