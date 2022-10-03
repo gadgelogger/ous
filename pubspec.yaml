@@ -37,7 +37,7 @@ dependencies:
   firebase_core: ^1.19.1
   curved_navigation_bar: ^1.0.3
   webviewx: ^0.2.1
-  webview_flutter: ^2.8.0
+  webview_flutter: ^2.0.13
   syncfusion_flutter_calendar: ^20.1.52
   flutter_native_splash: ^2.1.6
   url_launcher: ^6.1.0
