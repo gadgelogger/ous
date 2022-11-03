@@ -2,9 +2,13 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ous/setting/setting.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'Nav/Calendar/calendar.dart';
+import 'Nav/call.dart';
+import 'Nav/tcp.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ous/NavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/business.dart';
 import 'package:ous/test.dart';
@@ -14,6 +18,7 @@ import 'package:ous/info/info.dart';
 import 'login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
+import 'package:ous/Nav/link.dart';
 
 
 
@@ -111,7 +116,6 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-
   @override
 
   State<MyHomePage> createState() => _MyHomePageState();
@@ -133,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavBar(),
+
         backgroundColor: Colors.white,
         body: screens[currentindex],
         bottomNavigationBar: BottomNavigationBar(

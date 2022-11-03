@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ous/NavBar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx/webviewx.dart';
@@ -13,8 +12,8 @@ class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Scaffold(
-          drawer: NavBar(),
           appBar: AppBar(
+            elevation: 0,
             title: Text('ホーム'),
           ),
           body: SingleChildScrollView(

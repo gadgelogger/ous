@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ous/NavBar.dart';
 class Eat extends StatelessWidget {
   const Eat({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    drawer: NavBar(),
     appBar: AppBar(
       title: Text('食堂'),
     ),

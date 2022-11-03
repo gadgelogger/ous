@@ -2,7 +2,9 @@
 import 'package:html/dom.dart' as UserModel;
 import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
+import 'package:universal_html/parsing.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webfeed/webfeed.dart';
 
 
 
@@ -23,7 +25,6 @@ class _movieState extends State<movie> {
 
   }
   Future getWebsiteData() async {
-    print('Loading New Data');
     final controller = WindowController();
     await controller.openHttp(
       method: 'GET',
@@ -32,15 +33,18 @@ class _movieState extends State<movie> {
     final document = controller.window!.document;
 
     final titles = document
-        .querySelectorAll("ytd-grid-video-renderer < div< h3 < a")
-        .map((element) => element.id)
+        .querySelectorAll('title')
+        .map((element) => element.innerText)
         .toList();
 
     final urls = document
-        .querySelectorAll("ytd-grid-video-renderer < div < h3 < a")
-        .map((element) => element.id)
+        .querySelectorAll("dl > dd > a  ")
+        .map((element) => 'https://www.ous.ac.jp${element.getAttribute("href")}')
         .toList();
-    print('Count: ${titles.length}');
+    final dates = document
+        .querySelectorAll("div > .p10 > dt")
+        .map((element) => element.innerText)
+        .toList();
 
     setState((){
       articles = List.generate(
@@ -48,6 +52,7 @@ class _movieState extends State<movie> {
             (index) => Article(
           title: titles[index],
           url: urls[index],
+          date:dates[index],
         ),
       );
     });
@@ -69,7 +74,7 @@ class _movieState extends State<movie> {
                   ListTile(
                     title: Text(article.title),
                     subtitle: Text(article.url.replaceAll('./detail', '/detail')),
-                    onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
+                    onTap: () => launch(article.url),
 
                   ),
                   Divider(),//区切り線
@@ -89,7 +94,7 @@ class Article {
 
   const Article({
     required this.url,
-    required this.title,
+    required this.title, required String date,
 
   });
 }

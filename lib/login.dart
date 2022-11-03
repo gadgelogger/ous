@@ -17,13 +17,12 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   // メッセージ表示用
-  String infoText = '';
+  String _infoText = ""; // ログインに関する情報を表示
 
   // 入力したメールアドレス・パスワード
   String email = '';
   String password = '';
-
-  final auth_error = Authentication_error();
+  final auth_error = Authentication_error_to_ja();
 
 
   @override
@@ -98,10 +97,33 @@ class _AuthPageState extends State<AuthPage> {
                         });
                       },
                     ),
+                    SizedBox(height: 5.0.h,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '',
+                          style: TextStyle(fontFamily: 'Montserrat'),
+                        ),
+                        SizedBox(width: 5.0.w),
+                        InkWell(
+                          onTap: () => launch(
+                              'https://tan-q-bot-unofficial.com/terms_of_service/'),
+                          child: Text(
+                            '利用規約に同意する必要があります。',
+                            style: TextStyle(
+                                color: Colors.lightGreen,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 5.0.h),
                     Container(
-                      alignment: Alignment(1.0, 0.0),
-                      padding: EdgeInsets.only(top: 15.0, left: 20.0),
+                      alignment: Alignment(-1.0, 0.0),
+                      padding: EdgeInsets.only(top: 15.0, left: 6.0),
                       child: InkWell(
                         child: Text(
                           'パスワードを忘れた方へ',
@@ -116,8 +138,10 @@ class _AuthPageState extends State<AuthPage> {
                     Center(
                       child:  Padding(
                         padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
-                        child:Text(infoText,
-                          style: TextStyle(color: Colors.red),),
+                        child: Text(
+                          _infoText,
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
                     ),
                     SizedBox(height: 40.0.h),
@@ -147,7 +171,8 @@ class _AuthPageState extends State<AuthPage> {
                               }   catch(e) {
                                 // ログインに失敗した場合
                                 setState(() {
-                                  infoText = "ログインに失敗しました:${auth_error.login_error_msg(e.toString())}";
+                                  _infoText =auth_error.login_error_msg(e.hashCode, e.toString());
+
                                 });
                               }
                             },
@@ -205,57 +230,37 @@ class _AuthPageState extends State<AuthPage> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 20.0.h),
+                    Container(
+                      height: 40.0.h,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.lightGreen,
+                                style: BorderStyle.solid,
+                                width: 1.0.w),
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: GestureDetector(
+                          onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => SignupPage()),
+                              );
+                          },
+                          child: Center(
+                            child: Text(
+                              'サインアップ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 )),
-            SizedBox(height: 15.0.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '会員登録がお済みでない方',
-                  style: TextStyle(fontFamily: 'Montserrat'),
-                ),
-                SizedBox(width: 5.0.w),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignupPage()),
-                    );
-                  },
-                  child: Text(
-                    'こちら',
-                    style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '利用規約については',
-                  style: TextStyle(fontFamily: 'Montserrat'),
-                ),
-                SizedBox(width: 5.0.w),
-                InkWell(
-                  onTap: () => launch(
-                      'https://tan-q-bot-unofficial.com/terms_of_service/'),
-                  child: Text(
-                    'こちら',
-                    style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontFamily: 'Montserrat',
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline),
-                  ),
-                ),
-              ],
-            )
           ],
         ));
   }
@@ -279,30 +284,50 @@ class _AuthPageState extends State<AuthPage> {
   }
 }
 
+// Firebase Authentication利用時の日本語エラーメッセージ
+class Authentication_error_to_ja {
+  // ログイン時の日本語エラーメッセージ
+  login_error_msg(int error_code, String org_error_msg) {
+    String error_msg;
 
-
-  // Firebase Authentication利用時の日本語エラーメッセージ
-  class Authentication_error {
-
-    // ログイン時の日本語エラーメッセージ
-    String login_error_msg(String error_code) {
-      String error_msg;
-
-      if (error_code == 'ERROR_INVALID_EMAIL') {
-        error_msg = '有効なメールアドレスを入力してください。';
-      } else if (error_code == 'ERROR_USER_NOT_FOUND') {
-        // 入力されたメールアドレスが登ていない場合
-        error_msg = 'メールアドレスかパスワードが間違っています。';
-      } else if (error_code == 'ERROR_WRONG_PASSWORD') {
-        // 入力されたパスワードが間違っている場合
-        error_msg = 'メールアドレスかパスワードが間違っています。';
-      } else if (error_code == '[firebase_auth/wrong-password]') {
-        // メールアドレスかパスワードがEmpty or Nullの場合
-        error_msg = 'メールアドレスとパスワードを入力してください。';
-      } else {
-        error_msg = error_code;
-      }
-
-      return error_msg;
+    if (error_code == 513544714) {
+      error_msg = '有効なメールアドレスを入力してください。';
+    } else if (error_code == 505284406) {
+      // 入力されたメールアドレスが登録されていない場合
+      error_msg = 'メールアドレスかパスワードが間違っています。';
+    } else if (error_code == 185768934) {
+      // 入力されたパスワードが間違っている場合
+      error_msg = 'メールアドレスかパスワードが間違っています。';
+    } else if (error_code == 55182036) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = 'メールアドレスが無効であるか、パスワードが間違っています。';
     }
+    else if (error_code == 298063151) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = '何回も間違えたため一時的にログインが無効になりました。パスワードをリセットするか時間を空けてもう一度ログインしてください。';
+    } else {
+      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+    }
+
+    return error_msg;
   }
+
+  // アカウント登録時の日本語エラーメッセージ
+  register_error_msg(int error_code, String org_error_msg) {
+    String error_msg;
+
+    if (error_code == 360587416) {
+      error_msg = '有効なメールアドレスを入力してください。';
+    } else if (error_code == 34618382) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = '既に登録済みのメールアドレスです。';
+    } else if (error_code == 447031946) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = 'メールアドレスとパスワードを入力してください。';
+    } else {
+      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+    }
+
+    return error_msg;
+  }
+}

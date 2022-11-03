@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/NavBar.dart';
 import 'package:ous/test/debug.dart';
 import 'package:ous/test/gakubu.dart';
 import 'package:ous/test/kiban.dart';
@@ -113,8 +112,8 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavBar(),
       appBar: AppBar(
+        elevation: 0,
         title: Text('過去問まとめ'),
       ),
       body: Container(

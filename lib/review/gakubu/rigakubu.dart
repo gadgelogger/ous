@@ -20,7 +20,7 @@ class _RigakubuState extends State<Rigakubu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('理学部'),),
+      appBar: AppBar(elevation: 0,title: Text('理学部'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('理学部').snapshots(),

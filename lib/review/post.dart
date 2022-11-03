@@ -30,6 +30,7 @@ class _postState extends State<post> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 0,
           title: Text('投稿ページ'),
         ),
         body: Container(

@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/NavBar.dart';
 import 'package:ous/login.dart';
 import 'package:ous/setting/music.dart';
 import 'package:ous/Nav/userpolicie.dart';
@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
+import 'package:slide_to_act/slide_to_act.dart';
 import '../main.dart';
 
 class Setting extends StatefulWidget {
@@ -54,8 +54,8 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    drawer: NavBar(),
     appBar: AppBar(
+      elevation: 0,
       title: Text('アプリの設定'),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
@@ -142,7 +142,7 @@ class _SettingState extends State<Setting> {
           ],
         ),
         SettingsSection(
-          title: Text('ログアウト'),
+          title: Text('アカウント関連'),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
               leading: Icon(Icons.exit_to_app),
@@ -183,9 +183,57 @@ class _SettingState extends State<Setting> {
                 );
               },
             ),
+            SettingsTile.navigation(
+              leading: Icon(Icons.exit_to_app),
+              title: Text(
+                'アカウントを削除する。',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: (BuildContext context) async {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text("アカウントを削除します。",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red,),),
+                      content: Text("本当に良いか？\n全てのデータが消えるぞ。\n\n\n※一度アカウントを削除すると戻すことはできません。", textAlign: TextAlign.center,),
+                      actions: <Widget>[
+                        // ボタン領域
+                        SlideAction(
+                          text: 'スライドして退会',
+                          textStyle: const TextStyle(fontSize: 20),
+                          onSubmit: () {
+                            // スライドした時に実行したい処理を記載する
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
-      ],
+        ]
     ),
   );
+}
+
+//退会処理
+void deleteUser() async {
+  final user = FirebaseAuth.instance.currentUser;
+  final uid = user?.uid;
+  // userコレクションを削除
+  final msg =
+  await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+  // messagesサブコレクションを削除
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .collection('messages')
+      .doc(uid)
+      .delete();
+  // ユーザーを削除
+  await user?.delete();
+  await FirebaseAuth.instance.signOut();
+  print('ユーザーを削除しました!');
 }

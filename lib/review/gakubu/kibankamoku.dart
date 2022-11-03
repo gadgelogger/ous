@@ -20,7 +20,7 @@ class _kibankamokuState extends State<kibankamoku> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('基盤教育科目'),),
+      appBar: AppBar(elevation: 0,title: Text('基盤教育科目'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('基盤教育科目').snapshots(),

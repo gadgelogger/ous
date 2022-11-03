@@ -7,6 +7,7 @@ class policy extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.home),
         onPressed: (){

@@ -20,7 +20,7 @@ class _seimeikagakubuState extends State<seimeikagakubu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('生命科学部'),),
+      appBar: AppBar(elevation: 0,title: Text('生命科学部'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('生命科学部').snapshots(),

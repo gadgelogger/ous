@@ -29,6 +29,7 @@ class _MusicState extends State<Music> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text('校歌'),
       ),
       body: Column(

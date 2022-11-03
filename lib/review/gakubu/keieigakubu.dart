@@ -20,7 +20,9 @@ class _keieigakubuState extends State<keieigakubu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('経営学部'),),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text('経営学部'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('経営学部').snapshots(),

@@ -20,7 +20,7 @@ class _kyousyokukamokuState extends State<kyousyokukamoku> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('教職関連科目'),),
+      appBar: AppBar(elevation: 0,title: Text('教職関連科目'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('教職関連科目').snapshots(),

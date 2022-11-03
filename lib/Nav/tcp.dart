@@ -11,6 +11,7 @@ class tcp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      elevation: 0,
       title: Text('TCP'),
       automaticallyImplyLeading: false,
       leading: IconButton(

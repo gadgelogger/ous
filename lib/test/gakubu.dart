@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ous/NavBar.dart';
 import 'package:ous/test/keiei.dart';
 import 'package:ous/test/kiban.dart';
 import 'package:ous/test/kougakubu.dart';

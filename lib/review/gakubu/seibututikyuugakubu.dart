@@ -20,7 +20,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('生物地球学部'),),
+      appBar: AppBar(elevation: 0,title: Text('生物地球学部'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('生物地球学部').snapshots(),

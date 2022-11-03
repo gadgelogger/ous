@@ -20,6 +20,7 @@ class _ViewState extends State<View> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Column(
           children: [
             Text(widget.doc.get('zyugyoumei')),

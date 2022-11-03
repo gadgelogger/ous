@@ -37,7 +37,7 @@ class _newsState extends State<news> {
 
     final urls = document
         .querySelectorAll("dl > dd > a  ")
-        .map((element) => 'https://www.ous.ac.jp/topics/${element.getAttribute("href")}')
+        .map((element) => 'https://www.ous.ac.jp${element.getAttribute("href")}')
         .toList();
     final dates = document
         .querySelectorAll("div > .p10 > dt")
@@ -73,7 +73,7 @@ class _newsState extends State<news> {
                   ListTile(
                     title: Text(article.title),
                     subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
-                    onTap: () => launch(article.url.replaceAll('./detail', '/detail')),
+                    onTap: () => launch(article.url),
 
                   ),
                   Divider(),

@@ -8,6 +8,7 @@ class Call extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
+      elevation: 0,
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios),
         onPressed: (){

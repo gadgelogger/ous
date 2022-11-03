@@ -20,7 +20,7 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('教育学部'),),
+      appBar: AppBar(elevation: 0,title: Text('教育学部'),),
       body: SafeArea(
           child: StreamBuilder(
             stream: _firestore.collection('教育学部').snapshots(),

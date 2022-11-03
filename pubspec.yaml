@@ -67,6 +67,8 @@ dependencies:
   syncfusion_flutter_gauges: ^20.2.39
   package_info_plus: ^1.4.3
   camera: ^0.10.0+1
+  webfeed: ^0.7.0
+  slide_to_act: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
