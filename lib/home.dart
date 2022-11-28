@@ -86,6 +86,7 @@ class home extends StatelessWidget {
                     ]),
                 GestureDetector(
                   onTap: () {
+
                   },
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -97,13 +98,20 @@ class home extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        WebViewAware(child:
                         GestureDetector(
+                          onTap: (){
+                            launch(
+                                'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
+
+                          },
                           child: WebViewX(width: 400.w, height: 400.h,
                             initialContent: 'https://stats.uptimerobot.com/4KzW2hJvY6',
                             initialSourceType: SourceType.url,
                           ),
 
                         ),
+                        )
                       ]
                   ),
                 )

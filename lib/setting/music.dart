@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ous/setting/game.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shake/shake.dart';
 import 'package:provider/provider.dart';
@@ -41,10 +42,18 @@ class _MusicState extends State<Music> {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              GestureDetector(
+                onDoubleTap: ()
+                {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => game()),
+                  );
+                },                 child:
               Container(
                 padding: EdgeInsets.all(16),
                 child: Image.network('https://www.ous.ac.jp/common/files/100/gakka.gif'),
-              ),
+              ),),
               VideoProgressIndicator(
                 _controller,
                 allowScrubbing: true,
