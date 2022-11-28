@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx/webviewx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'NavBar.dart';
+
 
 class home extends StatelessWidget {
   const home({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class home extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       Scaffold(
+          drawer: NavBar(),
           appBar: AppBar(
             elevation: 0,
             title: Text('ホーム'),

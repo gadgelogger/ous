@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ous/Nav/call.dart';
+import 'package:ous/NavBar.dart';
 import 'package:ous/info/2.dart';
 import 'package:ous/info/3.dart';
 import 'package:ous/info/4.dart';
@@ -14,6 +15,7 @@ class Info extends StatelessWidget {
     return DefaultTabController(
       length: 6,
       child: Scaffold(
+        drawer: NavBar(),
         appBar: AppBar(
           elevation: 0,
           title: Text('News'),

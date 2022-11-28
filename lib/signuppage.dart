@@ -11,12 +11,12 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  // メッセージ表示用
-  String infoText = '';
-
-  // 入力したメールアドレス・パスワード
-  String email = '';
-  String password = '';
+  // 入力されたメールアドレス
+  String newUserEmail = "";
+  // 入力されたパスワード
+  String newUserPassword = "";
+  // 登録・ログインに関する情報を表示
+  String infoText = "";
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
                             borderSide: BorderSide(color: Colors.green))),
                     onChanged: (String value) {
                       setState(() {
-                        email = value;
+                        newUserEmail = value;
                       });
                     },
                   ),
@@ -82,7 +82,7 @@ class _SignupPageState extends State<SignupPage> {
                     obscureText: true,
                     onChanged: (String value) {
                       setState(() {
-                        password = value;
+                        newUserPassword = value;
                       });
                     },
                   ),
@@ -106,23 +106,23 @@ class _SignupPageState extends State<SignupPage> {
                         child: GestureDetector(
                           onTap: () async {
                             try {
-                              // メール/パスワードでログイン
+                              // メール/パスワードでユーザー登録
                               final FirebaseAuth auth = FirebaseAuth.instance;
-                              await auth.signInWithEmailAndPassword(
-                                email: email,
-                                password: password,
+                              final UserCredential result =
+                              await auth.createUserWithEmailAndPassword(
+                                email: newUserEmail,
+                                password: newUserPassword,
                               );
-                              // ログインに成功した場合
-                              // チャット画面に遷移＋ログイン画面を破棄
+                              //登録が成功したらホームに移動
                               await Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(builder: (context) {
                                   return MyHomePage(title: 'home');
                                 }),
                               );
                             } catch (e) {
-                              // ログインに失敗した場合
+                              // 登録に失敗した場合
                               setState(() {
-                                infoText = "ログインに失敗しました：${e.toString()}";
+                                infoText = "登録NG：${e.toString()}";
                               });
                             }
                           },

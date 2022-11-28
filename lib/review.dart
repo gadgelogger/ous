@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ous/NavBar.dart';
 import 'package:ous/review/gakubu/keieigakubu.dart';
 import 'package:ous/review/gakubu/kibankamoku.dart';
 import 'package:ous/review/gakubu/kougakubu.dart';
@@ -21,7 +22,8 @@ class Review extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
+    drawer: NavBar(),
+    appBar: AppBar(
           elevation: 0,
           title: Text('講義評価'),
         ),

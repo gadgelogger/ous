@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:shake/shake.dart';
+import 'package:provider/provider.dart';
+import 'package:ous/test.dart';
 class Music extends StatefulWidget {
   const Music({Key? key}) : super(key: key);
 
@@ -24,53 +27,58 @@ class _MusicState extends State<Music> {
     _controller.dispose();
     super.dispose();
   }
-
+//ここから書く
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('校歌'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Image.network('https://www.ous.ac.jp/common/files/100/gakka.gif'),
+    return ChangeNotifierProvider<HomeModel>(
+      create: (_) => HomeModel()..shakeGesture(context),
+      child: Consumer<HomeModel>(builder: (context, model, child) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('校歌'),
           ),
-          VideoProgressIndicator(
-            _controller,
-            allowScrubbing: true,
-          ),
-          _ProgressText(controller: _controller),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () {
-                  _controller
-                      .seekTo(Duration.zero)
-                      .then((_) => _controller.play());
-                },
-                icon: Icon(Icons.refresh),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Image.network('https://www.ous.ac.jp/common/files/100/gakka.gif'),
               ),
-              IconButton(
-                onPressed: () {
-                  _controller.play();
-                },
-                icon: Icon(Icons.play_arrow),
+              VideoProgressIndicator(
+                _controller,
+                allowScrubbing: true,
               ),
-              IconButton(
-                onPressed: () {
-                  _controller.pause();
-                },
-                icon: Icon(Icons.pause),
+              _ProgressText(controller: _controller),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _controller
+                          .seekTo(Duration.zero)
+                          .then((_) => _controller.play());
+                    },
+                    icon: Icon(Icons.refresh),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _controller.play();
+                    },
+                    icon: Icon(Icons.play_arrow),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _controller.pause();
+                    },
+                    icon: Icon(Icons.pause),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      }),
     );
   }
 }
@@ -113,5 +121,34 @@ class __ProgressTextState extends State<_ProgressText> {
     final String position = widget.controller.value.position.toString();
     final String duration = widget.controller.value.duration.toString();
     return Text('$position / $duration');
+  }
+}
+
+
+
+//端末を振った際に起こる動作の関数
+class HomeModel extends ChangeNotifier {
+  shakeGesture(BuildContext context) {
+    ShakeDetector.autoStart(onPhoneShake: () {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text('陬上Γ繝九Η繝ｼ縺ｫ蜈･繧翫∪縺'),
+              actions: [
+                ElevatedButton(
+                  child: Text('オ????ー'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Test()),
+                    );
+                  },                ),
+              ],
+            );
+          });
+    },
+    minimumShakeCount: 10,
+    );
   }
 }

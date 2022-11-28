@@ -69,6 +69,8 @@ dependencies:
   camera: ^0.10.0+1
   webfeed: ^0.7.0
   slide_to_act: ^2.0.1
+  shake: ^2.1.0
+  google_fonts: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -2,13 +2,9 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ous/setting/setting.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'Nav/Calendar/calendar.dart';
-import 'Nav/call.dart';
-import 'Nav/tcp.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ous/NavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/business.dart';
 import 'package:ous/test.dart';
@@ -18,24 +14,9 @@ import 'package:ous/info/info.dart';
 import 'login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
-import 'package:ous/Nav/link.dart';
-
-
-
 
 
 void main() async {
-  //Setting SysemUIOverlay
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemStatusBarContrastEnforced: true,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark)
-  );
-
-//Setting SystmeUIMode
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   await Firebase.initializeApp(
@@ -47,7 +28,7 @@ void main() async {
 
   runApp(
       const MyApp()
-    );
+  );
 
 }
 
@@ -66,38 +47,38 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(392, 759),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context , child) {
-        return MaterialApp(
-          title: 'ホーム',
-          theme: ThemeData(
-            primarySwatch: Colors.lightGreen,
-            fontFamily: 'NotoSansCJKJp',
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primarySwatch: Colors.lightGreen,
-            fontFamily: 'NotoSansCJKJp',
-          ),
-        home: StreamBuilder<User?>(
-    stream: FirebaseAuth.instance.authStateChanges(),
-    builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-        // スプラッシュ画面などに書き換えても良い
-        return const SizedBox();
+        designSize: const Size(392, 759),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context , child) {
+          return MaterialApp(
+              title: 'ホーム',
+              theme: ThemeData(
+                primarySwatch: Colors.lightGreen,
+                fontFamily: 'NotoSansCJKJp',
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                primarySwatch: Colors.lightGreen,
+                fontFamily: 'NotoSansCJKJp',
+              ),
+              home: StreamBuilder<User?>(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // スプラッシュ画面などに書き換えても良い
+                    return const SizedBox();
+                  }
+                  if (snapshot.hasData) {
+                    // User が null でなない、つまりサインイン済みのホーム画面へ
+                    return MyHomePage(title: 'home');
+                  }
+                  // User が null である、つまり未サインインのサインイン画面へ
+                  return AuthPage();
+                },
+              )
+          );
         }
-        if (snapshot.hasData) {
-        // User が null でなない、つまりサインイン済みのホーム画面へ
-          return MyHomePage(title: 'home');
-        }
-        // User が null である、つまり未サインインのサインイン画面へ
-        return AuthPage();
-        },
-        )
-        );
-      }
     );
   }
 }
@@ -116,6 +97,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+
   @override
 
   State<MyHomePage> createState() => _MyHomePageState();
@@ -128,7 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final screens = [
     home(),
     Info(),
-    Test(),
     Review(),
     Business(),
   ];
@@ -137,42 +118,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: NavBar(),
+      backgroundColor: Colors.white,
+      body: screens[currentindex],
+      bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentindex,
+        onTap: (index) => setState(() => currentindex = index),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'ホーム',
+            backgroundColor: Colors.lightGreen,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info),
+            label: 'お知らせ',
+            backgroundColor: Colors.lightGreen,
+          ),
 
-        backgroundColor: Colors.white,
-        body: screens[currentindex],
-        bottomNavigationBar: BottomNavigationBar(
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: currentindex,
-          onTap: (index) => setState(() => currentindex = index),
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'ホーム',
-              backgroundColor: Colors.lightGreen,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              label: 'お知らせ',
-              backgroundColor: Colors.lightGreen,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.sticky_note_2),
-              label: '過去問',
-              backgroundColor: Colors.lightGreen,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: '講義評価',
-              backgroundColor: Colors.lightGreen,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business_center),
-              label: '就活関連',
-              backgroundColor: Colors.lightGreen,
-            ),
-          ],
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: '講義評価',
+            backgroundColor: Colors.lightGreen,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business_center),
+            label: '就活関連',
+            backgroundColor: Colors.lightGreen,
+          ),
+        ],
+      ),
 
     );
 
@@ -180,5 +157,3 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 }
-
-
