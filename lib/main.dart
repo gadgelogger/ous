@@ -11,10 +11,9 @@ import 'package:ous/test.dart';
 import 'package:ous/home.dart';
 import 'package:ous/review.dart';
 import 'package:ous/info/info.dart';
-import 'login.dart';
+import 'account/login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +73,7 @@ class MyApp extends StatelessWidget {
                     return MyHomePage(title: 'home');
                   }
                   // User が null である、つまり未サインインのサインイン画面へ
-                  return AuthPage();
+                  return Login();
                 },
               )
           );

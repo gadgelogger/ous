@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ous/Nav/account.dart';
 import 'package:ous/Nav/link.dart';
-import 'package:ous/login.dart';
+import 'package:ous/account/login.dart';
 import 'package:ous/main.dart';
 import 'package:ous/setting/setting.dart';
 import 'package:ous/Nav/tcp.dart';

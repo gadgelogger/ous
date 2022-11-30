@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ous/login.dart';
+import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ous/main.dart';
+import 'authentication_error.dart';
+import 'email_check.dart';
 
-class SignupPage extends StatefulWidget {
+class Registration extends StatefulWidget {
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _RegistrationState createState() => _RegistrationState();
 }
 
-class _SignupPageState extends State<SignupPage> {
-  // 入力されたメールアドレス
-  String newUserEmail = "";
-  // 入力されたパスワード
-  String newUserPassword = "";
-  // 登録・ログインに関する情報を表示
-  String infoText = "";
+class _RegistrationState extends State<Registration> {
+  // Firebase Authenticationを利用するためのインスタンス
+  final _auth = FirebaseAuth.instance;
+
+  String _newEmail = ""; // 入力されたメールアドレス
+  String _newPassword = ""; // 入力されたパスワード
+  String _infoText = ""; // 登録に関する情報を表示
+  bool _pswd_OK = false; // パスワードが有効な文字数を満たしているかどうか
+
+  // エラーメッセージを日本語化するためのクラス
+  final auth_error = Authentication_error_to_ja();
 
   @override
   Widget build(BuildContext context) {
@@ -65,33 +71,37 @@ class _SignupPageState extends State<SignupPage> {
                             borderSide: BorderSide(color: Colors.green))),
                     onChanged: (String value) {
                       setState(() {
-                        newUserEmail = value;
+                        _newEmail = value;
                       });
                     },
                   ),
                   SizedBox(height: 10.0),
                   TextField(
-                    decoration: InputDecoration(
-                        labelText: 'パスワード ',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green))),
-                    obscureText: true,
-                    onChanged: (String value) {
-                      setState(() {
-                        newUserPassword = value;
-                      });
-                    },
-                  ),
+                      decoration: InputDecoration(
+                          labelText: 'パスワード（8～20文字）',
+                          labelStyle: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.green))),
+                      maxLength: 20, // 入力可能な文字数
+
+                      obscureText: true,
+                      onChanged: (String value) {
+                        if (value.length >= 8) {
+                          _newPassword = value;
+                          _pswd_OK = true;
+                        } else {
+                          _pswd_OK = false;
+                        }
+                      }),
                   SizedBox(height: 50.0),
                   Center(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
                       child: Text(
-                        infoText,
+                        _infoText,
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
@@ -105,24 +115,36 @@ class _SignupPageState extends State<SignupPage> {
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () async {
-                            try {
-                              // メール/パスワードでユーザー登録
-                              final FirebaseAuth auth = FirebaseAuth.instance;
-                              final UserCredential result =
-                              await auth.createUserWithEmailAndPassword(
-                                email: newUserEmail,
-                                password: newUserPassword,
-                              );
-                              //登録が成功したらホームに移動
-                              await Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(builder: (context) {
-                                  return MyHomePage(title: 'home');
-                                }),
-                              );
-                            } catch (e) {
-                              // 登録に失敗した場合
+                            if (_pswd_OK) {
+                              try {
+                                // メール/パスワードでユーザー登録
+                                UserCredential _result =
+                                    await _auth.createUserWithEmailAndPassword(
+                                  email: _newEmail,
+                                  password: _newPassword,
+                                );
+
+                                // 登録成功
+                                User _user = _result.user!; // 登録したユーザー情報
+                                _user.sendEmailVerification(); // Email確認のメールを送信
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Emailcheck(
+                                          email: _newEmail,
+                                          pswd: _newPassword,
+                                          from: 1),
+                                    ));
+                              } catch (e) {
+                                // 登録に失敗した場合
+                                setState(() {
+                                  _infoText = auth_error.register_error_msg(
+                                      e.hashCode, e.toString());
+                                });
+                              }
+                            } else {
                               setState(() {
-                                infoText = "登録NG：${e.toString()}";
+                                _infoText = 'パスワードは8文字以上です。';
                               });
                             }
                           },
@@ -153,7 +175,7 @@ class _SignupPageState extends State<SignupPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AuthPage()),
+                            MaterialPageRoute(builder: (context) => Login()),
                           );
                         },
                         child: Center(
@@ -167,35 +189,6 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ],
               )),
-          // SizedBox(height: 15.0),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: <Widget>[
-          //     Text(
-          //       'New to Spotify?',
-          //       style: TextStyle(
-          //         fontFamily: 'Montserrat',
-          //       ),
-          //     ),
-          //     SizedBox(width: 5.0),
-          //     InkWell(
-          //       child: Text('Register',
-          //           style: TextStyle(
-          //               color: Colors.green,
-          //               fontFamily: 'Montserrat',
-          //               fontWeight: FontWeight.bold,
-          //               decoration: TextDecoration.underline)),
-          //     )
-          //   ],
-          // )
         ]));
-  }
-}
-
-extension EmailValidator on String {
-  bool isValidEmail() {
-    return RegExp(
-            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(this);
   }
 }

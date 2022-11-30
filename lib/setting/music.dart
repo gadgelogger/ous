@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ous/setting/game.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shake/shake.dart';
 import 'package:provider/provider.dart';
@@ -45,10 +44,7 @@ class _MusicState extends State<Music> {
               GestureDetector(
                 onDoubleTap: ()
                 {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => game()),
-                  );
+
                 },                 child:
               Container(
                 padding: EdgeInsets.all(16),

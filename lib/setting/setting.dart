@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/login.dart';
+import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
 import 'package:ous/Nav/userpolicie.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -172,7 +172,7 @@ class _SettingState extends State<Setting> {
                             // ログイン画面に遷移＋チャット画面を破棄
                             await Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) {
-                                return AuthPage();
+                                return Login();
                               }),
                             );
                           },
