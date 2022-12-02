@@ -683,6 +683,8 @@ PODS:
     - Flutter
   - flutter_pdfview (1.0.2):
     - Flutter
+  - flutter_webview_plugin_ios_android (0.0.1):
+    - Flutter
   - gallery_saver (0.0.1):
     - Flutter
   - google_sign_in_ios (0.0.1):
@@ -788,6 +790,8 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
+  - sign_in_with_apple (0.0.1):
+    - Flutter
   - syncfusion_flutter_pdfviewer (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -807,6 +811,7 @@ DEPENDENCIES:
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
+  - flutter_webview_plugin_ios_android (from `.symlinks/plugins/flutter_webview_plugin_ios_android/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -815,6 +820,7 @@ DEPENDENCIES:
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - syncfusion_flutter_pdfviewer (from `.symlinks/plugins/syncfusion_flutter_pdfviewer/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
@@ -865,6 +871,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
+  flutter_webview_plugin_ios_android:
+    :path: ".symlinks/plugins/flutter_webview_plugin_ios_android/ios"
   gallery_saver:
     :path: ".symlinks/plugins/gallery_saver/ios"
   google_sign_in_ios:
@@ -881,6 +889,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sensors_plus/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sign_in_with_apple:
+    :path: ".symlinks/plugins/sign_in_with_apple/ios"
   syncfusion_flutter_pdfviewer:
     :path: ".symlinks/plugins/syncfusion_flutter_pdfviewer/ios"
   url_launcher_ios:
@@ -912,6 +922,7 @@ SPEC CHECKSUMS:
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
+  flutter_webview_plugin_ios_android: 72ac359f16e52e162a8ff359c5d36ec5379718f4
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   google_sign_in_ios: 4f85eb9f937450765c8573bb85fd8cd6a5af675c
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
@@ -931,6 +942,7 @@ SPEC CHECKSUMS:
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   sensors_plus: 5717760720f7e6acd96fdbd75b7428f5ad755ec2
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
   syncfusion_flutter_pdfviewer: bb9998884b864cfedf72628df3503bdf57e397c0
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff

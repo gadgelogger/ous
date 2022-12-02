@@ -4,7 +4,6 @@ import 'package:ous/Nav/link.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/main.dart';
 import 'package:ous/setting/setting.dart';
-import 'package:ous/Nav/tcp.dart';
 import 'package:ous/Nav/Calendar/calendar.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/userpolicie.dart';
@@ -83,16 +82,7 @@ class NavBar extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.launch),
-            title: Text('TCPはこちら'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => tcp()),
-              );
-            },
-          ),
+
           Divider(),
           ListTile(
             leading: Icon(Icons.settings),

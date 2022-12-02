@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +25,72 @@ class _RegistrationState extends State<Registration> {
 
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
+
+
+
+  //Appleサインイン
+
+  // 公式のを参考に作ったユーザー登録の関数
+  Future<UserCredential> signInWithApple() async {
+    print('AppSignInを実行');
+
+    final rawNonce = generateNonce();
+
+    // 現在サインインしているAppleアカウントのクレデンシャルを要求する。
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    print(appleCredential);
+    // Apple から返されたクレデンシャルから `OAuthCredential` を作成します。
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+    print(appleCredential);
+    // Firebaseでユーザーにサインインします。もし、先ほど生成したnonceが
+    // が `appleCredential.identityToken` の nonce と一致しない場合、サインインに失敗します。
+    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  }
+
+  // 上のとほぼ一緒。登録とログインができる。
+  Future<UserCredential> AppleSignIn() async {
+    print('AppSignInを実行');
+    // To prevent replay attacks with the credential returned from Apple, we
+    // include a nonce in the credential request. When signing in with
+    // Firebase, the nonce in the id token returned by Apple, is expected to
+    // match the sha256 hash of `rawNonce`.
+    final rawNonce = generateNonce();
+
+    // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    print(appleCredential);
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+    // ここに画面遷移をするコードを書く!
+    Navigator.push(
+        context,MaterialPageRoute(builder: (context) {
+      return MyHomePage(title: 'home');
+    }));
+    print(appleCredential);
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  }
+
+  //Appleサインイン
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +179,7 @@ class _RegistrationState extends State<Registration> {
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
                         shadowColor: Colors.greenAccent,
-                        color: Colors.green,
+                        color: Colors.lightGreen,
                         elevation: 7.0,
                         child: GestureDetector(
                           onTap: () async {
@@ -160,13 +228,14 @@ class _RegistrationState extends State<Registration> {
                         ),
                       )),
                   SizedBox(height: 20.0),
+
                   Container(
                     height: 40.0,
                     color: Colors.transparent,
                     child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.black,
+                              color: Colors.lightGreen,
                               style: BorderStyle.solid,
                               width: 1.0),
                           color: Colors.transparent,

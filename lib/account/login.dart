@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'authentication_error.dart';
 import 'signuppage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'email_check.dart';
+import 'package:sign_in_button/sign_in_button.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -27,10 +30,77 @@ class _Login extends State<Login> {
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
+
+
+  //Appleサインイン
+
+  // 公式のを参考に作ったユーザー登録の関数
+  Future<UserCredential> signInWithApple() async {
+    print('AppSignInを実行');
+
+    final rawNonce = generateNonce();
+
+    // 現在サインインしているAppleアカウントのクレデンシャルを要求する。
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    print(appleCredential);
+    // Apple から返されたクレデンシャルから `OAuthCredential` を作成します。
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+    print(appleCredential);
+    // Firebaseでユーザーにサインインします。もし、先ほど生成したnonceが
+    // が `appleCredential.identityToken` の nonce と一致しない場合、サインインに失敗します。
+    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  }
+
+  // 上のとほぼ一緒。登録とログインができる。
+  Future<UserCredential> AppleSignIn() async {
+    print('AppSignInを実行');
+    // To prevent replay attacks with the credential returned from Apple, we
+    // include a nonce in the credential request. When signing in with
+    // Firebase, the nonce in the id token returned by Apple, is expected to
+    // match the sha256 hash of `rawNonce`.
+    final rawNonce = generateNonce();
+
+    // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+    print(appleCredential);
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+    // ここに画面遷移をするコードを書く!
+    Navigator.push(
+        context,MaterialPageRoute(builder: (context) {
+      return MyHomePage(title: 'home');
+    }));
+    print(appleCredential);
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+  }
+
+  //Appleサインイン
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -73,7 +143,7 @@ class _Login extends State<Login> {
                               color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
-                              BorderSide(color: Colors.lightGreen))),
+                                  BorderSide(color: Colors.lightGreen))),
                       onChanged: (String value) {
                         setState(() {
                           _login_Email = value;
@@ -91,7 +161,7 @@ class _Login extends State<Login> {
                               color: Colors.grey),
                           focusedBorder: UnderlineInputBorder(
                               borderSide:
-                              BorderSide(color: Colors.lightGreen))),
+                                  BorderSide(color: Colors.lightGreen))),
                       obscureText: true,
                       onChanged: (String value) {
                         setState(() {
@@ -99,7 +169,9 @@ class _Login extends State<Login> {
                         });
                       },
                     ),
-                    SizedBox(height: 5.0.h,),
+                    SizedBox(
+                      height: 5.0.h,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -140,7 +212,7 @@ class _Login extends State<Login> {
                       ),
                     ),
                     Center(
-                      child:  Padding(
+                      child: Padding(
                         padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
                         child: Text(
                           _infoText,
@@ -148,7 +220,7 @@ class _Login extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 40.0.h),
+                    SizedBox(height: 10.0.h),
                     Container(
                       height: 40.0.h,
                       child: Material(
@@ -161,7 +233,7 @@ class _Login extends State<Login> {
                               try {
                                 // メール/パスワードでログイン
                                 UserCredential _result =
-                                await _auth.signInWithEmailAndPassword(
+                                    await _auth.signInWithEmailAndPassword(
                                   email: _login_Email,
                                   password: _login_Password,
                                 );
@@ -171,11 +243,10 @@ class _Login extends State<Login> {
 
                                 // Email確認が済んでいる場合のみHome画面へ
                                 if (_user.emailVerified) {
-                                  Navigator.push(
-                                      context,
+                                  Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
-                                        return MyHomePage(title: 'home');
-                                      }));
+                                    return MyHomePage(title: 'home');
+                                  }));
                                 } else {
                                   Navigator.push(
                                     context,
@@ -189,26 +260,26 @@ class _Login extends State<Login> {
                               } catch (e) {
                                 // ログインに失敗した場合
                                 setState(() {
-                                  _infoText =
-                                      auth_error.login_error_msg(e.hashCode, e.toString());
+                                  _infoText = auth_error.login_error_msg(
+                                      e.hashCode, e.toString());
                                 });
                               }
                             },
                             child: Container(
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'ログイン',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
-                                    )
-                                  ],
-                                ))),
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'ログイン',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                )
+                              ],
+                            ))),
                       ),
                     ),
                     SizedBox(height: 20.0.h),
@@ -234,8 +305,7 @@ class _Login extends State<Login> {
                                   return MyHomePage(title: 'home');
                                 }),
                               );
-                            } on PlatformException catch(e) {
-                            }
+                            } on PlatformException catch (e) {}
                           },
                           child: Center(
                             child: Text(
@@ -244,6 +314,41 @@ class _Login extends State<Login> {
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Montserrat'),
                             ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20.0.h),
+                    //Appleでサインイン
+                    Container(
+                      height: 40.0.h,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black,
+                                style: BorderStyle.solid,
+                                width: 1.0.w),
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20.0)),
+                        child: GestureDetector(
+                          onTap: () async {
+                            signInWithApple();
+                          },
+                          child: Center(
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                    Icons.apple, //設定したいアイコンのID
+                                    color: Colors.black // 色
+                                ),
+                                Text(
+                                  'Appleでサインイン',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat'),
+                                ),                              ],
+                            )
                           ),
                         ),
                       ),
@@ -263,7 +368,8 @@ class _Login extends State<Login> {
                           onTap: () async {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Registration()),
+                              MaterialPageRoute(
+                                  builder: (context) => Registration()),
                             );
                           },
                           child: Center(
@@ -289,7 +395,7 @@ class _Login extends State<Login> {
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser?.authentication;
+        await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -301,3 +407,7 @@ class _Login extends State<Login> {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
+
+
+
+

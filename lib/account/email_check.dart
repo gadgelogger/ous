@@ -20,6 +20,7 @@ class _Emailcheck extends State<Emailcheck> {
   final _auth = FirebaseAuth.instance;
   String _nocheckText = '';
   String _sentEmailText = '';
+  String _sentEmailText2 = '';
   int _btn_click_num = 0;
 
   // 前画面から受け取った値はNull許容のため、入れ直し用の変数を用意
@@ -37,6 +38,7 @@ class _Emailcheck extends State<Emailcheck> {
         // アカウント作成画面から遷移した時
         _nocheckText = '';
         _sentEmailText = '${widget.email}\nに確認メールを送信しました。';
+        _sentEmailText2 = '届いていない場合は迷惑メールフォルダも確認してみてください。';
       } else {
         _nocheckText = 'まだメール確認が完了していません。\n確認メール内のリンクをクリックしてください。';
         _sentEmailText = '';
@@ -60,6 +62,7 @@ class _Emailcheck extends State<Emailcheck> {
 
             // 確認メール送信時のメッセージ
             Text(_sentEmailText),
+            Text(_sentEmailText2),
 
             // 確認メールの再送信ボタン
             Padding(
@@ -107,7 +110,7 @@ class _Emailcheck extends State<Emailcheck> {
               child: ElevatedButton(
                 // ボタンの形状や背景色など
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // background-color
+                  primary: Colors.lightGreen, // background-color
                   onPrimary: Colors.white, //text-color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -116,7 +119,7 @@ class _Emailcheck extends State<Emailcheck> {
 
                 // ボタン内の文字や書式
                 child: Text(
-                  'メール確認完了',
+                  'メール確認が完了したで',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
 

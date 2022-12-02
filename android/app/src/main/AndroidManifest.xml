@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ous.unoffical.app.ous">
+    package="com.ous.unoffical.app">
    <application
         android:label="非公式岡理アプリβ"
         android:name="${applicationName}"
