@@ -6,14 +6,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 
-class all extends StatefulWidget {
-  const all({Key? key}) : super(key: key);
+class sanyo extends StatefulWidget {
+  const sanyo({Key? key}) : super(key: key);
 
   @override
-  State<all> createState() => _allState();
+  State<sanyo> createState() => _sanyoState();
 }
 
-class _allState extends State<all> {
+class _sanyoState extends State<sanyo> {
   List<Article> articles = [];
   @override
   void initState(){
@@ -26,23 +26,21 @@ class _allState extends State<all> {
     final controller = WindowController();
     await controller.openHttp(
       method: 'GET',
-      uri: Uri.parse('https://www.ous.ac.jp/topics/'),
+      uri: Uri.parse('https://www.sanyonews.jp/okayama/syuyo'),
     );
     final document = controller.window!.document;
 
     final titles = document
-        .querySelectorAll("dl > dd >a")
+        .querySelectorAll("> div.post_body > div.post_title > a")
+
         .map((element) => element.innerText)
         .toList();
 
     final urls = document
-        .querySelectorAll("dl > dd > a  ")
-        .map((element) => 'https://www.ous.ac.jp${element.getAttribute("href")}')
+        .querySelectorAll(" div.post_body > div.post_title > a")
+        .map((element) => 'https://www.sanyonews.jp${element.getAttribute("href")}')
         .toList();
-    final dates = document
-        .querySelectorAll("div > .p10 > dt")
-        .map((element) => element.innerText)
-        .toList();
+
 
     setState((){
       articles = List.generate(
@@ -50,7 +48,6 @@ class _allState extends State<all> {
             (index) => Article(
           title: titles[index],
           url: urls[index],
-          date:dates[index],
         ),
       );
     });
@@ -72,7 +69,6 @@ class _allState extends State<all> {
                 children:[
                   ListTile(
                     title: Text(article.title),
-                    subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                     onTap: () => launch(article.url),
 
                   ),
@@ -91,12 +87,10 @@ class _allState extends State<all> {
 class Article {
   final String url;
   final String title;
-  final String date;
 
   const Article({
     required this.url,
     required this.title,
-    required this.date,
 
   });
 }

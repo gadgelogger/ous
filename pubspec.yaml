@@ -74,6 +74,7 @@ dependencies:
   flutter_webview_plugin_ios_android: ^0.3.12
   sign_in_button: ^3.1.0
   sign_in_with_apple: ^4.2.0
+  youtube_api: ^1.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

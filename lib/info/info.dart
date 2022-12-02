@@ -6,6 +6,7 @@ import 'package:ous/info/3.dart';
 import 'package:ous/info/4.dart';
 import 'package:ous/info/5.dart';
 import 'package:ous/info/6.dart';
+import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
 class Info extends StatelessWidget {
   const Info({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class Info extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -55,6 +56,11 @@ class Info extends StatelessWidget {
                     fontSize: 15.0,
                   ),
                 ),
+                Text('岡山のニュース',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                  ),
+                ),
 
               ]),
         ),
@@ -66,6 +72,7 @@ class Info extends StatelessWidget {
             Departmentreport(),
             report(),
             movie(),
+            sanyo(),
           ],
         ),
       ),

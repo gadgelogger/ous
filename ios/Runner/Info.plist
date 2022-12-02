@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Ous</string>
+	<string>非公式岡理アプリ</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.550367521697-52ua35b9d8d2u5ccl5ldahtr7phitaip</string>
+				<string>com.googleusercontent.apps.550367521697-bi8fc20atnpnvmtsrrna49tjmed3h83i</string>
 			</array>
 		</dict>
 	</array>

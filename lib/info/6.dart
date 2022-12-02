@@ -4,8 +4,7 @@ import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
 import 'package:universal_html/parsing.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webfeed/webfeed.dart';
-
+import 'package:youtube_api/youtube_api.dart';
 
 
 class movie extends StatefulWidget {
@@ -16,88 +15,98 @@ class movie extends StatefulWidget {
 }
 
 class _movieState extends State<movie> {
-  List<Article> articles = [];
-  @override
-  void initState(){
-    super .initState();
-    getWebsiteData();
+
+  static String key = "AIzaSyBIcxrqy1q6MOKAkdnZkYIlGTEMUUdDLgw";
 
 
-  }
-  Future getWebsiteData() async {
-    final controller = WindowController();
-    await controller.openHttp(
-      method: 'GET',
-      uri: Uri.parse('https://www.youtube.com/channel/UCMuC2oINOXry-Ya6Lw7Pu4Q/videos'),
+
+  YoutubeAPI youtube = YoutubeAPI(key);
+  List<YouTubeVideo> videoResult = [];
+
+  Future<void> callAPI() async {
+    String query = "【おかりかチャンネル】岡山理科大学の現役学生による公式YouTubeチャンネル";
+
+        videoResult = await youtube.search(
+      query,
+      order: 'relevance',
+      videoDuration: 'any',
     );
-    final document = controller.window!.document;
+    videoResult = await youtube.nextPage(
 
-    final titles = document
-        .querySelectorAll('title')
-        .map((element) => element.innerText)
-        .toList();
-
-    final urls = document
-        .querySelectorAll("dl > dd > a  ")
-        .map((element) => 'https://www.ous.ac.jp${element.getAttribute("href")}')
-        .toList();
-    final dates = document
-        .querySelectorAll("div > .p10 > dt")
-        .map((element) => element.innerText)
-        .toList();
-
-    setState((){
-      articles = List.generate(
-        titles.length,
-            (index) => Article(
-          title: titles[index],
-          url: urls[index],
-          date:dates[index],
-        ),
-      );
-    });
+    );
+    setState(() {});
   }
+
+  @override
+  void initState() {
+    super.initState();
+    callAPI();
+    print('hello');
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            print('Loading New Data');
-            await getWebsiteData();
-          },
-          child: ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: articles.length,
-            itemBuilder: (context, index) {
-              final article = articles[index];
-              return Column(
-                children:[
-                  ListTile(
-                    title: Text(article.title),
-                    subtitle: Text(article.url.replaceAll('./detail', '/detail')),
-                    onTap: () => launch(article.url),
+      body: Container(
+        child: ListView(
+          children:
+            videoResult.map<Widget>(listItem).toList(),
 
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => {
+           launch('https://www.youtube.com/@user-ms9dw7xq5l/videos')
+          },
+          child: Icon(Icons.movie_creation_outlined)
+      ),
+    );
+  }
+
+
+
+
+  Widget listItem(YouTubeVideo video) {
+    return GestureDetector(
+      onTap: (){
+        launch(video.url);
+      },
+      child: Column(
+        children: [
+          Card(
+            child: Container(
+              margin: EdgeInsets.symmetric(vertical: 7.0),
+              padding: EdgeInsets.all(12.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Image.network(
+                      video.thumbnail.small.url ?? '',
+                      width: 120.0,
+                    ),
                   ),
-                  Divider(),//区切り線
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          video.title,
+                          softWrap: true,
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+
+                      ],
+                    ),
+                  )
                 ],
-              );
-            },
+              ),
+            ),
           ),
-        )
+        ],
+      )
     );
   }
 }
-
-
-class Article {
-  final String url;
-  final String title;
-
-  const Article({
-    required this.url,
-    required this.title, required String date,
-
-  });
-}
-
-
-

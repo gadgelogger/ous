@@ -53,31 +53,60 @@ class _MusicState extends State<Music> {
               VideoProgressIndicator(
                 _controller,
                 allowScrubbing: true,
+                colors: new VideoProgressColors(
+                  playedColor: Colors.lightGreen,
+                  bufferedColor: Colors.black26,
+                  backgroundColor: Colors.black26,
+                ),
               ),
               _ProgressText(controller: _controller),
+              SizedBox(height: 20.0),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  IconButton(
+                  ElevatedButton(
                     onPressed: () {
                       _controller
                           .seekTo(Duration.zero)
                           .then((_) => _controller.play());
                     },
-                    icon: Icon(Icons.refresh),
+                    child: Icon(Icons.refresh, color: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      foregroundColor: Colors.red, // <-- Splash color
+                    ),
                   ),
-                  IconButton(
+                  ElevatedButton(
                     onPressed: () {
-                      _controller.play();
+                      _controller
+                          .seekTo(Duration.zero)
+                          .then((_) => _controller.play());
                     },
-                    icon: Icon(Icons.play_arrow),
+                    child: Icon(Icons.play_arrow, color: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      foregroundColor: Colors.red, // <-- Splash color
+                    ),
                   ),
-                  IconButton(
+                  ElevatedButton(
                     onPressed: () {
-                      _controller.pause();
+                      _controller
+                          .seekTo(Duration.zero)
+                          .then((_) => _controller.pause());
                     },
-                    icon: Icon(Icons.pause),
-                  ),
+                    child: Icon(Icons.pause, color: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      foregroundColor: Colors.red, // <-- Splash color
+                    ),
+                  )
                 ],
               ),
             ],

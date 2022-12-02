@@ -332,7 +332,7 @@ class _Login extends State<Login> {
                             borderRadius: BorderRadius.circular(20.0)),
                         child: GestureDetector(
                           onTap: () async {
-                            signInWithApple();
+                            AppleSignIn();
                           },
                           child: Center(
                             child:Row(
