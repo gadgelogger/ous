@@ -1,7 +1,6 @@
 # ous
 
-A new Flutter project.
-
+非公式岡理アプリのソースコードです。
 ## Getting Started
 
 This project is a starting point for a Flutter application.
