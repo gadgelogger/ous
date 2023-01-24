@@ -679,8 +679,6 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
-  - flutter_native_splash (0.0.1):
-    - Flutter
   - flutter_pdfview (1.0.2):
     - Flutter
   - flutter_webview_plugin_ios_android (0.0.1):
@@ -809,7 +807,6 @@ DEPENDENCIES:
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
-  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - flutter_webview_plugin_ios_android (from `.symlinks/plugins/flutter_webview_plugin_ios_android/ios`)
   - gallery_saver (from `.symlinks/plugins/gallery_saver/ios`)
@@ -867,8 +864,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
-  flutter_native_splash:
-    :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   flutter_webview_plugin_ios_android:
@@ -920,7 +915,6 @@ SPEC CHECKSUMS:
   FirebaseStorage: e7b3fdc90b579cda35e5a0e4c6b206325766e75a
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
-  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_webview_plugin_ios_android: 72ac359f16e52e162a8ff359c5d36ec5379718f4
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542

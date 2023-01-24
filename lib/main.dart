@@ -17,7 +17,24 @@ import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  // 画面回転無効化
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp
+  ]);
+
+  //Setting SysemUIOverlay（ナビゲーションバー透過）
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemStatusBarContrastEnforced: true,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark)
+  );
+
+//Setting SystmeUIMode（ナビゲーションバー透過
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -53,12 +70,14 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               title: 'ホーム',
               theme: ThemeData(
-                primarySwatch: Colors.lightGreen,
+                useMaterial3: true,
+                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
                 fontFamily: 'NotoSansCJKJp',
               ),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,
-                primarySwatch: Colors.lightGreen,
+                useMaterial3: true,
+                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
                 fontFamily: 'NotoSansCJKJp',
               ),
               home: StreamBuilder<User?>(
@@ -105,50 +124,50 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
-  int currentindex = 0;
-  final screens = [
+  int _currentindex = 0;
+  List<Widget> pages = [
     home(),
     Info(),
     Review(),
     Business(),
   ];
 
-  @override
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Container(child: pages[_currentindex]),
       drawer: NavBar(),
-      backgroundColor: Colors.white,
-      body: screens[currentindex],
-      bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentindex,
-        onTap: (index) => setState(() => currentindex = index),
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+      backgroundColor: Color.fromARGB(0, 253, 253, 246),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentindex,
+        onDestinationSelected: (index) => setState(() {
+          _currentindex = index;
+        }),
+
+        destinations: [
+
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
             label: 'ホーム',
-            backgroundColor: Colors.lightGreen,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info),
+          NavigationDestination(
+            icon: Icon(Icons.info_outline),
             label: 'お知らせ',
-            backgroundColor: Colors.lightGreen,
           ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+          NavigationDestination(
+            icon: Icon(Icons.school_outlined),
             label: '講義評価',
-            backgroundColor: Colors.lightGreen,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business_center),
+          NavigationDestination(
+            icon: Icon(Icons.business_center_outlined),
             label: '就活関連',
-            backgroundColor: Colors.lightGreen,
           ),
         ],
-      ),
+
+          ),
+
 
     );
 

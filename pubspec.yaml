@@ -39,7 +39,6 @@ dependencies:
   webviewx: ^0.2.1
   webview_flutter: ^2.0.13
   syncfusion_flutter_calendar: ^20.1.52
-  flutter_native_splash: ^2.1.6
   url_launcher: ^6.1.0
   universal_html: ^2.0.8
   flutter_launcher_icons: ^0.11.0
@@ -79,10 +78,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter_native_splash:        # 追加
-  image: "assets/images/icon.png"  # 追加
-  color: "#ffffff"            # 追加
-  fullscreen: true            # 追加
 
 
 

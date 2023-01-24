@@ -21,7 +21,10 @@ class Info extends StatelessWidget {
           elevation: 0,
           title: Text('News'),
           bottom: TabBar(
+              labelColor: Colors.lightGreen,
+              unselectedLabelColor: Colors.grey,
               isScrollable: true,
+              indicatorColor: Colors.lightGreen,
               labelPadding: EdgeInsets.symmetric(horizontal:10),
 
               tabs: [

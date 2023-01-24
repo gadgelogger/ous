@@ -93,7 +93,7 @@ class _SettingState extends State<Setting> {
         ),
         body: SettingsList(sections: [
           SettingsSection(
-            title: Text('基本的な設定'),
+            title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.language),
@@ -107,7 +107,7 @@ class _SettingState extends State<Setting> {
             ],
           ),
           SettingsSection(
-            title: Text('その他'),
+            title: Text('その他',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                   leading: Icon(Icons.music_note),
@@ -162,7 +162,7 @@ class _SettingState extends State<Setting> {
             ],
           ),
           SettingsSection(
-            title: Text('アカウント関連'),
+            title: Text('アカウント関連',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.exit_to_app),

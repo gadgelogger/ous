@@ -21,12 +21,18 @@ class home extends StatelessWidget {
           ),
           body: SingleChildScrollView(
               child: Column(children: [
-                Image.asset(
-                  Theme
-                      .of(context)
-                      .brightness == Brightness.dark
-                      ? 'assets/images/homedark.jpeg'
-                      : 'assets/images/home.jpg',
+                Container(
+                  width: 500,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight:  Radius.circular(20)),
+                    child: Image.asset(
+                      Theme
+                          .of(context)
+                          .brightness == Brightness.dark
+                          ? 'assets/images/homedark.jpeg'
+                          : 'assets/images/home.jpg',
+                    ),
+                  ),
                 ),
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +41,6 @@ class home extends StatelessWidget {
                         'バス運行情報',
                         style: TextStyle(
                           fontSize: 30.sp,
-                          fontWeight: FontWeight.bold,
                         ),
                       )
                     ]
@@ -49,10 +54,11 @@ class home extends StatelessWidget {
                               width: 180.w, //横幅
                               height: 50.h, //高さ
                               child: ElevatedButton(
-                                child: const Text('岡山駅西口発'),
+                                child: const Text('岡山駅西口発',style: TextStyle(fontWeight: FontWeight.bold),),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.lightGreen,
-                                  onPrimary: Colors.white,
+                                  elevation: 0,
+                                  primary: Colors.lightGreen[200],
+                                  onPrimary: Colors.green[900],
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -67,10 +73,11 @@ class home extends StatelessWidget {
                               width: 180.w, //横幅
                               height: 50.h, //高さ
                               child: ElevatedButton(
-                                child: const Text('岡山理科大学\正門発'),
+                                child: const Text('岡山理科大学\正門発',style: TextStyle(fontWeight: FontWeight.bold),),
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.lightGreen,
-                                  onPrimary: Colors.white,
+                                  elevation: 0,
+                                  primary: Colors.lightGreen[200],
+                                  onPrimary: Colors.green[900],
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
@@ -95,10 +102,12 @@ class home extends StatelessWidget {
                           'マイログ稼働情報',
                           style: TextStyle(
                             fontSize: 30.sp,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        WebViewAware(child:
+                        ClipRRect(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20)),
+                            child:
+                            WebViewAware(child:
                         GestureDetector(
                           onTap: (){
                             launch(
@@ -112,6 +121,7 @@ class home extends StatelessWidget {
 
                         ),
                         )
+                          )
                       ]
                   ),
                 )

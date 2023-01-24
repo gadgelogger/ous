@@ -30,7 +30,6 @@ class Review extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Divider(), //区切り線
 
               Container(
                 child: Row(
