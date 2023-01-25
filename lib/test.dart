@@ -149,32 +149,7 @@ class _TestState extends State<Test> {
                 )),
               ),
             ),
-            Card(
-              child: ListTile(
-                  tileColor: Colors.lightGreen,
-                  leading: Icon(Icons.warning_amber_outlined),
-                  title: Text(
-                    '削除フォーム(教授向け）',
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  onTap: () {
-                    launch(
-                        'https://docs.google.com/forms/d/e/1FAIpQLSdhv3t-MJ7nh1J7p47ovwJKAdTRrKpTHkoHK2Ar13DMEh7UTg/viewform?usp=sf_link');
-                  }),
-            ),
-            Card(
-              child: ListTile(
-                tileColor: Colors.lightGreen,
-                leading: Icon(Icons.warning_amber_outlined),
-                title: Text(
-                  'debug',
-                  style: TextStyle(fontSize: 15),
-                ),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => debug(),
-                )),
-              ),
-            ),
+
           ],
         ),
       ),

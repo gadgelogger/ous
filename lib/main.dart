@@ -35,6 +35,7 @@ void main() async {
 
 //Setting SystmeUIMode（ナビゲーションバー透過
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -62,7 +63,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return
+
+      ScreenUtilInit(
         designSize: const Size(392, 759),
         minTextAdapt: true,
         splitScreenMode: true,
@@ -83,9 +86,9 @@ class MyApp extends StatelessWidget {
               home: StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                  {
                     // スプラッシュ画面などに書き換えても良い
-                    return const SizedBox();
                   }
                   if (snapshot.hasData) {
                     // User が null でなない、つまりサインイン済みのホーム画面へ
@@ -100,6 +103,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
 
 
 class MyHomePage extends StatefulWidget {
@@ -170,8 +175,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     );
-
-
-
   }
 }
+
+
+
+

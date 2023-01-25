@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'authentication_error.dart';
 import 'signuppage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ous/home.dart';
+
 import 'package:ous/main.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/services.dart';
 import 'email_check.dart';
-import 'package:sign_in_button/sign_in_button.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 
 class Login extends StatefulWidget {
   @override
@@ -29,7 +30,6 @@ class _Login extends State<Login> {
 
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
-
 
 
   //Appleサインイン
@@ -83,7 +83,7 @@ class _Login extends State<Login> {
     );
     // ここに画面遷移をするコードを書く!
     Navigator.push(
-        context,MaterialPageRoute(builder: (context) {
+        context, MaterialPageRoute(builder: (context) {
       return MyHomePage(title: 'home');
     }));
     print(appleCredential);
@@ -92,301 +92,405 @@ class _Login extends State<Login> {
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 
+  Future<void> _onSignInWithAnonymousUser() async {
+    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    try{
+      await firebaseAuth.signInAnonymously();
+
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) {
+            return MyHomePage(title: 'home');
+          })
+      );
+    } catch(e) {
+      await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('エラー'),
+              content: Text(e.toString()),
+            );
+          }
+      );
+    }
+  }
+
+
+
+
+
+
+
   //Appleサインイン
-
-
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                    child: Text('Hello',
-                        style: TextStyle(
-                            fontSize: 80.0.sp, fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(13.0, 180.0, 0.0, 0.0),
-                    child: Text('OUS',
-                        style: TextStyle(
-                            fontSize: 80.0.sp, fontWeight: FontWeight.bold)),
-                  ),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(168.0, 175.0, 0.0, 0.0),
-                    child: Text('.',
-                        style: TextStyle(
-                            fontSize: 80.0.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.lightGreen)),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-                padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+        body: Scrollbar(
+            isAlwaysShown: false,
+            child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    TextField(
-                      decoration: InputDecoration(
-                          labelText: 'メールアドレス',
-                          labelStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.lightGreen))),
-                      onChanged: (String value) {
-                        setState(() {
-                          _login_Email = value;
-                        });
-                      },
-                      inputFormatters: [],
-                    ),
-                    SizedBox(height: 20.0.h),
-                    TextField(
-                      decoration: InputDecoration(
-                          labelText: 'パスワード',
-                          labelStyle: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.lightGreen))),
-                      obscureText: true,
-                      onChanged: (String value) {
-                        setState(() {
-                          _login_Password = value;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 5.0.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          '',
-                          style: TextStyle(fontFamily: 'Montserrat'),
-                        ),
-                        SizedBox(width: 5.0.w),
-                        InkWell(
-                          onTap: () => launch(
-                              'https://tan-q-bot-unofficial.com/terms_of_service/'),
-                          child: Text(
-                            '利用規約に同意する必要があります。',
-                            style: TextStyle(
-                                color: Colors.lightGreen,
-                                fontFamily: 'Montserrat',
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
+                    Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                            child: Text('Hello',
+                                style: TextStyle(
+                                    fontSize: 80.0.sp,
+                                    fontWeight: FontWeight.bold)),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5.0.h),
-                    Container(
-                      alignment: Alignment(-1.0, 0.0),
-                      padding: EdgeInsets.only(top: 15.0, left: 6.0),
-                      child: InkWell(
-                        child: Text(
-                          'パスワードを忘れた方へ',
-                          style: TextStyle(
-                              color: Colors.lightGreen,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Montserrat',
-                              decoration: TextDecoration.underline),
-                        ),
-                        onTap: () =>
-                            _auth.sendPasswordResetEmail(email: _login_Email),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
-                        child: Text(
-                          _infoText,
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10.0.h),
-                    Container(
-                      height: 40.0.h,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.greenAccent,
-                        color: Colors.lightGreen,
-                        elevation: 7.0,
-                        child: GestureDetector(
-                            onTap: () async {
-                              try {
-                                // メール/パスワードでログイン
-                                UserCredential _result =
-                                    await _auth.signInWithEmailAndPassword(
-                                  email: _login_Email,
-                                  password: _login_Password,
-                                );
-
-                                // ログイン成功
-                                User _user = _result.user!; // ログインユーザーのIDを取得
-
-                                // Email確認が済んでいる場合のみHome画面へ
-                                if (_user.emailVerified) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return MyHomePage(title: 'home');
-                                  }));
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Emailcheck(
-                                            email: _login_Email,
-                                            pswd: _login_Password,
-                                            from: 2)),
-                                  );
-                                }
-                              } catch (e) {
-                                // ログインに失敗した場合
-                                setState(() {
-                                  _infoText = auth_error.login_error_msg(
-                                      e.hashCode, e.toString());
-                                });
-                              }
-                            },
-                            child: Container(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    'ログイン',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat'),
-                                  ),
-                                )
-                              ],
-                            ))),
-                      ),
-                    ),
-                    SizedBox(height: 20.0.h),
-                    Container(
-                      height: 40.0.h,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.lightGreen,
-                                style: BorderStyle.solid,
-                                width: 1.0.w),
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: GestureDetector(
-                          onTap: () async {
-                            try {
-                              // メール/パスワードでログイン
-                              final userCredential = await signInWithGoogle();
-                              // ログインに成功した場合
-                              // チャット画面に遷移＋ログイン画面を破棄
-                              await Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(builder: (context) {
-                                  return MyHomePage(title: 'home');
-                                }),
-                              );
-                            } on PlatformException catch (e) {}
-                          },
-                          child: Center(
-                            child: Text(
-                              '大学のアカウントでログイン',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
-                            ),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(13.0, 180.0, 0.0, 0.0),
+                            child: Text('OUS',
+                                style: TextStyle(
+                                    fontSize: 80.0.sp,
+                                    fontWeight: FontWeight.bold)),
                           ),
-                        ),
+                          Container(
+                            padding: EdgeInsets.fromLTRB(
+                                168.0, 175.0, 0.0, 0.0),
+                            child: Text('.',
+                                style: TextStyle(
+                                    fontSize: 80.0.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.lightGreen)),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 20.0.h),
-                    //Appleでサインイン
                     Container(
-                      height: 40.0.h,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.black,
-                                style: BorderStyle.solid,
-                                width: 1.0.w),
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: GestureDetector(
-                          onTap: () async {
-                            AppleSignIn();
-                          },
-                          child: Center(
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                    Icons.apple, //設定したいアイコンのID
-                                    color: Colors.black // 色
-                                ),
-                                Text(
-                                  'Appleでサインイン',
-                                  style: TextStyle(
+                        padding: EdgeInsets.only(
+                            top: 35.0, left: 20.0, right: 20.0),
+                        child: Column(
+                          children: <Widget>[
+                            TextField(
+                              decoration: InputDecoration(
+                                  labelText: 'メールアドレス',
+                                  labelStyle: TextStyle(
+                                      fontFamily: 'Montserrat',
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat'),
-                                ),                              ],
-                            )
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20.0.h),
-                    Container(
-                      height: 40.0.h,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.lightGreen,
-                                style: BorderStyle.solid,
-                                width: 1.0.w),
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: GestureDetector(
-                          onTap: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Registration()),
-                            );
-                          },
-                          child: Center(
-                            child: Text(
-                              'サインアップ',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
+                                      color: Colors.grey),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                      BorderSide(color: Colors.lightGreen))),
+                              onChanged: (String value) {
+                                setState(() {
+                                  _login_Email = value;
+                                });
+                              },
+                              inputFormatters: [],
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
+                            SizedBox(height: 20.0.h),
+                            TextField(
+                              decoration: InputDecoration(
+                                  labelText: 'パスワード',
+                                  labelStyle: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                      BorderSide(color: Colors.lightGreen))),
+                              obscureText: true,
+                              onChanged: (String value) {
+                                setState(() {
+                                  _login_Password = value;
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: 5.0.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  '',
+                                  style: TextStyle(fontFamily: 'Montserrat'),
+                                ),
+                                SizedBox(width: 5.0.w),
+                                InkWell(
+                                  onTap: () =>
+                                      launch(
+                                          'https://tan-q-bot-unofficial.com/terms_of_service/'),
+                                  child: Text(
+                                    '利用規約に同意する必要があります。',
+                                    style: TextStyle(
+                                        color: Colors.lightGreen,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 5.0.h),
+                            Container(
+                              alignment: Alignment(-1.0, 0.0),
+                              padding: EdgeInsets.only(top: 15.0, left: 6.0),
+                              child: InkWell(
+                                child: Text(
+                                  'パスワードを忘れた方へ',
+                                  style: TextStyle(
+                                      color: Colors.lightGreen,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat',
+                                      decoration: TextDecoration.underline),
+                                ),
+                                onTap: () =>
+                                    _auth.sendPasswordResetEmail(
+                                        email: _login_Email),
+                              ),
+                            ),
+                            Center(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    20.0, 0, 20.0, 5.0),
+                                child: Text(
+                                  _infoText,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10.0.h),
+                            Container(
+                              height: 40.0.h,
+                              child: Material(
+                                borderRadius: BorderRadius.circular(20.0),
+                                color: Colors.lightGreen[200],
+                                elevation: 7.0,
+                                child: GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        // メール/パスワードでログイン
+                                        UserCredential _result =
+                                        await _auth.signInWithEmailAndPassword(
+                                          email: _login_Email,
+                                          password: _login_Password,
+                                        );
+
+                                        // ログイン成功
+                                        User _user = _result
+                                            .user!; // ログインユーザーのIDを取得
+
+                                        // Email確認が済んでいる場合のみHome画面へ
+                                        if (_user.emailVerified) {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return MyHomePage(
+                                                        title: 'home');
+                                                  }));
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Emailcheck(
+                                                        email: _login_Email,
+                                                        pswd: _login_Password,
+                                                        from: 2)),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        // ログインに失敗した場合
+                                        setState(() {
+                                          _infoText =
+                                              auth_error.login_error_msg(
+                                                  e.hashCode, e.toString());
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .spaceEvenly,
+                                          children: [
+                                            Center(
+                                              child: Text(
+                                                'ログイン',
+                                                style: TextStyle(
+                                                    color: Colors.green[900],
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Montserrat'),
+                                              ),
+                                            )
+                                          ],
+                                        ))),
+                              ),
+                            ),
+                            SizedBox(height: 20.0.h),
+                            Container(
+                              height: 40.0.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.lightGreen,
+                                        style: BorderStyle.solid,
+                                        width: 1.0.w),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    try {
+                                      // メール/パスワードでログイン
+                                      final userCredential = await signInWithGoogle();
+                                      // ログインに成功した場合
+                                      // チャット画面に遷移＋ログイン画面を破棄
+                                      await Navigator.of(context)
+                                          .pushReplacement(
+                                        MaterialPageRoute(builder: (context) {
+                                          return MyHomePage(title: 'home');
+                                        }),
+                                      );
+                                    } on PlatformException catch (e) {}
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      '大学のアカウントでログイン',
+                                      style: TextStyle(
+                                          color: Colors.green[900],
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.0.h),
+                            //Appleでサインイン
+                            Container(
+                              height: 40.0.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.lightGreen,
+                                        style: BorderStyle.solid,
+                                        width: 1.0.w),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Registration()),
+                                    );
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      'サインアップ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.0.h),
+
+                            Container(
+                              height: 40.0.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black,
+                                        style: BorderStyle.solid,
+                                        width: 1.0.w),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    AppleSignIn();
+                                  },
+                                  child: Center(
+                                      child:Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                              Icons.apple, //設定したいアイコンのID
+                                              color: Colors.black // 色
+                                          ),
+                                          Text(
+                                            'Appleでサインイン',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Montserrat'),
+                                          ),                              ],
+                                      )
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 20.0.h),
+
+                            Container(
+                              height: 40.0.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.lightGreen,
+                                        style: BorderStyle.solid,
+                                        width: 1.0.w),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: GestureDetector(
+                                   onTap: (){
+                                     showDialog(
+                                       context: context,
+                                       builder: (_) {
+                                         return AlertDialog(
+                                           title: Text("⚠️注意⚠️",textAlign: TextAlign.center,style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
+                                           content: Column(
+                                               mainAxisSize: MainAxisSize.min,
+
+                                               children: <Widget>[
+
+                                                 Text('会員登録なしで続行します。\nただセキュリティ上の理由により',textAlign: TextAlign.center,),
+                                                 Text('30日後にアカウントが消去されます',textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
+                                                 Text('データを保存する場合は会員登録をするか\n大学のアカウントでログインしてください。',textAlign: TextAlign.center,),
+
+
+                                               ]
+                                           ),
+                                           actions: <Widget>[
+                                             // ボタン領域
+                                             TextButton(
+                                               child: Text("やっぱやめる"),
+                                               onPressed: () => Navigator.pop(context),
+                                             ),
+                                             TextButton(
+                                               child: Text("構わんよ"),
+                                               onPressed: () => Navigator.pop(context),
+                                             ),
+                                           ],
+                                         );
+                                       },
+                                     );
+                                   },
+                                  child: Center(
+                                    child: Text(
+                                      'ゲストモードで使用',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 50.0.h),
+
+                          ],
+                        )),
                   ],
-                )),
-          ],
-        ));
+                ))));
   }
 
   Future<UserCredential> signInWithGoogle() async {
@@ -395,7 +499,7 @@ class _Login extends State<Login> {
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -407,7 +511,5 @@ class _Login extends State<Login> {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
-
-
 
 

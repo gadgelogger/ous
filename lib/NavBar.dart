@@ -7,12 +7,14 @@ import 'package:ous/setting/setting.dart';
 import 'package:ous/Nav/Calendar/calendar.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/userpolicie.dart';
+import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,17 +55,31 @@ class NavBar extends StatelessWidget {
           ),
           ),
           ListTile(
-            leading: Icon(Icons.event),
+            leading: Icon(Icons.event_available_outlined),
             title: Text('行事予定'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Calender()),
-              );
+             launch('https://www.ous.ac.jp/common/files//285/20220311164731084854.pdf');
             },
           ),
           ListTile(
-            leading: Icon(Icons.link),
+            leading: Icon(Icons.public_outlined),
+            title: Text('マイログ'),
+            onTap: () {
+              launchUrl(Uri.https('mylog.pub.ous.ac.jp/uprx/up/pk/pky501/Pky50101.xhtml', '/uprx/up/pk/pky501/Pky50101.xhtml'),mode:LaunchMode.externalApplication );
+
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.book_outlined),
+            title: Text('学生便覧'),
+            onTap: () {
+              launch('https://edu.career-tasu.jp/p/digital_pamph/frame.aspx?id=7540000-3-30&FL=0');
+            },
+          ),
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.link_outlined),
             title: Text('各種リンク集'),
             onTap: () {
               Navigator.push(
@@ -73,7 +89,7 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.call),
+            leading: Icon(Icons.call_outlined),
             title: Text('各種連絡先'),
             onTap: () {
               Navigator.push(
@@ -85,7 +101,7 @@ class NavBar extends StatelessWidget {
 
           Divider(),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(Icons.settings_outlined),
             title: Text('設定/その他'),
             onTap: () {
               Navigator.push(

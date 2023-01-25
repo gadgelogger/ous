@@ -45,7 +45,10 @@ class _Emailcheck extends State<Emailcheck> {
       }
     }
 
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: () async => false,
+
+        child:Scaffold(
       // メイン画面
       body: Center(
         child: Column(
@@ -151,6 +154,7 @@ class _Emailcheck extends State<Emailcheck> {
           ],
         ),
       ),
+    )
     );
   }
 }
