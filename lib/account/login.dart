@@ -269,6 +269,7 @@ class _Login extends State<Login> {
                                         email: _login_Email),
                               ),
                             ),
+                            //エラー表示
                             Center(
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(
@@ -279,13 +280,14 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
+                            //エラー表示（ここまで）
                             SizedBox(height: 10.0.h),
+                            //ログインボタン
                             Container(
                               height: 40.0.h,
                               child: Material(
                                 borderRadius: BorderRadius.circular(20.0),
                                 color: Colors.lightGreen[200],
-                                elevation: 7.0,
                                 child: GestureDetector(
                                     onTap: () async {
                                       try {
@@ -349,7 +351,9 @@ class _Login extends State<Login> {
                                         ))),
                               ),
                             ),
+                            //ログインボタンここまで
                             SizedBox(height: 20.0.h),
+                            //大学のアカウントでログイン
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -390,6 +394,7 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
+                            //大学のアカウントでログイン（ここまで）
                             SizedBox(height: 20.0.h),
                             //Appleでサインイン
                             Container(
@@ -423,8 +428,9 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
+                            //Appleでサインイン（ここまで）
                             SizedBox(height: 20.0.h),
-
+                            //サインアップ
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -458,8 +464,9 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
+                            //サインアップ（ここまで）
                             SizedBox(height: 20.0.h),
-
+                            //ゲストモード
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -520,7 +527,7 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
-
+                            //ゲストモード（ここまで）
                             SizedBox(height: 50.0.h),
 
                           ],
