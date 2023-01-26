@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,22 @@ class _RegistrationState extends State<Registration> {
   // Firebase Authenticationを利用するためのインスタンス
   final _auth = FirebaseAuth.instance;
 
+  //ユーザー情報保存
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  Future<void> Register() {
+    // 上で定義したメンバ変数を格納すると、usersコレクションに、
+    // メールアドレスとパスワードも保存できる。
+    return users
+        .add({
+      'email': _newEmail,
+      'username': _username,
+    })
+        .then((value) => print("新規登録に成功"))
+        .catchError((error) => print("新規登録に失敗しました!: $error"));
+  }
+
+
+  String _username = "";
   String _newEmail = ""; // 入力されたメールアドレス
   String _newPassword = ""; // 入力されたパスワード
   String _infoText = ""; // 登録に関する情報を表示
@@ -128,6 +145,24 @@ class _RegistrationState extends State<Registration> {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
+                        labelText: 'ユーザー名（他ユーザーに表示されます）',
+                        labelStyle: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                        // hintText: 'EMAIL',
+                        // hintStyle: ,
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green))),
+                    onChanged: (String value) {
+                      setState(() {
+                        _username = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10.0),
+                  TextField(
+                    decoration: InputDecoration(
                         labelText: 'メールアドレス',
                         labelStyle: TextStyle(
                             fontFamily: 'Montserrat',
@@ -195,6 +230,7 @@ class _RegistrationState extends State<Registration> {
                                 // 登録成功
                                 User _user = _result.user!; // 登録したユーザー情報
                                 _user.sendEmailVerification(); // Email確認のメールを送信
+                                Register();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

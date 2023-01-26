@@ -65,7 +65,7 @@ class NavBar extends StatelessWidget {
             leading: Icon(Icons.public_outlined),
             title: Text('マイログ'),
             onTap: () {
-              launchUrl(Uri.https('mylog.pub.ous.ac.jp/uprx/up/pk/pky501/Pky50101.xhtml', '/uprx/up/pk/pky501/Pky50101.xhtml'),mode:LaunchMode.externalApplication );
+              launchUrl(Uri.https('mylog.pub.ous.ac.jp', '/uprx/up/pk/pky501/Pky50101.xhtml'),mode:LaunchMode.externalApplication );
 
             },
           ),

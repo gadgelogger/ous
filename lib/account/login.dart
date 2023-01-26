@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,6 +8,7 @@ import 'authentication_error.dart';
 import 'signuppage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ous/home.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:ous/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,8 +33,22 @@ class _Login extends State<Login> {
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
+  //ユーザー情報保存
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  Future<void> Register() {
+    // 上で定義したメンバ変数を格納すると、usersコレクションに、
+    // メールアドレスとパスワードも保存できる。
+    return users
+        .add({
+      'email': _login_Email,
+    })
+        .then((value) => print("新規登録に成功"))
+        .catchError((error) => print("新規登録に失敗しました!: $error"));
+  }
 
-  //Appleサインイン
+
+
+//Appleサインイン
 
   // 公式のを参考に作ったユーザー登録の関数
   Future<UserCredential> signInWithApple() async {
@@ -85,13 +101,17 @@ class _Login extends State<Login> {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) {
       return MyHomePage(title: 'home');
+
     }));
+    Fluttertoast.showToast(msg: "ログインしました");
+
+
     print(appleCredential);
     // Sign in the user with Firebase. If the nonce we generated earlier does
     // not match the nonce in `appleCredential.identityToken`, sign in will fail.
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
-
+//ゲストモード
   Future<void> _onSignInWithAnonymousUser() async {
     final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     try{
@@ -102,6 +122,8 @@ class _Login extends State<Login> {
             return MyHomePage(title: 'home');
           })
       );
+      Fluttertoast.showToast(msg: "ゲストでログインしました");
+
     } catch(e) {
       await showDialog(
           context: context,
@@ -267,6 +289,7 @@ class _Login extends State<Login> {
                                 child: GestureDetector(
                                     onTap: () async {
                                       try {
+                                        Register();
                                         // メール/パスワードでログイン
                                         UserCredential _result =
                                         await _auth.signInWithEmailAndPassword(
@@ -286,6 +309,7 @@ class _Login extends State<Login> {
                                                     return MyHomePage(
                                                         title: 'home');
                                                   }));
+                                          Fluttertoast.showToast(msg: "ログインしました");
                                         } else {
                                           Navigator.push(
                                             context,
@@ -296,6 +320,7 @@ class _Login extends State<Login> {
                                                         pswd: _login_Password,
                                                         from: 2)),
                                           );
+                                          Fluttertoast.showToast(msg: "ログインしました");
                                         }
                                       } catch (e) {
                                         // ログインに失敗した場合
@@ -340,6 +365,7 @@ class _Login extends State<Login> {
                                     try {
                                       // メール/パスワードでログイン
                                       final userCredential = await signInWithGoogle();
+                                      Register();
                                       // ログインに成功した場合
                                       // チャット画面に遷移＋ログイン画面を破棄
                                       await Navigator.of(context)
@@ -347,6 +373,8 @@ class _Login extends State<Login> {
                                         MaterialPageRoute(builder: (context) {
                                           return MyHomePage(title: 'home');
                                         }),
+                                          result: Fluttertoast.showToast(msg: "大学のアカウントでログインしました")
+
                                       );
                                     } on PlatformException catch (e) {}
                                   },
@@ -387,7 +415,9 @@ class _Login extends State<Login> {
                                       'サインアップ',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat'),
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.green[900]
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -452,9 +482,11 @@ class _Login extends State<Login> {
 
                                                children: <Widget>[
 
-                                                 Text('会員登録なしで続行します。\nただセキュリティ上の理由により',textAlign: TextAlign.center,),
-                                                 Text('30日後にアカウントが消去されます',textAlign: TextAlign.center,style: TextStyle(color: Colors.red),),
-                                                 Text('データを保存する場合は会員登録をするか\n大学のアカウントでログインしてください。',textAlign: TextAlign.center,),
+                                                 Text('会員登録なしで続行します。\n\nただセキュリティ上の理由により',textAlign: TextAlign.center,),
+                                                 Text('30日後にアカウントが消去されます',textAlign: TextAlign.center,style: TextStyle(color: Colors.red,decoration: TextDecoration.underline),),
+                                                 Text('データを保存する場合は登録をするか\n大学のアカウントでログインしてください\n\n',textAlign: TextAlign.center,),
+                                                 Text('また講義評価の書き込みなど一部の機能は使用できません。\n',textAlign: TextAlign.center,),
+
 
 
                                                ]
@@ -467,7 +499,7 @@ class _Login extends State<Login> {
                                              ),
                                              TextButton(
                                                child: Text("構わんよ"),
-                                               onPressed: () => Navigator.pop(context),
+                                               onPressed: () => _onSignInWithAnonymousUser(),
                                              ),
                                            ],
                                          );
@@ -479,12 +511,16 @@ class _Login extends State<Login> {
                                       'ゲストモードで使用',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat'),
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.green[900]
+
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+
                             SizedBox(height: 50.0.h),
 
                           ],
