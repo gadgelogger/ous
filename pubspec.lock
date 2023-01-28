@@ -398,6 +398,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  flutter_stream_listener:
+    dependency: "direct main"
+    description:
+      name: flutter_stream_listener
+      sha256: "2427116a1c96543498c80c3463d03f79e5432e199de40ffa3b29b463e65f7fec"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter

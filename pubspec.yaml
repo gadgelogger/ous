@@ -80,6 +80,7 @@ dependencies:
   flutter_native_splash: ^2.2.0+1
   auth_buttons: ^1.0.1+4
   flutter_emoji: ^2.4.0
+  flutter_stream_listener: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

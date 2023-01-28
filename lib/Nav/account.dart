@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,11 +6,37 @@ import 'package:google_fonts/google_fonts.dart';
 class account extends StatefulWidget {
   const account({Key? key}) : super(key: key);
 
+
+
   @override
   State<account> createState() => _accountState();
 }
 
 class _accountState extends State<account> {
+
+  String? name;
+  String? email;
+  String? image;
+  String? uid;
+
+  @override
+  void initState(){
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (user != null) {
+        // here, don't declare new variables, set the members instead
+        setState(() {
+          name = user.displayName; // <-- User ID
+          email = user.email; // <-- Their email
+          image = user.photoURL;
+          uid = user.uid;
+        });
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) => Scaffold(
 
@@ -27,8 +54,7 @@ class _accountState extends State<account> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  child: Text(
-                    "TANQBOT",
+                  child: Text(name ?? 'guest',
                     style: GoogleFonts.notoSans( // フォントをnotoSansに指定(
                       textStyle: TextStyle(
                         fontSize: 30,
@@ -48,8 +74,7 @@ class _accountState extends State<account> {
                       image: DecorationImage(
                         fit: BoxFit.fill,
                         image: NetworkImage(
-                          'https://pbs.twimg.com/profile_images/1494938183448281089/xXIv3xmE_400x400.jpg',
-                        ),                )
+                            image ?? 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg'                        ),                )
                   ),
                 ),
               ],

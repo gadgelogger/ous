@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -104,6 +105,7 @@ class home extends StatelessWidget {
                             fontSize: 30.sp,
                           ),
                         ),
+
                         ClipRRect(
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight:  Radius.circular(20)),
                             child:
@@ -125,11 +127,12 @@ class home extends StatelessWidget {
                       ]
                   ),
                 )
-
               ])
           )
       );
 
 }
+
+
 
 

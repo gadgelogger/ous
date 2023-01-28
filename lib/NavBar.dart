@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/Nav/account.dart';
 import 'package:ous/Nav/link.dart';
@@ -12,8 +13,33 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-class NavBar extends StatelessWidget {
-  const NavBar({Key? key}) : super(key: key);
+class NavBar extends StatefulWidget {
+  const NavBar({Key? key,  }) : super(key: key);
+  @override
+  State<NavBar> createState() => _NavBarState();
+}
+
+class _NavBarState extends State<NavBar> {
+  String? name;
+  String? email;
+  String? image;
+  String? uid;
+  @override
+  void initState(){
+    FirebaseAuth.instance
+        .authStateChanges()
+        .listen((User? user) {
+      if (user != null) {
+        // here, don't declare new variables, set the members instead
+        setState(() {
+          name = user.displayName; // <-- User ID
+          email = user.email; // <-- Their email
+          image = user.photoURL;
+          uid = user.uid;
+        });
+      }
+    });
+  }
 
 
   @override
@@ -30,35 +56,34 @@ class NavBar extends StatelessWidget {
               );
             },
             child:
-          UserAccountsDrawerHeader(
-            accountName: Text('開発者',style: TextStyle(color: Colors.white),),
-            accountEmail: Text('test@gmail.com',style: TextStyle(color: Colors.white),),
-            currentAccountPicture: CircleAvatar(
-              child: ClipOval(
-                child: Image.network(
-                  'https://pbs.twimg.com/profile_images/1494938183448281089/xXIv3xmE_400x400.jpg',
-                  width: 90,
-                  height: 90,
+            UserAccountsDrawerHeader(
+              accountName:    Text(name ?? 'guest'),//I want it to appear here
+              accountEmail: Text(email ?? '' ,style: TextStyle(color: Colors.white),),//I want it to appear here
+              currentAccountPicture: CircleAvatar(
+                child: ClipOval(
+                  child: Image.network(
+                    image ?? 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+                    width: 90,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.lightGreen,
+                image: DecorationImage(
+                  image: NetworkImage('https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500',
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            decoration: BoxDecoration(
-              color: Colors.lightGreen,
-              image: DecorationImage(
-                image: NetworkImage(
-                  'https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500',
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
           ),
           ListTile(
             leading: Icon(Icons.event_available_outlined),
             title: Text('行事予定'),
             onTap: () {
-             launch('https://www.ous.ac.jp/common/files//285/20220311164731084854.pdf');
+              launch('https://www.ous.ac.jp/common/files//285/20220311164731084854.pdf');
             },
           ),
           ListTile(
@@ -117,3 +142,9 @@ class NavBar extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
