@@ -157,6 +157,7 @@ class _ViewState extends State<View> {
                                   .get('omosirosa' as String)
                                   .toDouble(),
                               cornerStyle: CornerStyle.bothCurve,
+                              color: Colors.lightGreen,
                               width: 0.2.w,
                               sizeUnit: GaugeSizeUnit.factor,
                             )
@@ -205,6 +206,7 @@ class _ViewState extends State<View> {
                                   .get('toriyasusa' as String)
                                   .toDouble(),
                               cornerStyle: CornerStyle.bothCurve,
+                              color: Colors.lightGreen,
                               width: 0.2.w,
                               sizeUnit: GaugeSizeUnit.factor,
                             )
@@ -253,6 +255,7 @@ class _ViewState extends State<View> {
                                   .get('sougouhyouka' as String)
                                   .toDouble(),
                               cornerStyle: CornerStyle.bothCurve,
+                              color: Colors.lightGreen,
                               width: 0.2.w,
                               sizeUnit: GaugeSizeUnit.factor,
                             )
@@ -305,6 +308,37 @@ class _ViewState extends State<View> {
                     ),
                     child: Text(widget.doc.get('name')),
                   ),
+                  SizedBox(height: 20.0.h),
+                  Container(
+                    height: 40.0.h,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.lightGreen,
+                              style: BorderStyle.solid,
+                              width: 1.0.w),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: GestureDetector(
+                        onTap: () async {
+                         //ここにブロック関数
+                          FirebaseFirestore.instance.collection('hunters').doc('senritsuId').delete();
+
+                        },
+                        child: Center(
+                          child: Text(
+                            'この投稿をブロックする。',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0.h),
+
                 ],
               )
             ],

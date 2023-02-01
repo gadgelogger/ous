@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
 import 'package:ous/review/gakubu/keieigakubu.dart';
 import 'package:ous/review/gakubu/kibankamoku.dart';
@@ -27,350 +28,436 @@ class Review extends StatelessWidget {
           elevation: 0,
           title: Text('講義評価'),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
+        body: WillPopScope(
+          onWillPop: ()async => false,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
 
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/理学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '理学部',
-                                    style: TextStyle(fontSize: 20),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                   child: Image.asset(
+                                      'assets/images/理学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Rigakubu()),
-                        );
-                      },
-                    ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/工学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '工学部',
-                                    style: TextStyle(fontSize: 20),
+                                  ListTile(
+                                    title:  Text(
+                                      '理学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Rigakubu()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Kougakubu()),
-                        );
-                      },
-                    ),
-                  ],
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/工学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title:  Text(
+                                      '工学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Kougakubu()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/情報理工学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '情報理工学部',
-                                    style: TextStyle(fontSize: 20),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/情報理工学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => zyouhourikougakubu()),
-                        );
-                      },
-                    ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/生物地球学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '生物地球学部',
-                                    style: TextStyle(fontSize: 20),
+                                  ListTile(
+                                    title:  Text(
+                                      '情報理工学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => zyouhourikougakubu()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => seibututikyuu()),
-                        );
-                      },
-                    ),
-                  ],
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/生物地球学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title:  Text(
+                                      '生物地球学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => seibututikyuu()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/教育学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '教育学部',
-                                    style: TextStyle(fontSize: 20),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/教育学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => kyouikugakubu()),
-                        );
-                      },
-                    ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/経営学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '経営学部',
-                                    style: TextStyle(fontSize: 20),
+                                  ListTile(
+                                    title:  Text(
+                                      '教育学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => kyouikugakubu()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => keieigakubu()),
-                        );
-                      },
-                    ),
-                  ],
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/経営学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title:  Text(
+                                      '経営学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => keieigakubu()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/獣医学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '獣医学部',
-                                    style: TextStyle(fontSize: 20),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/獣医学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => zyuuigakubu()),
-                        );
-                      },
-                    ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/生命科学部.jpg',
-                                  height: 110.h,
-                                  width: 180.w,
-                                  fit: BoxFit.cover,
-                                ),
-                                ListTile(
-                                  title: const Text(
-                                    '生命科学部',
-                                    style: TextStyle(fontSize: 20),
+                                  ListTile(
+                                    title:  Text(
+                                      '獣医学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => zyuuigakubu()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => seimeikagakubu()),
-                        );
-                      },
-                    ),
-                  ],
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 176.h,
+                              width: 180.w,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(color: Colors.lightGreen[100]),
+                                    child: Image.asset(
+                                      'assets/images/生命科学部.jpg',
+                                      height: 110.h,
+                                      width: 180.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  ListTile(
+                                    title:  Text(
+                                      '生命科学部',
+                                      style: GoogleFonts.notoSans(
+                                        // フォントをnotoSansに指定(
+                                        textStyle: TextStyle(
+                                          fontSize: 20,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => seimeikagakubu()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Divider(), //区切り線
-              Text(
-                '共通科目はこちら',
-                style: TextStyle(
-                  fontSize: 30.sp,
-                  fontWeight: FontWeight.bold,
+                Divider(), //区切り線
+                Text(
+                  '共通科目はこちら',
+                  style: TextStyle(
+                    fontSize: 30.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 100.h,
-                            width: 180.w,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  title: const Text(
-                                    '基盤教育科目',
-                                    style: TextStyle(fontSize: 20),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 100.h,
+                              width: 180.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListTile(
+                                    title: const Text(
+                                      '基盤教育科目',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => kibankamoku()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kibankamoku()),
-                        );
-                      },
-                    ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 100.h,
-                            width: 180.w,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  title: const Text(
-                                    '教職科目',
-                                    style: TextStyle(fontSize: 20),
+                      GestureDetector(
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                              height: 100.h,
+                              width: 180.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListTile(
+                                    title: const Text(
+                                      '教職科目',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
+                                ],
+                              )),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => kyousyokukamoku()),
+                          );
+                        },
                       ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kyousyokukamoku()),
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(

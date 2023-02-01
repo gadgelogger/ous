@@ -96,6 +96,7 @@ class MyApp extends StatelessWidget {
                   }
                   // User が null である、つまり未サインインのサインイン画面へ
                   return Login();
+
                 },
               )
           );
@@ -165,10 +166,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.school_outlined),
             label: '講義評価',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.business_center_outlined),
-            label: '就活関連',
-          ),
+    //      NavigationDestination(
+      //      icon: Icon(Icons.business_center_outlined),
+        //    label: '就活関連',
+       //   ),
         ],
 
           ),
@@ -177,7 +178,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
 
 
 

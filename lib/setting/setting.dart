@@ -253,6 +253,8 @@ class _SettingState extends State<Setting> {
                                       ),
                                       actions: <Widget>[
                                         SlideAction(
+                                          outerColor: Colors.lightGreen[200],
+
                                           text: 'スライドして退会',
                                           textStyle:
                                               const TextStyle(fontSize: 20),

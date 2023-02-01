@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ous/account/tutorial.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'authentication_error.dart';
 import 'signuppage.dart';
@@ -28,6 +30,8 @@ class _Login extends State<Login> {
 
   String _login_Email = ""; // 入力されたメールアドレス
   String _login_Password = ""; // 入力されたパスワード
+  String _login_forgot_Email = ""; // 入力されたパスワード
+
   String _infoText = ""; // ログインに関する情報を表示
 
   // エラーメッセージを日本語化するためのクラス
@@ -138,20 +142,36 @@ class _Login extends State<Login> {
   }
 
 
+//初回チュートリアル表示
+  void _showTutorial(BuildContext context) async {
+    final pref = await SharedPreferences.getInstance();
+
+    if (pref.getBool('isAlreadyFirstLaunch') != true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => tutorial(),
+          fullscreenDialog: true,
+        ),
+      );
+      pref.setBool('isAlreadyFirstLaunch', true);
+    }
+  }
 
 
 
 
 
-  //Appleサインイン
 
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showTutorial(context));
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Scrollbar(
-            isAlwaysShown: false,
+            isAlwaysShown: true,
             child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,27 +180,27 @@ class _Login extends State<Login> {
                       child: Stack(
                         children: <Widget>[
                           Container(
-                            padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
-                            child: Text('Hello',
-                                style: TextStyle(
-                                    fontSize: 80.0.sp,
-                                    fontWeight: FontWeight.bold)),
+                            child:Padding(
+                              padding: EdgeInsets.only(
+                                  left: ScreenUtil().setWidth(15),
+                                top:ScreenUtil().setWidth(110),
+                              ),
+                              child: Text('Hello',
+                                  style: TextStyle(
+                                      fontSize: 80.0.sp,
+                                      fontWeight: FontWeight.bold)),
+                            ) ,
                           ),
                           Container(
-                            padding: EdgeInsets.fromLTRB(13.0, 180.0, 0.0, 0.0),
-                            child: Text('OUS',
-                                style: TextStyle(
-                                    fontSize: 80.0.sp,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                          Container(
-                            padding: EdgeInsets.fromLTRB(
-                                168.0, 175.0, 0.0, 0.0),
-                            child: Text('.',
-                                style: TextStyle(
-                                    fontSize: 80.0.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.lightGreen)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: ScreenUtil().setWidth(13),top:ScreenUtil().setWidth(180)),
+                              child: Container(
+                                child: Text('OUS',
+                                    style: TextStyle(
+                                        fontSize: 80.0.sp,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -241,7 +261,7 @@ class _Login extends State<Login> {
                                       launch(
                                           'https://tan-q-bot-unofficial.com/terms_of_service/'),
                                   child: Text(
-                                    '利用規約に同意する必要があります。',
+                                    '利用規約はこちら',
                                     style: TextStyle(
                                         color: Colors.lightGreen,
                                         fontFamily: 'Montserrat',
@@ -249,6 +269,7 @@ class _Login extends State<Login> {
                                         decoration: TextDecoration.underline),
                                   ),
                                 ),
+
                               ],
                             ),
                             SizedBox(height: 5.0.h),
@@ -264,9 +285,104 @@ class _Login extends State<Login> {
                                       fontFamily: 'Montserrat',
                                       decoration: TextDecoration.underline),
                                 ),
-                                onTap: () =>
-                                    _auth.sendPasswordResetEmail(
-                                        email: _login_Email),
+                                onTap: (){
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        title: Text("パスワードを忘れた人へ",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold),),
+                                        content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+
+                                            children: <Widget>[
+                                              Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  child:
+                                                  Image(
+                                                    image: AssetImage('assets/icon/password.gif'),
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                              Text('下のテキストボックスにメールアドレスを入力して、リセットボタンを押してください。',textAlign: TextAlign.center,),
+                                              TextField(
+                                                decoration: InputDecoration(
+                                                    labelText: 'メールアドレス',
+                                                    labelStyle: TextStyle(
+                                                        fontFamily: 'Montserrat',
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.grey),
+                                                    focusedBorder: UnderlineInputBorder(
+                                                        borderSide:
+                                                        BorderSide(color: Colors.lightGreen))),
+                                                onChanged: (String value) {
+                                                  setState(() {
+                                                    _login_forgot_Email = value;
+                                                  });
+                                                },
+                                              ),
+
+
+
+                                            ]
+                                        ),
+                                        actions: <Widget>[
+                                          // ボタン領域
+                                          TextButton(
+                                            child: Text("やっぱやめる"),
+                                            onPressed: () => Navigator.pop(context),
+                                          ),
+                                          TextButton(
+                                            child: Text("リセットする"),
+                                            onPressed: (){
+                                              _auth.sendPasswordResetEmail(
+                                                  email: _login_forgot_Email);
+
+
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                        "パスワードリセット完了",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      content: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+
+                                                        children: [
+                                                          Container(
+                                                              width: 100,
+                                                              height: 100,
+                                                              child:
+                                                              Image(
+                                                                image: AssetImage('assets/icon/rocket.gif'),
+                                                                fit: BoxFit.cover,
+                                                              )),
+                                                          Text(
+                                                            "入力してくれたメールアドレス宛にパスワードリセットをするメールを送信しました。\nもし届いていない場合は迷惑メールフォルダーを確認してください。",
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                          child: Text("オッケー"),
+                                                          onPressed: () => Navigator.pop(context),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  });
+                                            }
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+
                               ),
                             ),
                             //エラー表示

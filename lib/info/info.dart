@@ -67,16 +67,19 @@ class Info extends StatelessWidget {
 
               ]),
         ),
-        body: TabBarView(
-          children: [
-            all(),
-            important(),
-            news(),
-            Departmentreport(),
-            report(),
-            movie(),
-            sanyo(),
-          ],
+        body: WillPopScope(
+          onWillPop: ()async => false,
+          child: TabBarView(
+            children: [
+              all(),
+              important(),
+              news(),
+              Departmentreport(),
+              report(),
+              movie(),
+              sanyo(),
+            ],
+          ),
         ),
       ),
     );

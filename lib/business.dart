@@ -11,11 +11,14 @@ class Business extends StatelessWidget {
           elevation: 0,
           title: Text('就活'),
         ),
-        body: Center(
-          child: Text(
-            'business',
-            style: TextStyle(fontSize: 60),
+        body: WillPopScope(
+          onWillPop: ()async => false,
+          child: Center(
+            child: Text(
+              'business',
+              style: TextStyle(fontSize: 60),
+            ),
           ),
-        ),
+        )
       );
 }

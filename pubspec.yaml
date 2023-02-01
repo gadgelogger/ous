@@ -61,8 +61,8 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^20.2.38-beta
   flutter_inappwebview: ^5.4.3+7
   cloud_firestore: ^4.1.0
-  dynamic_theme: ^1.0.1
-  shared_preferences: ^0.5.7+3
+  dynamic_themes: ^1.1.0
+  shared_preferences: ^2.0.17
   syncfusion_flutter_gauges: ^20.2.39
   package_info_plus: ^3.0.2
   flutter_signin_button: ^2.0.0
@@ -81,6 +81,8 @@ dependencies:
   auth_buttons: ^1.0.1+4
   flutter_emoji: ^2.4.0
   flutter_stream_listener: ^2.0.0
+  health: ^4.4.0
+  flutter_overboard: ^3.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -115,6 +117,7 @@ flutter:
   - assets/images/icon.jpeg
   - assets/kouka.mp3
   - assets/images/理学部.jpg
+  - assets/images/green neutrals desktop.jpeg
   - assets/images/工学部.jpg
   - assets/images/情報理工学部.jpg
   - assets/images/生物地球学部.jpg
@@ -122,7 +125,12 @@ flutter:
   - assets/images/経営学部.jpg
   - assets/images/獣医学部.jpg
   - assets/images/生命科学部.jpg
-
+  - assets/images/mockup.PNG
+  - assets/icon/password.gif
+  - assets/icon/rocket.gif
+  - assets/icon/book.png
+  - assets/icon/news.png
+  - assets/icon/update.png
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/images/icon.png'

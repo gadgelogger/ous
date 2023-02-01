@@ -57,7 +57,7 @@ class _NavBarState extends State<NavBar> {
             },
             child:
             UserAccountsDrawerHeader(
-              accountName:    Text(name ?? 'guest'),//I want it to appear here
+              accountName:    Text(name ?? 'ゲストユーザー'),//I want it to appear here
               accountEmail: Text(email ?? '' ,style: TextStyle(color: Colors.white),),//I want it to appear here
               currentAccountPicture: CircleAvatar(
                 child: ClipOval(
