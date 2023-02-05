@@ -128,6 +128,7 @@ flutter:
   - assets/images/mockup.PNG
   - assets/icon/password.gif
   - assets/icon/rocket.gif
+  - assets/icon/error.gif
   - assets/icon/book.png
   - assets/icon/news.png
   - assets/icon/update.png

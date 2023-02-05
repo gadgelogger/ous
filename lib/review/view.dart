@@ -5,10 +5,12 @@ import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class View extends StatefulWidget {
-  View(this.doc);
-
+  String gakubu;
+  View(this.doc,this.gakubu  );
+  
   QueryDocumentSnapshot doc;
 
   @override
@@ -322,7 +324,7 @@ class _ViewState extends State<View> {
                       child: GestureDetector(
                         onTap: () async {
                          //ここにブロック関数
-                          FirebaseFirestore.instance.collection('hunters').doc('senritsuId').delete();
+                          FirebaseFirestore.instance.collection(widget.gakubu).doc(widget.doc.id).delete();
 
                         },
                         child: Center(
@@ -331,6 +333,35 @@ class _ViewState extends State<View> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Montserrat',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.0.h),
+
+                  Container(
+                    height: 40.0.h,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.lightGreen,
+                              style: BorderStyle.solid,
+                              width: 1.0.w),
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: GestureDetector(
+                        onTap: () async {
+                          //ここにブロック関数
+launch('https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
+                        },
+                        child: Center(
+                          child: Text(
+                            'この投稿を開発者に報告する',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat',
                             ),
                           ),
                         ),

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ous/account/account_edit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
@@ -103,6 +104,20 @@ class _accountState extends State<account> {
                       ),
                     ],
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ElevatedButton(onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return account_edit();
+                          }),
+                        );
+                      }, child: Icon(Icons.settings_outlined))
+
+                    ],
+                  )
                 ],
               ),
             ),
@@ -118,7 +133,8 @@ class _accountState extends State<account> {
                   width: 600,
                   child: Card(
                     child: Text(
-                      '歩数計',
+                      '開発中',
+                      textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 50),
                     ),
                     color: Colors.white,

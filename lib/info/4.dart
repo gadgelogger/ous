@@ -63,24 +63,28 @@ class _DepartmentreportState extends State<Departmentreport> {
             print('Loading New Data');
             await getWebsiteData();
           },
-          child: ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: articles.length,
-            itemBuilder: (context, index) {
-              final article = articles[index];
-              return Column(
-                children:[
-                  ListTile(
-                    title: Text(article.title),
-                    subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
-                    onTap: () => launch(article.url),
+          child: Center(
+            child: (articles == null || articles.length == 0)?
+            CircularProgressIndicator():
+            ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                final article = articles[index];
+                return Column(
+                  children:[
+                    ListTile(
+                      title: Text(article.title),
+                      subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                      onTap: () => launch(article.url),
 
-                  ),
-                  Divider(),
-                  //区切り線
-                ],
-              );
-            },
+                    ),
+                    Divider(),
+                    //区切り線
+                  ],
+                );
+              },
+            ),
           ),
         )
     );

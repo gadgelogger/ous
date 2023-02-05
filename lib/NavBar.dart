@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/Nav/account.dart';
+import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/main.dart';

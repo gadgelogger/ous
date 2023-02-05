@@ -13,6 +13,8 @@ class keieigakubu extends StatefulWidget {
 }
 
 class _keieigakubuState extends State<keieigakubu> {
+  String  gakubu = '経営学部';
+
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
 
@@ -33,7 +35,15 @@ class _keieigakubuState extends State<keieigakubu> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.do_disturb_on_outlined, size: 150.sp,),
+                        Container(
+                            width: 200,
+                            height: 200,
+                            child:
+                            Image(
+                              image: AssetImage('assets/icon/error.gif'),
+                              fit: BoxFit.cover,
+                            )),
+                        SizedBox(height: 50,),
                         Text(
                           '校外のメールアドレスでログインしているため\nこの機能は利用できません。',
                           style: TextStyle(fontSize: 18.sp),
@@ -58,7 +68,7 @@ class _keieigakubuState extends State<keieigakubu> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => View(snapshot.data!.docs[index])),
+                            MaterialPageRoute(builder: (context) => View(snapshot.data!.docs[index],gakubu)),
                           );
                         },
                         child: (

@@ -212,6 +212,8 @@ class _Login extends State<Login> {
                           children: <Widget>[
                             TextField(
                               decoration: InputDecoration(
+
+
                                   labelText: 'メールアドレス',
                                   labelStyle: TextStyle(
                                       fontFamily: 'Montserrat',
@@ -583,6 +585,7 @@ class _Login extends State<Login> {
                             //サインアップ（ここまで）
                             SizedBox(height: 20.0.h),
                             //ゲストモード
+/*
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -636,13 +639,13 @@ class _Login extends State<Login> {
                                           fontWeight: FontWeight.bold,
                                           fontFamily: 'Montserrat',
                                           color: Colors.green[900]
-
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+*/
                             //ゲストモード（ここまで）
                             SizedBox(height: 50.0.h),
 

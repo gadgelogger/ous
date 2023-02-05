@@ -13,6 +13,8 @@ class kyousyokukamoku extends StatefulWidget {
 }
 
 class _kyousyokukamokuState extends State<kyousyokukamoku> {
+  String  gakubu = '教職科目';
+
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
 
@@ -31,8 +33,15 @@ class _kyousyokukamokuState extends State<kyousyokukamoku> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.do_disturb_on_outlined, size: 150.sp,),
-                        Text(
+                        Container(
+                            width: 200,
+                            height: 200,
+                            child:
+                            Image(
+                              image: AssetImage('assets/icon/error.gif'),
+                              fit: BoxFit.cover,
+                            )),
+                        SizedBox(height: 50,),                        Text(
                           '校外のメールアドレスでログインしているため\nこの機能は利用できません。',
                           style: TextStyle(fontSize: 18.sp),
                           textAlign: TextAlign.center,
@@ -56,7 +65,7 @@ class _kyousyokukamokuState extends State<kyousyokukamoku> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => View(snapshot.data!.docs[index])),
+                            MaterialPageRoute(builder: (context) => View(snapshot.data!.docs[index],gakubu)),
                           );
                         },
                         child: (
