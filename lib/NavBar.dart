@@ -101,6 +101,13 @@ class _NavBarState extends State<NavBar> {
               launch('https://edu.career-tasu.jp/p/digital_pamph/frame.aspx?id=7540000-3-30&FL=0');
             },
           ),
+          ListTile(
+            leading: Icon(Icons.location_on_outlined),
+            title: Text('学内マップ'),
+            onTap: () {
+              launch('http://www1.ous.ac.jp/gakusyu/2017rikadaimap2.pdf');
+            },
+          ),
           Divider(),
 
           ListTile(

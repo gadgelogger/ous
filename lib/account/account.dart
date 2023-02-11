@@ -125,106 +125,12 @@ class _accountState extends State<account> {
         ),
         body: Stack(
           children: [
-            Container(
-                child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 600,
-                  child: Card(
-                    child: Text(
-                      '開発中',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 50),
-                    ),
-                    color: Colors.white,
-                    // Card自体の色
-                    margin: EdgeInsets.all(30),
-                    elevation: 10,
-                    // 影の離れ具合
-                    shadowColor: Colors.black, // 影の色
-                  ),
-                ),
-                SizedBox(
-                  height: 150,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      GestureDetector(
-                        child: SizedBox(
-                          width: 330,
-                          child: Card(
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        'assets/images/green neutrals desktop.jpeg'),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '開発者のTwitterはこちら',
-                                    maxLines: 1,
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                          ),
-                        ),
-                        onTap: (){
-                          launch('https://twitter.com/TAN_Q_BOT_LOCAL');
-                        },
-                      ),
-                      GestureDetector(
-                        child:
-                      SizedBox(
-                        width: 330,
-                        child: Card(
-                          child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/green neutrals desktop.jpeg'),
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'アプリ公式サイトはこちら',
-                                  maxLines: 1,
-                                  style: GoogleFonts.notoSans(
-                                    // フォントをnotoSansに指定(
-                                    textStyle: TextStyle(
-                                      fontSize: 20,
-                                      overflow: TextOverflow.ellipsis,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              )),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                        ),
-                      ),
-                        onTap: (){
-                          launch('https://tan-q-bot-unofficial.com/');
-                        },
-                      ),
-                    ],
-                    shrinkWrap: true,
-                  ),
-                ),
-              ],
-            )),
+            Center(
+              child: Text(
+                '開発中',
+                style: TextStyle(fontSize: 60,color: Colors.black26),
+              ),
+            ),
             CustomPaint(
               painter: AppBarPainter(),
               child: Container(height: 0),

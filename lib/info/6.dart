@@ -1,11 +1,10 @@
-
 import 'package:html/dom.dart' as UserModel;
+import 'package:provider/provider.dart';
 import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
 import 'package:universal_html/parsing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
-
 
 class movie extends StatefulWidget {
   const movie({Key? key}) : super(key: key);
@@ -15,25 +14,23 @@ class movie extends StatefulWidget {
 }
 
 class _movieState extends State<movie> {
-
   static String key = "AIzaSyBIcxrqy1q6MOKAkdnZkYIlGTEMUUdDLgw";
 
 
 
-  YoutubeAPI youtube = YoutubeAPI(key);
+
+  YoutubeAPI youtube = YoutubeAPI(key,);
   List<YouTubeVideo> videoResult = [];
 
   Future<void> callAPI() async {
     String query = "【おかりかチャンネル】岡山理科大学の現役学生による公式YouTubeチャンネル";
 
-        videoResult = await youtube.search(
+    videoResult = await youtube.search(
       query,
       order: 'relevance',
       videoDuration: 'any',
     );
-    videoResult = await youtube.nextPage(
-
-    );
+    videoResult = await youtube.nextPage();
     setState(() {});
   }
 
@@ -44,69 +41,61 @@ class _movieState extends State<movie> {
     print('hello');
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: ListView(
-          children:
-            videoResult.map<Widget>(listItem).toList(),
-
+      body: Center(
+        child: (videoResult == null || videoResult.length == 0)?
+        CircularProgressIndicator():
+        ListView(
+          children: videoResult.map<Widget>(listItem).toList(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => {
-           launch('https://www.youtube.com/@user-ms9dw7xq5l/videos')
-          },
-          child: Icon(Icons.movie_creation_outlined)
-      ),
+          onPressed: () =>
+          {launch('https://www.youtube.com/@user-ms9dw7xq5l/videos')},
+          child: Icon(Icons.movie_creation_outlined)),
     );
   }
 
-
-
-
   Widget listItem(YouTubeVideo video) {
     return GestureDetector(
-      onTap: (){
-        launch(video.url);
-      },
-      child: Column(
-        children: [
-          Card(
-            child: Container(
-              margin: EdgeInsets.symmetric(vertical: 7.0),
-              padding: EdgeInsets.all(12.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Image.network(
-                      video.thumbnail.small.url ?? '',
-                      width: 120.0,
+        onTap: () {
+          launch(video.url);
+        },
+        child: Column(
+          children: [
+            Card(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 7.0),
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: Image.network(
+                        video.thumbnail.small.url ?? '',
+                        width: 120.0,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          video.title,
-                          softWrap: true,
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-
-                      ],
-                    ),
-                  )
-                ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            video.title,
+                            softWrap: true,
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
 }
