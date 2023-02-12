@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_overboard/flutter_overboard.dart';
+import 'package:ous/account/login.dart';
 class tutorial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,12 +10,22 @@ class tutorial extends StatelessWidget {
         showBullets: true,
         skipCallback: () {
           // when user select SKIP
-          Navigator.pop(context);
-        },
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              // 遷移先のクラス
+              builder: (BuildContext context) =>  Login(),
+            ),
+          );        },
         finishCallback: () {
           // when user select NEXT
-          Navigator.pop(context);
-        },
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              // 遷移先のクラス
+              builder: (BuildContext context) =>  Login(),
+            ),
+          );        },
       ),
     );
   }
