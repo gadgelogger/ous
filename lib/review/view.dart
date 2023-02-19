@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart';
+import 'package:ous/home.dart';
+import 'package:ous/review.dart';
 import 'package:path/path.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -324,8 +326,35 @@ class _ViewState extends State<View> {
                       child: GestureDetector(
                         onTap: () async {
                          //ここにブロック関数
-                          FirebaseFirestore.instance.collection(widget.gakubu).doc(widget.doc.id).delete();
+                          showDialog(
+                            context: context,
+                            builder: (_) {
+                              return AlertDialog(
+                                title: Text("この投稿をブロックします。"),
+                                content: Text("本当にいい？",textAlign: TextAlign.center,),
+                                actions: <Widget>[
+                                  // ボタン領域
+                                  TextButton(
+                                    child: Text("ダメやで"),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  TextButton(
+                                    child: Text("ええで"),
+                                    onPressed: () async {
+                                      //ブロック処理
+                                      FirebaseFirestore.instance.collection(widget.gakubu).doc(widget.doc.id).delete();
 
+                                      await Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(builder: (context) {
+                                          return Review();
+                                        }),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Center(
                           child: Text(

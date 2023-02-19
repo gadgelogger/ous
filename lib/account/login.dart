@@ -36,6 +36,9 @@ class _Login extends State<Login> {
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
+
+
+
   //ユーザー情報保存
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -48,6 +51,7 @@ class _Login extends State<Login> {
         })
         .then((value) => print("新規登録に成功"))
         .catchError((error) => print("新規登録に失敗しました!: $error"));
+
   }
 
 //Appleサインイン
@@ -75,6 +79,7 @@ class _Login extends State<Login> {
     // Firebaseでユーザーにサインインします。もし、先ほど生成したnonceが
     // が `appleCredential.identityToken` の nonce と一致しない場合、サインインに失敗します。
     return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
   }
 
   // 上のとほぼ一緒。登録とログインができる。
@@ -102,7 +107,8 @@ class _Login extends State<Login> {
     // ここに画面遷移をするコードを書く!
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return MyHomePage(title: 'home');
-    }));
+    }
+    ));
     Fluttertoast.showToast(msg: "ログインしました");
 
     print(appleCredential);
@@ -122,6 +128,7 @@ class _Login extends State<Login> {
         return MyHomePage(title: 'home');
       }));
       Fluttertoast.showToast(msg: "ゲストでログインしました");
+
     } catch (e) {
       await showDialog(
           context: context,
@@ -152,6 +159,8 @@ class _Login extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) => _showTutorial(context));
 
     Future<bool> _willPopCallback() async {
@@ -452,9 +461,8 @@ class _Login extends State<Login> {
                                       } catch (e) {
                                         // ログインに失敗した場合
                                         setState(() {
-                                          _infoText =
-                                              auth_error.login_error_msg(
-                                                  e.hashCode, e.toString());
+                                          _infoText = auth_error.register_error_msg(
+                                              e.hashCode, e.toString());
                                         });
                                       }
                                     },
@@ -587,20 +595,11 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => tutorial()),
-                                );
-                              },
-                              child: Text('aaaaa'),
-                            ),
+
                             //サインアップ（ここまで）
                             SizedBox(height: 20.0.h),
                             //ゲストモード
-/*
+
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -660,7 +659,7 @@ class _Login extends State<Login> {
                                 ),
                               ),
                             ),
-*/
+
                             //ゲストモード（ここまで）
                             SizedBox(height: 50.0.h),
                           ],
@@ -686,5 +685,50 @@ class _Login extends State<Login> {
 
     // Once signed in, return the UserCredential
     return await FirebaseAuth.instance.signInWithCredential(credential);
+  }
+}
+
+
+// Firebase Authentication利用時の日本語エラーメッセージ
+class Authentication_error_to_ja {
+  // ログイン時の日本語エラーメッセージ
+  login_error_msg(int error_code, String org_error_msg) {
+    String error_msg;
+
+    if (error_code == 360587416) {
+      error_msg = '有効なメールアドレスを入力してください。';
+    } else if (error_code == 505284406) {
+      // 入力されたメールアドレスが登録されていない場合
+      error_msg = 'メールアドレスかパスワードが間違っています。';
+    } else if (error_code == 185768934) {
+      // 入力されたパスワードが間違っている場合
+      error_msg = 'メールアドレスかパスワードが間違っています。';
+    } else if (error_code == 362765553) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = 'メールアドレスとパスワードを入力してください。';
+    } else {
+      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+    }
+
+    return error_msg;
+  }
+
+  // アカウント登録時の日本語エラーメッセージ
+  register_error_msg(int error_code, String org_error_msg) {
+    String error_msg;
+
+    if (error_code == 360587416) {
+      error_msg = '有効なメールアドレスを入力してください。';
+    } else if (error_code == 34618382) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = '既に登録済みのメールアドレスです。';
+    } else if (error_code == 447031946) {
+      // メールアドレスかパスワードがEmpty or Nullの場合
+      error_msg = 'メールアドレスとパスワードを入力してください。';
+    } else {
+      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+    }
+
+    return error_msg;
   }
 }

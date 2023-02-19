@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ous/test/debug.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx/webviewx.dart';
@@ -92,7 +93,7 @@ class home extends StatelessWidget {
                                 ),
                               )
                             ]
-                        )
+                        ),
                       ]),
                   GestureDetector(
                     onTap: () {
@@ -101,6 +102,8 @@ class home extends StatelessWidget {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+
+
                           Text(
                             'マイログ稼働情報',
                             style: TextStyle(

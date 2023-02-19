@@ -28,14 +28,7 @@ class _SettingState extends State<Setting> {
   void deleteUser() async {
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid;
-    final msg =
-    await FirebaseFirestore.instance.collection('users').doc(uid).delete();
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .collection('messages')
-        .doc(uid)
-        .delete();
+
     // ユーザーを削除
     await user?.delete();
     await FirebaseAuth.instance.signOut();
@@ -92,7 +85,7 @@ class _SettingState extends State<Setting> {
           ),
         ),
         body: SettingsList(sections: [
-          SettingsSection(
+        /*  SettingsSection(
             title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
@@ -106,8 +99,10 @@ class _SettingState extends State<Setting> {
               ),
             ],
           ),
+
+         */
           SettingsSection(
-            title: Text('その他',style: TextStyle(color: Colors.lightGreen),),
+            title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                   leading: Icon(Icons.music_note),

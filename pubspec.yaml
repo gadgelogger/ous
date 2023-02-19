@@ -83,6 +83,7 @@ dependencies:
   flutter_stream_listener: ^2.0.0
   health: ^4.4.0
   flutter_overboard: ^3.1.1
+  highlight_text: ^1.6.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

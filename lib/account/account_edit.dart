@@ -106,8 +106,7 @@ class _account_editState extends State<account_edit> {
             SizedBox(
               height: 50,
             ),
-            Container(
-                width: double.infinity,
+            Center(
                 child: Text(
                   'ユーザー名',
                   style: GoogleFonts.notoSans(
@@ -116,7 +115,6 @@ class _account_editState extends State<account_edit> {
                       fontSize: 30,
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 )),
@@ -166,8 +164,7 @@ class _account_editState extends State<account_edit> {
                 });
               },
             ),
-            Container(
-                width: double.infinity,
+            Center(
                 child: Text(
                   '登録アカウント',
                   style: GoogleFonts.notoSans(
@@ -176,12 +173,11 @@ class _account_editState extends State<account_edit> {
                       fontSize: 30,
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                   ),
                 )),
             SizedBox(height: 20,),
-            Container(width: double.infinity,
+            Center(
                 child: Text(email ?? '',style: TextStyle(fontSize: 20),)),
 
 

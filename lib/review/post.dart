@@ -324,10 +324,9 @@ class _postState extends State<post> {
                       controller: _textEditingController1,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: 'FBD00100 フレッシュマンセミナー',
@@ -357,10 +356,9 @@ class _postState extends State<post> {
                       controller: _textEditingController2,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: '太郎田中',
@@ -615,10 +613,10 @@ class _postState extends State<post> {
                       controller: _textEditingController3,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
+                      maxLength: null,
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: 'この講義は楽で〜...',
@@ -644,10 +642,10 @@ class _postState extends State<post> {
                       controller: _textEditingController4,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
+                      maxLength: 20,
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: 'ありorなしorレポートorその他...',
@@ -675,11 +673,11 @@ class _postState extends State<post> {
                       controller: _textEditingController5,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
+                      maxLength: null,
 
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: 'テストは主に教科書から...',
@@ -697,10 +695,10 @@ class _postState extends State<post> {
                           controller: _textEditingController7,
                           // この一文を追加
                           enabled: true,
-                          maxLength: 50,
+                          maxLength: 20,
                           // 入力数
                           obscureText: false,
-                          maxLines: 1,
+                          maxLines: null,
                           decoration: const InputDecoration(
                             icon: Icon(Icons.drive_file_rename_outline_outlined),
                             labelText: 'ニックネーム',
@@ -727,10 +725,10 @@ class _postState extends State<post> {
                       controller: _textEditingController6,
                       // この一文を追加
                       enabled: true,
-                      maxLength: 50,
+                      maxLength: null,
                       // 入力数
                       obscureText: false,
-                      maxLines: 1,
+                      maxLines: null,
                       decoration: const InputDecoration(
                         icon: Icon(Icons.rate_review_outlined),
                         labelText: '〇〇サークルに属しています！入部よろしく！',
@@ -741,6 +739,9 @@ class _postState extends State<post> {
                         });
                       },
                     ),
+                        SizedBox(
+                          height: 50,
+                        ),
                     SlideAction(
                         outerColor: Colors.lightGreen[200],
                         child: Text('送信する',style: TextStyle(color: Colors.black),),
@@ -810,6 +811,9 @@ class _postState extends State<post> {
                                 'zyugyoukeisiki': iszyugyoukeisiki,
                                 'zyugyoumei': iszyugyoumei,
                             'name': isname,
+                            'accountname':name,
+                            'accountemail':email,
+                            'accountuid':uid,
 
                           })
                               .then((value) => print("新規登録に成功"))

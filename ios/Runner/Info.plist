@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>非公式岡理アプリ</string>
+	<string>岡理アプリ</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -72,10 +72,10 @@
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>We will sync your data with the Apple Health app to give you better insights</string>
 	<key>NSCameraUsageDescription</key>
-    <string>Access to take a photo by camera</string>
-    <key>NSAppleMusicUsageDescription</key>
-    <string>Access to pick a photo</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Access to pick a photo</string>
+	<string>Access to take a photo by camera</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Access to pick a photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to pick a photo</string>
 </dict>
 </plist>

@@ -528,6 +528,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.4.0"
+  highlight_text:
+    dependency: "direct main"
+    description:
+      name: highlight_text
+      sha256: "59dbbe4a3c9713d57f36c99efdbfb3dc871eabb6862b81ab70c2891305296878"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.0"
   html:
     dependency: "direct main"
     description:
