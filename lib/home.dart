@@ -91,10 +91,11 @@ class home extends StatelessWidget {
                                           'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'),
 
                                 ),
-                              )
-                            ]
+                              ),
+                             ]
                         ),
                       ]),
+
                   GestureDetector(
                     onTap: () {
 

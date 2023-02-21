@@ -814,6 +814,7 @@ class _postState extends State<post> {
                             'accountname':name,
                             'accountemail':email,
                             'accountuid':uid,
+                            'tesutokeikou':istesutokeikou,
 
                           })
                               .then((value) => print("新規登録に成功"))
