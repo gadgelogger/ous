@@ -13,7 +13,7 @@ class seibututikyuu extends StatefulWidget {
 }
 
 class _seibututikyuuState extends State<seibututikyuu> {
-  String  gakubu = '生物地球学部';
+  String  gakubu = 'seibutu';
 
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
@@ -25,7 +25,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
       appBar: AppBar(elevation: 0,title: Text('生物地球学部'),),
       body: SafeArea(
           child: StreamBuilder(
-            stream: _firestore.collection('生物地球学部').snapshots(),
+            stream: _firestore.collection('seibutu').snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

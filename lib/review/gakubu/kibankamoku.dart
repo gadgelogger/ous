@@ -13,7 +13,7 @@ class kibankamoku extends StatefulWidget {
 }
 
 class _kibankamokuState extends State<kibankamoku> {
-  String  gakubu = '基盤科目';
+  String  gakubu = 'kiban';
 
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
@@ -25,7 +25,7 @@ class _kibankamokuState extends State<kibankamoku> {
       appBar: AppBar(elevation: 0,title: Text('基盤教育科目'),),
       body: SafeArea(
           child: StreamBuilder(
-            stream: _firestore.collection('基盤教育科目').snapshots(),
+            stream: _firestore.collection('kiban').snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

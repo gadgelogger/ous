@@ -11,6 +11,7 @@ import 'signuppage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ous/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import 'package:ous/main.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,27 +33,18 @@ class _Login extends State<Login> {
   String _login_forgot_Email = ""; // 入力されたパスワード
 
   String _infoText = ""; // ログインに関する情報を表示
-
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
+
+  final DateTime now = DateTime.now();
 
 
 
   //ユーザー情報保存
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Future<void> Register() {
-    // 上で定義したメンバ変数を格納すると、usersコレクションに、
-    // メールアドレスとパスワードも保存できる。
-    return users
-        .add({
-          'email': _login_Email,
-        })
-        .then((value) => print("新規登録に成功"))
-        .catchError((error) => print("新規登録に失敗しました!: $error"));
 
-  }
 
 //Appleサインイン
 
@@ -424,7 +416,6 @@ class _Login extends State<Login> {
                                 child: GestureDetector(
                                     onTap: () async {
                                       try {
-                                        Register();
                                         // メール/パスワードでログイン
                                         UserCredential _result = await _auth
                                             .signInWithEmailAndPassword(
@@ -446,6 +437,16 @@ class _Login extends State<Login> {
                                           Fluttertoast.showToast(
                                               msg: "ログインしました");
                                         } else {
+
+
+                                          FirebaseFirestore.instance.collection('users').doc(_user.uid).set({
+                                            'uid': _user.uid,
+                                            'displayname': '名前未設定',
+                                            'day':DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
+
+                                          });
+                                          print("Created");
+
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -503,7 +504,6 @@ class _Login extends State<Login> {
                                       // メール/パスワードでログイン
                                       final userCredential =
                                           await signInWithGoogle();
-                                      Register();
                                       // ログインに成功した場合
                                       // チャット画面に遷移＋ログイン画面を破棄
                                       await Navigator.of(context)

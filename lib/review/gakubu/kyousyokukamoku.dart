@@ -13,7 +13,7 @@ class kyousyokukamoku extends StatefulWidget {
 }
 
 class _kyousyokukamokuState extends State<kyousyokukamoku> {
-  String  gakubu = '教職科目';
+  String  gakubu = 'kyousyoku';
 
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
@@ -25,7 +25,7 @@ class _kyousyokukamokuState extends State<kyousyokukamoku> {
       appBar: AppBar(elevation: 0,title: Text('教職関連科目'),),
       body: SafeArea(
           child: StreamBuilder(
-            stream: _firestore.collection('教職関連科目').snapshots(),
+            stream: _firestore.collection('kyousyoku').snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) {

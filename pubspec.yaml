@@ -133,6 +133,7 @@ flutter:
   - assets/icon/book.png
   - assets/icon/news.png
   - assets/icon/update.png
+  - assets/images/icon2.jpg
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/images/icon.png'

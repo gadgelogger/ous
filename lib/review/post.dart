@@ -14,7 +14,7 @@ class post extends StatefulWidget {
 
 class _postState extends State<post> {
   //投稿データ
-  String? iscategory = '理学部';
+  String? iscategory = 'rigaku';
   String? isbumon = 'ラク単';
   String? isnendo = '2022';
   String? isgakki = '春１';
@@ -33,16 +33,13 @@ class _postState extends State<post> {
   String? issenden = '';
 
   //総合評価
-  var _hyouka = 0.0;
-  var _hyouka_text = '0';
+  double _hyouka = 0;
 
   //面白さ
-  var _omosirosa = 0.0;
-  var _omosirosa_text = '0';
+  double _omosirosa = 0;
 
   //単位の取りやすさ
-  var _toriyasusa = 0.0;
-  var _toriyasusa_text = '0';
+  double _toriyasusa = 0;
 
   //投稿者の情報
   String? name;
@@ -120,43 +117,43 @@ class _postState extends State<post> {
                         //5
                         DropdownMenuItem(
                           child: Text('理学部'),
-                          value: '理学部',
+                          value: 'rigaku',
                         ),
                         DropdownMenuItem(
                           child: Text('工学部'),
-                          value: '工学部',
+                          value: 'kougaku',
                         ),
                         DropdownMenuItem(
                           child: Text('情報理工学部'),
-                          value: '情報理工学部',
+                          value: 'zyouhou',
                         ),
                         DropdownMenuItem(
                           child: Text('生物地球学部'),
-                          value: '生物地球学部',
+                          value: 'seibutu',
                         ),
                         DropdownMenuItem(
                           child: Text('教育学部'),
-                          value: '教育学部',
+                          value: 'kyouiku',
                         ),
                         DropdownMenuItem(
                           child: Text('経営学部'),
-                          value: '経営学部',
+                          value: 'keiei',
                         ),
                         DropdownMenuItem(
                           child: Text('獣医学部'),
-                          value: '獣医学部',
+                          value: 'zyuui',
                         ),
                         DropdownMenuItem(
                           child: Text('生命科学部'),
-                          value: '生命科学部',
+                          value: 'seimei',
                         ),
                         DropdownMenuItem(
                           child: Text('基盤教育科目'),
-                          value: '基盤教育科目',
+                          value: 'kiban',
                         ),
                         DropdownMenuItem(
                           child: Text('教職科目'),
-                          value: '教職科目',
+                          value: 'kyousyoku',
                         ),
                       ],
                       //6
@@ -459,7 +456,7 @@ class _postState extends State<post> {
                     Column(
                       children: <Widget>[
                         Text(
-                          _hyouka_text,
+                          '${_hyouka.toStringAsFixed(0)}',
                           style: TextStyle(fontSize: 24),
                         ),
                         Slider(
@@ -469,7 +466,6 @@ class _postState extends State<post> {
                           onChanged: (double value) {
                             setState(() {
                               _hyouka = value.roundToDouble();
-                              _hyouka_text = ' $_hyouka';
                             });
                           },
                         )
@@ -482,7 +478,7 @@ class _postState extends State<post> {
                     Column(
                       children: <Widget>[
                         Text(
-                          _omosirosa_text,
+                          '${_omosirosa.toStringAsFixed(0)}',
                           style: TextStyle(fontSize: 24),
                         ),
                         Slider(
@@ -492,7 +488,6 @@ class _postState extends State<post> {
                           onChanged: (double value) {
                             setState(() {
                               _omosirosa = value.roundToDouble();
-                              _omosirosa_text = ' $_omosirosa';
                             });
                           },
                         )
@@ -505,7 +500,7 @@ class _postState extends State<post> {
                     Column(
                       children: <Widget>[
                         Text(
-                          _toriyasusa_text,
+                          '${_toriyasusa.toStringAsFixed(0)}',
                           style: TextStyle(fontSize: 24),
                         ),
                         Slider(
@@ -515,7 +510,6 @@ class _postState extends State<post> {
                           onChanged: (double value) {
                             setState(() {
                               _toriyasusa = value.roundToDouble();
-                              _toriyasusa_text = ' $_toriyasusa';
                             });
                           },
                         )
@@ -793,7 +787,7 @@ class _postState extends State<post> {
                           );
 
                           await FirebaseFirestore.instance
-                              .collection('test_collection1') // コレクションID
+                              .collection(iscategory!) // コレクションID
                               .doc() // ここは空欄だと自動でIDが付く
                               .set({
                                 'bumon': isbumon,
@@ -801,13 +795,13 @@ class _postState extends State<post> {
                                 'komento': iskomento,
                                 'kousimei': iskousimei,
                                 'nenndo': isnendo,
-                                'omosirosa': _omosirosa_text,
+                                'omosirosa': _omosirosa,
                                 'senden': issenden,
-                                'sougouhyouka': _hyouka_text,
+                                'sougouhyouka': _hyouka,
                                 'syusseki': issyusseki,
                                 'tannisuu': istanni,
                                 'tesutokeisiki': istesutokeisiki,
-                                'toriyasusa': _toriyasusa_text,
+                                'toriyasusa': _toriyasusa,
                                 'zyugyoukeisiki': iszyugyoukeisiki,
                                 'zyugyoumei': iszyugyoumei,
                             'name': isname,
@@ -815,6 +809,7 @@ class _postState extends State<post> {
                             'accountemail':email,
                             'accountuid':uid,
                             'tesutokeikou':istesutokeikou,
+                            'kyoukasyo':iskyoukasyo,
 
                           })
                               .then((value) => print("新規登録に成功"))

@@ -27,11 +27,8 @@ class _ViewState extends State<View> {
         elevation: 0,
         title: Column(
           children: [
-            Text(widget.doc.get('zyugyoumei')),
-            Text(
-              widget.doc.get('syurui'),
-              style: TextStyle(fontSize: 18.sp),
-            )
+            Text(widget.doc.get('zyugyoumei') ?? '不明'),
+
           ],
         ),
       ),
@@ -54,7 +51,7 @@ class _ViewState extends State<View> {
                   bottom: 10,
                 ),
                 child: Text(
-                  widget.doc.get('kousimei'),
+                  widget.doc.get('kousimei')??'不明',
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 15.sp,
@@ -128,7 +125,7 @@ class _ViewState extends State<View> {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(widget.doc.get('tesutokeisiki')),
+                child: Text(widget.doc.get('tesutokeisiki')??'不明'),
               ),
               Divider(),
               Container(
@@ -158,7 +155,7 @@ class _ViewState extends State<View> {
                           pointers: <GaugePointer>[
                             RangePointer(
                               value: widget.doc
-                                  .get('omosirosa' as String)
+                                  .get('omosirosa')
                                   .toDouble(),
                               cornerStyle: CornerStyle.bothCurve,
                               color: Colors.lightGreen,
@@ -295,7 +292,7 @@ class _ViewState extends State<View> {
                       fontSize: 20.sp,
                     ),
                   ),
-                  Text(widget.doc.get('komento'),style: TextStyle(
+                  Text(widget.doc.get('komento')??'不明',style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 16.sp,
                   ),),
@@ -310,7 +307,7 @@ class _ViewState extends State<View> {
                     padding: EdgeInsets.only(
                       bottom: 50,
                     ),
-                    child: Text(widget.doc.get('name')),
+                    child: Text(widget.doc.get('name')??'不明'),
                   ),
                   SizedBox(height: 20.0.h),
                   Container(
