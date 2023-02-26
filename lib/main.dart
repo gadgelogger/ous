@@ -14,6 +14,17 @@ import 'package:ous/info/info.dart';
 import 'account/login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
+import 'package:algolia/algolia.dart';
+
+//algolia
+class Application {
+  static final Algolia algolia = Algolia.init(
+    applicationId: '78CZVABC2W',
+    apiKey: 'c2377e7faad9a408d5867b849f25fae4',
+  );
+}
+//algolia
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

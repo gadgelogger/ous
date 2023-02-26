@@ -46,7 +46,7 @@ class home extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 30.sp,
                           ),
-                        )
+                        ),
                       ]
                   ),
                   Row(

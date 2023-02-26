@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +7,9 @@ import 'package:ous/review/view.dart';
 import 'package:ous/test/rigaku.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:highlight_text/highlight_text.dart';
+import 'package:algolia/algolia.dart';
+
+import '../../main.dart';
 
 class Rigakubu extends StatefulWidget {
   const Rigakubu({Key? key}) : super(key: key);
@@ -19,13 +24,44 @@ class _RigakubuState extends State<Rigakubu> {
   List<DocumentSnapshot> documentList = [];
   String test = 'FB219000 学びの基礎論';
   bool _searchBoolean = false; //追加
+  StreamController searchController = StreamController();
+
+
+  Future searchFireStore(word) async {
+    Algolia algolia = Application.algolia;
+    AlgoliaQuery query = algolia.instance.index("rigaku_index").query(word);
+    AlgoliaQuerySnapshot snap = await query.getObjects();
+    List<AlgoliaObjectSnapshot> hits = snap.hits;
+    searchController.add(hits);
+  }
+
+  Widget _searchTextField() {
+    return TextField(
+      autofocus: true, //TextFieldが表示されるときにフォーカスする（キーボードを表示する）
+      style: TextStyle( //テキストのスタイル
+        fontSize: 20,
+      ),
+      textInputAction: TextInputAction.search, //キーボードのアクションボタンを指定
+      decoration: InputDecoration( //TextFiledのスタイル
+        enabledBorder: UnderlineInputBorder( //デフォルトのTextFieldの枠線
+        ),
+        focusedBorder: UnderlineInputBorder( //TextFieldにフォーカス時の枠線
+        ),
+        hintText: '講義名or講師名', //何も入力してないときに表示されるテキスト
+        hintStyle: TextStyle( //hintTextのスタイル
+          fontSize: 20,
+        ),
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
-          title: Text('理学部'),
+          title: !_searchBoolean ? Text('理学部') : _searchTextField(),
           actions: !_searchBoolean
               ? [
                   IconButton(

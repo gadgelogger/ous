@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.12"
+  algolia:
+    dependency: "direct main"
+    description:
+      name: algolia
+      sha256: "0ba325344f85ac8f8351d158f0be0643e169ac0c91a43a496f8b1f3b54390066"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   archive:
     dependency: transitive
     description:
