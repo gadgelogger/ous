@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -15,6 +16,8 @@ import 'account/login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
+
+
 
 //algolia
 class Application {
@@ -103,7 +106,9 @@ class MyApp extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     // User が null でなない、つまりサインイン済みのホーム画面へ
+
                     return MyHomePage(title: 'home');
+
                   }
                   // User が null である、つまり未サインインのサインイン画面へ
                   return Login();

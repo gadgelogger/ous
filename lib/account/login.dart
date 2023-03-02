@@ -436,8 +436,6 @@ class _Login extends State<Login> {
                                           }));
                                           Fluttertoast.showToast(
                                               msg: "ログインしました");
-                                        } else {
-
 
                                           FirebaseFirestore.instance.collection('users').doc(_user.uid).set({
                                             'uid': _user.uid,
@@ -446,6 +444,8 @@ class _Login extends State<Login> {
 
                                           });
                                           print("Created");
+
+                                        } else {
 
                                           Navigator.push(
                                             context,
