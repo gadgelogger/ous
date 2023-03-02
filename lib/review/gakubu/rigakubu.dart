@@ -254,7 +254,8 @@ class _RigakubuState extends State<Rigakubu> {
                                         hit.data['bumon'],
                                         // Your text
                                       )),
-                                )
+                                ),
+
                               ],
                             ),
                           ),
@@ -284,7 +285,15 @@ class _RigakubuState extends State<Rigakubu> {
               child:  Icon(Icons.filter_alt_outlined)  ,
             ),
           ),
-          Container(
+
+        ],
+      ),
+    );
+  }
+}
+
+/*お気に入りボタン
+ Container(
             margin: EdgeInsets.only(bottom: 16.0),
             child: FloatingActionButton(
               heroTag: "btn2",
@@ -295,14 +304,9 @@ class _RigakubuState extends State<Rigakubu> {
               child: const Icon(Icons.favorite_outline),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-
+ */
 class DetailsScreen extends StatelessWidget {
+
   final   zyugyoumei;
   final  kousimei;
   final  tannisuu;
@@ -323,6 +327,7 @@ class DetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(zyugyoumei),
+
       ),
       body: Container(
         margin: EdgeInsets.all(15),

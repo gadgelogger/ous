@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
-import 'package:ous/review/gakubu/debug.dart';
 import 'package:ous/review/gakubu/keieigakubu.dart';
 import 'package:ous/review/gakubu/kibankamoku.dart';
 import 'package:ous/review/gakubu/kougakubu.dart';
@@ -14,7 +13,6 @@ import 'package:ous/review/gakubu/seimeikagaku.dart';
 import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
 import 'package:ous/review/post.dart';
-import 'package:ous/test/seimei.dart';
 import 'package:ous/test/zyouhourikou.dart';
 import 'package:ous/test/zyuui.dart';
 import 'package:path/path.dart';
@@ -377,7 +375,7 @@ class Review extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => seimeikagakubu()),
+                                builder: (context) => seimei()),
                           );
                         },
                       ),
@@ -393,10 +391,7 @@ class Review extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyWidget()),
-                  );
+
                 }, child: Text('aaaa')),
                 Container(
                   child: Row(

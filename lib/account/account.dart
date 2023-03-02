@@ -20,6 +20,8 @@ class _accountState extends State<account> {
   String? image;
   String? uid;
 
+
+
   @override
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
@@ -104,9 +106,16 @@ class _accountState extends State<account> {
                       ),
                     ],
                   ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                     Container(
+
+                       child: Text(
+                         _checkForWord("Hello World"),
+                       ),
+                     ),
                       ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -127,39 +136,39 @@ class _accountState extends State<account> {
         body: Stack(
           children: [
             Column(
-              children: [
-              ],
+              children: [],
             ),
             Container(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    child: Image.asset(
-                      'assets/images/icon2.jpg',
-                    ),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 10,  bottom: 30, ),
-                  child:Text(
-                   'aaaaa',
-                    maxLines: 1,
-                    style: GoogleFonts.notoSans(
-                      // フォントをnotoSansに指定(
-                      textStyle: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromRGBO(184, 189, 211,1),
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset(
+                        'assets/images/icon2.jpg',
                       ),
                     ),
-                  )),
-                ],
-              )
-            ),
-
+                    Padding(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          bottom: 30,
+                        ),
+                        child: Text(
+                          'aaaaa',
+                          maxLines: 1,
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromRGBO(184, 189, 211, 1),
+                            ),
+                          ),
+                        )),
+                  ],
+                )),
             CustomPaint(
               painter: AppBarPainter(),
               child: Container(height: 0),
