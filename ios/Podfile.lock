@@ -924,7 +924,7 @@ SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  camera_avfoundation: 82dc5597033fe2dcdcca6e41f7e464d0855e74ad
+  camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   cloud_firestore: 94326bb743acbfe43c68f933dab8a094e84d5849
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
@@ -954,7 +954,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   health: 5a380c0f6c4f619535845992993964293962e99e
-  image_picker_ios: 58b9c4269cb176f89acea5e5d043c9358f2d25f8
+  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378

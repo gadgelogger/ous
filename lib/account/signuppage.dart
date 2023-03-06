@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -39,73 +41,14 @@ class _RegistrationState extends State<Registration> {
   String _newPassword = ""; // 入力されたパスワード
   String _infoText = ""; // 登録に関する情報を表示
   bool _pswd_OK = false; // パスワードが有効な文字数を満たしているかどうか
+  bool _isChecked = false;
 
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
 
 
-  //Appleサインイン
 
-  // 公式のを参考に作ったユーザー登録の関数
-  Future<UserCredential> signInWithApple() async {
-    print('AppSignInを実行');
-
-    final rawNonce = generateNonce();
-
-    // 現在サインインしているAppleアカウントのクレデンシャルを要求する。
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    print(appleCredential);
-    // Apple から返されたクレデンシャルから `OAuthCredential` を作成します。
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
-    );
-    print(appleCredential);
-    // Firebaseでユーザーにサインインします。もし、先ほど生成したnonceが
-    // が `appleCredential.identityToken` の nonce と一致しない場合、サインインに失敗します。
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-  }
-
-  // 上のとほぼ一緒。登録とログインができる。
-  Future<UserCredential> AppleSignIn() async {
-    print('AppSignInを実行');
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
-    final rawNonce = generateNonce();
-
-    // Request credential for the currently signed in Apple account.
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    print(appleCredential);
-    // Create an `OAuthCredential` from the credential returned by Apple.
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
-    );
-    // ここに画面遷移をするコードを書く!
-    Navigator.push(
-        context,MaterialPageRoute(builder: (context) {
-      return MyHomePage(title: 'home');
-    }));
-    print(appleCredential);
-    // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-  }
-
-  //Appleサインイン
 
 
 
@@ -143,23 +86,6 @@ class _RegistrationState extends State<Registration> {
               padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: Column(
                 children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(
-                        labelText: 'ユーザー名（他ユーザーに表示されます）',
-                        labelStyle: TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                        // hintText: 'EMAIL',
-                        // hintStyle: ,
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.green))),
-                    onChanged: (String value) {
-                      setState(() {
-                        _username = value;
-                      });
-                    },
-                  ),
                   SizedBox(height: 10.0),
                   TextField(
                     decoration: InputDecoration(
@@ -199,6 +125,41 @@ class _RegistrationState extends State<Registration> {
                           _pswd_OK = false;
                         }
                       }),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0, color: Colors.transparent),
+                        ),
+                        child:   Checkbox(
+                          value: _isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isChecked = value ?? false;
+                            });
+                          },
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+
+                        ),
+                      ),
+                      InkWell(
+                          onTap: () {
+                            launch(
+                                'https://tan-q-bot-unofficial.com/terms_of_service/');
+                          },
+                          child: Text(
+                            '利用規約に同意した？',
+                            style: TextStyle(
+                                color: Colors.lightGreen,
+                                fontFamily: 'Montserrat',
+                                fontWeight: FontWeight.bold,
+                                decoration:
+                                TextDecoration.underline),
+                          )),
+
+                    ],
+                  ),
                   SizedBox(height: 50.0),
                   Center(
                     child: Padding(
@@ -213,16 +174,15 @@ class _RegistrationState extends State<Registration> {
                       height: 40.0,
                       child: Material(
                         borderRadius: BorderRadius.circular(20.0),
-                        shadowColor: Colors.greenAccent,
-                        color: Colors.lightGreen,
-                        elevation: 7.0,
+                        color: Colors.lightGreen[200],
                         child: GestureDetector(
-                          onTap: () async {
+                          onTap: _isChecked
+                              ? () async {
                             if (_pswd_OK) {
                               try {
                                 // メール/パスワードでユーザー登録
                                 UserCredential _result =
-                                    await _auth.createUserWithEmailAndPassword(
+                                await _auth.createUserWithEmailAndPassword(
                                   email: _newEmail,
                                   password: _newPassword,
                                 );
@@ -251,8 +211,12 @@ class _RegistrationState extends State<Registration> {
                                 _infoText = 'パスワードは8文字以上です。';
                               });
                             }
-                          },
-                          child: Center(
+                          }
+                              : () {
+                            Fluttertoast.showToast(
+                                msg:
+                                "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
+                          },                          child: Center(
                             child: Text(
                               'サインアップ',
                               style: TextStyle(

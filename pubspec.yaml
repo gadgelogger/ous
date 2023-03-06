@@ -85,6 +85,8 @@ dependencies:
   flutter_overboard: ^3.1.1
   highlight_text: ^1.6.0
   algolia: ^1.1.2
+  fl_chart: ^0.61.0
+  pie_chart: ^5.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

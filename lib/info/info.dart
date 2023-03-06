@@ -60,6 +60,8 @@ class Info extends StatelessWidget {
                 ),
 
 
+
+
               ]),
         ),
         body: WillPopScope(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,12 +21,26 @@ import 'package:flutter/services.dart';
 import 'email_check.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+extension OnPrimary on Color {
+  /// 輝度が高ければ黒, 低ければ白を返す
+  Color get onPrimary {
+    // 輝度により黒か白かを決定する
+    if (computeLuminance() < 0.5) {
+      return Colors.white;
+    }
+    return Colors.black;
+  }
+}
+
 class Login extends StatefulWidget {
   @override
   _Login createState() => _Login();
 }
 
 class _Login extends State<Login> {
+  //利用規約に同意したかの確認
+  bool _isChecked = false;
+
   // Firebase 認証
   final _auth = FirebaseAuth.instance;
 
@@ -36,46 +52,15 @@ class _Login extends State<Login> {
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
 
-
   final DateTime now = DateTime.now();
-
-
 
   //ユーザー情報保存
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-
-
 //Appleサインイン
 
-  // 公式のを参考に作ったユーザー登録の関数
-  Future<UserCredential> signInWithApple() async {
-    print('AppSignInを実行');
-
-    final rawNonce = generateNonce();
-
-    // 現在サインインしているAppleアカウントのクレデンシャルを要求する。
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    print(appleCredential);
-    // Apple から返されたクレデンシャルから `OAuthCredential` を作成します。
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
-    );
-    print(appleCredential);
-    // Firebaseでユーザーにサインインします。もし、先ほど生成したnonceが
-    // が `appleCredential.identityToken` の nonce と一致しない場合、サインインに失敗します。
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-
-  }
-
   // 上のとほぼ一緒。登録とログインができる。
-  Future<UserCredential> AppleSignIn() async {
+  Future<UserCredential?> AppleSignIn() async {
     print('AppSignInを実行');
     // To prevent replay attacks with the credential returned from Apple, we
     // include a nonce in the credential request. When signing in with
@@ -96,17 +81,38 @@ class _Login extends State<Login> {
       idToken: appleCredential.identityToken,
       rawNonce: rawNonce,
     );
-    // ここに画面遷移をするコードを書く!
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return MyHomePage(title: 'home');
-    }
-    ));
-    Fluttertoast.showToast(msg: "ログインしました");
 
-    print(appleCredential);
-    // Sign in the user with Firebase. If the nonce we generated earlier does
-    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
-    return await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+    try {
+      final authResult =
+          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+      final firebaseUser = authResult.user;
+
+      final userRef =
+          FirebaseFirestore.instance.collection('users').doc(firebaseUser?.uid);
+
+      userRef.set({
+        'uid': firebaseUser?.uid ?? '未設定',
+        'email': firebaseUser?.email ?? '未設定',
+        'displayName': firebaseUser?.displayName ?? '名前未設定',
+        'photoURL': firebaseUser?.photoURL ?? 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+        'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
+
+        // その他のユーザー情報を追加
+      }, SetOptions(merge: true));
+
+      // ここに画面遷移をするコードを書く!
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return MyHomePage(title: 'home');
+      }));
+      Fluttertoast.showToast(msg: "Appleでログインしました");
+
+      print(appleCredential);
+      return authResult;
+    } catch (error) {
+      print(error);
+    }
+
+
   }
 
 //ゲストモード
@@ -120,7 +126,6 @@ class _Login extends State<Login> {
         return MyHomePage(title: 'home');
       }));
       Fluttertoast.showToast(msg: "ゲストでログインしました");
-
     } catch (e) {
       await showDialog(
           context: context,
@@ -151,13 +156,13 @@ class _Login extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) => _showTutorial(context));
 
     Future<bool> _willPopCallback() async {
       return true;
     }
+
+    final Color primaryColor;
 
     return WillPopScope(
         onWillPop: _willPopCallback,
@@ -243,170 +248,195 @@ class _Login extends State<Login> {
                             SizedBox(
                               height: 5.0.h,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  '',
-                                  style: TextStyle(fontFamily: 'Montserrat'),
-                                ),
-                                SizedBox(width: 5.0.w),
-                                InkWell(
-                                  onTap: () => launch(
-                                      'https://tan-q-bot-unofficial.com/terms_of_service/'),
-                                  child: Text(
-                                    '利用規約はこちら',
-                                    style: TextStyle(
-                                        color: Colors.lightGreen,
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.underline),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5.0.h),
-                            Container(
-                              alignment: Alignment(-1.0, 0.0),
-                              padding: EdgeInsets.only(top: 15.0, left: 6.0),
-                              child: InkWell(
-                                  child: Text(
-                                    'パスワードを忘れた方へ',
-                                    style: TextStyle(
-                                        color: Colors.lightGreen,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat',
-                                        decoration: TextDecoration.underline),
-                                  ),
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            "パスワードを忘れた人へ",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Container(
-                                                    width: 100,
-                                                    height: 100,
-                                                    child: Image(
-                                                      image: AssetImage(
-                                                          'assets/icon/password.gif'),
-                                                      fit: BoxFit.cover,
-                                                    )),
-                                                Text(
-                                                  '下のテキストボックスにメールアドレスを入力して、リセットボタンを押してください。',
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                TextField(
-                                                  decoration: InputDecoration(
-                                                      labelText: 'メールアドレス',
-                                                      labelStyle: TextStyle(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.grey),
-                                                      focusedBorder:
-                                                          UnderlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                  color: Colors
-                                                                      .lightGreen))),
-                                                  onChanged: (String value) {
-                                                    setState(() {
-                                                      _login_forgot_Email =
-                                                          value;
-                                                    });
-                                                  },
-                                                ),
-                                              ]),
-                                          actions: <Widget>[
-                                            // ボタン領域
-                                            TextButton(
-                                              child: Text("やっぱやめる"),
-                                              onPressed: () =>
-                                                  Navigator.pop(context),
-                                            ),
-                                            TextButton(
-                                                child: Text("リセットする"),
-                                                onPressed: () {
-                                                  _auth.sendPasswordResetEmail(
-                                                      email:
-                                                          _login_forgot_Email);
 
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (_) {
-                                                        return AlertDialog(
-                                                          title: Text(
-                                                            "パスワードリセット完了",
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0,
+                                            color: Colors.transparent),
+                                      ),
+                                      child: Checkbox(
+                                        value: _isChecked,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            _isChecked = value ?? false;
+                                          });
+                                        },
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                      ),
+                                    ),
+                                    InkWell(
+                                        onTap: () {
+                                          launch(
+                                              'https://tan-q-bot-unofficial.com/terms_of_service/');
+                                        },
+                                        child: Text(
+                                          '利用規約に同意した？',
+                                          style: TextStyle(
+                                              color: Colors.lightGreen,
+                                              fontFamily: 'Montserrat',
+                                              fontWeight: FontWeight.bold,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        )),
+                                  ],
+                                ),
+                                SizedBox(height: 5.0.h),
+                                Container(
+                                  alignment: Alignment(-1.0, 0.0),
+                                  padding: EdgeInsets.only(top: 15.0, left: 10),
+                                  child: InkWell(
+                                      child: Text(
+                                        'パスワードを忘れた方へ',
+                                        style: TextStyle(
+                                            color: Colors.lightGreen,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Montserrat',
+                                            decoration:
+                                                TextDecoration.underline),
+                                      ),
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "パスワードを忘れた人へ",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: 100,
+                                                        height: 100,
+                                                        child: Image(
+                                                          image: AssetImage(
+                                                              'assets/icon/password.gif'),
+                                                          fit: BoxFit.cover,
+                                                        )),
+                                                    Text(
+                                                      '下のテキストボックスにメールアドレスを入力して、リセットボタンを押してください。',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                    TextField(
+                                                      decoration: InputDecoration(
+                                                          labelText: 'メールアドレス',
+                                                          labelStyle: TextStyle(
+                                                              fontFamily:
+                                                                  'Montserrat',
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                            ),
-                                                          ),
-                                                          content: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              Container(
-                                                                  width: 100,
-                                                                  height: 100,
-                                                                  child: Image(
-                                                                    image: AssetImage(
-                                                                        'assets/icon/rocket.gif'),
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                  )),
-                                                              Text(
-                                                                "入力してくれたメールアドレス宛にパスワードリセットをするメールを送信しました。\nもし届いていない場合は迷惑メールフォルダーを確認してください。",
+                                                              color:
+                                                                  Colors.grey),
+                                                          focusedBorder:
+                                                              UnderlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              Colors.lightGreen))),
+                                                      onChanged:
+                                                          (String value) {
+                                                        setState(() {
+                                                          _login_forgot_Email =
+                                                              value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ]),
+                                              actions: <Widget>[
+                                                // ボタン領域
+                                                TextButton(
+                                                  child: Text("やっぱやめる"),
+                                                  onPressed: () =>
+                                                      Navigator.pop(context),
+                                                ),
+                                                TextButton(
+                                                    child: Text("リセットする"),
+                                                    onPressed: () {
+                                                      _auth.sendPasswordResetEmail(
+                                                          email:
+                                                              _login_forgot_Email);
+
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (_) {
+                                                            return AlertDialog(
+                                                              title: Text(
+                                                                "パスワードリセット完了",
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                          actions: <Widget>[
-                                                            TextButton(
-                                                              child:
-                                                                  Text("オッケー"),
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      context),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      });
-                                                }),
-                                          ],
+                                                              content: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Container(
+                                                                      width:
+                                                                          100,
+                                                                      height:
+                                                                          100,
+                                                                      child:
+                                                                          Image(
+                                                                        image: AssetImage(
+                                                                            'assets/icon/rocket.gif'),
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      )),
+                                                                  Text(
+                                                                    "入力してくれたメールアドレス宛にパスワードリセットをするメールを送信しました。\nもし届いていない場合は迷惑メールフォルダーを確認してください。",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  child: Text(
+                                                                      "オッケー"),
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(
+                                                                          context),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          });
+                                                    }),
+                                              ],
+                                            );
+                                          },
                                         );
-                                      },
-                                    );
-                                  }),
+                                      }),
+                                ),
+                              ],
                             ),
                             //エラー表示
-                            Center(
-                              child: Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(20.0, 0, 20.0, 5.0),
-                                child: Text(
-                                  _infoText,
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ),
+
                             //エラー表示（ここまで）
                             SizedBox(height: 10.0.h),
+
                             //ログインボタン
                             Container(
                               height: 40.0.h,
@@ -414,59 +444,103 @@ class _Login extends State<Login> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 color: Colors.lightGreen[200],
                                 child: GestureDetector(
-                                    onTap: () async {
-                                      try {
-                                        // メール/パスワードでログイン
-                                        UserCredential _result = await _auth
-                                            .signInWithEmailAndPassword(
-                                          email: _login_Email,
-                                          password: _login_Password,
-                                        );
+                                    onTap: _isChecked
+                                        ? () async {
+                                            try {
+                                              // メール/パスワードでログイン
+                                              UserCredential _result = await _auth
+                                                  .signInWithEmailAndPassword(
+                                                email: _login_Email,
+                                                password: _login_Password,
+                                              );
 
-                                        // ログイン成功
-                                        User _user =
-                                            _result.user!; // ログインユーザーのIDを取得
+                                              // ログイン成功
+                                              User _user = _result
+                                                  .user!; // ログインユーザーのIDを取得
 
-                                        // Email確認が済んでいる場合のみHome画面へ
-                                        if (_user.emailVerified) {
-                                          Navigator.push(context,
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return MyHomePage(title: 'home');
-                                          }));
-                                          Fluttertoast.showToast(
-                                              msg: "ログインしました");
+                                              // Email確認が済んでいる場合のみHome画面へ
+                                              if (_user.emailVerified) {
+                                                Navigator.push(context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                                  return MyHomePage(
+                                                      title: 'home');
+                                                }));
+                                                Fluttertoast.showToast(
+                                                    msg: "ログインしました");
 
-                                          FirebaseFirestore.instance.collection('users').doc(_user.uid).set({
-                                            'uid': _user.uid,
-                                            'displayname': '名前未設定',
-                                            'day':DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
+                                                FirebaseFirestore.instance
+                                                    .collection('users')
+                                                    .doc(_user.uid)
+                                                    .set({
+                                                  'uid': _user.uid,
+                                                  'displayname': '名前未設定',
+                                                  'date': DateFormat(
+                                                          'yyyy/MM/dd(E) HH:mm:ss')
+                                                      .format(now)
+                                                });
+                                                print("Created");
+                                              } else {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Emailcheck(
+                                                              email:
+                                                                  _login_Email,
+                                                              pswd:
+                                                                  _login_Password,
+                                                              from: 2)),
+                                                );
+                                                Fluttertoast.showToast(
+                                                    msg: "ログインしました");
+                                              }
+                                            } on FirebaseAuthException catch (e) {
+                                              String errorMessage;
+                                              if (e.code == 'weak-password') {
+                                                errorMessage = 'パスワードが弱すぎます';
+                                              } else if (e.code == 'email-already-in-use') {
+                                                errorMessage = 'そのメールアドレスは既に登録されています';
+                                              } else if (e.code == 'invalid-email') {
+                                                errorMessage = '無効なメールアドレスです';
+                                              } else if (e.code == 'user-not-found') {
+                                                errorMessage = 'ユーザーが見つかりませんでした';
+                                              } else if (e.code == 'wrong-password') {
+                                                errorMessage = 'パスワードが間違っています';
+                                              } else {
+                                                errorMessage = 'エラーが発生しました';
+                                              }
+                                              showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                                  return    AlertDialog(
+                                                    title: Text('エラー'),
+                                                    content: Text(_infoText),
+                                                    actions: <Widget>[
 
-                                          });
-                                          print("Created");
+                                                      TextButton(
+                                                        child: Text('OK'),
+                                                        onPressed: () {
+                                                          // OKボタンが押されたときの処理
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              print('FirebaseAuthのエラー: $errorMessage');
+                                              setState(() {
+                                                _infoText = errorMessage;
+                                              });
+                                            }
 
-                                        } else {
-
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Emailcheck(
-                                                        email: _login_Email,
-                                                        pswd: _login_Password,
-                                                        from: 2)),
-                                          );
-                                          Fluttertoast.showToast(
-                                              msg: "ログインしました");
-                                        }
-                                      } catch (e) {
-                                        // ログインに失敗した場合
-                                        setState(() {
-                                          _infoText = auth_error.register_error_msg(
-                                              e.hashCode, e.toString());
-                                        });
-                                      }
-                                    },
+                                    }
+                                        : () {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "利用規約に同意してね！"); // ボタンが無効なときの処理
+                                          },
                                     child: Container(
                                         child: Column(
                                       mainAxisAlignment:
@@ -476,7 +550,7 @@ class _Login extends State<Login> {
                                           child: Text(
                                             'ログイン',
                                             style: TextStyle(
-                                                color: Colors.green[900],
+                                                color: Colors.white,
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily: 'Montserrat'),
                                           ),
@@ -488,6 +562,7 @@ class _Login extends State<Login> {
                             //ログインボタンここまで
                             SizedBox(height: 20.0.h),
                             //大学のアカウントでログイン
+
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -499,37 +574,101 @@ class _Login extends State<Login> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: GestureDetector(
-                                  onTap: () async {
-                                    try {
-                                      // メール/パスワードでログイン
-                                      final userCredential =
-                                          await signInWithGoogle();
-                                      // ログインに成功した場合
-                                      // チャット画面に遷移＋ログイン画面を破棄
-                                      await Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(
-                                                  builder: (context) {
-                                        return MyHomePage(title: 'home');
-                                      }),
-                                              result: Fluttertoast.showToast(
-                                                  msg: "大学のアカウントでログインしました"));
-                                    } on PlatformException catch (e) {}
-                                  },
+                                  onTap: _isChecked
+                                      ? () async {
+                                          try {
+                                            // メール/パスワードでログイン
+                                            final userCredential =
+                                                await signInWithGoogle();
+                                            // ログインに成功した場合
+                                            // チャット画面に遷移＋ログイン画面を破棄
+                                            await Navigator.of(context)
+                                                .pushReplacement(
+                                                    MaterialPageRoute(
+                                                        builder: (context) {
+                                              return MyHomePage(title: 'home');
+                                            }),
+                                                    result: Fluttertoast.showToast(
+                                                        msg:
+                                                            "大学のアカウントでログインしました"));
+                                          } on PlatformException catch (e) {}
+                                        }
+                                      : () {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "利用規約に同意してね！"); // ボタンが無効なときの処理
+                                        },
                                   child: Center(
-                                    child: Text(
-                                      '大学のアカウントでログイン',
-                                      style: TextStyle(
-                                          color: Colors.green[900],
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat'),
-                                    ),
-                                  ),
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '大学のアカウントでサインイン',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Montserrat'),
+                                      ),
+                                    ],
+                                  )),
                                 ),
                               ),
                             ),
                             //大学のアカウントでログイン（ここまで）
                             SizedBox(height: 20.0.h),
                             //Appleでサインイン
+
+                            if (Platform.isIOS)
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: 0, right: 0, bottom: 20, left: 0),
+                                child: Container(
+
+                                  height: 40.0.h,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                                ? Colors.white
+                                                : Colors.black,
+                                            style: BorderStyle.solid,
+                                            width: 1.0.w),
+                                        color: Colors.transparent,
+                                        borderRadius:
+                                        BorderRadius.circular(20.0)),
+                                    child: GestureDetector(
+                                      onTap: _isChecked
+                                          ? () async {
+                                        AppleSignIn(); // ボタンをタップしたときの処理
+                                      }
+                                          : () {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                            "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
+                                      },
+                                      child: Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.apple, //設定したいアイコンのID
+                                              ),
+                                              Text(
+                                                'Appleでサインイン',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Montserrat'),
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                            if (Platform.isAndroid) SizedBox(height: 0.h),
+
                             Container(
                               height: 40.0.h,
                               child: Container(
@@ -552,55 +691,24 @@ class _Login extends State<Login> {
                                     child: Text(
                                       'サインアップ',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.green[900]),
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+
                             //Appleでサインイン（ここまで）
                             SizedBox(height: 20.0.h),
+
                             //サインアップ
-                            Container(
-                              height: 40.0.h,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black,
-                                        style: BorderStyle.solid,
-                                        width: 1.0.w),
-                                    color: Colors.transparent,
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    AppleSignIn();
-                                  },
-                                  child: Center(
-                                      child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.apple, //設定したいアイコンのID
-                                          color: Colors.black // 色
-                                          ),
-                                      Text(
-                                        'Appleでサインイン',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Montserrat'),
-                                      ),
-                                    ],
-                                  )),
-                                ),
-                              ),
-                            ),
 
                             //サインアップ（ここまで）
-                            SizedBox(height: 20.0.h),
                             //ゲストモード
 
-                            Container(
+                            /*  Container(
                               height: 40.0.h,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -611,48 +719,78 @@ class _Login extends State<Login> {
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: GestureDetector(
-                                   onTap: (){
-                                     showDialog(
-                                       context: context,
-                                       builder: (_) {
-                                         return AlertDialog(
-                                           title: Text("⚠️注意⚠️",textAlign: TextAlign.center,style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
-                                           content: Column(
-                                               mainAxisSize: MainAxisSize.min,
-
-                                               children: <Widget>[
-
-                                                 Text('会員登録なしで続行します。\n\nただセキュリティ上の理由により',textAlign: TextAlign.center,),
-                                                 Text('30日後にアカウントが消去されます',textAlign: TextAlign.center,style: TextStyle(color: Colors.red,decoration: TextDecoration.underline),),
-                                                 Text('データを保存する場合は登録をするか\n大学のアカウントでログインしてください\n\n',textAlign: TextAlign.center,),
-                                                 Text('また講義評価の書き込みなど一部の機能は使用できません。\n',textAlign: TextAlign.center,),
-
-
-
-                                               ]
-                                           ),
-                                           actions: <Widget>[
-                                             // ボタン領域
-                                             TextButton(
-                                               child: Text("やっぱやめる"),
-                                               onPressed: () => Navigator.pop(context),
-                                             ),
-                                             TextButton(
-                                               child: Text("構わんよ"),
-                                               onPressed: () => _onSignInWithAnonymousUser(),
-                                             ),
-                                           ],
-                                         );
-                                       },
-                                     );
-                                   },
+                                  onTap: _isChecked
+                                      ? () async {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  "⚠️注意⚠️",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        '会員登録なしで続行します。\n\nただセキュリティ上の理由により',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      Text(
+                                                        '30日後にアカウントが消去されます',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline),
+                                                      ),
+                                                      Text(
+                                                        'データを保存する場合は登録をするか\n大学のアカウントでログインしてください\n\n',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                      Text(
+                                                        'また講義評価の書き込みなど一部の機能は使用できません。\n',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ]),
+                                                actions: <Widget>[
+                                                  // ボタン領域
+                                                  TextButton(
+                                                    child: Text("やっぱやめる"),
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                  ),
+                                                  TextButton(
+                                                    child: Text("構わんよ"),
+                                                    onPressed: () =>
+                                                        _onSignInWithAnonymousUser(),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+                                      : () {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
+                                        },
                                   child: Center(
                                     child: Text(
                                       'ゲストモードで使用',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.green[900]
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
                                       ),
                                     ),
                                   ),
@@ -661,12 +799,12 @@ class _Login extends State<Login> {
                             ),
 
                             //ゲストモード（ここまで）
+                           */
                             SizedBox(height: 50.0.h),
                           ],
                         )),
                   ],
                 )))));
-
   }
 
   Future<UserCredential> signInWithGoogle() async {
@@ -677,17 +815,38 @@ class _Login extends State<Login> {
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
+    final OAuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleAuth?.idToken,
+      accessToken: googleAuth?.accessToken,
     );
 
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+// Set the custom parameter for restricting the Google Workspace domain
+    final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+    googleProvider.setCustomParameters({
+      "hd": "@ous.jp",
+    });
+
+// Sign in with the credential and return the UserCredential
+    final UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithCredential(GoogleAuthProvider.credential(
+      idToken: credential.idToken,
+      accessToken: credential.accessToken,
+    ));
+    // Firestoreにユーザー情報を書き込む
+    final User? user = userCredential.user;
+    final firestoreInstance = FirebaseFirestore.instance;
+    firestoreInstance.collection('users').doc(user!.uid).set({
+      'displayName': user.displayName,
+      'uid': user.uid,
+      'email': user.email,
+      'photoURL': user.photoURL,
+      'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
+    });
+
+    return userCredential;
   }
 }
-
 
 // Firebase Authentication利用時の日本語エラーメッセージ
 class Authentication_error_to_ja {

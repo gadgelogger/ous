@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
 import 'package:ous/Nav/userpolicie.dart';
@@ -33,6 +34,8 @@ class _SettingState extends State<Setting> {
     await user?.delete();
     await FirebaseAuth.instance.signOut();
     print('ユーザーを削除しました!');
+    Fluttertoast.showToast(
+        msg: "アカウントを削除しました\nご利用ありがとうございました。");
   }
 //退会処理
 

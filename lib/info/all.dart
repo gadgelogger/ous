@@ -1,9 +1,11 @@
 
+import 'package:gallery_saver/files.dart';
 import 'package:html/dom.dart' as UserModel;
+import 'package:html/parser.dart';
+import 'package:path/path.dart';
 import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 
 class all extends StatefulWidget {
@@ -77,7 +79,11 @@ class _allState extends State<all> {
                       ListTile(
                         title: Text(article.title),
                         subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
-                        onTap: () => launch(article.url),
+
+                        onTap: (){
+                          launch(article.url);
+                        }
+
 
                       ),
                       Divider(),
