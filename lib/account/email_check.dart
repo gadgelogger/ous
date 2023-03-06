@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/home.dart';
 import 'package:ous/main.dart';
+import 'package:intl/intl.dart';
 
 class Emailcheck extends StatefulWidget {
   // 呼び出し元Widgetから受け取った後、変更をしないためfinalを宣言。
@@ -22,6 +25,7 @@ class _Emailcheck extends State<Emailcheck> {
   String _sentEmailText = '';
   String _sentEmailText2 = '';
   int _btn_click_num = 0;
+  final DateTime now = DateTime.now();
 
   // 前画面から受け取った値はNull許容のため、入れ直し用の変数を用意
   late String _email;
@@ -133,13 +137,34 @@ class _Emailcheck extends State<Emailcheck> {
                     password: _pswd,
                   );
 
+                  User _user = _result
+                      .user!; // ログインユーザーのIDを取得
+
                   // Email確認が済んでいる場合は、Home画面へ遷移
                   if (_result.user!.emailVerified) {
+                    Fluttertoast.showToast(
+                        msg: "ログインしました");
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
                       return MyHomePage(title: 'home');
+
                     }));
+
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(_user.uid)
+                        .set({
+                      'email':_email,
+                      'uid': _user.uid,
+                      'displayName': '名前未設定',
+                      'day': DateFormat(
+                          'yyyy/MM/dd(E) HH:mm:ss')
+                          .format(now),
+                      'photoURL':'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+                    });
+                    print("Created");
+
                   } else {
                     // print('NG');
                     setState(() {

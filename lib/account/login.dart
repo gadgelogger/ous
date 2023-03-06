@@ -473,9 +473,10 @@ class _Login extends State<Login> {
                                                     .collection('users')
                                                     .doc(_user.uid)
                                                     .set({
+                                                  'email':_login_Email,
                                                   'uid': _user.uid,
-                                                  'displayname': '名前未設定',
-                                                  'date': DateFormat(
+                                                  'displayName': '名前未設定',
+                                                  'day': DateFormat(
                                                           'yyyy/MM/dd(E) HH:mm:ss')
                                                       .format(now)
                                                 });

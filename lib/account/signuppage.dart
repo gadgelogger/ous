@@ -21,19 +21,7 @@ class _RegistrationState extends State<Registration> {
   // Firebase Authenticationを利用するためのインスタンス
   final _auth = FirebaseAuth.instance;
 
-  //ユーザー情報保存
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  Future<void> Register() {
-    // 上で定義したメンバ変数を格納すると、usersコレクションに、
-    // メールアドレスとパスワードも保存できる。
-    return users
-        .add({
-      'email': _newEmail,
-      'username': _username,
-    })
-        .then((value) => print("新規登録に成功"))
-        .catchError((error) => print("新規登録に失敗しました!: $error"));
-  }
+
 
 
   String _username = "";
@@ -190,7 +178,6 @@ class _RegistrationState extends State<Registration> {
                                 // 登録成功
                                 User _user = _result.user!; // 登録したユーザー情報
                                 _user.sendEmailVerification(); // Email確認のメールを送信
-                                Register();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/account/account.dart';
@@ -20,9 +21,6 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  String? name;
-  String? email;
-  String? image;
   String? uid;
   @override
   void initState(){
@@ -32,9 +30,7 @@ class _NavBarState extends State<NavBar> {
       if (user != null) {
         // here, don't declare new variables, set the members instead
         setState(() {
-          name = user.displayName; // <-- User ID
-          email = user.email; // <-- Their email
-          image = user.photoURL;
+
           uid = user.uid;
         });
       }
@@ -55,28 +51,45 @@ class _NavBarState extends State<NavBar> {
                 MaterialPageRoute(builder: (context) => account()),
               );
             },
-            child:
-            UserAccountsDrawerHeader(
-              accountName:    Text(name ?? 'ゲストユーザー'),//I want it to appear here
-              accountEmail: Text(email ?? '' ,style: TextStyle(color: Colors.white),),//I want it to appear here
-              currentAccountPicture: CircleAvatar(
-                child: ClipOval(
-                  child: Image.network(
-                    image ?? 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
-                    width: 90,
-                    height: 90,
-                    fit: BoxFit.cover,
+            child:FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
+              builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (!snapshot.hasData || snapshot.data == null) {
+                  return Text('データが見つかりませんでした。');
+                }
+
+                final displayName = snapshot.data!['displayName'] as String?;
+                final email = snapshot.data!['email'] as String?;
+                final image = snapshot.data!['photoURL'] as String?;
+
+                return  UserAccountsDrawerHeader(
+                  accountName:    Text(displayName ?? 'ゲストユーザー'),//I want it to appear here
+                  accountEmail: Text(email ?? '' ,style: TextStyle(color: Colors.white),),//I want it to appear here
+                  currentAccountPicture: CircleAvatar(
+                    child: ClipOval(
+                      child: Image.network(
+                        image ?? 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+                        width: 90,
+                        height: 90,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Colors.lightGreen,
-                image: DecorationImage(
-                  image: NetworkImage('https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500',
+                  decoration: BoxDecoration(
+                    color: Colors.lightGreen,
+                    image: DecorationImage(
+                      image: NetworkImage('https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500',
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  fit: BoxFit.cover,
-                ),
-              ),
+                );
+              },
             ),
           ),
           ListTile(

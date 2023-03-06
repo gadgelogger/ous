@@ -203,8 +203,8 @@ class _RigakubuState extends State<Rigakubu> {
                           );
                         },
                         child: (SizedBox(
-                          width: 200,
-                          height: 30,
+                          width: 200.w,
+                          height: 30.h,
                           child: Card(
                             elevation: 10,
                             shape: RoundedRectangleBorder(

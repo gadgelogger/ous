@@ -18,7 +18,6 @@ import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
 
 
-
 //algolia
 class Application {
   static final Algolia algolia = Algolia.init(

@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/home.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../main.dart';
 
@@ -19,8 +22,49 @@ class account_edit extends StatefulWidget {
 
 class _account_editState extends State<account_edit> {
 //画像
-  XFile? _image;
-  final imagePicker = ImagePicker();
+  File? _imageFile; // 選択した画像ファイル
+  String? _downloadURL; // Firebase Storageからダウンロードした画像のURL
+
+  Future<void> _listenToChanges() async {
+    FirebaseFirestore.instance.collection("users").doc(uid).snapshots().listen((snapshot) {
+      if (snapshot.exists) {
+        String downloadURL = snapshot.data()!["photoURL"];
+        if (downloadURL != _downloadURL) {
+          setState(() {
+            _downloadURL = downloadURL;
+          });
+        }
+      }
+    });
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().getImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+      _uploadImage();
+    }
+  }
+
+
+  Future<void> _uploadImage() async {
+    try {
+      // Firebase Storageにアップロード
+      String fileName = basename(_imageFile!.path);
+      Reference storageRef = FirebaseStorage.instance.ref().child("users/$fileName");
+      await storageRef.putFile(_imageFile!);
+      // FirestoreのusersドキュメントのphotoURLフィールドに書き込む
+      String downloadURL = await storageRef.getDownloadURL();
+      FirebaseFirestore.instance.collection("users").doc(uid).update({"photoURL": downloadURL});
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+
+
 //UIDをFirebaseAythから取得
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -57,17 +101,13 @@ class _account_editState extends State<account_edit> {
     // Firestore にデータを書き込むなどの処理を行う
   }
 
-
-
-  // ギャラリーから画像を取得するメソッド
-  Future getImageFromGarally() async {
-    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        _image = XFile(pickedFile.path);
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    _listenToChanges();
   }
+
+
 
 
   @override
@@ -108,18 +148,43 @@ class _account_editState extends State<account_edit> {
                     child: Center(
                         child: GestureDetector(
                           onTap: (){
-                            getImageFromGarally();
+                            _pickImage(ImageSource.gallery);
                           },
-                          child: Container(
-                            width: 150.0,
-                            height: 150.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(image ??
-                                      'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg'),
-                                )),
+                          child: SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              fit: StackFit.expand,
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(image),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: -25,
+                                  child: RawMaterialButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) {
+                                              return account_edit();
+                                            }),
+                                      );
+                                    },
+                                    elevation: 2.0,
+                                    fillColor: Color(0xFFF5F6F9),
+                                    child: Icon(
+                                      Icons.photo_camera_outlined,
+                                      color: Colors.lightGreen,
+                                    ),
+                                    padding: EdgeInsets.all(7.0),
+                                    shape: CircleBorder(),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         )
                     ),
