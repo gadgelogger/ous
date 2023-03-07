@@ -220,13 +220,13 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                         ),
                                         child: Text(
                                           hit.data['zyugyoumei'],
-                                          style: TextStyle(fontSize: 20),
+                                          style: TextStyle(fontSize: 20.sp),
                                         ))),
                                 Align(
                                   alignment: const Alignment(-0.8, 0.4),
                                   child: Text(
                                     hit.data['gakki'],
-                                    style: TextStyle(color: Colors.lightGreen),
+                                    style: TextStyle(color: Colors.lightGreen,fontSize: 15.sp),
                                   ),
                                 ),
                                 Align(
@@ -234,6 +234,7 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                   child: Text(
                                     hit.data['kousimei'],
                                     overflow: TextOverflow.ellipsis, //ここ！！
+                                    style: TextStyle(fontSize: 15.sp),
                                   ),
                                 ),
                                 Positioned(
@@ -252,6 +253,7 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                       ),
                                       child: Text(
                                         hit.data['bumon'],
+                                        style: TextStyle(fontSize: 15.sp),
                                         // Your text
                                       )),
                                 ),
@@ -340,6 +342,7 @@ class DetailsScreen extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.sp,
+
                 ),
               ),
               Padding(
@@ -366,6 +369,10 @@ class DetailsScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
                   tannisuu.toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
                 ),
               ),
               Text(
@@ -380,7 +387,10 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(zyugyoukeisiki),
+                child: Text(zyugyoukeisiki,  style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 '出席確認の有無',
@@ -394,7 +404,10 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(syusseki),
+                child: Text(syusseki,  style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 '教科書の有無',
@@ -408,7 +421,10 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(kyoukasyo),
+                child: Text(kyoukasyo,  style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 'テスト形式',
@@ -422,7 +438,10 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(tesutokeisiki??'不明'),
+                child: Text(tesutokeisiki??'不明',  style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Divider(),
               Container(
@@ -456,7 +475,7 @@ class DetailsScreen extends StatelessWidget {
                                       .toDouble(),
                                   cornerStyle: CornerStyle.bothCurve,
                                   color: Colors.lightGreen,
-                                  width: 0.2.w,
+                                  width: 0.2,
                                   sizeUnit: GaugeSizeUnit.factor,
                                 )
                               ],
@@ -503,7 +522,7 @@ class DetailsScreen extends StatelessWidget {
                                     .toDouble(),
                                 cornerStyle: CornerStyle.bothCurve,
                                 color: Colors.lightGreen,
-                                width: 0.2.w,
+                                width: 0.2,
                                 sizeUnit: GaugeSizeUnit.factor,
                               )
                             ],
@@ -550,7 +569,7 @@ class DetailsScreen extends StatelessWidget {
                                     .toDouble(),
                                 cornerStyle: CornerStyle.bothCurve,
                                 color: Colors.lightGreen,
-                                width: 0.2.w,
+                                width: 0.2,
                                 sizeUnit: GaugeSizeUnit.factor,
                               )
                             ],
@@ -599,7 +618,10 @@ class DetailsScreen extends StatelessWidget {
                     padding: EdgeInsets.only(
                       bottom: 50,
                     ),
-                    child: Text(name??'不明'),
+                    child: Text(name??'不明',  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15.sp,
+                    ),),
                   ),
                   SizedBox(height: 20.0.h),
                   /*  Container(

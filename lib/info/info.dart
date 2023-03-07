@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/NavBar.dart';
 import 'package:ous/info/2.dart';
@@ -29,33 +30,33 @@ class Info extends StatelessWidget {
               tabs: [
             Text('全て',
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: 15.0.sp,
               ),
             ),
 
                 Text('重要',
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 15.0.sp,
                   ),
                 ),
                 Text('お知らせ',
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 15.0.sp,
                   ),
                 ),
                 Text('学科レポート',
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 15.0.sp,
                   ),
                 ),
                 Text('理大レポート',
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 15.0.sp,
                   ),
                 ),
                 Text('おかりかチャンネル',
                   style: TextStyle(
-                    fontSize: 15.0,
+                    fontSize: 15.0.sp,
                   ),
                 ),
 

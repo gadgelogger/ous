@@ -60,6 +60,12 @@ void main() async {
       const MyApp()
   );
 
+
+  FirebaseFirestore.instance.settings = Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
+
 }
 
 class MyHttpOverrides extends HttpOverrides{

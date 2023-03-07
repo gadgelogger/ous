@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:html/dom.dart' as UserModel;
 import 'package:provider/provider.dart';
 import "package:universal_html/controller.dart";
@@ -86,7 +87,7 @@ class _movieState extends State<movie> {
                           Text(
                             video.title,
                             softWrap: true,
-                            style: TextStyle(fontSize: 18.0),
+                            style: TextStyle(fontSize: 18.0.sp),
                           ),
                         ],
                       ),

@@ -1,4 +1,5 @@
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gallery_saver/files.dart';
 import 'package:html/dom.dart' as UserModel;
 import 'package:html/parser.dart';
@@ -77,8 +78,8 @@ class _allState extends State<all> {
                   return Column(
                     children:[
                       ListTile(
-                        title: Text(article.title),
-                        subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                        title: Text(article.title,style: TextStyle(fontSize: 15.sp),),
+                        subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold,fontSize: 15.sp),),
 
                         onTap: (){
                           launch(article.url);

@@ -21,21 +21,25 @@ class NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<NavBar> {
-  String? uid;
-  @override
-  void initState(){
-    FirebaseAuth.instance
-        .authStateChanges()
-        .listen((User? user) {
-      if (user != null) {
-        // here, don't declare new variables, set the members instead
-        setState(() {
+//firestoreキャッシュ
+  Stream<DocumentSnapshot>? _stream;
+  late DocumentSnapshot _data;
 
-          uid = user.uid;
-        });
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    _stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots();
   }
+
+//UIDをFirebaseAythから取得
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+
 
 
   @override
@@ -48,28 +52,38 @@ class _NavBarState extends State<NavBar> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => account()),
+                MaterialPageRoute(
+                    builder: (context) {
+                      return account();
+                    }),
               );
             },
-            child:FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
+            child:StreamBuilder<DocumentSnapshot>(
+              stream: _stream,
               builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
                 }
+
+                if (snapshot.hasError) {
+                  return Text('エラーが発生しました。');
+                }
+
                 if (!snapshot.hasData || snapshot.data == null) {
                   return Text('データが見つかりませんでした。');
                 }
 
-                final displayName = snapshot.data!['displayName'] as String?;
-                final email = snapshot.data!['email'] as String?;
-                final image = snapshot.data!['photoURL'] as String?;
+                _data = snapshot.data!;
 
-                return  UserAccountsDrawerHeader(
-                  accountName:    Text(displayName ?? 'ゲストユーザー'),//I want it to appear here
-                  accountEmail: Text(email ?? '' ,style: TextStyle(color: Colors.white),),//I want it to appear here
+                final displayName = _data['displayName'] as String?;
+                final email = _data['email'] as String?;
+                final image = _data['photoURL'] as String?;
+
+                return UserAccountsDrawerHeader(
+                  accountName: Text(displayName ?? 'ゲストユーザー'),
+                  accountEmail: Text(email ?? '', style: TextStyle(color: Colors.white)),
                   currentAccountPicture: CircleAvatar(
                     child: ClipOval(
                       child: Image.network(
@@ -83,14 +97,14 @@ class _NavBarState extends State<NavBar> {
                   decoration: BoxDecoration(
                     color: Colors.lightGreen,
                     image: DecorationImage(
-                      image: NetworkImage('https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500',
-                      ),
+                      image: NetworkImage('https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 );
               },
             ),
+
           ),
           ListTile(
             leading: Icon(Icons.event_available_outlined),

@@ -19,6 +19,21 @@ class account extends StatefulWidget {
 }
 
 class _accountState extends State<account> {
+//firestoreキャッシュ
+
+  Stream<DocumentSnapshot>? _stream;
+  late DocumentSnapshot _data;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .snapshots();
+  }
+
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -48,10 +63,9 @@ class _accountState extends State<account> {
             ),
             title: WillPopScope(
               onWillPop: () async => false,
-              child: FutureBuilder<DocumentSnapshot>(
-                  future: firestore.collection('users').doc(uid).get(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+              child: StreamBuilder<DocumentSnapshot>(
+                  stream: _stream,
+                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // データ読み込み中の場合の処理
                       return CircularProgressIndicator();
@@ -61,12 +75,12 @@ class _accountState extends State<account> {
                       return Text('データが見つかりませんでした。');
                     }
                     // データが正常に取得できた場合の処理
-                    final data = snapshot.data!.data() as Map<String, dynamic>;
-                    final email = data['email'] as String;
-                    final name = data['displayName'] as String;
+                    _data = snapshot.data!;
+                    final email = _data['email'] as String;
+                    final name = _data['displayName'] as String;
                     final isStudent = email.contains('@ous.jp');
                     final isStaff = email.contains('@ous.ac.jp');
-                    final image = data['photoURL'] as String;
+                    final image = _data['photoURL'] as String;
                     final status = isStudent
                         ? '生徒'
                         : isStaff

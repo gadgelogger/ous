@@ -76,7 +76,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -116,7 +116,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -162,7 +162,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -202,7 +202,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -249,7 +249,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -289,7 +289,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -336,7 +336,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -376,7 +376,7 @@ class _ReviewState extends State<Review> {
                                     style: GoogleFonts.notoSans(
                                       // フォントをnotoSansに指定(
                                       textStyle: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -420,9 +420,16 @@ class _ReviewState extends State<Review> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ListTile(
-                                  title: const Text(
+                                  title:  Text(
                                     '基盤教育科目',
-                                    style: TextStyle(fontSize: 20),
+                                    style: GoogleFonts.notoSans(
+                                      // フォントをnotoSansに指定(
+                                      textStyle: TextStyle(
+                                        fontSize: 20.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -445,9 +452,16 @@ class _ReviewState extends State<Review> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ListTile(
-                                  title: const Text(
-                                    '教職科目',
-                                    style: TextStyle(fontSize: 20),
+                                  title:  Text(
+                                    '教職関連科目',
+                                    style: GoogleFonts.notoSans(
+                                      // フォントをnotoSansに指定(
+                                      textStyle: TextStyle(
+                                        fontSize: 20.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

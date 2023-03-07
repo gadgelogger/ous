@@ -69,6 +69,10 @@ class _ViewState extends State<View> {
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
                   widget.doc.get('tannisuu').toString(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
                 ),
               ),
               Text(
@@ -83,7 +87,10 @@ class _ViewState extends State<View> {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(widget.doc.get('zyugyoukeisiki')),
+                child: Text(widget.doc.get('zyugyoukeisiki'), style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 '出席確認の有無',
@@ -97,7 +104,10 @@ class _ViewState extends State<View> {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(widget.doc.get('syusseki')),
+                child: Text(widget.doc.get('syusseki'), style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 '教科書の有無',
@@ -111,7 +121,10 @@ class _ViewState extends State<View> {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(widget.doc.get('kyoukasyo')),
+                child: Text(widget.doc.get('kyoukasyo'), style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Text(
                 'テスト形式',
@@ -125,7 +138,10 @@ class _ViewState extends State<View> {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(widget.doc.get('tesutokeisiki')??'不明'),
+                child: Text(widget.doc.get('tesutokeisiki')??'不明', style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 15.sp,
+                ),),
               ),
               Divider(),
               Container(
@@ -159,7 +175,7 @@ class _ViewState extends State<View> {
                                   .toDouble(),
                               cornerStyle: CornerStyle.bothCurve,
                               color: Colors.lightGreen,
-                              width: 0.2.w,
+                              width: 0.2.sw,
                               sizeUnit: GaugeSizeUnit.factor,
                             )
                           ],

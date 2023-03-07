@@ -812,28 +812,29 @@ class _Login extends State<Login> {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    if (googleUser == null) {
+      throw FirebaseAuthException(
+        code: 'ERROR_ABORTED_BY_USER',
+        message: 'ユーザーによって操作が中止されました',
+      );
+    }
+
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    await googleUser!.authentication;
 
     final OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth?.idToken,
-      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth!.idToken,
+      accessToken: googleAuth.accessToken,
     );
 
-// Set the custom parameter for restricting the Google Workspace domain
-    final GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
-    googleProvider.setCustomParameters({
-      "hd": "@ous.jp",
-    });
-
-// Sign in with the credential and return the UserCredential
+    // Sign in with the credential and return the UserCredential
     final UserCredential userCredential = await FirebaseAuth.instance
         .signInWithCredential(GoogleAuthProvider.credential(
       idToken: credential.idToken,
       accessToken: credential.accessToken,
     ));
+
     // Firestoreにユーザー情報を書き込む
     final User? user = userCredential.user;
     final firestoreInstance = FirebaseFirestore.instance;
@@ -847,6 +848,7 @@ class _Login extends State<Login> {
 
     return userCredential;
   }
+
 }
 
 // Firebase Authentication利用時の日本語エラーメッセージ
