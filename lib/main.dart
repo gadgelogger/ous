@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -16,6 +17,11 @@ import 'account/login.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
+import 'dart:core';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
 
 
 //algolia
@@ -27,9 +33,7 @@ class Application {
 }
 //algolia
 
-
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
 
   // 画面回転無効化
   SystemChrome.setPreferredOrientations([
@@ -68,6 +72,13 @@ void main() async {
 
 }
 
+
+
+
+
+
+
+
 class MyHttpOverrides extends HttpOverrides{
   @override
   HttpClient createHttpClient(SecurityContext? context){
@@ -82,6 +93,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // ここでBuildContextを定義する
+
     return
 
       ScreenUtilInit(
@@ -90,6 +104,8 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         builder: (context , child) {
           return MaterialApp(
+              debugShowCheckedModeBanner: false, // これを追加するだけ
+
               title: 'ホーム',
               theme: ThemeData(
                 useMaterial3: true,
