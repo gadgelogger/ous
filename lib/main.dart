@@ -167,6 +167,89 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
+//アップデート通知
+  late String _currentVersion;
+  late String _latestVersion;
+  late bool _updateRequired;
+  late String _updateUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkVersion();
+  }
+
+
+  void _checkVersion() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    setState(() {
+      _currentVersion = version;
+    });
+
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('config').doc('3wmNMFXQArQHWpJA20je').get();
+    Map<String, dynamic>? data = documentSnapshot.data() as Map<String,
+        dynamic>?;
+    if (data != null) {
+      setState(() {
+        _latestVersion = data['version'];
+      });
+      print(_latestVersion);
+      if (_currentVersion != _latestVersion) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "アップデートのお知らせ",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold),
+              ),
+              content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                        width: 100,
+                        height: 100,
+                        child:
+                        Image(
+                          image: AssetImage('assets/icon/rocket.gif'),
+                          fit: BoxFit.cover,
+                        )),
+                    Text(
+                      'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。。',
+                      textAlign: TextAlign.center,
+                    ),
+                  ]),
+              actions: <Widget>[
+                // ボタン領域
+                ElevatedButton(
+                    child: Text("後で"),
+                    onPressed: (){
+                      Navigator.pop(context);
+                    }
+                ),
+                ElevatedButton(
+                    child: Text("おっけー"),
+                    onPressed: (){
+                   launch('https://twitter.com/gadgelogger');
+                    }
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+//アップデート通知
+
   int _currentindex = 0;
   List<Widget> pages = [
     home(),
