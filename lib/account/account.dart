@@ -186,85 +186,75 @@ class _accountState extends State<account> {
             ListView(
               children: [
                 // ここにリストアイテムを追加する
-
                 // 画面中央下部に配置するウィジェット
 
-                FutureBuilder<DocumentSnapshot>(
-                  future: firestore.collection('users').doc(uid).get(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    if (snapshot.hasError) {
-                      print('error');
-                    }
+        StreamBuilder<DocumentSnapshot>(
+        stream: firestore.collection('users').doc(uid).snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+      if (snapshot.hasError) {
+        print('error');
+      }
 
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      // Firestoreから取得したデータを取り出す
-                      Map<String, dynamic> data =
-                          snapshot.data!.data() as Map<String, dynamic>;
-                      String day = data['day'] ?? '値が見つかりませんでした';
-                      String displayname =
-                          data['displayName'] ?? '値が見つかりませんでした';
-                      final DateFormat inputFormat =
-                          DateFormat('yyyy/MM/dd(EEE) HH:mm:ss');
-                      final DateFormat outputFormat = DateFormat('yyyy年MM月dd日');
-                      final DateTime dateTime = inputFormat.parse(day);
-                      final String formattedDate =
-                          outputFormat.format(dateTime); //登録した日付
+      if (!snapshot.hasData) {
+        return SizedBox();
+      }
 
-                      final DateTime now = DateTime.now();
-                      final Duration difference = now.difference(dateTime);
+      // Firestoreから取得したデータを取り出す
+      Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+      String day = data['day'] ?? '値が見つかりませんでした';
+      String displayname = data['displayName'] ?? '値が見つかりませんでした';
+      final DateFormat inputFormat = DateFormat('yyyy/MM/dd(EEE) HH:mm:ss');
+      final DateFormat outputFormat = DateFormat('yyyy年MM月dd日');
+      final DateTime dateTime = inputFormat.parse(day);
+      final String formattedDate = outputFormat.format(dateTime); // 登録した日付
 
-                      final int days = difference.inDays;
-                      final int hours = difference.inHours % 24;
-                      final int minutes = difference.inMinutes % 60;
+      final DateTime now = DateTime.now();
+      final Duration difference = now.difference(dateTime);
 
-                      final String differenceString =
-                          '$days days $hours hours $minutes minutes ago';
+      final int days = difference.inDays;
+      final int hours = difference.inHours % 24;
+      final int minutes = difference.inMinutes % 60;
 
-                      print(formattedDate); // 2023/03/04
-                      print(differenceString); // 740 days 0 hours 25 minutes
+      final String differenceString = '$days days $hours hours $minutes minutes ago';
 
-                      // テキストを表示する
-                      return Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 100,
-                                child: Image.asset(
-                                  'assets/images/icon2.jpg',
-                                ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 10,
-                                    bottom: 30,
-                                  ),
-                                  child: Text(
-                                    '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromRGBO(184, 189, 211, 1),
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          ), // ここに画面中央下部に配置するウィジェットを配置する
-                        ),
-                      );
-                    }
-                    return SizedBox();
-                  },
+      print(formattedDate); // 2023/03/04
+      print(differenceString); // 740 days 0 hours 25 minutes
+
+      // テキストを表示する
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/images/icon2.jpg'),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 30),
+                child: Text(
+                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.notoSans(
+                    textStyle: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(184, 189, 211, 1),
+                    ),
+                  ),
                 ),
-              ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  )
+
+  ],
             ),
             CustomPaint(
               painter: AppBarPainter(),

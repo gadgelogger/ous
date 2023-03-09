@@ -221,6 +221,8 @@ class _zyuuigakubuState extends State<zyuuigakubu> {
                                         child: Text(
                                           hit.data['zyugyoumei'],
                                           style: TextStyle(fontSize: 20.sp),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ))),
                                 Align(
                                   alignment: const Alignment(-0.8, 0.4),

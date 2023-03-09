@@ -37,21 +37,29 @@ class _importantState extends State<important> {
         .toList();
 
     final urls = document
-        .querySelectorAll("dl > dd > a  ")
-        .map((element) => 'https://www.ous.ac.jp${element.getAttribute("href")}')
+        .querySelectorAll("dl > dd > a")
+        .map((element) {
+      var href = element.getAttribute("href")!;
+      // リンクが相対パスの場合、絶対URLに変換する
+      if (!href.startsWith('http')) {
+        href = 'https://www.ous.ac.jp$href';
+      }
+      return href;
+    })
         .toList();
+
     final dates = document
         .querySelectorAll("div > .p10 > dt")
         .map((element) => element.innerText)
         .toList();
 
-    setState((){
+    setState(() {
       articles = List.generate(
         titles.length,
             (index) => Article(
           title: titles[index],
           url: urls[index],
-          date:dates[index],
+          date: dates[index],
         ),
       );
     });

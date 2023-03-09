@@ -97,6 +97,7 @@ class _account_editState extends State<account_edit> {
   void _onTextEditingComplete() {
     String text = _controller.text;
     writeToFirestore(text);
+    _controller.clear();
   }
 
   void textview() {
