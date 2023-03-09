@@ -66,12 +66,14 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>UIStatusBarHidden</key>
-	<true/>
+	<false/>
 	<key>NSCameraUsageDescription</key>
 	<string>ファイルのアップロードに使います。</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>ファイルのアップロードに使います。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ファイルのアップロードに使います。</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>ファイルのアップロードに使います。</string>
 </dict>
 </plist>
