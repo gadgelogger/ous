@@ -110,7 +110,7 @@ class _NavBarState extends State<NavBar> {
             leading: Icon(Icons.event_available_outlined),
             title: Text('行事予定'),
             onTap: () {
-              launch('https://www.ous.ac.jp/common/files//285/20220311164731084854.pdf');
+              launch('https://www.ous.ac.jp/campuslife/academic_calenda/');
             },
           ),
           ListTile(
@@ -125,7 +125,7 @@ class _NavBarState extends State<NavBar> {
             leading: Icon(Icons.book_outlined),
             title: Text('学生便覧'),
             onTap: () {
-              launch('https://edu.career-tasu.jp/p/digital_pamph/frame.aspx?id=7540000-3-30&FL=0');
+              launch('https://www.ous.ac.jp/outline/disclosure/handbook/');
             },
           ),
           ListTile(

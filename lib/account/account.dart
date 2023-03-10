@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class account extends StatefulWidget {
   const account({Key? key}) : super(key: key);
@@ -19,14 +20,23 @@ class account extends StatefulWidget {
 }
 
 class _accountState extends State<account> {
-//firestoreキャッシュ
+  //アプリバージョン表示
+  String _version = '';
+  Future getVer() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = packageInfo.version;
+    });
+  }
 
+//firestoreキャッシュ
   Stream<DocumentSnapshot>? _stream;
   late DocumentSnapshot _data;
 
   @override
   void initState() {
     super.initState();
+    getVer();
 
     _stream = FirebaseFirestore.instance
         .collection('users')
@@ -236,7 +246,7 @@ class _accountState extends State<account> {
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 30),
                 child: Text(
-                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
+                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。\n\n$_version',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.notoSans(
                     textStyle: TextStyle(

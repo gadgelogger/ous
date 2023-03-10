@@ -86,98 +86,30 @@ class MyHttpOverrides extends HttpOverrides{
       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
-
   @override
-  Widget build(BuildContext context) {
-
-    // ここでBuildContextを定義する
-
-    return
-
-      ScreenUtilInit(
-        designSize: const Size(392, 759),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (context , child) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false, // これを追加するだけ
-
-              title: 'ホーム',
-              theme: ThemeData(
-                useMaterial3: true,
-                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
-                fontFamily: 'NotoSansCJKJp',
-              ),
-              darkTheme: ThemeData(
-                brightness: Brightness.dark,
-                useMaterial3: true,
-                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
-                fontFamily: 'NotoSansCJKJp',
-              ),
-              home: StreamBuilder<User?>(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting)
-                  {
-                    // スプラッシュ画面などに書き換えても良い
-                  }
-                  if (snapshot.hasData) {
-                    // User が null でなない、つまりサインイン済みのホーム画面へ
-
-                    return MyHomePage(title: 'home');
-
-                  }
-                  // User が null である、つまり未サインインのサインイン画面へ
-                  return Login();
-
-                },
-              )
-          );
-        }
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
+class _MyAppState extends State<MyApp> {
 
-
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-
-  State<MyHomePage> createState() => _MyHomePageState();
-
-}
-
-
-class _MyHomePageState extends State<MyHomePage> {
-//アップデート通知
+  //アップデート通知
   late String _currentVersion;
   late String _latestVersion;
   late bool _updateRequired;
   late String _updateUrl;
+  bool _checkedVersion = false;
 
-  @override
   void initState() {
     super.initState();
-    _checkVersion();
+    if (!_checkedVersion) {
+      _checkVersion();
+      _checkedVersion = true;
+    }
   }
+
 
 
   void _checkVersion() async {
@@ -235,12 +167,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.pop(context);
                     }
                 ),
-                ElevatedButton(
-                    child: Text("おっけー"),
-                    onPressed: (){
-                   launch('https://twitter.com/gadgelogger');
-                    }
-                ),
+                if (Platform.isIOS)
+                  ElevatedButton(
+                      child: Text("おっけー"),
+                      onPressed: (){
+                        launch('https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
+                      }
+                  ),
+                if(Platform.isAndroid)
+                  ElevatedButton(
+                      child: Text("おっけー"),
+                      onPressed: (){
+                        launch('https://twitter.com/TAN_Q_BOT_LOCAL');
+                      }
+                  ),
               ],
             );
           },
@@ -248,6 +188,96 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   }
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    // ここでBuildContextを定義する
+
+    return
+
+      ScreenUtilInit(
+          designSize: const Size(392, 759),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context , child) {
+            return MaterialApp(
+                debugShowCheckedModeBanner: false, // これを追加するだけ
+
+                title: 'ホーム',
+                theme: ThemeData(
+                  useMaterial3: true,
+                  colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
+                  fontFamily: 'NotoSansCJKJp',
+                ),
+                darkTheme: ThemeData(
+                  brightness: Brightness.dark,
+                  useMaterial3: true,
+                  colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
+                  fontFamily: 'NotoSansCJKJp',
+                ),
+                home: StreamBuilder<User?>(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting)
+                    {
+                      // スプラッシュ画面などに書き換えても良い
+                      _checkVersion();
+
+
+                    }
+                    if (snapshot.hasData) {
+                      // User が null でなない、つまりサインイン済みのホーム画面へ
+
+                      return MyHomePage(title: 'home');
+
+                    }
+                    // User が null である、つまり未サインインのサインイン画面へ
+                    return Login();
+
+                  },
+                )
+            );
+          }
+      );
+  }
+}
+
+
+
+
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+
+  State<MyHomePage> createState() => _MyHomePageState();
+
+}
+
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+
+
 //アップデート通知
 
   int _currentindex = 0;

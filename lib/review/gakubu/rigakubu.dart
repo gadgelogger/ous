@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ous/review/post.dart';
 import 'package:ous/review/view.dart';
 import 'package:ous/test/rigaku.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -194,9 +195,9 @@ class _RigakubuState extends State<Rigakubu> {
                                   toriyasusa: hit.data['toriyasusa'],
                                   sougouhyouka: hit.data['sougouhyouka'],
                                   komento: hit.data['komento'],
-                                  name: hit.data['name']
-
-
+                                  name: hit.data['name'],
+                                  senden: hit.data['senden'],
+                                nenndo: hit.data['nenndo'],
 
                               ),
                             ),
@@ -278,17 +279,27 @@ class _RigakubuState extends State<Rigakubu> {
         verticalDirection: VerticalDirection.up,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 16.0),
-            child: FloatingActionButton(
-              heroTag: "btn1",
-
-              onPressed: _onButtonPressed,
-
-              child:  Icon(Icons.filter_alt_outlined)  ,
-            ),
+          Column(
+            children: [
+              FloatingActionButton(
+                heroTag: "btn1",
+                onPressed: _onButtonPressed,
+                child: Icon(Icons.filter_alt_outlined),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 16),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => post()),
+                    );
+                  },
+                  child: const Icon(Icons.upload_outlined),
+                ),
+              )
+            ],
           ),
-
         ],
       ),
     );
@@ -322,8 +333,9 @@ class DetailsScreen extends StatelessWidget {
   final  sougouhyouka;
   final  komento;
   final name;
-
-  const DetailsScreen({Key? key, required this.zyugyoumei, required this.kousimei, required this.tannisuu,required this.zyugyoukeisiki,required this.syusseki,required this.kyoukasyo,required this.tesutokeisiki,required this.omosirosa,required this.toriyasusa,required this.sougouhyouka,required this.komento,required this.name}) : super(key: key);
+  final senden;
+  final nenndo;
+  const DetailsScreen({Key? key, required this.nenndo,required this.zyugyoumei, required this.kousimei, required this.tannisuu,required this.zyugyoukeisiki,required this.syusseki,required this.kyoukasyo,required this.tesutokeisiki,required this.omosirosa,required this.toriyasusa,required this.sougouhyouka,required this.komento,required this.name, required this.senden}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -353,6 +365,23 @@ class DetailsScreen extends StatelessWidget {
                 ),
                 child: Text(
                   kousimei??'不明',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
+              ),
+              Text(
+                '年度',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text(
+                  nenndo??'不明'.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 15.sp,
@@ -620,6 +649,22 @@ class DetailsScreen extends StatelessWidget {
                       bottom: 50,
                     ),
                     child: Text(name??'不明',  style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 15.sp,
+                    ),),
+                  ),
+                  Text(
+                    '宣伝',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 50,
+                    ),
+                    child: Text(senden??'不明',  style: TextStyle(
                       fontWeight: FontWeight.normal,
                       fontSize: 15.sp,
                     ),),

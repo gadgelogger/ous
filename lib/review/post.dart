@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
+import 'package:intl/intl.dart';
 
 class post extends StatefulWidget {
   const post({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _postState extends State<post> {
   //投稿データ
   String? iscategory = 'rigaku';
   String? isbumon = 'ラク単';
-  String? isnendo = '2022';
+  String? isnendo = '';
   String? isgakki = '春１';
   String? iszyugyoumei = '';
   String? iskousimei = '';
@@ -28,10 +29,8 @@ class _postState extends State<post> {
   String? istesutokeikou = '';
   String? isname = '';
 
-
   String? iskomento = '';
   String? issenden = '';
-
   //総合評価
   double _hyouka = 0;
 
@@ -45,24 +44,26 @@ class _postState extends State<post> {
   String? name;
   String? email;
   String? image;
-  String? uid;
-
 //投稿者の情報をFirebaseAuthから取得
-  @override
-  void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        // here, don't declare new variables, set the members instead
-        setState(() {
-          name = user.displayName; // <-- User ID
-          email = user.email; // <-- Their email
-          image = user.photoURL;
-          uid = user.uid;
-        });
-      }
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final uid = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<void> getData() async {
+    final DocumentSnapshot<Map<String, dynamic>> snapshot =
+    await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    setState(() {
+      name = snapshot.get('displayName');
+      email = snapshot.get('email');
     });
   }
+  
+//投稿日
+  final DateTime now = DateTime.now();
 
+
+  TextEditingController _textEditingController0 = TextEditingController();
 
   TextEditingController _textEditingController1 = TextEditingController();
   TextEditingController _textEditingController2 = TextEditingController();
@@ -73,7 +74,10 @@ class _postState extends State<post> {
   TextEditingController _textEditingController7 = TextEditingController();
 
 
-
+//投稿したら一番上まで移動
+  final ScrollController _scrollController = ScrollController();
+//スライドボタンの状態をリセットするため
+  final slideActionKey = GlobalKey<SlideActionState>();
 
 
 
@@ -90,6 +94,8 @@ class _postState extends State<post> {
                   padding: EdgeInsets.all(15.0), //全方向にパディング１００
 
                   child: SingleChildScrollView(
+                      controller: _scrollController,
+
                       child: Column(children: [
                     Center(
                       child: (Text(
@@ -111,6 +117,14 @@ class _postState extends State<post> {
                         style: TextStyle(color: Colors.red),
                       )),
                     ),
+                        SizedBox(height: 20,),
+                        Center(
+                          child: (Text(
+                            '荒らし防止の為\n学外のメーアドレスからは投稿ができません。\n投稿したい場合は大学のアカウントでログインし直してください。',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.red),
+                          )),
+                        ),
                     DropdownButton(
                       //4
                       items: const [
@@ -121,7 +135,7 @@ class _postState extends State<post> {
                         ),
                         DropdownMenuItem(
                           child: Text('工学部'),
-                          value: 'kougaku',
+                          value: 'kougakubu',
                         ),
                         DropdownMenuItem(
                           child: Text('情報理工学部'),
@@ -193,6 +207,10 @@ class _postState extends State<post> {
                           child: Text('エグ単'),
                           value: 'エグ単',
                         ),
+                        DropdownMenuItem(
+                          child: Text('役立つ単位'),
+                          value: '役立つ単位',
+                        ),
                       ],
                       //6
                       onChanged: (String? value) {
@@ -207,7 +225,7 @@ class _postState extends State<post> {
                       height: 32,
                     ),
                     Text(
-                      '年度を選んでください',
+                      '年度を記入してください',
                       style: GoogleFonts.notoSans(
                         // フォントをnotoSansに指定(
                         textStyle: TextStyle(
@@ -217,36 +235,23 @@ class _postState extends State<post> {
                         ),
                       ),
                     ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('2023'),
-                          value: '2023',
+                        TextField(
+                          controller: _textEditingController0,
+                          // この一文を追加
+                          enabled: true,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: '例：2023',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              isnendo = value;
+                            });
+                          },
                         ),
-                        DropdownMenuItem(
-                          child: Text('2022'),
-                          value: '2022',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('2021'),
-                          value: '2021',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('2020'),
-                          value: '2020',
-                        ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          isnendo = value;
-                        });
-                      },
-                      //7
-                      value: isnendo,
-                    ),
                     const SizedBox(
                       height: 32,
                     ),
@@ -738,7 +743,8 @@ class _postState extends State<post> {
                         ),
                     SlideAction(
                         outerColor: Colors.lightGreen[200],
-                        child: Text('送信する',style: TextStyle(color: Colors.black),),
+                        child: Text('スワイプして送信',style: TextStyle(color: Colors.black),),
+                        key: slideActionKey,
                         onSubmit: () async {
                           showDialog(
                             context: context,
@@ -772,24 +778,24 @@ class _postState extends State<post> {
                                   TextButton(
                                     child: Text("おっけー"),
                                     onPressed: (){
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          // 遷移先のクラス
-                                          builder: (BuildContext context) =>  Review(),
-                                        ),
-                                      );
+                                      Navigator.pop(context);
+                                      _scrollController.animateTo(
+                                          0, // 移動したい位置を指定
+                                          duration: Duration(milliseconds: 1), // 1秒かけて戻る
+                                          curve: Curves.linear);
+                                      slideActionKey.currentState!.reset();
+
                                     }
                                   ),
                                 ],
                               );
                             },
                           );
-
                           await FirebaseFirestore.instance
                               .collection(iscategory!) // コレクションID
                               .doc() // ここは空欄だと自動でIDが付く
                               .set({
+
                                 'bumon': isbumon,
                                 'gakki': isgakki,
                                 'komento': iskomento,
@@ -810,11 +816,12 @@ class _postState extends State<post> {
                             'accountuid':uid,
                             'tesutokeikou':istesutokeikou,
                             'kyoukasyo':iskyoukasyo,
-
+                            'date':Timestamp.fromDate(now),
                           })
                               .then((value) => print("新規登録に成功"))
                               .catchError(
                                   (error) => print("新規登録に失敗しました!: $error"));
+                          _textEditingController0.clear();
                           _textEditingController1.clear();
                           _textEditingController2.clear();
                           _textEditingController3.clear();
@@ -822,7 +829,6 @@ class _postState extends State<post> {
                           _textEditingController5.clear();
                           _textEditingController6.clear();
                           _textEditingController7.clear();
-
                         }),
                     const SizedBox(
                       height: 100,

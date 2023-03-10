@@ -640,7 +640,29 @@ class _Login extends State<Login> {
                                     child: GestureDetector(
                                       onTap: _isChecked
                                           ? () async {
-                                        AppleSignIn(); // ボタンをタップしたときの処理
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) {
+                                            return AlertDialog(
+                                              title: Text("注意",textAlign: TextAlign.center,),
+                                              content: Text("大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",textAlign: TextAlign.center,),
+                                              actions: <Widget>[
+                                                // ボタン領域
+                                                TextButton(
+                                                  child: Text("やっぱやめる"),
+                                                  onPressed: () => Navigator.pop(context),
+                                                ),
+                                                TextButton(
+                                                  child: Text("ええで"),
+                                                  onPressed: () async{
+                                                    AppleSignIn(); // ボタンをタップしたときの処理
+
+                                                  }
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       }
                                           : () {
                                         Fluttertoast.showToast(

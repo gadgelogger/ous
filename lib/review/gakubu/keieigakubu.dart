@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ous/review/post.dart';
 import 'package:ous/review/view.dart';
 import 'package:ous/test/rigaku.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,7 @@ class keieigakubu extends StatefulWidget {
 
 class _keieigakubuState extends State<keieigakubu> {
   final _queryController = TextEditingController();
-  String gakubu = 'rigaku';
+  String gakubu = 'keiei';
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> documentList = [];
   String test = 'FB219000 学びの基礎論';
@@ -87,17 +88,16 @@ class _keieigakubuState extends State<keieigakubu> {
     setState(() {
       _isPressed = true;
       _queryController.text = 'ラク単';
-      Fluttertoast.showToast(
-          msg: "ラク単のみ表示");
-    });  }
+      Fluttertoast.showToast(msg: "ラク単のみ表示");
+    });
+  }
 
   void _doSecondAction() {
     // 二つ目の処理
     setState(() {
       _isPressed = false;
       _queryController.text = 'エグ単';
-      Fluttertoast.showToast(
-          msg: "エグ単のみ表示");
+      Fluttertoast.showToast(msg: "エグ単のみ表示");
     });
   }
 
@@ -106,13 +106,9 @@ class _keieigakubuState extends State<keieigakubu> {
     setState(() {
       _isPressed = true;
       _queryController.clear();
-      Fluttertoast.showToast(
-          msg: "全て表示");
+      Fluttertoast.showToast(msg: "全て表示");
     });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,49 +118,49 @@ class _keieigakubuState extends State<keieigakubu> {
           title: !_searchBoolean ? Text('経営学部') : _searchTextField(),
           actions: !_searchBoolean
               ? [
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  setState(() {
-                    _searchBoolean = true;
-                  });
-                })
-          ]
+                  IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        setState(() {
+                          _searchBoolean = true;
+                        });
+                      })
+                ]
               : [
-            IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  setState(() {
-                    _searchBoolean = false;
-                    _queryController.clear();
-                  });
-                })
-          ]),
+                  IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _searchBoolean = false;
+                          _queryController.clear();
+                        });
+                      })
+                ]),
       body: FutureBuilder<List<AlgoliaObjectSnapshot>>(
         future: _searchAlgolia(_queryController.text),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        width: 200,
-                        height: 200,
-                        child: Image(
-                          image: AssetImage('assets/icon/error.gif'),
-                          fit: BoxFit.cover,
-                        )),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      '校外のメールアドレスでログインしているため\nこの機能は利用できません。',
-                      style: TextStyle(fontSize: 18.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ));
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    width: 200,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage('assets/icon/error.gif'),
+                      fit: BoxFit.cover,
+                    )),
+                SizedBox(
+                  height: 50,
+                ),
+                Text(
+                  '校外のメールアドレスでログインしているため\nこの機能は利用できません。',
+                  style: TextStyle(fontSize: 18.sp),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ));
           }
           if (snapshot.hasData) {
             final hits = snapshot.data!;
@@ -178,97 +174,94 @@ class _keieigakubuState extends State<keieigakubu> {
 
                   return Container(
                       child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                  zyugyoumei: hit.data['zyugyoumei'],
-                                  kousimei: hit.data['kousimei'],
-                                  tannisuu: hit.data['tannisuu'],
-                                  zyugyoukeisiki: hit.data['zyugyoukeisiki'],
-                                  syusseki: hit.data['syusseki'],
-                                  kyoukasyo: hit.data['kyoukasyo'],
-                                  tesutokeisiki: hit.data['tesutokeisiki'],
-                                  omosirosa: hit.data['omosirosa'],
-                                  toriyasusa: hit.data['toriyasusa'],
-                                  sougouhyouka: hit.data['sougouhyouka'],
-                                  komento: hit.data['komento'],
-                                  name: hit.data['name']
-
-
-
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            zyugyoumei: hit.data['zyugyoumei'],
+                            kousimei: hit.data['kousimei'],
+                            tannisuu: hit.data['tannisuu'],
+                            zyugyoukeisiki: hit.data['zyugyoukeisiki'],
+                            syusseki: hit.data['syusseki'],
+                            kyoukasyo: hit.data['kyoukasyo'],
+                            tesutokeisiki: hit.data['tesutokeisiki'],
+                            omosirosa: hit.data['omosirosa'],
+                            toriyasusa: hit.data['toriyasusa'],
+                            sougouhyouka: hit.data['sougouhyouka'],
+                            komento: hit.data['komento'],
+                            name: hit.data['name'],
+                            senden: hit.data['senden'],
+                            nenndo: hit.data['nenndo'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: (SizedBox(
+                      width: 200.w,
+                      height: 30.h,
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Stack(
+                          children: <Widget>[
+                            Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Align(
+                                    alignment: const Alignment(
+                                      -0.8,
+                                      -0.5,
+                                    ),
+                                    child: Text(
+                                      hit.data['zyugyoumei'],
+                                      style: TextStyle(fontSize: 20.sp),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ))),
+                            Align(
+                              alignment: const Alignment(-0.8, 0.4),
+                              child: Text(
+                                hit.data['gakki'],
+                                style: TextStyle(
+                                    color: Colors.lightGreen, fontSize: 15.sp),
                               ),
                             ),
-                          );
-                        },
-                        child: (SizedBox(
-                          width: 200,
-                          height: 30,
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Align(
-                                        alignment: const Alignment(
-                                          -0.8,
-                                          -0.5,
-                                        ),
-                                        child: Text(
-                                          hit.data['zyugyoumei'],
-                                          style: TextStyle(fontSize: 20.sp),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ))),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.4),
-                                  child: Text(
-                                    hit.data['gakki'],
-                                    style: TextStyle(color: Colors.lightGreen,fontSize: 15.sp),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.8),
-                                  child: Text(
-                                    hit.data['kousimei'],
-                                    overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 6),
-                                      decoration: BoxDecoration(
-                                          color: hit.data['bumon'] == 'エグ単'
-                                              ? Colors.red
-                                              : Colors.lightGreen[200],
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
-                                          ) // green shaped
-                                      ),
-                                      child: Text(
-                                        hit.data['bumon'],
-                                        style: TextStyle(fontSize: 15.sp),
-                                        // Your text
-                                      )),
-                                ),
-
-                              ],
+                            Align(
+                              alignment: const Alignment(-0.8, 0.8),
+                              child: Text(
+                                hit.data['kousimei'],
+                                overflow: TextOverflow.ellipsis, //ここ！！
+                                style: TextStyle(fontSize: 15.sp),
+                              ),
                             ),
-                          ),
-                        )),
-                      ));
-                }
-            );
-          }
-          else  {
+                            Positioned(
+                              top: 0,
+                              child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 4, horizontal: 6),
+                                  decoration: BoxDecoration(
+                                      color: hit.data['bumon'] == 'エグ単'
+                                          ? Colors.red
+                                          : Colors.lightGreen[200],
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        bottomRight: Radius.circular(8),
+                                      ) // green shaped
+                                      ),
+                                  child: Text(
+                                    hit.data['bumon'],
+                                    style: TextStyle(fontSize: 15.sp),
+                                    // Your text
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
+                  ));
+                });
+          } else {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -279,17 +272,27 @@ class _keieigakubuState extends State<keieigakubu> {
         verticalDirection: VerticalDirection.up,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 16.0),
-            child: FloatingActionButton(
-              heroTag: "btn1",
-
-              onPressed: _onButtonPressed,
-
-              child:  Icon(Icons.filter_alt_outlined)  ,
-            ),
+          Column(
+            children: [
+              FloatingActionButton(
+                heroTag: "btn1",
+                onPressed: _onButtonPressed,
+                child: Icon(Icons.filter_alt_outlined),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 16),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => post()),
+                    );
+                  },
+                  child: const Icon(Icons.upload_outlined),
+                ),
+              )
+            ],
           ),
-
         ],
       ),
     );
@@ -310,28 +313,44 @@ class _keieigakubuState extends State<keieigakubu> {
           ),
  */
 class DetailsScreen extends StatelessWidget {
-
-  final   zyugyoumei;
-  final  kousimei;
-  final  tannisuu;
-  final  zyugyoukeisiki;
-  final  syusseki;
-  final  kyoukasyo;
-  final  tesutokeisiki;
-  final  omosirosa;
-  final  toriyasusa;
-  final  sougouhyouka;
-  final  komento;
+  final zyugyoumei;
+  final kousimei;
+  final tannisuu;
+  final zyugyoukeisiki;
+  final syusseki;
+  final kyoukasyo;
+  final tesutokeisiki;
+  final omosirosa;
+  final toriyasusa;
+  final sougouhyouka;
+  final komento;
   final name;
+  final senden;
+  final nenndo;
 
-  const DetailsScreen({Key? key, required this.zyugyoumei, required this.kousimei, required this.tannisuu,required this.zyugyoukeisiki,required this.syusseki,required this.kyoukasyo,required this.tesutokeisiki,required this.omosirosa,required this.toriyasusa,required this.sougouhyouka,required this.komento,required this.name}) : super(key: key);
+  const DetailsScreen(
+      {Key? key,
+      required this.nenndo,
+      required this.zyugyoumei,
+      required this.kousimei,
+      required this.tannisuu,
+      required this.zyugyoukeisiki,
+      required this.syusseki,
+      required this.kyoukasyo,
+      required this.tesutokeisiki,
+      required this.omosirosa,
+      required this.toriyasusa,
+      required this.sougouhyouka,
+      required this.komento,
+      required this.name,
+      required this.senden})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(zyugyoumei),
-
       ),
       body: Container(
         margin: EdgeInsets.all(15),
@@ -344,7 +363,6 @@ class DetailsScreen extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.sp,
-
                 ),
               ),
               Padding(
@@ -353,7 +371,24 @@ class DetailsScreen extends StatelessWidget {
                   bottom: 10,
                 ),
                 child: Text(
-                  kousimei??'不明',
+                  kousimei ?? '不明',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
+              ),
+              Text(
+                '年度',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text(
+                  nenndo ?? '不明'.toString(),
                   style: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 15.sp,
@@ -389,10 +424,13 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(zyugyoukeisiki,  style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15.sp,
-                ),),
+                child: Text(
+                  zyugyoukeisiki,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
               ),
               Text(
                 '出席確認の有無',
@@ -406,10 +444,13 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(syusseki,  style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15.sp,
-                ),),
+                child: Text(
+                  syusseki,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
               ),
               Text(
                 '教科書の有無',
@@ -423,10 +464,13 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(kyoukasyo,  style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15.sp,
-                ),),
+                child: Text(
+                  kyoukasyo,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
               ),
               Text(
                 'テスト形式',
@@ -440,10 +484,13 @@ class DetailsScreen extends StatelessWidget {
                   top: 10,
                   bottom: 10,
                 ),
-                child: Text(tesutokeisiki??'不明',  style: TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 15.sp,
-                ),),
+                child: Text(
+                  tesutokeisiki ?? '不明',
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 15.sp,
+                  ),
+                ),
               ),
               Divider(),
               Container(
@@ -472,9 +519,7 @@ class DetailsScreen extends StatelessWidget {
                               ),
                               pointers: <GaugePointer>[
                                 RangePointer(
-                                  value: omosirosa
-
-                                      .toDouble(),
+                                  value: omosirosa.toDouble(),
                                   cornerStyle: CornerStyle.bothCurve,
                                   color: Colors.lightGreen,
                                   width: 0.2,
@@ -486,17 +531,14 @@ class DetailsScreen extends StatelessWidget {
                                     positionFactor: 0.1,
                                     angle: 90,
                                     widget: Text(
-                                      omosirosa
-                                          .toDouble()
-                                          .toStringAsFixed(0) +
+                                      omosirosa.toDouble().toStringAsFixed(0) +
                                           ' / 5',
                                       style: TextStyle(
                                           fontSize: 50.sp,
                                           fontWeight: FontWeight.bold),
                                     ))
                               ])
-                        ])
-                    ),
+                        ])),
                     Text(
                       '単位の取りやすさ',
                       style: TextStyle(
@@ -520,8 +562,7 @@ class DetailsScreen extends StatelessWidget {
                             ),
                             pointers: <GaugePointer>[
                               RangePointer(
-                                value: toriyasusa
-                                    .toDouble(),
+                                value: toriyasusa.toDouble(),
                                 cornerStyle: CornerStyle.bothCurve,
                                 color: Colors.lightGreen,
                                 width: 0.2,
@@ -533,9 +574,7 @@ class DetailsScreen extends StatelessWidget {
                                   positionFactor: 0.1,
                                   angle: 90,
                                   widget: Text(
-                                    toriyasusa
-                                        .toDouble()
-                                        .toStringAsFixed(0) +
+                                    toriyasusa.toDouble().toStringAsFixed(0) +
                                         ' / 5',
                                     style: TextStyle(
                                         fontSize: 50.sp,
@@ -567,8 +606,7 @@ class DetailsScreen extends StatelessWidget {
                             ),
                             pointers: <GaugePointer>[
                               RangePointer(
-                                value: sougouhyouka
-                                    .toDouble(),
+                                value: sougouhyouka.toDouble(),
                                 cornerStyle: CornerStyle.bothCurve,
                                 color: Colors.lightGreen,
                                 width: 0.2,
@@ -580,9 +618,7 @@ class DetailsScreen extends StatelessWidget {
                                   positionFactor: 0.1,
                                   angle: 90,
                                   widget: Text(
-                                    sougouhyouka
-                                        .toDouble()
-                                        .toStringAsFixed(0) +
+                                    sougouhyouka.toDouble().toStringAsFixed(0) +
                                         ' / 5',
                                     style: TextStyle(
                                         fontSize: 50.sp,
@@ -605,10 +641,13 @@ class DetailsScreen extends StatelessWidget {
                       fontSize: 20.sp,
                     ),
                   ),
-                  Text(komento??'不明',style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 16.sp,
-                  ),),
+                  Text(
+                    komento ?? '不明',
+                    style: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16.sp,
+                    ),
+                  ),
                   Text(
                     'ニックネーム',
                     style: TextStyle(
@@ -620,10 +659,32 @@ class DetailsScreen extends StatelessWidget {
                     padding: EdgeInsets.only(
                       bottom: 50,
                     ),
-                    child: Text(name??'不明',  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 15.sp,
-                    ),),
+                    child: Text(
+                      name ?? '不明',
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '宣伝',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.sp,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 50,
+                    ),
+                    child: Text(
+                      senden ?? '不明',
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 15.sp,
+                      ),
+                    ),
                   ),
                   SizedBox(height: 20.0.h),
                   /*  Container(
@@ -682,7 +743,6 @@ class DetailsScreen extends StatelessWidget {
                     ),
                   ),*/
                   SizedBox(height: 20.0.h),
-
                   Container(
                     height: 40.0.h,
                     child: Container(
@@ -696,7 +756,8 @@ class DetailsScreen extends StatelessWidget {
                       child: GestureDetector(
                         onTap: () async {
                           //ここにブロック関数
-                          launch('https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
+                          launch(
+                              'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
                         },
                         child: Center(
                           child: Text(
@@ -711,7 +772,6 @@ class DetailsScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.0.h),
-
                 ],
               )
             ],

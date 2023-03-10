@@ -166,38 +166,59 @@ class _RegistrationState extends State<Registration> {
                         child: GestureDetector(
                           onTap: _isChecked
                               ? () async {
-                            if (_pswd_OK) {
-                              try {
-                                // メール/パスワードでユーザー登録
-                                UserCredential _result =
-                                await _auth.createUserWithEmailAndPassword(
-                                  email: _newEmail,
-                                  password: _newPassword,
-                                );
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text("注意",textAlign: TextAlign.center,),
+                                  content: Text("大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",textAlign: TextAlign.center,),
+                                  actions: <Widget>[
+                                    // ボタン領域
+                                    TextButton(
+                                      child: Text("やっぱやめる"),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                    TextButton(
+                                      child: Text("ええで"),
+                                      onPressed: ()async{
+                                        if (_pswd_OK) {
+                                          try {
+                                            // メール/パスワードでユーザー登録
+                                            UserCredential _result =
+                                            await _auth.createUserWithEmailAndPassword(
+                                              email: _newEmail,
+                                              password: _newPassword,
+                                            );
 
-                                // 登録成功
-                                User _user = _result.user!; // 登録したユーザー情報
-                                _user.sendEmailVerification(); // Email確認のメールを送信
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Emailcheck(
-                                          email: _newEmail,
-                                          pswd: _newPassword,
-                                          from: 1),
-                                    ));
-                              } catch (e) {
-                                // 登録に失敗した場合
-                                setState(() {
-                                  _infoText = auth_error.register_error_msg(
-                                      e.hashCode, e.toString());
-                                });
-                              }
-                            } else {
-                              setState(() {
-                                _infoText = 'パスワードは8文字以上です。';
-                              });
-                            }
+                                            // 登録成功
+                                            User _user = _result.user!; // 登録したユーザー情報
+                                            _user.sendEmailVerification(); // Email確認のメールを送信
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => Emailcheck(
+                                                      email: _newEmail,
+                                                      pswd: _newPassword,
+                                                      from: 1),
+                                                ));
+                                          } catch (e) {
+                                            // 登録に失敗した場合
+                                            setState(() {
+                                              _infoText = auth_error.register_error_msg(
+                                                  e.hashCode, e.toString());
+                                            });
+                                          }
+                                        } else {
+                                          setState(() {
+                                            _infoText = 'パスワードは8文字以上です。';
+                                          });
+                                        }
+                                      }
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }
                               : () {
                             Fluttertoast.showToast(

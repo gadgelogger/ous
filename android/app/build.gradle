@@ -54,6 +54,16 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
     }
+    // ここから追加
+    signingConfigs {
+        release {
+            storeFile file("key.jks")
+            storePassword "android"
+            keyAlias "tanqbot"
+            keyPassword "android"
+        }
+    }
+    // ここまで追加
 
     buildTypes {
         release {
