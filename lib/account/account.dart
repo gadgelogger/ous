@@ -66,7 +66,7 @@ class _accountState extends State<account> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return MyHomePage(title: 'home');
+                    return MyHomePage(title: 'home',);
                   }),
                 );
               },

@@ -86,109 +86,10 @@ class MyHttpOverrides extends HttpOverrides{
       ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
-  //アップデート通知
-  late String _currentVersion;
-  late String _latestVersion;
-  late bool _updateRequired;
-  late String _updateUrl;
-  bool _checkedVersion = false;
-
-  void initState() {
-    super.initState();
-    if (!_checkedVersion) {
-      _checkVersion();
-      _checkedVersion = true;
-    }
-  }
-
-
-
-  void _checkVersion() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    setState(() {
-      _currentVersion = version;
-    });
-
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-        .collection('config').doc('3wmNMFXQArQHWpJA20je').get();
-    Map<String, dynamic>? data = documentSnapshot.data() as Map<String,
-        dynamic>?;
-    if (data != null) {
-      setState(() {
-        _latestVersion = data['version'];
-      });
-      print(_latestVersion);
-      if (_currentVersion != _latestVersion) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                "アップデートのお知らせ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold),
-              ),
-              content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(
-                        width: 100,
-                        height: 100,
-                        child:
-                        Image(
-                          image: AssetImage('assets/icon/rocket.gif'),
-                          fit: BoxFit.cover,
-                        )),
-                    Text(
-                      'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。。',
-                      textAlign: TextAlign.center,
-                    ),
-                  ]),
-              actions: <Widget>[
-                // ボタン領域
-                ElevatedButton(
-                    child: Text("後で"),
-                    onPressed: (){
-                      Navigator.pop(context);
-                    }
-                ),
-                if (Platform.isIOS)
-                  ElevatedButton(
-                      child: Text("おっけー"),
-                      onPressed: (){
-                        launch('https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
-                      }
-                  ),
-                if(Platform.isAndroid)
-                  ElevatedButton(
-                      child: Text("おっけー"),
-                      onPressed: (){
-                        launch('https://twitter.com/TAN_Q_BOT_LOCAL');
-                      }
-                  ),
-              ],
-            );
-          },
-        );
-      }
-    }
-  }
-
+  // This widget is the root of your application.
 
   @override
   Widget build(BuildContext context) {
@@ -223,13 +124,9 @@ class _MyAppState extends State<MyApp> {
                     if (snapshot.connectionState == ConnectionState.waiting)
                     {
                       // スプラッシュ画面などに書き換えても良い
-                      _checkVersion();
-
-
                     }
                     if (snapshot.hasData) {
                       // User が null でなない、つまりサインイン済みのホーム画面へ
-
                       return MyHomePage(title: 'home');
 
                     }
@@ -243,7 +140,6 @@ class _MyAppState extends State<MyApp> {
       );
   }
 }
-
 
 
 
@@ -270,14 +166,106 @@ class MyHomePage extends StatefulWidget {
 
 
 class _MyHomePageState extends State<MyHomePage> {
+//アップデート通知
+  late String _currentVersion;
+  late String _latestVersion;
+  late bool _updateRequired;
+  late String _updateUrl;
+
   @override
   void initState() {
     super.initState();
-
+    _checkVersion();
   }
 
 
+  void _checkVersion() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    setState(() {
+      _currentVersion = version;
+    });
+
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('config').doc('3wmNMFXQArQHWpJA20je').get();
+    Map<String, dynamic>? data = documentSnapshot.data() as Map<String,
+        dynamic>?;
+    if (data != null) {
+      setState(() {
+        _latestVersion = data['version'];
+      });
+      print(_latestVersion);
+      if (_currentVersion != _latestVersion) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('アプリのアップデートがあるぞ！'),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: '見てくれ',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(
+                        "アップデートのお知らせ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                                width: 100,
+                                height: 100,
+                                child:
+                                Image(
+                                  image: AssetImage('assets/icon/rocket.gif'),
+                                  fit: BoxFit.cover,
+                                )),
+                            Text(
+                              'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。',
+                              textAlign: TextAlign.center,
+                            ),
+                          ]),
+                      actions: <Widget>[
+                        // ボタン領域
+                        ElevatedButton(
+                            child: Text("後で"),
+                            onPressed: (){
+                              Navigator.pop(context);
+                            }
+                        ),
+                        if (Platform.isIOS)
+                          ElevatedButton(
+                              child: Text("おっけー"),
+                              onPressed: (){
+                                launch('https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
+                              }
+                          ),
+                        if(Platform.isAndroid)
+                          ElevatedButton(
+                              child: Text("おっけー"),
+                              onPressed: (){
+                                launch('https://twitter.com/TAN_Q_BOT_LOCAL');
+                              }
+                          ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      }
+    }
+  }
 //アップデート通知
 
   int _currentindex = 0;
@@ -316,18 +304,17 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.school_outlined),
             label: '講義評価',
           ),
-    //      NavigationDestination(
-      //      icon: Icon(Icons.business_center_outlined),
-        //    label: '就活関連',
-       //   ),
+          //      NavigationDestination(
+          //      icon: Icon(Icons.business_center_outlined),
+          //    label: '就活関連',
+          //   ),
         ],
 
-          ),
+      ),
 
 
     );
   }
 }
-
 
 

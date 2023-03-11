@@ -14,6 +14,7 @@ import 'package:ous/review/gakubu/seimeikagaku.dart';
 import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
 import 'package:ous/review/post.dart';
+import 'package:ous/review/postuser.dart';
 import 'package:ous/test/zyouhourikou.dart';
 import 'package:ous/test/zyuui.dart';
 import 'package:path/path.dart';
@@ -482,15 +483,37 @@ class _ReviewState extends State<Review> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => post()),
-          );
-        },
-        child: const Icon(Icons.upload_outlined),
-      ),
+    floatingActionButton: Column(
+      verticalDirection: VerticalDirection.up,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Column(
+          children: [
+            FloatingActionButton(
+              heroTag: "btn1",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MultipleCollectionsPage()),
+                );
+              },              child: Icon(Icons.person_2_outlined),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 16),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => post()),
+                  );
+                },
+                child: const Icon(Icons.upload_outlined),
+              ),
+            )
+          ],
+        ),
+      ],
+    ),
 
 
     );
