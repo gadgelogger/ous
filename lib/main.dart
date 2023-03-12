@@ -252,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ElevatedButton(
                               child: Text("おっけー"),
                               onPressed: (){
-                                launch('https://twitter.com/TAN_Q_BOT_LOCAL');
+                                launch('https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
                               }
                           ),
                       ],

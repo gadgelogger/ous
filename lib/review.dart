@@ -19,6 +19,9 @@ import 'package:ous/test/zyouhourikou.dart';
 import 'package:ous/test/zyuui.dart';
 import 'package:path/path.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:flutter_dialogs/flutter_dialogs.dart';
+
 class Review extends StatefulWidget {
   const Review({Key? key}) : super(key: key);
 
@@ -28,7 +31,26 @@ class Review extends StatefulWidget {
 
 class _ReviewState extends State<Review> {
 
-
+  Future<Map<String, dynamic>> _getDocumentCount() async {
+    Map<String, dynamic> result = {};
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku'
+    ];
+    for (String collection in collections) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(collection).get();
+      result[collection] = querySnapshot.size;
+    }
+    return result;
+  }
 
 
 
@@ -53,8 +75,11 @@ class _ReviewState extends State<Review> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+
+
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -93,6 +118,7 @@ class _ReviewState extends State<Review> {
                           MaterialPageRoute(builder: (context) => Rigakubu()),
                         );
                       },
+
                     ),
                     GestureDetector(
                       child: Card(

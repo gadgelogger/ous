@@ -208,8 +208,8 @@ class _postState extends State<post> {
                           value: 'エグ単',
                         ),
                         DropdownMenuItem(
-                          child: Text('役立つ単位'),
-                          value: '役立つ単位',
+                          child: Text('普通'),
+                          value: '普通',
                         ),
                       ],
                       //6

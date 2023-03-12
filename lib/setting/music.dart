@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:shake/shake.dart';
 import 'package:provider/provider.dart';
 import 'package:ous/test.dart';
+
 class Music extends StatefulWidget {
   const Music({Key? key}) : super(key: key);
 
@@ -12,6 +14,7 @@ class Music extends StatefulWidget {
 
 class _MusicState extends State<Music> {
   late VideoPlayerController _controller;
+
   @override
   void initState() {
     super.initState();
@@ -27,6 +30,7 @@ class _MusicState extends State<Music> {
     _controller.dispose();
     super.dispose();
   }
+
 //ここから書く
   @override
   Widget build(BuildContext context) {
@@ -42,14 +46,20 @@ class _MusicState extends State<Music> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onDoubleTap: ()
-                {
-
-                },                 child:
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Image.network('https://www.ous.ac.jp/common/files/100/gakka.gif'),
-              ),),
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  child: Image.network(
+                      'https://www.ous.ac.jp/common/files/100/gakka.gif'),
+                ),
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: (){
+                    launch('https://twitter.com/music_genki');
+                  },
+                  child: Text('楽曲\n@music_genki',textAlign: TextAlign.center,),
+                ),
+              ),
               VideoProgressIndicator(
                 _controller,
                 allowScrubbing: true,
@@ -61,7 +71,6 @@ class _MusicState extends State<Music> {
               ),
               _ProgressText(controller: _controller),
               SizedBox(height: 20.0),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -158,31 +167,31 @@ class __ProgressTextState extends State<_ProgressText> {
   }
 }
 
-
-
 //端末を振った際に起こる動作の関数
 class HomeModel extends ChangeNotifier {
   shakeGesture(BuildContext context) {
-    ShakeDetector.autoStart(onPhoneShake: () {
-      showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text('陬上Γ繝九Η繝ｼ縺ｫ蜈･繧翫∪縺'),
-              actions: [
-                ElevatedButton(
-                  child: Text('オ????ー'),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Test()),
-                    );
-                  },                ),
-              ],
-            );
-          });
-    },
-    minimumShakeCount: 10,
+    ShakeDetector.autoStart(
+      onPhoneShake: () {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title: Text('陬上Γ繝九Η繝ｼ縺ｫ蜈･繧翫∪縺'),
+                actions: [
+                  ElevatedButton(
+                    child: Text('オ????ー'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Test()),
+                      );
+                    },
+                  ),
+                ],
+              );
+            });
+      },
+      minimumShakeCount: 10,
     );
   }
 }

@@ -89,6 +89,8 @@ dependencies:
   pie_chart: ^5.3.2
   cached_network_image: ^3.2.3
   version: ^3.0.2
+  badges: ^3.0.2
+  flutter_dialogs: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
