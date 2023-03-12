@@ -21,9 +21,6 @@ class _RegistrationState extends State<Registration> {
   // Firebase Authenticationを利用するためのインスタンス
   final _auth = FirebaseAuth.instance;
 
-
-
-
   String _username = "";
   String _newEmail = ""; // 入力されたメールアドレス
   String _newPassword = ""; // 入力されたパスワード
@@ -33,12 +30,6 @@ class _RegistrationState extends State<Registration> {
 
   // エラーメッセージを日本語化するためのクラス
   final auth_error = Authentication_error_to_ja();
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,17 +109,18 @@ class _RegistrationState extends State<Registration> {
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(width: 0, color: Colors.transparent),
+                          border:
+                              Border.all(width: 0, color: Colors.transparent),
                         ),
-                        child:   Checkbox(
+                        child: Checkbox(
                           value: _isChecked,
                           onChanged: (bool? value) {
                             setState(() {
                               _isChecked = value ?? false;
                             });
                           },
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
                       InkWell(
@@ -142,10 +134,8 @@ class _RegistrationState extends State<Registration> {
                                 color: Colors.lightGreen,
                                 fontFamily: 'Montserrat',
                                 fontWeight: FontWeight.bold,
-                                decoration:
-                                TextDecoration.underline),
+                                decoration: TextDecoration.underline),
                           )),
-
                     ],
                   ),
                   SizedBox(height: 50.0),
@@ -158,20 +148,21 @@ class _RegistrationState extends State<Registration> {
                       ),
                     ),
                   ),
-                  Container(
-                      height: 40.0,
-                      child: Material(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.lightGreen[200],
-                        child: GestureDetector(
-                          onTap: _isChecked
-                              ? () async {
+                  GestureDetector(
+                    onTap: _isChecked
+                        ? () async {
                             showDialog(
                               context: context,
                               builder: (_) {
                                 return AlertDialog(
-                                  title: Text("注意",textAlign: TextAlign.center,),
-                                  content: Text("大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",textAlign: TextAlign.center,),
+                                  title: Text(
+                                    "注意",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: Text(
+                                    "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
+                                    textAlign: TextAlign.center,
+                                  ),
                                   actions: <Widget>[
                                     // ボタン領域
                                     TextButton(
@@ -179,98 +170,117 @@ class _RegistrationState extends State<Registration> {
                                       onPressed: () => Navigator.pop(context),
                                     ),
                                     TextButton(
-                                      child: Text("ええで"),
-                                      onPressed: ()async{
-                                        if (_pswd_OK) {
-                                          try {
-                                            // メール/パスワードでユーザー登録
-                                            UserCredential _result =
-                                            await _auth.createUserWithEmailAndPassword(
-                                              email: _newEmail,
-                                              password: _newPassword,
-                                            );
+                                        child: Text("ええで"),
+                                        onPressed: () async {
+                                          Fluttertoast.showToast(
+                                              msg: "ログイン中です\nちょっと待ってね。");
+                                          if (_pswd_OK) {
+                                            try {
+                                              // メール/パスワードでユーザー登録
+                                              UserCredential _result = await _auth
+                                                  .createUserWithEmailAndPassword(
+                                                email: _newEmail,
+                                                password: _newPassword,
+                                              );
 
-                                            // 登録成功
-                                            User _user = _result.user!; // 登録したユーザー情報
-                                            _user.sendEmailVerification(); // Email確認のメールを送信
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => Emailcheck(
-                                                      email: _newEmail,
-                                                      pswd: _newPassword,
-                                                      from: 1),
-                                                ));
-                                          } catch (e) {
-                                            // 登録に失敗した場合
+                                              // 登録成功
+                                              User _user =
+                                                  _result.user!; // 登録したユーザー情報
+                                              _user
+                                                  .sendEmailVerification(); // Email確認のメールを送信
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Emailcheck(
+                                                            email: _newEmail,
+                                                            pswd: _newPassword,
+                                                            from: 1),
+                                                  ));
+                                            } catch (e) {
+                                              // 登録に失敗した場合
+                                              setState(() {
+                                                _infoText = auth_error
+                                                    .register_error_msg(
+                                                        e.hashCode,
+                                                        e.toString());
+                                              });
+                                            }
+                                          } else {
                                             setState(() {
-                                              _infoText = auth_error.register_error_msg(
-                                                  e.hashCode, e.toString());
+                                              _infoText = 'パスワードは8文字以上です。';
                                             });
                                           }
-                                        } else {
-                                          setState(() {
-                                            _infoText = 'パスワードは8文字以上です。';
-                                          });
-                                        }
-                                      }
-                                    ),
+                                        }),
                                   ],
                                 );
                               },
                             );
                           }
-                              : () {
+                        : () {
                             Fluttertoast.showToast(
                                 msg:
-                                "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
-                          },                          child: Center(
-                            child: Text(
-                              'サインアップ',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat'),
-                            ),
-                          ),
-                        ),
-                      )),
+                                    "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
+                          },
+                    child: Container(
+                      height: 40.0.h,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        color: Colors.lightGreen[200],
+                        child: Container(
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    'サインアップ',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat'),
+                                  ),
+                                )
+                              ],
+                            )),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 20.0),
-
-                  Container(
-                    height: 40.0,
-                    color: Colors.transparent,
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Login()),
+                      );
+                    }, child: Container(
+                    height: 40.0.h,
                     child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Colors.lightGreen,
                               style: BorderStyle.solid,
-                              width: 1.0),
+                              width: 1.0.w),
                           color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Login()),
-                          );
-                        },
-                        child: Center(
-                          child: Text('戻る',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat')),
+                          borderRadius: BorderRadius.circular(
+                              20.0)),
+                      child: Center(
+                        child: Text(
+                          '戻る',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                          ),
                         ),
                       ),
                     ),
+                  ),
                   ),
                 ],
               )),
         ]));
   }
 }
-
-
 
 // Firebase Authentication利用時の日本語エラーメッセージ
 class Authentication_error_to_ja {
