@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class post extends StatefulWidget {
   const post({Key? key}) : super(key: key);
@@ -79,6 +80,13 @@ class _postState extends State<post> {
 //スライドボタンの状態をリセットするため
   final slideActionKey = GlobalKey<SlideActionState>();
 
+  String? _randomId = Uuid().v4();
+
+
+@override
+void initState(){
+  getData();
+  }
 
 
   Widget build(BuildContext context) {
@@ -817,6 +825,7 @@ class _postState extends State<post> {
                             'tesutokeikou':istesutokeikou,
                             'kyoukasyo':iskyoukasyo,
                             'date':Timestamp.fromDate(now),
+                            'ID':_randomId,
                           })
                               .then((value) => print("新規登録に成功"))
                               .catchError(

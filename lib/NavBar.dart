@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:ous/Nav/map.dart';
 import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/account/login.dart';
@@ -132,8 +133,10 @@ class _NavBarState extends State<NavBar> {
             leading: Icon(Icons.location_on_outlined),
             title: Text('学内マップ'),
             onTap: () {
-              launch('http://www1.ous.ac.jp/gakusyu/2017rikadaimap2.pdf');
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Map()),
+              );            },
           ),
           Divider(),
 

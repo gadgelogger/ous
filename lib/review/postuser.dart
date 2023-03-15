@@ -1,19 +1,22 @@
+
+import 'dart:html';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MultipleCollectionsPage extends StatefulWidget {
   @override
-  _MultipleCollectionsPageState createState() => _MultipleCollectionsPageState();
+  _MultipleCollectionsPageState createState() =>
+      _MultipleCollectionsPageState();
 }
 
 class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +36,15 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
               child: Text('Error: ${snapshot.error}'),
             );
           } else {
-            List<DocumentSnapshot> documents = snapshot.data as List<DocumentSnapshot>;
+            List<DocumentSnapshot> documents =
+                snapshot.data as List<DocumentSnapshot>;
             List<Widget> cards = [];
             for (DocumentSnapshot document in documents) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
               if (data['accountuid'] == _auth.currentUser!.uid) {
-                cards.add(
-                GestureDetector(
-                  onTap: (){
+                cards.add(GestureDetector(
+                  onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -59,10 +63,12 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                           name: data['name'],
                           senden: data['senden'],
                           nenndo: data['nenndo'],
+                          ID: data['ID'],
                         ),
                       ),
-                    );                      },
-                  child:   Card(
+                    );
+                  },
+                  child: Card(
                     elevation: 10,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
@@ -110,7 +116,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                                     topLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8),
                                   ) // green shaped
-                              ),
+                                  ),
                               child: Text(
                                 data['bumon'],
                                 style: TextStyle(fontSize: 15.sp),
@@ -120,32 +126,31 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                       ],
                     ),
                   ),
-                )
-                );
+                ));
               }
             }
             if (cards.isEmpty) {
               return Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: 200,
-                          height: 200,
-                          child: Image(
-                            image: AssetImage('assets/icon/found.gif'),
-                            fit: BoxFit.cover,
-                          )),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        '何も投稿していません',
-                        style: TextStyle(fontSize: 18.sp),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ));
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      width: 200,
+                      height: 200,
+                      child: Image(
+                        image: AssetImage('assets/icon/found.gif'),
+                        fit: BoxFit.cover,
+                      )),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    '何も投稿していません',
+                    style: TextStyle(fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ));
             } else {
               return GridView.count(
                 crossAxisCount: 2, // 2列に設定
@@ -157,6 +162,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       ),
     );
   }
+
   Future<List<DocumentSnapshot>> _getData() async {
     List<String> collections = [
       'rigaku',
@@ -172,7 +178,8 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
     ];
     List<DocumentSnapshot> documents = [];
     for (String collection in collections) {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(collection).get();
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection(collection).get();
       documents.addAll(querySnapshot.docs);
     }
     return documents;
@@ -194,23 +201,25 @@ class DetailsScreen extends StatelessWidget {
   final name;
   final senden;
   final nenndo;
+  final ID;
 
   const DetailsScreen(
       {Key? key,
-        required this.nenndo,
-        required this.zyugyoumei,
-        required this.kousimei,
-        required this.tannisuu,
-        required this.zyugyoukeisiki,
-        required this.syusseki,
-        required this.kyoukasyo,
-        required this.tesutokeisiki,
-        required this.omosirosa,
-        required this.toriyasusa,
-        required this.sougouhyouka,
-        required this.komento,
-        required this.name,
-        required this.senden})
+      required this.nenndo,
+      required this.zyugyoumei,
+      required this.kousimei,
+      required this.tannisuu,
+      required this.zyugyoukeisiki,
+      required this.syusseki,
+      required this.kyoukasyo,
+      required this.tesutokeisiki,
+      required this.omosirosa,
+      required this.toriyasusa,
+      required this.sougouhyouka,
+      required this.komento,
+      required this.name,
+      required this.ID,
+      required this.senden})
       : super(key: key);
 
   @override
@@ -645,11 +654,147 @@ class DetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Do something when FAB is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return Edit(
+                id: ID,
+              );
+            }),
+          );
+        },
+        child: Icon(Icons.mode_edit_outlined),
+      ),
     );
   }
 }
 
+class Edit extends StatefulWidget {
+  final String id;
 
+  const Edit({Key? key, required this.id}) : super(key: key);
 
+  @override
+  State<Edit> createState() => _EditState();
+}
 
+class _EditState extends State<Edit> {
 
+  //投稿データ(現在
+  String? iscategory = '';
+  String? isbumon = 'ラク単';
+  var _text = 'Hello'; //初期値はHello
+  String? isnendo = '';
+  String? isgakki = '';
+  String? iszyugyoumei = '';
+  String? iskousimei = '';
+  String? istanni = '';
+  String? iszyugyoukeisiki = '';
+  String? issyusseki = '';
+  String? iskyoukasyo = '';
+  String? istesutokeisiki = '';
+  String? istesutokeikou = '';
+  String? isname = '';
+
+  String? iskomento = '';
+  String? issenden = '';
+  //総合評価
+  double _hyouka = 0;
+
+  //面白さ
+  double _omosirosa = 0;
+
+  //単位の取りやすさ
+  double _toriyasusa = 0;
+
+  //投稿データ(現在
+
+  Future<List<DocumentSnapshot>> _getData() async {
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku'
+    ];
+    List<DocumentSnapshot> documents = [];
+    for (String collection in collections) {
+      QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection(collection).get();
+      documents.addAll(querySnapshot.docs);
+    }
+
+    return documents;
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('編集画面'),
+        ),
+    body:FutureBuilder(
+        future: _getData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            List<DocumentSnapshot> documents =
+            snapshot.data as List<DocumentSnapshot>;
+            List<Widget> cards = [];
+            for (DocumentSnapshot document in documents) {
+              Map<String, dynamic> data =
+              document.data() as Map<String, dynamic>;
+              if (data['ID'] == widget.id) {
+                return Container(
+                  child: Scrollbar(
+                    isAlwaysShown: true,
+                    child: Padding(
+                      padding: EdgeInsets.all(15.0), //全方向にパディング１００
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Center(
+                              child:   Text(
+                                '投稿する授業の部門を選んでください',
+                                style: GoogleFonts.notoSans(
+                                  // フォントをnotoSansに指定(
+                                  textStyle: TextStyle(
+                                    fontSize: 20,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+
+                            ),
+                            Text(document['bumon'])
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+            }
+          }
+          return SizedBox.shrink(); // 条件に合致しない場合には空のSizedBoxを返す
+        }
+    )
+
+  );
+}

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,12 +16,10 @@ import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
-import 'package:ous/test/zyouhourikou.dart';
-import 'package:ous/test/zyuui.dart';
+
 import 'package:path/path.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:badges/badges.dart' as badges;
-import 'package:flutter_dialogs/flutter_dialogs.dart';
+
 
 class Review extends StatefulWidget {
   const Review({Key? key}) : super(key: key);
@@ -52,14 +51,26 @@ class _ReviewState extends State<Review> {
     return result;
   }
 
+//大学のアカウント以外は非表示にする
+  late FirebaseAuth auth;
+  bool showFloatingActionButton = false;
 
-
+  @override
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
+      showFloatingActionButton = true;
+    }
+  }
 
 
 
   @override
 
     Widget build(BuildContext context) => Scaffold(
+
       drawer: NavBar(),
       appBar: AppBar(
         elevation: 0,
@@ -509,7 +520,8 @@ class _ReviewState extends State<Review> {
           ),
         ),
       ),
-    floatingActionButton: Column(
+    floatingActionButton: showFloatingActionButton
+        ? Column(
       verticalDirection: VerticalDirection.up,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -539,7 +551,8 @@ class _ReviewState extends State<Review> {
           ],
         ),
       ],
-    ),
+    )
+        : null,
 
 
     );

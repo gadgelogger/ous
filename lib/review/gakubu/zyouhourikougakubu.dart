@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/view.dart';
-import 'package:ous/test/rigaku.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:highlight_text/highlight_text.dart';
 import 'package:algolia/algolia.dart';
@@ -112,6 +112,20 @@ class _zyouhourikougakubuState extends State<zyouhourikougakubu> {
     });
   }
 
+
+//大学のアカウント以外は非表示にする
+  late FirebaseAuth auth;
+  bool showFloatingActionButton = false;
+
+  @override
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
+      showFloatingActionButton = true;
+    }
+  }
 
 
 
@@ -275,17 +289,14 @@ class _zyouhourikougakubuState extends State<zyouhourikougakubu> {
           }
         },
       ),
-      floatingActionButton: Column(
+      floatingActionButton: showFloatingActionButton
+          ? Column(
         verticalDirection: VerticalDirection.up,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Column(
             children: [
-              FloatingActionButton(
-                heroTag: "btn1",
-                onPressed: _onButtonPressed,
-                child: Icon(Icons.filter_alt_outlined),
-              ),
+
               Container(
                 margin: EdgeInsets.only(top: 16),
                 child: FloatingActionButton(
@@ -301,6 +312,11 @@ class _zyouhourikougakubuState extends State<zyouhourikougakubu> {
             ],
           ),
         ],
+      )
+          :   FloatingActionButton(
+        heroTag: "btn1",
+        onPressed: _onButtonPressed,
+        child: Icon(Icons.filter_alt_outlined),
       ),
     );
   }
