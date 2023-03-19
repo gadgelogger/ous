@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -6,6 +8,7 @@ import 'package:ous/setting/music.dart';
 import 'package:ous/Nav/userpolicie.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:ous/home.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +26,7 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  bool _isDarkModeEnabled = false;
 
 
   //退会処理
@@ -41,7 +45,6 @@ class _SettingState extends State<Setting> {
 
 
   ThemeData current = ThemeData.light();
-  bool _isDark = false;
 
   void showLicensePage({
     required BuildContext context,
@@ -104,9 +107,11 @@ class _SettingState extends State<Setting> {
           ),
 
          */
+
           SettingsSection(
             title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
+
               SettingsTile.navigation(
                   leading: Icon(Icons.music_note),
                   title: Text('校歌'),
@@ -146,7 +151,23 @@ class _SettingState extends State<Setting> {
                   }
                 },
               ),
-              SettingsTile.navigation(
+              if (Platform.isIOS)
+                SettingsTile.navigation(
+                leading: Icon(Icons.share),
+                title: Text('このアプリをシェアする'),
+                onPressed: (BuildContext context) async {
+                  Share.share('https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
+                },
+              ),
+              if (Platform.isAndroid)
+                SettingsTile.navigation(
+                  leading: Icon(Icons.share),
+                  title: Text('このアプリをシェアする'),
+                  onPressed: (BuildContext context) async {
+                    Share.share('https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
+                  },
+                ),
+                SettingsTile.navigation(
                   leading: Icon(Icons.terminal),
                   title: Text('ライセンスについて'),
                   onPressed: (context) {

@@ -1,5 +1,4 @@
-
-import 'dart:html';
+import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,19 @@ class MultipleCollectionsPage extends StatefulWidget {
 
 class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late StreamController<List<DocumentSnapshot>> _streamController;
+  @override
+  void initState() {
+    super.initState();
+    _streamController = StreamController();
+    _getData();
+  }
+
+  @override
+  void dispose() {
+    _streamController.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +36,8 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       appBar: AppBar(
         title: Text('投稿した評価'),
       ),
-      body: FutureBuilder(
-        future: _getData(),
+      body: StreamBuilder(
+        stream: _getData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -37,12 +49,15 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
             );
           } else {
             List<DocumentSnapshot> documents =
-                snapshot.data as List<DocumentSnapshot>;
+            snapshot.data as List<DocumentSnapshot>;
+            List<String> documentIDs = [];
             List<Widget> cards = [];
             for (DocumentSnapshot document in documents) {
               Map<String, dynamic> data =
-                  document.data() as Map<String, dynamic>;
-              if (data['accountuid'] == _auth.currentUser!.uid) {
+              document.data() as Map<String, dynamic>;
+              if (data['accountuid'] == _auth.currentUser!.uid &&
+                  !documentIDs.contains(data['ID'])) {
+                documentIDs.add(data['ID']);
                 cards.add(GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -64,6 +79,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                           senden: data['senden'],
                           nenndo: data['nenndo'],
                           ID: data['ID'],
+                          userid: _auth.currentUser!.uid,
                         ),
                       ),
                     );
@@ -163,7 +179,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
     );
   }
 
-  Future<List<DocumentSnapshot>> _getData() async {
+  Stream<List<DocumentSnapshot>> _getData() {
     List<String> collections = [
       'rigaku',
       'kougakubu',
@@ -176,17 +192,29 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       'kiban',
       'kyousyoku'
     ];
-    List<DocumentSnapshot> documents = [];
-    for (String collection in collections) {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection(collection).get();
-      documents.addAll(querySnapshot.docs);
-    }
-    return documents;
+    StreamController<List<DocumentSnapshot>> streamController =
+        StreamController();
+
+    Future(() async {
+      List<DocumentSnapshot> documents = [];
+      for (String collection in collections) {
+        FirebaseFirestore.instance
+            .collection(collection)
+            .snapshots()
+            .listen((querySnapshot) {
+          List<DocumentSnapshot> currentDocuments = querySnapshot.docs;
+          documents.addAll(currentDocuments);
+          streamController.add(documents);
+        });
+      }
+    });
+
+    return streamController.stream;
   }
 }
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
+  //現在の講義データ
   final zyugyoumei;
   final kousimei;
   final tannisuu;
@@ -202,31 +230,125 @@ class DetailsScreen extends StatelessWidget {
   final senden;
   final nenndo;
   final ID;
+  final userid;
 
-  const DetailsScreen(
-      {Key? key,
-      required this.nenndo,
-      required this.zyugyoumei,
-      required this.kousimei,
-      required this.tannisuu,
-      required this.zyugyoukeisiki,
-      required this.syusseki,
-      required this.kyoukasyo,
-      required this.tesutokeisiki,
-      required this.omosirosa,
-      required this.toriyasusa,
-      required this.sougouhyouka,
-      required this.komento,
-      required this.name,
-      required this.ID,
-      required this.senden})
-      : super(key: key);
+  //新しい講義データ
+  late final new_zyugyoumei;
+  final new_kousimei;
+  final new_tannisuu;
+  final new_zyugyoukeisiki;
+  final new_syusseki;
+  final new_kyoukasyo;
+  final new_tesutokeisiki;
+  final new_omosirosa;
+  final new_toriyasusa;
+  final new_sougouhyouka;
+  final new_komento;
+  final new_name;
+  final new_senden;
+  final new_nenndo;
+
+  DetailsScreen({
+    Key? key,
+    required this.nenndo,
+    required this.zyugyoumei,
+    required this.kousimei,
+    required this.tannisuu,
+    required this.zyugyoukeisiki,
+    required this.syusseki,
+    required this.kyoukasyo,
+    required this.tesutokeisiki,
+    required this.omosirosa,
+    required this.toriyasusa,
+    required this.sougouhyouka,
+    required this.komento,
+    required this.name,
+    required this.ID,
+    required this.userid,
+    required this.senden,
+    //新しい講義データ
+    this.new_zyugyoumei,
+    this.new_kousimei,
+    this.new_tannisuu,
+    this.new_zyugyoukeisiki,
+    this.new_syusseki,
+    this.new_kyoukasyo,
+    this.new_tesutokeisiki,
+    this.new_omosirosa,
+    this.new_toriyasusa,
+    this.new_sougouhyouka,
+    this.new_komento,
+    this.new_name,
+    this.new_senden,
+    this.new_nenndo,
+  }) : super(key: key);
+
+  @override
+  _DetailsScreenState createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  Future<void> _updateData(String userid, String ID) async {
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku'
+    ];
+
+    for (String collection in collections) {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(collection)
+          .where('accountuid', isEqualTo: userid)
+          .where('ID', isEqualTo: ID)
+          .get();
+
+      List<DocumentSnapshot> documents = querySnapshot.docs;
+
+      for (DocumentSnapshot document in documents) {
+        document.reference.update({
+          'zyugyoumei': widget.new_zyugyoumei,
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(zyugyoumei),
+        title: Text(widget.zyugyoumei),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.mode_edit_outlined),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text("編集モード"),
+                      content: Text(
+                        "編集モードです\n各項目上で長押しをすると\n編集できます",
+                        textAlign: TextAlign.center,
+                      ),
+                      actions: <Widget>[
+                        // ボタン領域
+                        TextButton(
+                          child: Text("おけ"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }),
+        ],
       ),
       body: Container(
         margin: EdgeInsets.all(15),
@@ -234,274 +356,639 @@ class DetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '講師名',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text("授業名"),
+                        content: Column(
+                          children: [
+                            TextField(
+                              decoration: InputDecoration(
+                                  labelText: 'メールアドレス',
+                                  labelStyle: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.lightGreen))),
+                              onChanged: (String value) {
+                                setState(() {
+                                  widget.new_zyugyoumei = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                              child: Text("おけ"),
+                              onPressed: () async {
+                                _updateData(widget.userid, widget.ID);
+                              }),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '授業名',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.zyugyoumei ?? '不明',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                ),
-                child: Text(
-                  kousimei ?? '不明',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              Text(
-                '年度',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Text(
-                  nenndo ?? '不明'.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              Text(
-                '単位数',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: Text(
-                  tannisuu.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              Text(
-                '授業形式',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '講師名',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.kousimei ?? '不明',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                ),
-                child: Text(
-                  zyugyoukeisiki,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              Text(
-                '出席確認の有無',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                ),
-                child: Text(
-                  syusseki,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
-                ),
-              ),
-              Text(
-                '教科書の有無',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
-                ),
-                child: Text(
-                  kyoukasyo,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text("年度"),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '年度',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Text(
+                        widget.nenndo ?? '不明'.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                'テスト形式',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '単位数',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Text(
+                        widget.tannisuu.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 10,
-                  bottom: 10,
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '授業形式',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.zyugyoukeisiki,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  tesutokeisiki ?? '不明',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 15.sp,
-                  ),
+              ),
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '出席確認の有無',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.syusseki,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '教科書の有無',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.kyoukasyo,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(""),
+                        content: Text(
+                          "",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("やっぱやめる"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(child: Text("おけ"), onPressed: () {}),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'テスト形式',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 10,
+                      ),
+                      child: Text(
+                        widget.tesutokeisiki ?? '不明',
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Divider(),
               Container(
                 child: Column(
                   children: [
-                    Text(
-                      '講義の面白さ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp,
-                      ),
-                    ),
-                    Container(
-                        height: 200.h,
-                        child: SfRadialGauge(axes: <RadialAxis>[
-                          RadialAxis(
-                              minimum: 0,
-                              maximum: 5,
-                              showLabels: false,
-                              showTicks: false,
-                              axisLineStyle: AxisLineStyle(
-                                thickness: 0.2,
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Color.fromARGB(139, 134, 134, 134),
-                                thicknessUnit: GaugeSizeUnit.factor,
+                    GestureDetector(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(""),
+                              content: Text(
+                                "",
+                                textAlign: TextAlign.center,
                               ),
-                              pointers: <GaugePointer>[
-                                RangePointer(
-                                  value: omosirosa.toDouble(),
-                                  cornerStyle: CornerStyle.bothCurve,
-                                  color: Colors.lightGreen,
-                                  width: 0.2,
-                                  sizeUnit: GaugeSizeUnit.factor,
-                                )
+                              actions: <Widget>[
+                                // ボタン領域
+                                TextButton(
+                                  child: Text("やっぱやめる"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                TextButton(child: Text("おけ"), onPressed: () {}),
                               ],
-                              annotations: <GaugeAnnotation>[
-                                GaugeAnnotation(
-                                    positionFactor: 0.1,
-                                    angle: 90,
-                                    widget: Text(
-                                      omosirosa.toDouble().toStringAsFixed(0) +
-                                          ' / 5',
-                                      style: TextStyle(
-                                          fontSize: 50.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ))
-                              ])
-                        ])),
-                    Text(
-                      '単位の取りやすさ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp,
+                            );
+                          },
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '講義の面白さ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                            ),
+                          ),
+                          Container(
+                              height: 200.h,
+                              child: SfRadialGauge(axes: <RadialAxis>[
+                                RadialAxis(
+                                    minimum: 0,
+                                    maximum: 5,
+                                    showLabels: false,
+                                    showTicks: false,
+                                    axisLineStyle: AxisLineStyle(
+                                      thickness: 0.2,
+                                      cornerStyle: CornerStyle.bothCurve,
+                                      color: Color.fromARGB(139, 134, 134, 134),
+                                      thicknessUnit: GaugeSizeUnit.factor,
+                                    ),
+                                    pointers: <GaugePointer>[
+                                      RangePointer(
+                                        value: widget.omosirosa.toDouble(),
+                                        cornerStyle: CornerStyle.bothCurve,
+                                        color: Colors.lightGreen,
+                                        width: 0.2,
+                                        sizeUnit: GaugeSizeUnit.factor,
+                                      )
+                                    ],
+                                    annotations: <GaugeAnnotation>[
+                                      GaugeAnnotation(
+                                          positionFactor: 0.1,
+                                          angle: 90,
+                                          widget: Text(
+                                            widget.omosirosa
+                                                    .toDouble()
+                                                    .toStringAsFixed(0) +
+                                                ' / 5',
+                                            style: TextStyle(
+                                                fontSize: 50.sp,
+                                                fontWeight: FontWeight.bold),
+                                          ))
+                                    ])
+                              ])),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 200.h,
-                      child: SfRadialGauge(axes: <RadialAxis>[
-                        RadialAxis(
-                            minimum: 0,
-                            maximum: 5,
-                            showLabels: false,
-                            showTicks: false,
-                            axisLineStyle: AxisLineStyle(
-                              thickness: 0.2,
-                              cornerStyle: CornerStyle.bothCurve,
-                              color: Color.fromARGB(139, 134, 134, 134),
-                              thicknessUnit: GaugeSizeUnit.factor,
+                    GestureDetector(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(""),
+                              content: Text(
+                                "",
+                                textAlign: TextAlign.center,
+                              ),
+                              actions: <Widget>[
+                                // ボタン領域
+                                TextButton(
+                                  child: Text("やっぱやめる"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                TextButton(child: Text("おけ"), onPressed: () {}),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '単位の取りやすさ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
                             ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: toriyasusa.toDouble(),
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Colors.lightGreen,
-                                width: 0.2,
-                                sizeUnit: GaugeSizeUnit.factor,
-                              )
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  positionFactor: 0.1,
-                                  angle: 90,
-                                  widget: Text(
-                                    toriyasusa.toDouble().toStringAsFixed(0) +
-                                        ' / 5',
-                                    style: TextStyle(
-                                        fontSize: 50.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ))
-                            ])
-                      ]),
-                    ),
-                    Text(
-                      '総合評価',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20.sp,
+                          ),
+                          Container(
+                            height: 200.h,
+                            child: SfRadialGauge(axes: <RadialAxis>[
+                              RadialAxis(
+                                  minimum: 0,
+                                  maximum: 5,
+                                  showLabels: false,
+                                  showTicks: false,
+                                  axisLineStyle: AxisLineStyle(
+                                    thickness: 0.2,
+                                    cornerStyle: CornerStyle.bothCurve,
+                                    color: Color.fromARGB(139, 134, 134, 134),
+                                    thicknessUnit: GaugeSizeUnit.factor,
+                                  ),
+                                  pointers: <GaugePointer>[
+                                    RangePointer(
+                                      value: widget.toriyasusa.toDouble(),
+                                      cornerStyle: CornerStyle.bothCurve,
+                                      color: Colors.lightGreen,
+                                      width: 0.2,
+                                      sizeUnit: GaugeSizeUnit.factor,
+                                    )
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(
+                                        positionFactor: 0.1,
+                                        angle: 90,
+                                        widget: Text(
+                                          widget.toriyasusa
+                                                  .toDouble()
+                                                  .toStringAsFixed(0) +
+                                              ' / 5',
+                                          style: TextStyle(
+                                              fontSize: 50.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ))
+                                  ])
+                            ]),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 200.h,
-                      child: SfRadialGauge(axes: <RadialAxis>[
-                        RadialAxis(
-                            minimum: 0,
-                            maximum: 5,
-                            showLabels: false,
-                            showTicks: false,
-                            axisLineStyle: AxisLineStyle(
-                              thickness: 0.2,
-                              cornerStyle: CornerStyle.bothCurve,
-                              color: Color.fromARGB(139, 134, 134, 134),
-                              thicknessUnit: GaugeSizeUnit.factor,
+                    GestureDetector(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: Text(""),
+                              content: Text(
+                                "",
+                                textAlign: TextAlign.center,
+                              ),
+                              actions: <Widget>[
+                                // ボタン領域
+                                TextButton(
+                                  child: Text("やっぱやめる"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                TextButton(child: Text("おけ"), onPressed: () {}),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '総合評価',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
                             ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: sougouhyouka.toDouble(),
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Colors.lightGreen,
-                                width: 0.2,
-                                sizeUnit: GaugeSizeUnit.factor,
-                              )
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  positionFactor: 0.1,
-                                  angle: 90,
-                                  widget: Text(
-                                    sougouhyouka.toDouble().toStringAsFixed(0) +
-                                        ' / 5',
-                                    style: TextStyle(
-                                        fontSize: 50.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ))
-                            ])
-                      ]),
+                          ),
+                          Container(
+                            height: 200.h,
+                            child: SfRadialGauge(axes: <RadialAxis>[
+                              RadialAxis(
+                                  minimum: 0,
+                                  maximum: 5,
+                                  showLabels: false,
+                                  showTicks: false,
+                                  axisLineStyle: AxisLineStyle(
+                                    thickness: 0.2,
+                                    cornerStyle: CornerStyle.bothCurve,
+                                    color: Color.fromARGB(139, 134, 134, 134),
+                                    thicknessUnit: GaugeSizeUnit.factor,
+                                  ),
+                                  pointers: <GaugePointer>[
+                                    RangePointer(
+                                      value: widget.sougouhyouka.toDouble(),
+                                      cornerStyle: CornerStyle.bothCurve,
+                                      color: Colors.lightGreen,
+                                      width: 0.2,
+                                      sizeUnit: GaugeSizeUnit.factor,
+                                    )
+                                  ],
+                                  annotations: <GaugeAnnotation>[
+                                    GaugeAnnotation(
+                                        positionFactor: 0.1,
+                                        angle: 90,
+                                        widget: Text(
+                                          widget.sougouhyouka
+                                                  .toDouble()
+                                                  .toStringAsFixed(0) +
+                                              ' / 5',
+                                          style: TextStyle(
+                                              fontSize: 50.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ))
+                                  ])
+                            ]),
+                          ),
+                        ],
+                      ),
                     ),
                     Divider(),
                   ],
@@ -510,56 +997,143 @@ class DetailsScreen extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '講義に関するコメント',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                  GestureDetector(
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(""),
+                            content: Text(
+                              "",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              // ボタン領域
+                              TextButton(
+                                child: Text("やっぱやめる"),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(child: Text("おけ"), onPressed: () {}),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '講義に関するコメント',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Text(
+                          widget.komento ?? '不明',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    komento ?? '不明',
-                    style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16.sp,
+                  GestureDetector(
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(""),
+                            content: Text(
+                              "",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              // ボタン領域
+                              TextButton(
+                                child: Text("やっぱやめる"),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(child: Text("おけ"), onPressed: () {}),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'ニックネーム',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            bottom: 50,
+                          ),
+                          child: Text(
+                            widget.name ?? '不明',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Text(
-                    'ニックネーム',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 50,
-                    ),
-                    child: Text(
-                      name ?? '不明',
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    '宣伝',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 50,
-                    ),
-                    child: Text(
-                      senden ?? '不明',
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
-                      ),
+                  GestureDetector(
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(""),
+                            content: Text(
+                              "",
+                              textAlign: TextAlign.center,
+                            ),
+                            actions: <Widget>[
+                              // ボタン領域
+                              TextButton(
+                                child: Text("やっぱやめる"),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              TextButton(child: Text("おけ"), onPressed: () {}),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '宣伝',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            bottom: 50,
+                          ),
+                          child: Text(
+                            widget.senden ?? '不明',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 20.0.h),
@@ -654,147 +1228,6 @@ class DetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Do something when FAB is pressed
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) {
-              return Edit(
-                id: ID,
-              );
-            }),
-          );
-        },
-        child: Icon(Icons.mode_edit_outlined),
-      ),
     );
   }
-}
-
-class Edit extends StatefulWidget {
-  final String id;
-
-  const Edit({Key? key, required this.id}) : super(key: key);
-
-  @override
-  State<Edit> createState() => _EditState();
-}
-
-class _EditState extends State<Edit> {
-
-  //投稿データ(現在
-  String? iscategory = '';
-  String? isbumon = 'ラク単';
-  var _text = 'Hello'; //初期値はHello
-  String? isnendo = '';
-  String? isgakki = '';
-  String? iszyugyoumei = '';
-  String? iskousimei = '';
-  String? istanni = '';
-  String? iszyugyoukeisiki = '';
-  String? issyusseki = '';
-  String? iskyoukasyo = '';
-  String? istesutokeisiki = '';
-  String? istesutokeikou = '';
-  String? isname = '';
-
-  String? iskomento = '';
-  String? issenden = '';
-  //総合評価
-  double _hyouka = 0;
-
-  //面白さ
-  double _omosirosa = 0;
-
-  //単位の取りやすさ
-  double _toriyasusa = 0;
-
-  //投稿データ(現在
-
-  Future<List<DocumentSnapshot>> _getData() async {
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-    List<DocumentSnapshot> documents = [];
-    for (String collection in collections) {
-      QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection(collection).get();
-      documents.addAll(querySnapshot.docs);
-    }
-
-    return documents;
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: Text('編集画面'),
-        ),
-    body:FutureBuilder(
-        future: _getData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            List<DocumentSnapshot> documents =
-            snapshot.data as List<DocumentSnapshot>;
-            List<Widget> cards = [];
-            for (DocumentSnapshot document in documents) {
-              Map<String, dynamic> data =
-              document.data() as Map<String, dynamic>;
-              if (data['ID'] == widget.id) {
-                return Container(
-                  child: Scrollbar(
-                    isAlwaysShown: true,
-                    child: Padding(
-                      padding: EdgeInsets.all(15.0), //全方向にパディング１００
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Center(
-                              child:   Text(
-                                '投稿する授業の部門を選んでください',
-                                style: GoogleFonts.notoSans(
-                                  // フォントをnotoSansに指定(
-                                  textStyle: TextStyle(
-                                    fontSize: 20,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-
-                            ),
-                            Text(document['bumon'])
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
-            }
-          }
-          return SizedBox.shrink(); // 条件に合致しない場合には空のSizedBoxを返す
-        }
-    )
-
-  );
 }

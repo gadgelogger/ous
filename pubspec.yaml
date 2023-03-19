@@ -92,6 +92,8 @@ dependencies:
   badges: ^3.0.2
   flutter_dialogs: ^3.0.0
   uuid: ^3.0.7
+  share: ^2.0.4
+  quick_actions: ^1.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

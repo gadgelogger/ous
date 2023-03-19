@@ -20,6 +20,7 @@ import 'package:algolia/algolia.dart';
 import 'dart:core';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 
 

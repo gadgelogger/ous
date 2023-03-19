@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main.dart';
+
 class Map extends StatelessWidget {
   const Map({Key? key}) : super(key: key);
 
@@ -12,6 +14,17 @@ class Map extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return MyHomePage(title: 'home');
+                  }),
+                );
+              },
+            ),
             elevation: 0,
             title: Text('学内マップ'),
             bottom: TabBar(
