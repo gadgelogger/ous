@@ -65,7 +65,7 @@ class _SettingState extends State<Setting> {
           height: 100,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: Image.asset('assets/images/icon.jpeg'),
+            child: Image.asset('assets/images/icon.png'),
           ),
         ),
         applicationLegalese: "@TAN_Q_BOT_LOCAL",
@@ -174,7 +174,7 @@ class _SettingState extends State<Setting> {
                     showLicensePage(
                       context: context,
                       applicationName: "非公式岡理アプリ",
-                      applicationIcon: Image.asset("assets/icon/icon.png"),
+                      applicationIcon: Image.asset("assets/images/icon.png"),
                       applicationLegalese: "@TAN_Q_BOT_LOCAL",
                     );
                   }),
