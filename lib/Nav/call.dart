@@ -23,7 +23,18 @@ class Call extends StatelessWidget {
     ),
     body: ListView(
       children: <Widget>[
-        ListTile(
+            Container(
+              child: ListTile(
+                title: Text(
+                  "岡山キャンパス",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: Colors.lightGreen[400],
+              ),
+            ),
+            ListTile(
             title: Text('健康管理センター(外線)',),
             subtitle: Text('0862568434'),
             trailing: Icon(Icons.call),
@@ -137,9 +148,52 @@ class Call extends StatelessWidget {
           trailing: Icon(Icons.call),
           onTap: () => launch('tel:0862568438'),
         ),
-        new Divider(
-          height: 1.0,
-          indent: 1.0,
+        Container(
+          child: ListTile(
+            title: Text(
+              "今治キャンパス",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+          ),
+          decoration: BoxDecoration(
+            color: Colors.lightGreen[400],
+          ),
+        ),
+        ListTile(
+          title: Text('キャリア支援係'),
+          subtitle: Text('0898529017'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0898529017'),
+        ),
+        ListTile(
+          title: Text('教務係'),
+          subtitle: Text('0898529029'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0898529029'),
+        ),
+        ListTile(
+          title: Text('学生係'),
+          subtitle: Text('0898529019'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0898529019'),
+        ),
+        ListTile(
+          title: Text('庶務係'),
+          subtitle: Text('0898529021'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0898529021'),
+        ),
+        ListTile(
+          title: Text('経理係'),
+          subtitle: Text('0898529025'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0898529025'),
+        ),
+        ListTile(
+          title: Text('グローバル教育センター'),
+          subtitle: Text('0862569814'),
+          trailing: Icon(Icons.call),
+          onTap: () => launch('tel:0862569814'),
         ),
       ],
     ),  );

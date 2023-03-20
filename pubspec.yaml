@@ -94,6 +94,10 @@ dependencies:
   uuid: ^3.0.7
   share: ^2.0.4
   quick_actions: ^1.0.2
+  cookie_jar: ^3.0.1
+  webview_cookie_manager: ^2.0.6
+  map_launcher: ^2.5.0+1
+  flutter_svg: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

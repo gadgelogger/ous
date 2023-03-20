@@ -7,6 +7,7 @@ import 'package:ous/info/3.dart';
 import 'package:ous/info/4.dart';
 import 'package:ous/info/5.dart';
 import 'package:ous/info/6.dart';
+import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
 class Info extends StatelessWidget {
   const Info({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class Info extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: 7,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -54,6 +55,11 @@ class Info extends StatelessWidget {
                     fontSize: 15.0.sp,
                   ),
                 ),
+                Text('キャリア支援センター',
+                  style: TextStyle(
+                    fontSize: 15.0.sp,
+                  ),
+                ),
                 Text('おかりかチャンネル',
                   style: TextStyle(
                     fontSize: 15.0.sp,
@@ -74,6 +80,7 @@ class Info extends StatelessWidget {
               news(),
               Departmentreport(),
               report(),
+              business(),
               movie(),
             ],
           ),
