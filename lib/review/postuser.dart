@@ -1,4 +1,4 @@
-import 'dart:async';
+
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,19 +16,6 @@ class MultipleCollectionsPage extends StatefulWidget {
 
 class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  late StreamController<List<DocumentSnapshot>> _streamController;
-  @override
-  void initState() {
-    super.initState();
-    _streamController = StreamController();
-    _getData();
-  }
-
-  @override
-  void dispose() {
-    _streamController.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +23,8 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       appBar: AppBar(
         title: Text('投稿した評価'),
       ),
-      body: StreamBuilder(
-        stream: _getData(),
+      body: FutureBuilder(
+        future: _getData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -50,14 +37,11 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
           } else {
             List<DocumentSnapshot> documents =
             snapshot.data as List<DocumentSnapshot>;
-            List<String> documentIDs = [];
             List<Widget> cards = [];
             for (DocumentSnapshot document in documents) {
               Map<String, dynamic> data =
               document.data() as Map<String, dynamic>;
-              if (data['accountuid'] == _auth.currentUser!.uid &&
-                  !documentIDs.contains(data['ID'])) {
-                documentIDs.add(data['ID']);
+              if (data['accountuid'] == _auth.currentUser!.uid) {
                 cards.add(GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -132,7 +116,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                                     topLeft: Radius.circular(8),
                                     bottomRight: Radius.circular(8),
                                   ) // green shaped
-                                  ),
+                              ),
                               child: Text(
                                 data['bumon'],
                                 style: TextStyle(fontSize: 15.sp),
@@ -148,25 +132,25 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
             if (cards.isEmpty) {
               return Center(
                   child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                      width: 200,
-                      height: 200,
-                      child: Image(
-                        image: AssetImage('assets/icon/found.gif'),
-                        fit: BoxFit.cover,
-                      )),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    '何も投稿していません',
-                    style: TextStyle(fontSize: 18.sp),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ));
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 200,
+                          height: 200,
+                          child: Image(
+                            image: AssetImage('assets/icon/found.gif'),
+                            fit: BoxFit.cover,
+                          )),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        '何も投稿していません',
+                        style: TextStyle(fontSize: 18.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ));
             } else {
               return GridView.count(
                 crossAxisCount: 2, // 2列に設定
@@ -179,7 +163,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
     );
   }
 
-  Stream<List<DocumentSnapshot>> _getData() {
+  Future<List<DocumentSnapshot>> _getData() async {
     List<String> collections = [
       'rigaku',
       'kougakubu',
@@ -192,26 +176,16 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       'kiban',
       'kyousyoku'
     ];
-    StreamController<List<DocumentSnapshot>> streamController =
-        StreamController();
-
-    Future(() async {
-      List<DocumentSnapshot> documents = [];
-      for (String collection in collections) {
-        FirebaseFirestore.instance
-            .collection(collection)
-            .snapshots()
-            .listen((querySnapshot) {
-          List<DocumentSnapshot> currentDocuments = querySnapshot.docs;
-          documents.addAll(currentDocuments);
-          streamController.add(documents);
-        });
-      }
-    });
-
-    return streamController.stream;
+    List<DocumentSnapshot> documents = [];
+    for (String collection in collections) {
+      QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection(collection).get();
+      documents.addAll(querySnapshot.docs);
+    }
+    return documents;
   }
 }
+
 
 class DetailsScreen extends StatefulWidget {
   //現在の講義データ

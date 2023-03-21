@@ -91,5 +91,12 @@
             <string>here-location</string>
             <string>tomtomgo</string>
         </array>
+        <key>NSAppTransportSecurity</key>
+        <dict>
+            <key>NSAllowsArbitraryLoads</key>
+            <true/>
+            <key>NSAllowsArbitraryLoadsInWebContent</key>
+            <true/>
+        </dict>
 </dict>
 </plist>

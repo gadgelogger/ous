@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_webview_plugin_ios_android/flutter_webview_plugin_ios_android.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
@@ -35,12 +37,19 @@ class _NavBarState extends State<NavBar> {
 
     _stream =
         FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+
+
   }
 
 //UIDをFirebaseAythから取得
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final uid = FirebaseAuth.instance.currentUser?.uid;
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +134,7 @@ class _NavBarState extends State<NavBar> {
                   mode: LaunchMode.externalApplication);
             },
           ),
+
           ListTile(
             leading: Icon(Icons.book_outlined),
             title: Text('学生便覧'),

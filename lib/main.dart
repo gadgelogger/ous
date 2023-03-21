@@ -35,7 +35,6 @@ class Application {
 //algolia
 
 void main() async {
-
   // 画面回転無効化
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
