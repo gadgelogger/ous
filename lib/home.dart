@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:share/share.dart';
@@ -33,6 +34,7 @@ class _homeState extends State<home> {
     getWeatherData();
   }
 
+  //天気予報
   void getWeatherData() async {
     String city = "Okayama";
     String apiKey = "d4838ba76c2416889981636c11a76054";
@@ -46,6 +48,44 @@ class _homeState extends State<home> {
       setState(() {
         weatherData = jsonData;
       });
+    }
+  }
+
+//岡山駅
+  Future<String> fetchApproachCaption() async {
+    final response = await http.get(Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return 'データがありません';
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+//理大
+  Future<String> fetchApproachCaption1() async {
+    final response = await http.get(Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return 'データがありません';
+      }
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
@@ -146,9 +186,36 @@ class _homeState extends State<home> {
                   width: 180.w, //横幅
                   height: 50.h, //高さ
                   child: ElevatedButton(
-                    child: const Text(
-                      '岡山駅西口発',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          '岡山駅西口発',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        FutureBuilder<String>(
+                          future: fetchApproachCaption(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var approachCaption = snapshot.data;
+                              if (approachCaption!.contains('あと')) {
+                                return Text(approachCaption);
+                              } else {
+                                var index = approachCaption.indexOf(':');
+                                var time =
+                                    approachCaption.substring(0, index + 3);
+                                return Text(time);
+                              }
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            }
+                            return Container(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator());
+                          },
+                        ),
+                      ],
                     ),
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
@@ -166,9 +233,38 @@ class _homeState extends State<home> {
                   width: 180.w, //横幅
                   height: 50.h, //高さ
                   child: ElevatedButton(
-                    child: const Text(
-                      '岡山理科大学\正門発',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          '岡山理科大学\正門発',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        FutureBuilder<String>(
+                          future: fetchApproachCaption1(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              var approachCaption = snapshot.data;
+                              if (approachCaption!.contains('あと')) {
+                                var index = approachCaption.indexOf('で到着予定');
+                                var time = approachCaption.substring(0, index);
+                                return Text(time);
+                              } else {
+                                var index = approachCaption.indexOf(':');
+                                var time =
+                                    approachCaption.substring(0, index + 3);
+                                return Text(time);
+                              }
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.error.toString());
+                            }
+                            return Container(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator());
+                          },
+                        ),
+                      ],
                     ),
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
