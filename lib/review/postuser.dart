@@ -119,7 +119,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                               ),
                               child: Text(
                                 data['bumon'],
-                                style: TextStyle(fontSize: 15.sp),
+                                style: TextStyle(fontSize: 15.sp,color: Colors.black),
                                 // Your text
                               )),
                         ),

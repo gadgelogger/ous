@@ -63,7 +63,7 @@ class _homeState extends State<home> {
       if (approachCaption.isNotEmpty) {
         return approachCaption[0].text.trim();
       } else {
-        return 'データがありません';
+        return '終了';
       }
     } else {
       throw Exception('Failed to load data');
@@ -82,7 +82,7 @@ class _homeState extends State<home> {
       if (approachCaption.isNotEmpty) {
         return approachCaption[0].text.trim();
       } else {
-        return 'データがありません';
+        return '終了';
       }
     } else {
       throw Exception('Failed to load data');
@@ -573,7 +573,7 @@ class _WeatherState extends State<Weather> {
                                               Text(
                                                 date,
                                                 style:
-                                                    TextStyle(fontSize: 20.sp),
+                                                    TextStyle(fontSize: 20.sp,color: Colors.black),
                                               )
                                             else
                                               SizedBox(
@@ -593,7 +593,7 @@ class _WeatherState extends State<Weather> {
                                                             forecast[index]
                                                                 ['dt_txt'])),
                                                     style: TextStyle(
-                                                        fontSize: 15.sp),
+                                                        fontSize: 15.sp,color: Colors.black),
                                                   ),
                                                   Image.network(
                                                     Uri.encodeFull(
@@ -603,7 +603,7 @@ class _WeatherState extends State<Weather> {
                                                   Text(
                                                     "${(forecast[index]['main']['temp'] - 273.15).toStringAsFixed(0)}°",
                                                     style: TextStyle(
-                                                        fontSize: 15.sp),
+                                                        fontSize: 15.sp,color: Colors.black),
                                                   ),
                                                 ],
                                               ),
