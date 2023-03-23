@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:html/parser.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:share/share.dart';
+import 'package:uuid/uuid.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx/webviewx.dart';
@@ -89,6 +91,23 @@ class _homeState extends State<home> {
       throw Exception('Failed to load data');
     }
   }
+
+
+
+
+
+  Future<void> addRandomIdToAllDocuments() async {
+    final QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance.collection('zyuui').get();
+    final List<QueryDocumentSnapshot<Map<String, dynamic>>> documents = querySnapshot.docs;
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+      batch.update(document.reference, {'ID': Uuid().v4()});
+    }
+
+    await batch.commit();
+  }
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -174,6 +193,7 @@ class _homeState extends State<home> {
               ],
             ),
             Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              ElevatedButton(onPressed: (){addRandomIdToAllDocuments();}, child: Text('set')),
               Text(
                 'バス運行情報',
                 style: TextStyle(
