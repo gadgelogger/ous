@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rxdart/streams.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,153 +18,54 @@ class MultipleCollectionsPage extends StatefulWidget {
 class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('投稿した評価'),
       ),
-      body: FutureBuilder(
-        future: _getData(),
-        builder: (context, snapshot) {
+      body: StreamBuilder<List<QuerySnapshot>>(
+        stream: _getStream(),
+        builder: (BuildContext context, AsyncSnapshot<List<QuerySnapshot>> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            List<DocumentSnapshot> documents =
-            snapshot.data as List<DocumentSnapshot>;
-            List<Widget> cards = [];
-            for (DocumentSnapshot document in documents) {
-              Map<String, dynamic> data =
-              document.data() as Map<String, dynamic>;
-              if (data['accountuid'] == _auth.currentUser!.uid) {
-                cards.add(GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          zyugyoumei: data['zyugyoumei'],
-                          kousimei: data['kousimei'],
-                          tannisuu: data['tannisuu'],
-                          zyugyoukeisiki: data['zyugyoukeisiki'],
-                          syusseki: data['syusseki'],
-                          kyoukasyo: data['kyoukasyo'],
-                          tesutokeisiki: data['tesutokeisiki'],
-                          omosirosa: data['omosirosa'],
-                          toriyasusa: data['toriyasusa'],
-                          sougouhyouka: data['sougouhyouka'],
-                          komento: data['komento'],
-                          name: data['name'],
-                          senden: data['senden'],
-                          nenndo: data['nenndo'],
-                          ID: data['ID'],
-                          userid: _auth.currentUser!.uid,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    child: Stack(
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.all(15),
-                            child: Align(
-                                alignment: const Alignment(
-                                  -0.8,
-                                  -0.5,
-                                ),
-                                child: Text(
-                                  data['zyugyoumei'],
-                                  style: TextStyle(fontSize: 20.sp),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ))),
-                        Align(
-                          alignment: const Alignment(-0.8, 0.4),
-                          child: Text(
-                            data['gakki'],
-                            style: TextStyle(
-                                color: Colors.lightGreen, fontSize: 15.sp),
-                          ),
-                        ),
-                        Align(
-                          alignment: const Alignment(-0.8, 0.8),
-                          child: Text(
-                            data['kousimei'],
-                            overflow: TextOverflow.ellipsis, //ここ！！
-                            style: TextStyle(fontSize: 15.sp),
-                          ),
-                        ),
-                        Positioned(
-                          top: 0,
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 6),
-                              decoration: BoxDecoration(
-                                  color: data['bumon'] == 'エグ単'
-                                      ? Colors.red
-                                      : Colors.lightGreen[200],
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ) // green shaped
-                              ),
-                              child: Text(
-                                data['bumon'],
-                                style: TextStyle(fontSize: 15.sp,color: Colors.black),
-                                // Your text
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                ));
-              }
-            }
-            if (cards.isEmpty) {
-              return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: 200,
-                          height: 200,
-                          child: Image(
-                            image: AssetImage('assets/icon/found.gif'),
-                            fit: BoxFit.cover,
-                          )),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        '何も投稿していません',
-                        style: TextStyle(fontSize: 18.sp),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ));
-            } else {
-              return GridView.count(
-                crossAxisCount: 2, // 2列に設定
-                children: cards,
-              );
+            return CircularProgressIndicator();
+          }
+
+          List<DocumentSnapshot> documents = [];
+
+          if (snapshot.hasData) {
+            for (QuerySnapshot querySnapshot in snapshot.data!) {
+              documents.addAll(querySnapshot.docs);
             }
           }
+
+          return ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (BuildContext context, int index) {
+              DocumentSnapshot document = documents[index];
+              return ListTile(
+                title: Text(document['zyugyoumei']),
+                subtitle: Text(document['kousimei']),
+              );
+            },
+          );
         },
-      ),
+      )
+
+
+
     );
   }
+  Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    String? uid = user?.uid;
 
-  Future<List<DocumentSnapshot>> _getData() async {
     List<String> collections = [
       'rigaku',
       'kougakubu',
@@ -176,14 +78,21 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
       'kiban',
       'kyousyoku'
     ];
-    List<DocumentSnapshot> documents = [];
-    for (String collection in collections) {
-      QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection(collection).get();
-      documents.addAll(querySnapshot.docs);
-    }
-    return documents;
+
+    List<Stream<QuerySnapshot<Map<String, dynamic>>>> streams = collections
+        .map((collection) => FirebaseFirestore.instance
+        .collection(collection)
+        .where('accountuid', isEqualTo: uid)
+        .snapshots())
+        .toList();
+
+    yield* CombineLatestStream.list(streams);
   }
+
+
+
+
+
 }
 
 

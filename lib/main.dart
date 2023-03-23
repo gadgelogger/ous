@@ -21,6 +21,7 @@ import 'dart:core';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:quick_actions/quick_actions.dart';
+import 'package:flutter/services.dart';
 
 
 
@@ -283,14 +284,15 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(child: pages[_currentindex]),
       drawer: NavBar(),
       backgroundColor: Color.fromARGB(0, 253, 253, 246),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar:NavigationBar(
         selectedIndex: _currentindex,
-        onDestinationSelected: (index) => setState(() {
-          _currentindex = index;
-        }),
-
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentindex = index;
+          });
+          HapticFeedback.heavyImpact(); // ライトインパクトの振動フィードバック
+        },
         destinations: [
-
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             label: 'ホーム',
@@ -299,18 +301,12 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.info_outline),
             label: 'お知らせ',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.school_outlined),
             label: '講義評価',
           ),
-          //      NavigationDestination(
-          //      icon: Icon(Icons.business_center_outlined),
-          //    label: '就活関連',
-          //   ),
         ],
-
-      ),
+      )
 
 
     );
