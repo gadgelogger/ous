@@ -193,7 +193,6 @@ class _homeState extends State<home> {
               ],
             ),
             Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              ElevatedButton(onPressed: (){addRandomIdToAllDocuments();}, child: Text('set')),
               Text(
                 'バス運行情報',
                 style: TextStyle(
