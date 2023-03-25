@@ -145,7 +145,7 @@ class _okayamaState extends State<okayama> {
     return Scaffold(
         body: Container(
             child: SfPdfViewer.network(
-                'http://www1.ous.ac.jp/gakusyu/2017rikadaimap2.pdf')),
+                'https://www.ous.ac.jp/common/files//229/ridaimapA3_omote(1).pdf')),
         floatingActionButton: Column(
           verticalDirection: VerticalDirection.up,
           mainAxisSize: MainAxisSize.min,
