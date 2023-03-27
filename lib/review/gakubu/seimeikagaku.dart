@@ -11,7 +11,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
-import 'package:ous/review/view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:highlight_text/highlight_text.dart';
 import 'package:algolia/algolia.dart';
@@ -19,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 import '../../review.dart';
@@ -219,7 +219,8 @@ class _seimeiState extends State<seimei> {
                                 name: hit.data['name'],
                                 senden: hit.data['senden'],
                                 nenndo: hit.data['nenndo'],
-
+                                date: Timestamp.fromMillisecondsSinceEpoch(hit.data['lastmodified']).toDate(),
+                                tesutokeikou:hit.data['tesutokeikou'],
                               ),
                             ),
                           );
@@ -357,7 +358,8 @@ class DetailsScreen extends StatefulWidget {
   final name;
   final senden;
   final nenndo;
-
+  final date;
+  final tesutokeikou;
   const DetailsScreen({
     Key? key,
     required this.nenndo,
@@ -374,6 +376,8 @@ class DetailsScreen extends StatefulWidget {
     required this.komento,
     required this.name,
     required this.senden,
+    required this.date,
+    required this.tesutokeikou,
   }) : super(key: key);
 
   @override
@@ -430,6 +434,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.zyugyoumei),
@@ -763,6 +770,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ),
                           Text(
+                            'テスト傾向',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                            ),
+                          ),                      Padding(
+                              padding: EdgeInsets.only(
+                                top: 10,
+                                bottom: 10,
+                              ),
+                              child: Text(widget.tesutokeikou)
+                          ),
+                          Text(
                             'ニックネーム',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -771,7 +791,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              bottom: 50,
+                              bottom: 10,
+                              top: 10,
                             ),
                             child: SelectableText(
                               widget.name ?? '不明',
@@ -779,6 +800,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 fontWeight: FontWeight.normal,
                                 fontSize: 15.sp,
                               ),
+                            ),
+                          ),
+                          Text(
+                            '投稿日・更新日',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                            ),
+                          ),                      Padding(
+                            padding: EdgeInsets.only(
+                              top: 10,
+                              bottom: 10,
+                            ),
+                            child:Text(
+                              DateFormat('yyyy年MM月dd日 HH:mm').format(widget.date),
+                              style: TextStyle(fontSize: 15.sp),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
@@ -790,14 +828,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              bottom: 50,
+                              bottom: 10,
+                              top: 10,
                             ),
                             child: SelectableText(
-                              widget.senden ?? '不明',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15.sp,
-                              ),
+                              widget.senden?.toString() ?? '不明',
+                              style: TextStyle(fontSize: 15.sp),
                             ),
                           ),
                           SizedBox(height: 20.0.h),

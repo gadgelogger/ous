@@ -30,14 +30,16 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
   String _approachInfoText = '';
   var weatherData;
+  var weatherData1;
 
   @override
   void initState() {
     super.initState();
     getWeatherData();
+    getWeatherData1();
   }
 
-  //天気予報
+  //天気予報　岡山
   void getWeatherData() async {
     String city = "Okayama";
     String apiKey = "d4838ba76c2416889981636c11a76054";
@@ -54,43 +56,68 @@ class _homeState extends State<home> {
     }
   }
 
-//岡山駅
-  Future<String> fetchApproachCaption() async {
-    final response = await http.get(Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
+  void getWeatherData1() async {
+    String city = "Aichi-ken";
+    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String url =
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
+
+    var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
+      var jsonData = jsonDecode(response.body);
+      setState(() {
+        weatherData1 = jsonData;
+      });
+    }
+  }
 
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
+//岡山駅
+  Stream<String> fetchApproachCaption() async* {
+    while (true) {
+      final response = await http.get(Uri.parse(
+          'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
+
+      if (response.statusCode == 200) {
+        var document = parse(response.body);
+        var approachCaption = document.getElementsByClassName('approachCaption');
+
+        if (approachCaption.isNotEmpty) {
+          yield approachCaption[0].text.trim();
+        } else {
+          yield '終了';
+        }
       } else {
-        return '終了';
+        throw Exception('Failed to load data');
       }
-    } else {
-      throw Exception('Failed to load data');
+
+      await Future.delayed(Duration(seconds: 10));
     }
   }
 
 //理大
-  Future<String> fetchApproachCaption1() async {
-    final response = await http.get(Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
+  Stream<String> fetchApproachCaption1() async* {
+    while (true) {
+      final response = await http.get(Uri.parse(
+          'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'));
 
-    if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
+      if (response.statusCode == 200) {
+        var document = parse(response.body);
+        var approachCaption = document.getElementsByClassName('approachCaption');
 
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
+        if (approachCaption.isNotEmpty) {
+          yield approachCaption[0].text.trim();
+        } else {
+          yield '終了';
+        }
       } else {
-        return '終了';
+        throw Exception('Failed to load data');
       }
-    } else {
-      throw Exception('Failed to load data');
+
+      await Future.delayed(Duration(seconds: 10));
     }
   }
+
 
 
 
@@ -139,7 +166,7 @@ class _homeState extends State<home> {
             Stack(
               children: [
                 Container(
-                  width: 500.0,
+                  width: 500.0.w,
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(20),
@@ -163,21 +190,27 @@ class _homeState extends State<home> {
                                   builder: (_) => Weather(),
                                 ));
                               },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child:Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Container(
-                                    height: 50.h,
-                                    width: 50.w,
-                                    child: Image.network(
-                                        "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@2x.png"),
-                                  ),
-                                  Text(
-                                    (weatherData['main']['temp'] - 273.15)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('岡山',style: TextStyle(fontSize: 15.sp),),
+                                      Container(
+                                        height: 50.h,
+                                        width: 50.w,
+                                        child: Image.network(
+                                            "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@2x.png"),
+                                      ),
+                                      Text(
+                                        (weatherData['main']['temp'] - 273.15)
                                             .toStringAsFixed(0) +
-                                        "°C",
-                                    style: TextStyle(
-                                        fontSize: 15.sp, color: Colors.white),
+                                            "°C",
+                                        style: TextStyle(
+                                            fontSize: 15.sp, color: Colors.white),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -189,6 +222,52 @@ class _homeState extends State<home> {
                             child: CircularProgressIndicator(),
                           ),
                         ),
+                ),
+                Positioned(
+                  top: 60,
+                  right: 20,
+                  child: weatherData1 != null
+                      ? Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => imabari(),
+                          ));
+                        },
+                        child:Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('今治',style: TextStyle(fontSize: 15.sp),),
+
+                                Container(
+                                  height: 50.h,
+                                  width: 50.w,
+                                  child: Image.network(
+                                      "http://openweathermap.org/img/wn/${weatherData1['weather'][0]['icon']}@2x.png"),
+                                ),
+                                Text(
+                                  (weatherData1['main']['temp'] - 273.15)
+                                      .toStringAsFixed(0) +
+                                      "°C",
+                                  style: TextStyle(
+                                      fontSize: 15.sp, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )
+                      : Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -213,8 +292,8 @@ class _homeState extends State<home> {
                           '岡山駅西口発',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        FutureBuilder<String>(
-                          future: fetchApproachCaption(),
+                        StreamBuilder<String>(
+                          stream: fetchApproachCaption(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               var approachCaption = snapshot.data;
@@ -230,8 +309,8 @@ class _homeState extends State<home> {
                               return Text(snapshot.error.toString());
                             }
                             return Container(
-                                height: 30,
-                                width: 30,
+                                height: 30.h,
+                                width: 30.w,
                                 child: CircularProgressIndicator());
                           },
                         ),
@@ -261,8 +340,8 @@ class _homeState extends State<home> {
                           '岡山理科大学\正門発',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        FutureBuilder<String>(
-                          future: fetchApproachCaption1(),
+                        StreamBuilder<String>(
+                          stream: fetchApproachCaption1(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               var approachCaption = snapshot.data;
@@ -280,8 +359,8 @@ class _homeState extends State<home> {
                               return Text(snapshot.error.toString());
                             }
                             return Container(
-                                height: 30,
-                                width: 30,
+                                height: 30.h,
+                                width: 30.w,
                                 child: CircularProgressIndicator());
                           },
                         ),
@@ -457,7 +536,7 @@ class _WeatherState extends State<Weather> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 20.h,
                       ),
                       Text(
                         weatherData['weather'][0]['description'],
@@ -466,7 +545,7 @@ class _WeatherState extends State<Weather> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 20.h,
                       ),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -476,7 +555,7 @@ class _WeatherState extends State<Weather> {
                               children: [
                                 Text(
                                   '降水量',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 15.sp),
                                 ),
                                 Text(
                                   weatherData['rain'] != null
@@ -484,65 +563,65 @@ class _WeatherState extends State<Weather> {
                                           "mm"
                                       : "0mm",
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 30.sp,
                                   ),
                                 ),
                               ],
                             ),
-                            Container(height: 50, child: VerticalDivider()),
+                            Container(height: 50.h, child: VerticalDivider()),
                             Column(
                               children: [
                                 Text(
                                   '湿度',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 15.sp),
                                 ),
                                 Text(
                                   weatherData['main']['humidity'].toString() +
                                       "%",
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 30.sp,
                                   ),
                                 ),
                               ],
                             ),
-                            Container(height: 50, child: VerticalDivider()),
+                            Container(height: 50.h, child: VerticalDivider()),
                             Column(
                               children: [
                                 Text(
                                   '風速',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 15.sp),
                                 ),
                                 Text(
                                   weatherData['wind']['speed'].toString() +
                                       "m/s",
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 30.sp,
                                   ),
                                 ),
                               ],
                             ),
-                            Container(height: 50, child: VerticalDivider()),
+                            Container(height: 50.h, child: VerticalDivider()),
                             Column(
                               children: [
                                 Text(
                                   '気圧',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 15.sp),
                                 ),
                                 Text(
                                   weatherData['main']['pressure'].toString() +
                                       "hPa",
                                   style: TextStyle(
-                                    fontSize: 30,
+                                    fontSize: 30.sp,
                                   ),
                                 ),
                               ],
                             ),
-                            Container(height: 50, child: VerticalDivider()),
+                            Container(height: 50.h, child: VerticalDivider()),
                             Column(
                               children: [
                                 Text(
                                   '体感温度',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 15.sp),
                                 ),
                                 Text(
                                   (weatherData['main']['feels_like'] - 273.15)
@@ -554,19 +633,19 @@ class _WeatherState extends State<Weather> {
                                 ),
                               ],
                             ),
-                            Container(height: 50, child: VerticalDivider()),
+                            Container(height: 50.h, child: VerticalDivider()),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 20.h,
                       ),
                       Container(
                           decoration: BoxDecoration(
                             color: Colors.lightGreen[200],
                             borderRadius: BorderRadius.circular(10),
                           ), // 追加
-                          height: 230,
+                          height: 230.h,
                           child: forecast == null
                               ? Center(child: CircularProgressIndicator())
                               : Padding(
@@ -645,4 +724,315 @@ class _WeatherState extends State<Weather> {
                 ),
               ),
       );
+}
+
+
+
+class imabari extends StatefulWidget {
+  const imabari({Key? key}) : super(key: key);
+
+  @override
+  State<imabari> createState() => _imabariState();
+}
+
+class _imabariState extends State<imabari> {
+
+  var weatherData;
+  List<dynamic> forecast = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getWeatherData();
+    getWeatherForecast();
+  }
+
+  void getWeatherData() async {
+    String city = "Aichi-ken";
+    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String url =
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
+
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      setState(() {
+        weatherData = jsonData;
+      });
+    }
+  }
+
+  void getWeatherForecast() async {
+    String city = "Aichi-ken";
+    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String url =
+        "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey";
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      setState(() {
+        forecast = jsonData['list'];
+      });
+    }
+  }
+
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      elevation: 0,
+      title: Text('天気'),
+    ),
+    body: weatherData != null
+        ? SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.location_on_outlined),
+                    Text('今治')
+                  ],
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Text(
+                  DateFormat('M/d(E)HH:mm').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          weatherData['dt'] * 1000)),
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 130.h,
+                      width: 150.w,
+                      child: Image.network(
+                          "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@4x.png"),
+                    ),
+                    Text(
+                      (weatherData['main']['temp'] - 273.15)
+                          .toStringAsFixed(0) +
+                          "°",
+                      style: TextStyle(
+                          fontSize: 80.sp,
+                          color: Theme.of(context).brightness ==
+                              Brightness.dark
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+                  ],
+                ),
+                Text(
+                  (weatherData['main']['temp_max'] - 273.15)
+                      .toStringAsFixed(0) +
+                      "°" +
+                      "/" +
+                      (weatherData['main']['temp_min'] - 273.15)
+                          .toStringAsFixed(0) +
+                      "°",
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Text(
+                  weatherData['weather'][0]['description'],
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            '降水量',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          Text(
+                            weatherData['rain'] != null
+                                ? weatherData['rain']['1h'].toString() +
+                                "mm"
+                                : "0mm",
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 50.h, child: VerticalDivider()),
+                      Column(
+                        children: [
+                          Text(
+                            '湿度',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          Text(
+                            weatherData['main']['humidity'].toString() +
+                                "%",
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 50.h, child: VerticalDivider()),
+                      Column(
+                        children: [
+                          Text(
+                            '風速',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          Text(
+                            weatherData['wind']['speed'].toString() +
+                                "m/s",
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 50.h, child: VerticalDivider()),
+                      Column(
+                        children: [
+                          Text(
+                            '気圧',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          Text(
+                            weatherData['main']['pressure'].toString() +
+                                "hPa",
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 50.h, child: VerticalDivider()),
+                      Column(
+                        children: [
+                          Text(
+                            '体感温度',
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          Text(
+                            (weatherData['main']['feels_like'] - 273.15)
+                                .toStringAsFixed(0) +
+                                "°",
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(height: 50.h, child: VerticalDivider()),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 20.h,
+                ),
+                Container(
+                    decoration: BoxDecoration(
+                      color: Colors.lightGreen[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ), // 追加
+                    height: 230.h,
+                    child: forecast == null
+                        ? Center(child: CircularProgressIndicator())
+                        : Padding(
+                      padding: EdgeInsets.only(top: 20),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount:
+                        forecast == null ? 0 : forecast.length,
+                        itemBuilder: (context, index) {
+                          String date = DateFormat('M/d').format(
+                              DateTime.parse(
+                                  forecast[index]['dt_txt']));
+                          return Container(
+                            width: 70,
+                            height: 150,
+                            margin: EdgeInsets.all(10),
+                            child: Column(
+                              children: <Widget>[
+                                if (index == 0 ||
+                                    date !=
+                                        DateFormat('M/d').format(
+                                            DateTime.parse(
+                                                forecast[index - 1]
+                                                ['dt_txt'])))
+                                  Text(
+                                    date,
+                                    style:
+                                    TextStyle(fontSize: 20.sp,color: Colors.black),
+                                  )
+                                else
+                                  SizedBox(
+                                    height: 28.h,
+                                  ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.lightGreen[100],
+                                    borderRadius:
+                                    BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        DateFormat('HH:mm').format(
+                                            DateTime.parse(
+                                                forecast[index]
+                                                ['dt_txt'])),
+                                        style: TextStyle(
+                                            fontSize: 15.sp,color: Colors.black),
+                                      ),
+                                      Image.network(
+                                        Uri.encodeFull(
+                                            "http://openweathermap.org/img/wn/${forecast[index]['weather'][0]['icon']}@2x.png"),
+                                        width: 80,
+                                      ),
+                                      Text(
+                                        "${(forecast[index]['main']['temp'] - 273.15).toStringAsFixed(0)}°",
+                                        style: TextStyle(
+                                            fontSize: 15.sp,color: Colors.black),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ))
+        : Container(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    ),
+  );
 }
