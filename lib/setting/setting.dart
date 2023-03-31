@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
 import 'package:ous/Nav/userpolicie.dart';
+import 'package:ous/setting/payment.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:ous/home.dart';
 import 'package:share/share.dart';
@@ -142,6 +143,17 @@ class _SettingState extends State<Setting> {
                 },
               ),
               SettingsTile.navigation(
+                  leading: Icon(Icons.terminal),
+                  title: Text('ライセンスについて'),
+                  onPressed: (context) {
+                    showLicensePage(
+                      context: context,
+                      applicationName: "非公式岡理アプリ",
+                      applicationIcon: Image.asset("assets/images/icon.png"),
+                      applicationLegalese: "@TAN_Q_BOT_LOCAL",
+                    );
+                  }),
+              SettingsTile.navigation(
                 leading: Icon(Icons.rate_review),
                 title: Text('このアプリを評価する'),
                 onPressed: (BuildContext context) async {
@@ -167,19 +179,17 @@ class _SettingState extends State<Setting> {
                     Share.share('https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
                   },
                 ),
-                SettingsTile.navigation(
-                  leading: Icon(Icons.terminal),
-                  title: Text('ライセンスについて'),
+              SettingsTile.navigation(
+                  leading: Icon(Icons.payments_outlined),
+                  title: Text('このアプリを支援する'),
                   onPressed: (context) {
-                    showLicensePage(
-                      context: context,
-                      applicationName: "非公式岡理アプリ",
-                      applicationIcon: Image.asset("assets/images/icon.png"),
-                      applicationLegalese: "@TAN_Q_BOT_LOCAL",
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => Payment(),
+                    ));
                   }),
             ],
           ),
+
           SettingsSection(
             title: Text('アカウント関連',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[

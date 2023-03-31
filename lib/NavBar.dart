@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_webview_plugin_ios_android/flutter_webview_plugin_ios_android.dart';
-import 'package:ous/Nav/TCP.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
@@ -139,10 +138,10 @@ class _NavBarState extends State<NavBar> {
             leading: Icon(Icons.public_outlined),
             title: Text('TCP'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TCP()),
-              );
+                  launchUrl(
+                      Uri.https('app.tcpapp.net',
+                          '/tcpapp/login.html'),
+                      mode: LaunchMode.externalApplication);
             },
           ),
 

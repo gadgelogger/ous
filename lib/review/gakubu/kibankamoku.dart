@@ -1,126 +1,71 @@
-import 'dart:async';
+import 'dart:io';
+
+import 'package:algolia/algolia.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ous/review/post.dart';
+
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pie_chart/pie_chart.dart';
+
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/review/post.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:highlight_text/highlight_text.dart';
-import 'package:algolia/algolia.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../main.dart';
-import '../../review.dart';
-
-final algolia = Algolia.init(
-  applicationId: '78CZVABC2W',
-  apiKey: 'c2377e7faad9a408d5867b849f25fae4',
-);
-
-final index = algolia.instance.index('kiban');
 
 class kibankamoku extends StatefulWidget {
-  const kibankamoku({Key? key}) : super(key: key);
-
   @override
-  State<kibankamoku> createState() => _kibankamokuState();
+  _kibankamokuState createState() => _kibankamokuState();
 }
 
 class _kibankamokuState extends State<kibankamoku> {
-  final _queryController = TextEditingController();
-  String gakubu = 'kiban';
-  final _firestore = FirebaseFirestore.instance;
-  List<DocumentSnapshot> documentList = [];
-  String test = 'FB219000 学びの基礎論';
-  bool _searchBoolean = false; //追加
   bool _isPressed = false;
   int _actionCounter = 0;
+  final _queryController = TextEditingController();
 
-  StreamController searchController = StreamController();
+  Algolia _algolia = Algolia.init(
+    applicationId: '78CZVABC2W',
+    apiKey: 'c2377e7faad9a408d5867b849f25fae4',
+  );
 
-  Future<List<AlgoliaObjectSnapshot>> _searchAlgolia(String query) async {
-    final result = await index.search(query).getObjects();
+  String _query = '';
+  bool _isSearching = false;
+  int _filterCount = 0;
+
+  Future<List<AlgoliaObjectSnapshot>> _search(String query) async {
+    final result = await _algolia.instance
+        .index('kiban')
+        .search(query)
+        .getObjects();
+
     return result.hits;
   }
 
-  Widget _searchTextField() {
-    return TextField(
-      controller: _queryController,
-      decoration: InputDecoration(
-        hintText: '講義名or講師名',
-        border: InputBorder.none,
-      ),
-      onChanged: (query) {
-        setState(() {});
-      },
-      onSubmitted: (query) {
-        setState(() {});
-      },
-    );
-  }
-
-  void _onButtonPressed() {
-    setState(() {
-      _isPressed = true;
-    });
-
-    switch (_actionCounter) {
-      case 0:
-        _doFirstAction();
-        _actionCounter++;
-        break;
-      case 1:
-        _doSecondAction();
-        _actionCounter++;
-        break;
-      case 2:
-        _doThirdAction();
-        _actionCounter = 0;
-        break;
+  List<DocumentSnapshot> _filterData(List<DocumentSnapshot> data) {
+    if (_filterCount == 1) {
+      // Filter Rakutan only
+      return data.where((document) => document['bumon'] == 'ラク単').toList();
+    } else if (_filterCount == 2) {
+      // Filter Egutan only
+      return data.where((document) => document['bumon'] == 'エグ単').toList();
+    } else {
+      // Return all data
+      return data;
     }
   }
 
-  void _doFirstAction() {
-    setState(() {
-      _isPressed = true;
-      _queryController.text = 'ラク単';
-      Fluttertoast.showToast(
-          msg: "ラク単のみ表示");
-    });  }
-
-  void _doSecondAction() {
-    // 二つ目の処理
-    setState(() {
-      _isPressed = false;
-      _queryController.text = 'エグ単';
-      Fluttertoast.showToast(
-          msg: "エグ単のみ表示");
-    });
-  }
-
-  void _doThirdAction() {
-    // 三つ目の処理
-    setState(() {
-      _isPressed = true;
-      _queryController.clear();
-      Fluttertoast.showToast(
-          msg: "全て表示");
-    });
-  }
-
-
-//大学のアカウント以外は非表示にする
+  //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
 
@@ -135,92 +80,243 @@ class _kibankamokuState extends State<kibankamoku> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0,
-          title: !_searchBoolean ? Text('基盤科目') : _searchTextField(),
-          actions: !_searchBoolean
-              ? [
-            IconButton(
-                icon: Icon(Icons.search),
-                onPressed: () {
-                  setState(() {
-                    _searchBoolean = true;
-                  });
-                })
-          ]
-              : [
-            IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  setState(() {
-                    _searchBoolean = false;
-                    _queryController.clear();
-                  });
-                })
-          ]),
-      body: FutureBuilder<List<AlgoliaObjectSnapshot>>(
-        future: _searchAlgolia(_queryController.text),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        width: 200,
-                        height: 200,
-                        child: Image(
-                          image: AssetImage('assets/icon/error.gif'),
-                          fit: BoxFit.cover,
-                        )),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Text(
-                      '校外のメールアドレスでログインしているため\nこの機能は利用できません。',
-                      style: TextStyle(fontSize: 18.sp),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ));
-          }
-          if (snapshot.hasData) {
-            final hits = snapshot.data!;
-            return GridView.builder(
+        title: _isSearching
+            ? TextField(
+          controller: _queryController,
+          autofocus: true,
+          onChanged: (value) {
+            setState(() {
+              _query = value;
+            });
+          },
+          decoration: InputDecoration(
+            hintText: '講義名or講師名',
+          ),
+        )
+            : Text('基盤教育科目'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(_isSearching ? Icons.close : Icons.search),
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+              });
+            },
+          ),
+        ],
+      ),
+      body: Center(
+        child: _isSearching && _query.isNotEmpty
+            ? FutureBuilder(
+          future: _search(_query),
+          builder: (context,
+              AsyncSnapshot<List<AlgoliaObjectSnapshot>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              final data = snapshot.data!;
+              return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
-                itemCount: snapshot.data!.length,
+                itemCount: data.length,
                 itemBuilder: (context, index) {
-                  final hit = hits[index];
-
+                  final hit = data[index].data;
                   return Container(
                       child: GestureDetector(
                         onTap: () {
+//algolia
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => DetailsScreen(
-                                zyugyoumei: hit.data['zyugyoumei'],
-                                kousimei: hit.data['kousimei'],
-                                tannisuu: hit.data['tannisuu'],
-                                zyugyoukeisiki: hit.data['zyugyoukeisiki'],
-                                syusseki: hit.data['syusseki'],
-                                kyoukasyo: hit.data['kyoukasyo'],
-                                tesutokeisiki: hit.data['tesutokeisiki'],
-                                omosirosa: hit.data['omosirosa'],
-                                toriyasusa: hit.data['toriyasusa'],
-                                sougouhyouka: hit.data['sougouhyouka'],
-                                komento: hit.data['komento'],
-                                name: hit.data['name'],
-                                senden: hit.data['senden'],
-                                nenndo: hit.data['nenndo'],
-                                date: Timestamp.fromMillisecondsSinceEpoch(hit.data['date']).toDate(),
-                                tesutokeikou:hit.data['tesutokeikou'],
+                                zyugyoumei: hit['zyugyoumei'],
+                                kousimei: hit['kousimei'],
+                                tannisuu: hit['tannisuu'],
+                                zyugyoukeisiki: hit['zyugyoukeisiki'],
+                                syusseki: hit['syusseki'],
+                                kyoukasyo: hit['kyoukasyo'],
+                                tesutokeisiki: hit['tesutokeisiki'],
+                                omosirosa: hit['omosirosa'],
+                                toriyasusa: hit['toriyasusa'],
+                                sougouhyouka: hit['sougouhyouka'],
+                                komento: hit['komento'],
+                                name: hit['name'],
+                                senden: hit['senden'],
+                                nenndo: hit['nenndo'],
+                                date: Timestamp.fromMillisecondsSinceEpoch(
+                                    hit['date']).toDate(),
+                                tesutokeikou: hit['tesutokeikou'],
+                              ),
+                            ),
+                          );
+
+                        },
+                        child: (SizedBox(
+                          width: 200.w,
+                          height: 30.h,
+                          child: Card(
+                            elevation: 10,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.all(15),
+                                    child: Align(
+                                        alignment: const Alignment(
+                                          -0.8,
+                                          -0.5,
+                                        ),
+                                        child: Text(
+                                          hit['zyugyoumei'],
+                                          style: TextStyle(fontSize: 20.sp),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ))),
+                                Align(
+                                  alignment: const Alignment(-0.8, 0.4),
+                                  child: Text(
+                                    hit['gakki'],
+                                    style: TextStyle(
+                                        color: Colors.lightGreen,
+                                        fontSize: 15.sp),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: const Alignment(-0.8, 0.8),
+                                  child: Text(
+                                    hit['kousimei'],
+                                    overflow: TextOverflow.ellipsis, //ここ！！
+                                    style: TextStyle(fontSize: 15.sp),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0,
+                                  child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 4, horizontal: 6),
+                                      decoration: BoxDecoration(
+                                          color: hit['bumon'] == 'エグ単'
+                                              ? Colors.red
+                                              : Colors.lightGreen[200],
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ) // green shaped
+                                      ),
+                                      child: Text(
+                                        hit['bumon'],
+                                        style: TextStyle(
+                                            fontSize: 15.sp, color: Colors.black),
+                                        // Your text
+                                      )),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )),
+                      ));
+                },
+              );
+            } else {
+              return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 200,
+                          height: 200,
+                          child: Image(
+                            image: AssetImage('assets/icon/found.gif'),
+                            fit: BoxFit.cover,
+                          )),
+                      SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        '何も見つかりませんでした。\n別のキーワードで検索をしてみてね。',
+                        style: TextStyle(fontSize: 18.sp),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ));
+            }
+          },
+        )
+            : StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('kiban')
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error'),
+              );
+            } else if (snapshot.connectionState ==
+                ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              final data = snapshot.data!.docs.where((document) {
+                if (_filterCount == 1) {
+                  // Filter Rakutan only
+                  Fluttertoast.showToast(msg: "ラク単のみ表示");
+
+                  return document['bumon'] == 'ラク単';
+                } else if (_filterCount == 2) {
+                  // Filter Egutan only
+                  Fluttertoast.showToast(msg: "エグ単のみ表示");
+
+                  return document['bumon'] == 'エグ単';
+
+                } else {
+                  Fluttertoast.showToast(msg: "全て表示");
+
+                  // Return all data
+                  return true;
+                }
+              }).toList();
+              return Scrollbar(child:
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                      child: GestureDetector(
+                        onTap: () {
+                          //firebase
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailsScreen(
+                                zyugyoumei: data[index]['zyugyoumei'],
+                                kousimei: data[index]['kousimei'],
+                                tannisuu: data[index]['tannisuu'],
+                                zyugyoukeisiki: data[index]['zyugyoukeisiki'],
+                                syusseki: data[index]['syusseki'],
+                                kyoukasyo: data[index]['kyoukasyo'],
+                                tesutokeisiki: data[index]['tesutokeisiki'],
+                                omosirosa: data[index]['omosirosa'],
+                                toriyasusa: data[index]['toriyasusa'],
+                                sougouhyouka: data[index]['sougouhyouka'],
+                                komento: data[index]['komento'],
+                                name: data[index]['name'],
+                                senden: data[index]['senden'],
+                                nenndo: data[index]['nenndo'],
+                                date: data[index]['date'].toDate(),
+                                tesutokeikou: data[index]['tesutokeikou'],
                               ),
                             ),
                           );
@@ -242,7 +338,7 @@ class _kibankamokuState extends State<kibankamoku> {
                                           -0.5,
                                         ),
                                         child: Text(
-                                          hit.data['zyugyoumei'],
+                                          data[index]['zyugyoumei'],
                                           style: TextStyle(fontSize: 20.sp),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
@@ -250,14 +346,16 @@ class _kibankamokuState extends State<kibankamoku> {
                                 Align(
                                   alignment: const Alignment(-0.8, 0.4),
                                   child: Text(
-                                    hit.data['gakki'],
-                                    style: TextStyle(color: Colors.lightGreen,fontSize: 15.sp),
+                                    data[index]['gakki'],
+                                    style: TextStyle(
+                                        color: Colors.lightGreen,
+                                        fontSize: 15.sp),
                                   ),
                                 ),
                                 Align(
                                   alignment: const Alignment(-0.8, 0.8),
                                   child: Text(
-                                    hit.data['kousimei'],
+                                    data[index]['kousimei'],
                                     overflow: TextOverflow.ellipsis, //ここ！！
                                     style: TextStyle(fontSize: 15.sp),
                                   ),
@@ -268,7 +366,7 @@ class _kibankamokuState extends State<kibankamoku> {
                                       padding: EdgeInsets.symmetric(
                                           vertical: 4, horizontal: 6),
                                       decoration: BoxDecoration(
-                                          color: hit.data['bumon'] == 'エグ単'
+                                          color: data[index]['bumon'] == 'エグ単'
                                               ? Colors.red
                                               : Colors.lightGreen[200],
                                           borderRadius: BorderRadius.only(
@@ -277,25 +375,23 @@ class _kibankamokuState extends State<kibankamoku> {
                                           ) // green shaped
                                       ),
                                       child: Text(
-                                        hit.data['bumon'],style: TextStyle(fontSize: 15.sp,color: Colors.black),
+                                        data[index]['bumon'],
+                                        style: TextStyle(
+                                            fontSize: 15.sp, color: Colors.black),
                                         // Your text
                                       )),
                                 ),
-
                               ],
                             ),
                           ),
                         )),
                       ));
-                }
-            );
-          }
-          else  {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                },
+              ),
+              );
+            }
+          },
+        ),
       ),
       floatingActionButton: showFloatingActionButton
           ? Column(
@@ -319,30 +415,30 @@ class _kibankamokuState extends State<kibankamoku> {
               )
             ],
           ),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _filterCount = (_filterCount + 1) % 3;
+              },
+              );
+            },
+            child: Icon(Icons.filter_list),
+          ),
         ],
       )
-          :   FloatingActionButton(
-        heroTag: "btn1",
-        onPressed: _onButtonPressed,
-        child: Icon(Icons.filter_alt_outlined),
+          : FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _filterCount = (_filterCount + 1) % 3;
+          },
+          );
+        },
+        child: Icon(Icons.filter_list),
       ),
     );
   }
 }
 
-/*お気に入りボタン
- Container(
-            margin: EdgeInsets.only(bottom: 16.0),
-            child: FloatingActionButton(
-              heroTag: "btn2",
-
-              onPressed: () {
-
-              },
-              child: const Icon(Icons.favorite_outline),
-            ),
-          ),
- */
 class DetailsScreen extends StatefulWidget {
   final zyugyoumei;
   final kousimei;
@@ -360,6 +456,7 @@ class DetailsScreen extends StatefulWidget {
   final nenndo;
   final date;
   final tesutokeikou;
+
   const DetailsScreen({
     Key? key,
     required this.nenndo,
@@ -385,8 +482,7 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  final GlobalKey shareKey = GlobalKey();//追加
-
+  final GlobalKey shareKey = GlobalKey(); //追加
 
   Future<ByteData> exportToImage(GlobalKey globalKey) async {
     final boundary =
@@ -400,7 +496,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return byteData!;
   }
 
-  Future<File> getApplicationDocumentsFile(String text, List<int> imageData) async {
+  Future<File> getApplicationDocumentsFile(
+      String text, List<int> imageData) async {
     final directory = await getApplicationDocumentsDirectory();
 
     final exportFile = File('${directory.path}/$text.png');
@@ -410,7 +507,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
     final file = await exportFile.writeAsBytes(imageData);
     return file;
   }
-
 
   void shareImageAndText(String text, GlobalKey globalKey) async {
     //shareする際のテキスト
@@ -431,12 +527,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.zyugyoumei),
@@ -446,7 +538,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
         child: SingleChildScrollView(
             child: RepaintBoundary(
                 key: shareKey,
-                child:Container(
+                child: Container(
                   color: Theme.of(context).brightness == Brightness.light
                       ? Color(0xFFFDFDF5)
                       : Color(0xFF1A1C17),
@@ -629,7 +721,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       axisLineStyle: AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Color.fromARGB(139, 134, 134, 134),
+                                        color:
+                                        Color.fromARGB(139, 134, 134, 134),
                                         thicknessUnit: GaugeSizeUnit.factor,
                                       ),
                                       pointers: <GaugePointer>[
@@ -775,13 +868,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20.sp,
                             ),
-                          ),                      Padding(
+                          ),
+                          Padding(
                               padding: EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
-                              child: Text(widget.tesutokeikou)
-                          ),
+                              child: Text(widget.tesutokeikou)),
                           Text(
                             'ニックネーム',
                             style: TextStyle(
@@ -808,13 +901,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               fontWeight: FontWeight.bold,
                               fontSize: 20.sp,
                             ),
-                          ),                      Padding(
+                          ),
+                          Padding(
                             padding: EdgeInsets.only(
                               top: 10,
                               bottom: 10,
                             ),
-                            child:Text(
-                              DateFormat('yyyy年MM月dd日 HH:mm').format(widget.date),
+                            child: Text(
+                              DateFormat('yyyy年MM月dd日 HH:mm')
+                                  .format(widget.date),
                               style: TextStyle(fontSize: 15.sp),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -870,9 +965,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       )
                     ],
                   ),
-                )
-            )
-        ),
+                ))),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => shareImageAndText(

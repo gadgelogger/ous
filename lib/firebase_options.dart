@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCWTdKyY5SV2JuL2lcYcjUZjMTHJhbylLw',
-    appId: '1:550367521697:android:ffb08692ecf45871a539e0',
+    appId: '1:550367521697:android:4ac0dd32af43f5e8a539e0',
     messagingSenderId: '550367521697',
     projectId: 'ous-unoffical-20d2c',
     storageBucket: 'ous-unoffical-20d2c.appspot.com',
@@ -59,11 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCzpNrYyg5yDqkTobE4PBYjc1s3kAgBaw0',
-    appId: '1:550367521697:ios:4358103c9670e08aa539e0',
+    appId: '1:550367521697:ios:dee6af6b9a1392aba539e0',
     messagingSenderId: '550367521697',
     projectId: 'ous-unoffical-20d2c',
     storageBucket: 'ous-unoffical-20d2c.appspot.com',
-    iosClientId: '550367521697-52ua35b9d8d2u5ccl5ldahtr7phitaip.apps.googleusercontent.com',
-    iosBundleId: 'com.ous.unoffical.app.ous',
+    androidClientId: '550367521697-5lenfmij8k9bdojaamhffo9pcvs4143n.apps.googleusercontent.com',
+    iosClientId: '550367521697-bi8fc20atnpnvmtsrrna49tjmed3h83i.apps.googleusercontent.com',
+    iosBundleId: 'com.ous.unoffical.app',
   );
 }
