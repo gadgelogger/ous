@@ -179,14 +179,16 @@ class _SettingState extends State<Setting> {
                     Share.share('https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
                   },
                 ),
-              SettingsTile.navigation(
+              if (Platform.isIOS)
+                SettingsTile.navigation(
                   leading: Icon(Icons.payments_outlined),
                   title: Text('このアプリを支援する'),
                   onPressed: (context) {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => Payment(),
                     ));
-                  }),
+                  },
+                ),
             ],
           ),
 

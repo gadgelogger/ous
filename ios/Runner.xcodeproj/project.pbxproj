@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		009FD4EDAEB6BC70505E1EEA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87BEC7C8C2D1AEC09E386A12 /* GoogleService-Info.plist */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		2E58761C29D6F7D90004EA8D /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E58761B29D6F7D90004EA8D /* StoreKit.framework */; };
 		2EAE17F328EB0410003F0725 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EAE17F228EB0410003F0725 /* GoogleService-Info.plist */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -35,6 +36,7 @@
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		2A9FF3AB3695B9E4B311D46F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2E58761B29D6F7D90004EA8D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2EAE17F228EB0410003F0725 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2EF00E9B2938E71C009F2E85 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				95DD0265500E1DC8FB4D9D55 /* Pods_Runner.framework in Frameworks */,
+				2E58761C29D6F7D90004EA8D /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +72,7 @@
 		19E93E4BB58F1E8F5AD2352A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2E58761B29D6F7D90004EA8D /* StoreKit.framework */,
 				2A9FF3AB3695B9E4B311D46F /* Pods_Runner.framework */,
 			);
 			name = Frameworks;
