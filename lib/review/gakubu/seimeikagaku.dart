@@ -908,8 +908,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               bottom: 10,
                             ),
                             child: Text(
-                              DateFormat('yyyy年MM月dd日 HH:mm')
-                                  .format(widget.date),
+                              widget.date != null
+                                  ? DateFormat('yyyy年MM月dd日 HH:mm').format(widget.date)
+                                  : "不明",
                               style: TextStyle(fontSize: 15.sp),
                               overflow: TextOverflow.ellipsis,
                             ),

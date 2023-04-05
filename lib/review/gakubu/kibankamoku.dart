@@ -968,6 +968,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ))),
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "hero1", // HeroTag設定
+
         onPressed: () => shareImageAndText(
           'sample_widget',
           shareKey,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/account/login.dart';
@@ -10,6 +11,7 @@ import 'package:ous/setting/payment.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:ous/home.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import '../main.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:dynamic_themes/dynamic_themes.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -27,8 +31,17 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-  bool _isDarkModeEnabled = false;
+  bool isDarkModeEnabled = false;
 
+  //アプリバージョン表示
+  String _version = '';
+
+  Future getVer() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      _version = packageInfo.version;
+    });
+  }
 
   //退会処理
   void deleteUser() async {
@@ -39,11 +52,14 @@ class _SettingState extends State<Setting> {
     await user?.delete();
     await FirebaseAuth.instance.signOut();
     print('ユーザーを削除しました!');
-    Fluttertoast.showToast(
-        msg: "アカウントを削除しました\nご利用ありがとうございました。");
+    Fluttertoast.showToast(msg: "アカウントを削除しました\nご利用ありがとうございました。");
   }
-//退会処理
 
+
+
+
+
+//退会処理
 
   ThemeData current = ThemeData.light();
 
@@ -74,6 +90,24 @@ class _SettingState extends State<Setting> {
     ));
   }
 
+  final ThemeData lightThemeData = ThemeData(
+    brightness: Brightness.light,
+    primarySwatch: Colors.blue,
+    // 他のテーマプロパティを設定する
+  );
+
+  final ThemeData darkThemeData = ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: Colors.blueGrey,
+    // 他のテーマプロパティを設定する
+  );
+
+  @override
+  void initState() {
+    getVer();
+
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -92,7 +126,7 @@ class _SettingState extends State<Setting> {
           ),
         ),
         body: SettingsList(sections: [
-        /*  SettingsSection(
+          /*  SettingsSection(
             title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
@@ -108,11 +142,43 @@ class _SettingState extends State<Setting> {
           ),
 
          */
-
           SettingsSection(
-            title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
+            title: Text(
+              'テーマ',
+              style: TextStyle(color: Colors.lightGreen),
+            ),
             tiles: <SettingsTile>[
+              SettingsTile.switchTile(
+                leading: Icon(Icons.sunny),
+                title: const Text('テーマ切り替え'),
+                initialValue: isDarkModeEnabled,
+                onToggle: (value) {
+                  setState(() {
+                    isDarkModeEnabled = value;
+                    if (isDarkModeEnabled) {
+                      // ダークモードに切り替える
+                      DynamicTheme.of(context)?.setTheme(darkThemeData as int);
+                    } else {
+                      // ライトモードに切り替える
+                      DynamicTheme.of(context)?.setTheme(lightThemeData as int);
+                    }
+                  });
+                },
+              ),
+              SettingsTile.navigation(
+                  leading: Icon(Icons.color_lens_outlined),
+                  title: Text('色変更'),
+                  onPressed: (context) {
 
+                  }),
+            ],
+          ),
+          SettingsSection(
+            title: Text(
+              '基本的な設定',
+              style: TextStyle(color: Colors.lightGreen),
+            ),
+            tiles: <SettingsTile>[
               SettingsTile.navigation(
                   leading: Icon(Icons.music_note),
                   title: Text('校歌'),
@@ -165,35 +231,50 @@ class _SettingState extends State<Setting> {
               ),
               if (Platform.isIOS)
                 SettingsTile.navigation(
-                leading: Icon(Icons.share),
-                title: Text('このアプリをシェアする'),
-                onPressed: (BuildContext context) async {
-                  Share.share('https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
-                },
-              ),
+                  leading: Icon(Icons.share),
+                  title: Text('このアプリをシェアする'),
+                  onPressed: (BuildContext context) async {
+                    Share.share(
+                        'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
+                  },
+                ),
               if (Platform.isAndroid)
                 SettingsTile.navigation(
                   leading: Icon(Icons.share),
                   title: Text('このアプリをシェアする'),
                   onPressed: (BuildContext context) async {
-                    Share.share('https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
+                    Share.share(
+                        'https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
                   },
                 ),
               if (Platform.isIOS)
                 SettingsTile.navigation(
-                  leading: Icon(Icons.payments_outlined),
-                  title: Text('このアプリを支援する'),
+                  leading: Icon(Icons.public_outlined),
+                  title: Text('アプリの公式サイト'),
                   onPressed: (context) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => Payment(),
-                    ));
+                    launch('https://ous-unoffical-app.studio.site');
                   },
                 ),
             ],
           ),
-
           SettingsSection(
-            title: Text('アカウント関連',style: TextStyle(color: Colors.lightGreen),),
+            title: const Text('アプリについて',
+              style: TextStyle(color: Colors.lightGreen),
+
+            ),
+            tiles: <SettingsTile>[
+              SettingsTile(
+                leading: const Icon(Icons.info_outline),
+                title: const Text('アプリのバージョン'),
+                value: Text(_version),
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: Text(
+              'アカウント関連',
+              style: TextStyle(color: Colors.lightGreen),
+            ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: Icon(Icons.exit_to_app),
@@ -285,7 +366,6 @@ class _SettingState extends State<Setting> {
                                       actions: <Widget>[
                                         SlideAction(
                                           outerColor: Colors.lightGreen[200],
-
                                           text: 'スライドして退会',
                                           textStyle:
                                               const TextStyle(fontSize: 20),
@@ -313,7 +393,7 @@ class _SettingState extends State<Setting> {
               ),
             ],
           ),
+
         ]),
       );
 }
-

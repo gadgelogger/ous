@@ -245,7 +245,7 @@ class _accountState extends State<account> {
               Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 30),
                 child: Text(
-                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。\n\n$_version',
+                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.notoSans(
                     textStyle: TextStyle(

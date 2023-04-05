@@ -196,7 +196,7 @@ class _homeState extends State<home> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text('岡山',style: TextStyle(fontSize: 15.sp),),
+                                      Text('岡山',style: TextStyle(fontSize: 15.sp,color: Colors.white),),
                                       Container(
                                         height: 50.h,
                                         width: 50.w,
@@ -241,7 +241,7 @@ class _homeState extends State<home> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('今治',style: TextStyle(fontSize: 15.sp),),
+                                Text('今治',style: TextStyle(fontSize: 15.sp,color: Colors.white),),
 
                                 Container(
                                   height: 50.h,
@@ -272,6 +272,8 @@ class _homeState extends State<home> {
               ],
             ),
             Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+
+
               Text(
                 'バス運行情報',
                 style: TextStyle(

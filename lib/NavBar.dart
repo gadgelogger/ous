@@ -8,8 +8,7 @@ import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/main.dart';
-import 'package:ous/setting/setting.dart';
-import 'package:ous/Nav/Calendar/calendar.dart';
+import 'package:ous/Nav/setting.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/userpolicie.dart';
 import 'package:path/path.dart';
@@ -162,6 +161,7 @@ class _NavBarState extends State<NavBar> {
               );
             },
           ),
+
           Divider(),
           ListTile(
             leading: Icon(Icons.link_outlined),

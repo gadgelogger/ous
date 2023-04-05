@@ -19,42 +19,8 @@ import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
-import 'package:algolia/algolia.dart';
-
-import 'package:path/path.dart';
-import 'package:pie_chart/pie_chart.dart';
 
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
-
-
-
-import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/review/post.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:highlight_text/highlight_text.dart';
-import 'package:algolia/algolia.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
-import 'package:share_extend/share_extend.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
-
-
 
 
 class Review extends StatefulWidget {
@@ -66,26 +32,6 @@ class Review extends StatefulWidget {
 
 class _ReviewState extends State<Review> {
 
-  Future<Map<String, dynamic>> _getDocumentCount() async {
-    Map<String, dynamic> result = {};
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-    for (String collection in collections) {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(collection).get();
-      result[collection] = querySnapshot.size;
-    }
-    return result;
-  }
 
 //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
@@ -137,13 +83,48 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/理学部.jpg',
-                                    height: 110.h,
-                                    width: 200.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/理学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                             color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('rigaku').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: Text('0'),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -172,6 +153,7 @@ class _ReviewState extends State<Review> {
                     ),
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -180,11 +162,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/工学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/工学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('kougakubu').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -197,7 +215,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -217,7 +236,8 @@ class _ReviewState extends State<Review> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      child: Card(
+                      child:Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -226,11 +246,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/情報理工学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/情報理工学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('zyouhou').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -243,7 +299,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -258,6 +315,7 @@ class _ReviewState extends State<Review> {
                     ),
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -266,11 +324,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/生物地球学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/生物地球学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('seibutu').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -283,7 +377,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -304,7 +399,8 @@ class _ReviewState extends State<Review> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      child: Card(
+                      child:Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -313,11 +409,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/教育学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/教育学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child:StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('kyouiku').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -330,7 +462,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -345,6 +478,7 @@ class _ReviewState extends State<Review> {
                     ),
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -353,11 +487,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/経営学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/経営学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('keiei').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -370,7 +540,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -392,6 +563,7 @@ class _ReviewState extends State<Review> {
                   children: [
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -400,11 +572,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/獣医学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/獣医学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('zyuui').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -417,7 +625,8 @@ class _ReviewState extends State<Review> {
                                         overflow: TextOverflow.ellipsis,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),                                    ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             )),
@@ -432,6 +641,7 @@ class _ReviewState extends State<Review> {
                     ),
                     GestureDetector(
                       child: Card(
+
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -440,11 +650,47 @@ class _ReviewState extends State<Review> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(color: Colors.lightGreen[100]),
-                                  child: Image.asset(
-                                    'assets/images/生命科学部.jpg',
-                                    height: 110.h,
-                                    width: 180.w,
-                                    fit: BoxFit.contain,
+
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/生命科学部.jpg',
+                                        height: 110.h,
+                                        width: 200.w,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4, horizontal: 6),
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(8),
+                                                  bottomRight: Radius.circular(8),
+                                                ) // green shaped
+                                            ),
+                                            child: StreamBuilder<QuerySnapshot>(
+                                              stream: FirebaseFirestore.instance.collection('seimei').snapshots(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.hasData) {
+                                                  final count = snapshot.data!.size;
+                                                  return Text(
+                                                    '$count',
+                                                    style: TextStyle(fontSize: 16.0,color: Colors.black),
+                                                  );
+                                                } else {
+                                                  return SizedBox(
+                                                    height: 3,
+                                                    width: 3,
+                                                    child: CircularProgressIndicator(),
+                                                  );
+                                                }
+                                              },
+                                            )),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 ListTile(
@@ -488,29 +734,64 @@ class _ReviewState extends State<Review> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 100.h,
-                            width: 180.w,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  title:  Text(
-                                    '基盤教育科目',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
+                      child:Stack(
+                        children: <Widget>[
+                          Card(
+                            clipBehavior: Clip.antiAlias,
+                            child: Container(
+                              height: 100.h,
+                              width: 180.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      '基盤教育科目',
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: TextStyle(
+                                          fontSize: 20.sp,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                              decoration: BoxDecoration(
+                                color: Colors.lightGreen,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
                                 ),
-                              ],
-                            )),
+                              ),
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance.collection('kiban').snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final count = snapshot.data!.size;
+                                    return Text(
+                                      '$count',
+                                      style: TextStyle(fontSize: 16.0),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: 3,
+                                      width: 3,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       onTap: () {
                         Navigator.push(
@@ -520,29 +801,64 @@ class _ReviewState extends State<Review> {
                       },
                     ),
                     GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 100.h,
-                            width: 180.w,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ListTile(
-                                  title:  Text(
-                                    '教職関連科目',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
+                      child:Stack(
+                        children: <Widget>[
+                          Card(
+                            clipBehavior: Clip.antiAlias,
+                            child: Container(
+                              height: 100.h,
+                              width: 180.w,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      '教職関連科目',
+                                      style: GoogleFonts.notoSans(
+                                        textStyle: TextStyle(
+                                          fontSize: 20.sp,
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                              decoration: BoxDecoration(
+                                color: Colors.lightGreen,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomRight: Radius.circular(8),
                                 ),
-                              ],
-                            )),
+                              ),
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance.collection('kyousyoku').snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final count = snapshot.data!.size;
+                                    return Text(
+                                      '$count',
+                                      style: TextStyle(fontSize: 16.0),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: 3,
+                                      width: 3,
+                                      child: Text('0'),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       onTap: () {
                         Navigator.push(
