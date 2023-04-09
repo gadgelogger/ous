@@ -82,6 +82,12 @@ class _seibututikyuuState extends State<seibututikyuu> {
 
   @override
   Widget build(BuildContext context) {
+    // 背景の明るさをチェック
+    bool isBackgroundBright = Theme.of(context).primaryColor == Brightness.light;
+
+    // 明るい背景の場合は黒、暗い背景の場合は白
+    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
+
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
@@ -185,7 +191,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                   child: Text(
                                     hit['gakki'],
                                     style: TextStyle(
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context).colorScheme.primary,
                                         fontSize: 15.sp),
                                   ),
                                 ),
@@ -205,7 +211,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                       decoration: BoxDecoration(
                                           color: hit['bumon'] == 'エグ単'
                                               ? Colors.red
-                                              : Colors.lightGreen[200],
+                                              : Theme.of(context).colorScheme.primary,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8),
@@ -214,7 +220,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                       child: Text(
                                         hit['bumon'],
                                         style: TextStyle(
-                                            fontSize: 15.sp, color: Colors.black),
+                                            fontSize: 15.sp, color: textColor),
                                         // Your text
                                       )),
                                 ),
@@ -348,7 +354,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                   child: Text(
                                     data[index]['gakki'],
                                     style: TextStyle(
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context).colorScheme.primary,
                                         fontSize: 15.sp),
                                   ),
                                 ),
@@ -368,7 +374,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                       decoration: BoxDecoration(
                                           color: data[index]['bumon'] == 'エグ単'
                                               ? Colors.red
-                                              : Colors.lightGreen[200],
+                                              : Theme.of(context).colorScheme.primary,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8),
@@ -377,7 +383,7 @@ class _seibututikyuuState extends State<seibututikyuu> {
                                       child: Text(
                                         data[index]['bumon'],
                                         style: TextStyle(
-                                            fontSize: 15.sp, color: Colors.black),
+                                            fontSize: 15.sp, color: textColor),
                                         // Your text
                                       )),
                                 ),
@@ -729,7 +735,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         RangePointer(
                                           value: widget.omosirosa.toDouble(),
                                           cornerStyle: CornerStyle.bothCurve,
-                                          color: Colors.lightGreen,
+                                          color: Theme.of(context).colorScheme.primary,
                                           width: 0.2,
                                           sizeUnit: GaugeSizeUnit.factor,
                                         )
@@ -774,7 +780,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       RangePointer(
                                         value: widget.toriyasusa.toDouble(),
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context).colorScheme.primary,
                                         width: 0.2,
                                         sizeUnit: GaugeSizeUnit.factor,
                                       )
@@ -820,7 +826,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       RangePointer(
                                         value: widget.sougouhyouka.toDouble(),
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context).colorScheme.primary,
                                         width: 0.2,
                                         sizeUnit: GaugeSizeUnit.factor,
                                       )
@@ -937,7 +943,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.lightGreen,
+                                      color: Theme.of(context).colorScheme.primary,
                                       style: BorderStyle.solid,
                                       width: 1.0.w),
                                   color: Colors.transparent,

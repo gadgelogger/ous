@@ -123,7 +123,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                               child: Text(
                                 document['gakki'],
                                 style: TextStyle(
-                                    color: Colors.lightGreen, fontSize: 15.sp),
+                                    color: Theme.of(context).colorScheme.primary, fontSize: 15.sp),
                               ),
                             ),
                             Align(
@@ -142,7 +142,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                                   decoration: BoxDecoration(
                                       color: document['bumon'] == 'エグ単'
                                           ? Colors.red
-                                          : Colors.lightGreen[200],
+                                          : Theme.of(context).colorScheme.primary,
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(8),
                                         bottomRight: Radius.circular(8),
@@ -1169,7 +1169,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               color: Colors.grey),
                                           focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightGreen))),
+                                                  color: Theme.of(context).colorScheme.primary,))),
                                     ),
                                   ],
                                 ),
@@ -1434,7 +1434,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               color: Colors.grey),
                                           focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightGreen))),
+                                                  color: Theme.of(context).colorScheme.primary,))),
                                     ),
                                   ],
                                 ),
@@ -1511,7 +1511,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               color: Colors.grey),
                                           focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightGreen))),
+                                                  color: Theme.of(context).colorScheme.primary,))),
                                     ),
                                   ],
                                 ),
@@ -1934,7 +1934,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               color: Colors.grey),
                                           focusedBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: Colors.lightGreen))),
+                                                  color: Theme.of(context).colorScheme.primary,))),
                                     ),
                                   ],
                                 ),
@@ -2074,7 +2074,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                     .toDouble(),
                                                 cornerStyle:
                                                     CornerStyle.bothCurve,
-                                                color: Colors.lightGreen,
+                                                color:Theme.of(context).colorScheme.primary,
                                                 width: 0.2,
                                                 sizeUnit: GaugeSizeUnit.factor,
                                               )
@@ -2182,7 +2182,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                   .toDouble(),
                                               cornerStyle:
                                                   CornerStyle.bothCurve,
-                                              color: Colors.lightGreen,
+                                              color: Theme.of(context).colorScheme.primary,
                                               width: 0.2,
                                               sizeUnit: GaugeSizeUnit.factor,
                                             )
@@ -2290,7 +2290,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                   .toDouble(),
                                               cornerStyle:
                                                   CornerStyle.bothCurve,
-                                              color: Colors.lightGreen,
+                                              color: Theme.of(context).colorScheme.primary,
                                               width: 0.2,
                                               sizeUnit: GaugeSizeUnit.factor,
                                             )
@@ -2636,7 +2636,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.lightGreen,
+                                      color:Theme.of(context).colorScheme.primary,
                                       style: BorderStyle.solid,
                                       width: 1.0.w),
                                   color: Colors.transparent,

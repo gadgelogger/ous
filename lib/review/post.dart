@@ -750,7 +750,7 @@ void initState(){
                           height: 50,
                         ),
                     SlideAction(
-                        outerColor: Colors.lightGreen[200],
+                        outerColor: Theme.of(context).colorScheme.primary,
                         child: Text('スワイプして送信',style: TextStyle(color: Colors.black),),
                         key: slideActionKey,
                         onSubmit: () async {

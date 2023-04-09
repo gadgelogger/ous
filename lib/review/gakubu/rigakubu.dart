@@ -23,7 +23,6 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class Rigakubu extends StatefulWidget {
   @override
   _RigakubuState createState() => _RigakubuState();
@@ -44,10 +43,8 @@ class _RigakubuState extends State<Rigakubu> {
   int _filterCount = 0;
 
   Future<List<AlgoliaObjectSnapshot>> _search(String query) async {
-    final result = await _algolia.instance
-        .index('rigaku')
-        .search(query)
-        .getObjects();
+    final result =
+        await _algolia.instance.index('rigaku').search(query).getObjects();
 
     return result.hits;
   }
@@ -79,24 +76,29 @@ class _RigakubuState extends State<Rigakubu> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    // 背景の明るさをチェック
+    bool isBackgroundBright = Theme.of(context).primaryColor == Brightness.light;
+
+    // 明るい背景の場合は黒、暗い背景の場合は白
+    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
+
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
             ? TextField(
-          controller: _queryController,
-          autofocus: true,
-          onChanged: (value) {
-            setState(() {
-              _query = value;
-            });
-          },
-          decoration: InputDecoration(
-            hintText: '講義名or講師名',
-          ),
-        )
+                controller: _queryController,
+                autofocus: true,
+                onChanged: (value) {
+                  setState(() {
+                    _query = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: '講義名or講師名',
+                ),
+              )
             : Text('理学部'),
         actions: <Widget>[
           IconButton(
@@ -112,329 +114,340 @@ class _RigakubuState extends State<Rigakubu> {
       body: Center(
         child: _isSearching && _query.isNotEmpty
             ? FutureBuilder(
-          future: _search(_query),
-          builder: (context,
-              AsyncSnapshot<List<AlgoliaObjectSnapshot>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              final data = snapshot.data!;
-              return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final hit = data[index].data;
-                  return Container(
-                      child: GestureDetector(
-                        onTap: () {
+                future: _search(_query),
+                builder: (context,
+                    AsyncSnapshot<List<AlgoliaObjectSnapshot>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                    final data = snapshot.data!;
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final hit = data[index].data;
+                        return Container(
+                            child: GestureDetector(
+                          onTap: () {
 //algolia
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                zyugyoumei: hit['zyugyoumei'],
-                                kousimei: hit['kousimei'],
-                                tannisuu: hit['tannisuu'],
-                                zyugyoukeisiki: hit['zyugyoukeisiki'],
-                                syusseki: hit['syusseki'],
-                                kyoukasyo: hit['kyoukasyo'],
-                                tesutokeisiki: hit['tesutokeisiki'],
-                                omosirosa: hit['omosirosa'],
-                                toriyasusa: hit['toriyasusa'],
-                                sougouhyouka: hit['sougouhyouka'],
-                                komento: hit['komento'],
-                                name: hit['name'],
-                                senden: hit['senden'],
-                                nenndo: hit['nenndo'],
-                                date: Timestamp.fromMillisecondsSinceEpoch(
-                                    hit['date']).toDate(),
-                                tesutokeikou: hit['tesutokeikou'],
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  zyugyoumei: hit['zyugyoumei'],
+                                  kousimei: hit['kousimei'],
+                                  tannisuu: hit['tannisuu'],
+                                  zyugyoukeisiki: hit['zyugyoukeisiki'],
+                                  syusseki: hit['syusseki'],
+                                  kyoukasyo: hit['kyoukasyo'],
+                                  tesutokeisiki: hit['tesutokeisiki'],
+                                  omosirosa: hit['omosirosa'],
+                                  toriyasusa: hit['toriyasusa'],
+                                  sougouhyouka: hit['sougouhyouka'],
+                                  komento: hit['komento'],
+                                  name: hit['name'],
+                                  senden: hit['senden'],
+                                  nenndo: hit['nenndo'],
+                                  date: Timestamp.fromMillisecondsSinceEpoch(
+                                          hit['date'])
+                                      .toDate(),
+                                  tesutokeikou: hit['tesutokeikou'],
+                                ),
+                              ),
+                            );
+                          },
+                          child: (SizedBox(
+                            width: 200.w,
+                            height: 30.h,
+                            child: Card(
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              child: Stack(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Align(
+                                          alignment: const Alignment(
+                                            -0.8,
+                                            -0.5,
+                                          ),
+                                          child: Text(
+                                            hit['zyugyoumei'],
+                                            style: TextStyle(fontSize: 20.sp),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ))),
+                                  Align(
+                                    alignment: const Alignment(-0.8, 0.4),
+                                    child: Text(
+                                      hit['gakki'],
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 15.sp),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: const Alignment(-0.8, 0.8),
+                                    child: Text(
+                                      hit['kousimei'],
+                                      overflow: TextOverflow.ellipsis, //ここ！！
+                                      style: TextStyle(fontSize: 15.sp),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 4, horizontal: 6),
+                                        decoration: BoxDecoration(
+                                            color: hit['bumon'] == 'エグ単'
+                                                ? Colors.red
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            ) // green shaped
+                                            ),
+                                        child: Text(
+                                          hit['bumon'],
+                                          style: TextStyle(
+                                              fontSize: 15.sp,
+                                              color: textColor),
+                                          // Your text
+                                        )),
+                                  ),
+                                ],
                               ),
                             ),
-                          );
-
-                        },
-                        child: (SizedBox(
-                          width: 200.w,
-                          height: 30.h,
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Align(
-                                        alignment: const Alignment(
-                                          -0.8,
-                                          -0.5,
-                                        ),
-                                        child: Text(
-                                          hit['zyugyoumei'],
-                                          style: TextStyle(fontSize: 20.sp),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ))),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.4),
-                                  child: Text(
-                                    hit['gakki'],
-                                    style: TextStyle(
-                                        color: Colors.lightGreen,
-                                        fontSize: 15.sp),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.8),
-                                  child: Text(
-                                    hit['kousimei'],
-                                    overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 6),
-                                      decoration: BoxDecoration(
-                                          color: hit['bumon'] == 'エグ単'
-                                              ? Colors.red
-                                              : Colors.lightGreen[200],
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
-                                          ) // green shaped
-                                      ),
-                                      child: Text(
-                                        hit['bumon'],
-                                        style: TextStyle(
-                                            fontSize: 15.sp, color: Colors.black),
-                                        // Your text
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )),
-                      ));
-                },
-              );
-            } else {
-              return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          width: 200,
-                          height: 200,
-                          child: Image(
-                            image: AssetImage('assets/icon/found.gif'),
-                            fit: BoxFit.cover,
                           )),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        '何も見つかりませんでした。\n別のキーワードで検索をしてみてね。',
-                        style: TextStyle(fontSize: 18.sp),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ));
-            }
-          },
-        )
+                        ));
+                      },
+                    );
+                  } else {
+                    return Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            width: 200,
+                            height: 200,
+                            child: Image(
+                              image: AssetImage('assets/icon/found.gif'),
+                              fit: BoxFit.cover,
+                            )),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Text(
+                          '何も見つかりませんでした。\n別のキーワードで検索をしてみてね。',
+                          style: TextStyle(fontSize: 18.sp),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ));
+                  }
+                },
+              )
             : StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('rigaku')
-              .snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('Error'),
-              );
-            } else if (snapshot.connectionState ==
-                ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              final data = snapshot.data!.docs.where((document) {
-                if (_filterCount == 1) {
-                  // Filter Rakutan only
-                  Fluttertoast.showToast(msg: "ラク単のみ表示");
+                stream:
+                    FirebaseFirestore.instance.collection('rigaku').snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error'),
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    final data = snapshot.data!.docs.where((document) {
+                      if (_filterCount == 1) {
+                        // Filter Rakutan only
+                        Fluttertoast.showToast(msg: "ラク単のみ表示");
 
-                  return document['bumon'] == 'ラク単';
-                } else if (_filterCount == 2) {
-                  // Filter Egutan only
-                  Fluttertoast.showToast(msg: "エグ単のみ表示");
+                        return document['bumon'] == 'ラク単';
+                      } else if (_filterCount == 2) {
+                        // Filter Egutan only
+                        Fluttertoast.showToast(msg: "エグ単のみ表示");
 
-                  return document['bumon'] == 'エグ単';
+                        return document['bumon'] == 'エグ単';
+                      } else {
+                        Fluttertoast.showToast(msg: "全て表示");
 
-                } else {
-                  Fluttertoast.showToast(msg: "全て表示");
+                        // Return all data
+                        return true;
+                      }
+                    }).toList();
+                    return Scrollbar(
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                        ),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              child: GestureDetector(
+                            onTap: () {
+                              //firebase
 
-                  // Return all data
-                  return true;
-                }
-              }).toList();
-              return Scrollbar(child:
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          //firebase
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                zyugyoumei: data[index]['zyugyoumei'],
-                                kousimei: data[index]['kousimei'],
-                                tannisuu: data[index]['tannisuu'],
-                                zyugyoukeisiki: data[index]['zyugyoukeisiki'],
-                                syusseki: data[index]['syusseki'],
-                                kyoukasyo: data[index]['kyoukasyo'],
-                                tesutokeisiki: data[index]['tesutokeisiki'],
-                                omosirosa: data[index]['omosirosa'],
-                                toriyasusa: data[index]['toriyasusa'],
-                                sougouhyouka: data[index]['sougouhyouka'],
-                                komento: data[index]['komento'],
-                                name: data[index]['name'],
-                                senden: data[index]['senden'],
-                                nenndo: data[index]['nenndo'],
-                                date: data[index]['date'].toDate(),
-                                tesutokeikou: data[index]['tesutokeikou'],
-                              ),
-                            ),
-                          );
-                        },
-                        child: (SizedBox(
-                          width: 200.w,
-                          height: 30.h,
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Align(
-                                        alignment: const Alignment(
-                                          -0.8,
-                                          -0.5,
-                                        ),
-                                        child: Text(
-                                          data[index]['zyugyoumei'],
-                                          style: TextStyle(fontSize: 20.sp),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ))),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.4),
-                                  child: Text(
-                                    data[index]['gakki'],
-                                    style: TextStyle(
-                                        color: Colors.lightGreen,
-                                        fontSize: 15.sp),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailsScreen(
+                                    zyugyoumei: data[index]['zyugyoumei'],
+                                    kousimei: data[index]['kousimei'],
+                                    tannisuu: data[index]['tannisuu'],
+                                    zyugyoukeisiki: data[index]
+                                        ['zyugyoukeisiki'],
+                                    syusseki: data[index]['syusseki'],
+                                    kyoukasyo: data[index]['kyoukasyo'],
+                                    tesutokeisiki: data[index]['tesutokeisiki'],
+                                    omosirosa: data[index]['omosirosa'],
+                                    toriyasusa: data[index]['toriyasusa'],
+                                    sougouhyouka: data[index]['sougouhyouka'],
+                                    komento: data[index]['komento'],
+                                    name: data[index]['name'],
+                                    senden: data[index]['senden'],
+                                    nenndo: data[index]['nenndo'],
+                                    date: data[index]['date'].toDate(),
+                                    tesutokeikou: data[index]['tesutokeikou'],
                                   ),
                                 ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.8),
-                                  child: Text(
-                                    data[index]['kousimei'],
-                                    overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 6),
-                                      decoration: BoxDecoration(
-                                          color: data[index]['bumon'] == 'エグ単'
-                                              ? Colors.red
-                                              : Colors.lightGreen[200],
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
-                                          ) // green shaped
-                                      ),
+                              );
+                            },
+                            child: (SizedBox(
+                              width: 200.w,
+                              height: 30.h,
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Padding(
+                                        padding: EdgeInsets.all(15),
+                                        child: Align(
+                                            alignment: const Alignment(
+                                              -0.8,
+                                              -0.5,
+                                            ),
+                                            child: Text(
+                                              data[index]['zyugyoumei'],
+                                              style: TextStyle(fontSize: 20.sp),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ))),
+                                    Align(
+                                      alignment: const Alignment(-0.8, 0.4),
                                       child: Text(
-                                        data[index]['bumon'],
+                                        data[index]['gakki'],
                                         style: TextStyle(
-                                            fontSize: 15.sp, color: Colors.black),
-                                        // Your text
-                                      )),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 15.sp),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: const Alignment(-0.8, 0.8),
+                                      child: Text(
+                                        data[index]['kousimei'],
+                                        overflow: TextOverflow.ellipsis, //ここ！！
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  data[index]['bumon'] == 'エグ単'
+                                                      ? Colors.red
+                                                      : Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: Text(
+                                            data[index]['bumon'],
+                                            style: TextStyle(
+                                                fontSize: 15.sp,
+                                                color: textColor),
+                                            // Your text
+                                          )),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        )),
-                      ));
+                              ),
+                            )),
+                          ));
+                        },
+                      ),
+                    );
+                  }
                 },
               ),
-              );
-            }
-          },
-        ),
       ),
       floatingActionButton: showFloatingActionButton
           ? Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            children: [
-
-              Container(
-                margin: EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
+              verticalDirection: VerticalDirection.up,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => post()),
+                          );
+                        },
+                        child: const Icon(Icons.upload_outlined),
+                      ),
+                    )
+                  ],
+                ),
+                FloatingActionButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => post()),
+                    setState(
+                      () {
+                        _filterCount = (_filterCount + 1) % 3;
+                      },
                     );
                   },
-                  child: const Icon(Icons.upload_outlined),
+                  child: Icon(Icons.filter_list),
                 ),
-              )
-            ],
-          ),
-          FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _filterCount = (_filterCount + 1) % 3;
-              },
-              );
-            },
-            child: Icon(Icons.filter_list),
-          ),
-        ],
-      )
+              ],
+            )
           : FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _filterCount = (_filterCount + 1) % 3;
-          },
-          );
-        },
-        child: Icon(Icons.filter_list),
-      ),
+              onPressed: () {
+                setState(
+                  () {
+                    _filterCount = (_filterCount + 1) % 3;
+                  },
+                );
+              },
+              child: Icon(Icons.filter_list),
+            ),
     );
   }
 }
@@ -486,7 +499,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   Future<ByteData> exportToImage(GlobalKey globalKey) async {
     final boundary =
-    globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     final image = await boundary.toImage(
       pixelRatio: 3,
     );
@@ -514,10 +527,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       final bytes = await exportToImage(globalKey);
       //byte data→Uint8List
       final widgetImageBytes =
-      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+          bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
       //App directoryファイルに保存
       final applicationDocumentsFile =
-      await getApplicationDocumentsFile(text, widgetImageBytes);
+          await getApplicationDocumentsFile(text, widgetImageBytes);
 
       final path = applicationDocumentsFile.path;
       await ShareExtend.share(path, "image");
@@ -540,8 +553,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 key: shareKey,
                 child: Container(
                   color: Theme.of(context).brightness == Brightness.light
-                      ? Color(0xFFFDFDF5)
-                      : Color(0xFF1A1C17),
+                      ? Theme.of(context).backgroundColor.withOpacity(0.6)
+                      : Theme.of(context).backgroundColor.withOpacity(0.6),
+
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -722,14 +737,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
                                         color:
-                                        Color.fromARGB(139, 134, 134, 134),
+                                            Color.fromARGB(139, 134, 134, 134),
                                         thicknessUnit: GaugeSizeUnit.factor,
                                       ),
                                       pointers: <GaugePointer>[
                                         RangePointer(
                                           value: widget.omosirosa.toDouble(),
                                           cornerStyle: CornerStyle.bothCurve,
-                                          color: Colors.lightGreen,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           width: 0.2,
                                           sizeUnit: GaugeSizeUnit.factor,
                                         )
@@ -740,8 +757,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             angle: 90,
                                             widget: Text(
                                               widget.omosirosa
-                                                  .toDouble()
-                                                  .toStringAsFixed(0) +
+                                                      .toDouble()
+                                                      .toStringAsFixed(0) +
                                                   ' / 5',
                                               style: TextStyle(
                                                   fontSize: 50.sp,
@@ -774,7 +791,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       RangePointer(
                                         value: widget.toriyasusa.toDouble(),
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         width: 0.2,
                                         sizeUnit: GaugeSizeUnit.factor,
                                       )
@@ -785,8 +804,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           angle: 90,
                                           widget: Text(
                                             widget.toriyasusa
-                                                .toDouble()
-                                                .toStringAsFixed(0) +
+                                                    .toDouble()
+                                                    .toStringAsFixed(0) +
                                                 ' / 5',
                                             style: TextStyle(
                                                 fontSize: 50.sp,
@@ -820,7 +839,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       RangePointer(
                                         value: widget.sougouhyouka.toDouble(),
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         width: 0.2,
                                         sizeUnit: GaugeSizeUnit.factor,
                                       )
@@ -831,8 +852,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           angle: 90,
                                           widget: Text(
                                             widget.sougouhyouka
-                                                .toDouble()
-                                                .toStringAsFixed(0) +
+                                                    .toDouble()
+                                                    .toStringAsFixed(0) +
                                                 ' / 5',
                                             style: TextStyle(
                                                 fontSize: 50.sp,
@@ -937,7 +958,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: Colors.lightGreen,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                       style: BorderStyle.solid,
                                       width: 1.0.w),
                                   color: Colors.transparent,

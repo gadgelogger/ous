@@ -111,6 +111,7 @@ dependencies:
   table_calendar: ^3.0.8
   ical: ^0.2.2
   icalendar_parser: ^1.1.1
+  flutter_colorpicker: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -58,7 +58,7 @@ class _businessState extends State<business> {
                   children:[
                     ListTile(
                       title: Text(article.title,style: TextStyle(fontSize: 15.sp),),
-                      subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Colors.lightGreen,fontWeight: FontWeight.bold,fontSize: 15.sp),),
+                      subtitle: Text(article.date.substring(0,10),style: TextStyle(color: Theme.of(context).colorScheme.primary,fontWeight: FontWeight.bold,fontSize: 15.sp),),
                       onTap: () => launch(article.url),
 
                     ),

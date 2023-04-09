@@ -8,7 +8,7 @@ import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/main.dart';
-import 'package:ous/Nav/setting.dart';
+import 'package:ous/setting/setting.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/userpolicie.dart';
 import 'package:path/path.dart';
@@ -105,7 +105,7 @@ class _NavBarState extends State<NavBar> {
                     ),
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.lightGreen,
+                    color: Theme.of(context).colorScheme.primary,
                     image: DecorationImage(
                       image: NetworkImage(
                           'https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500'),

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -24,6 +26,7 @@ import 'package:quick_actions/quick_actions.dart';
 import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
+import 'package:ous/setting/globals.dart';
 
 //algolia
 class Application {
@@ -35,6 +38,8 @@ class Application {
 //algolia
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // ここに追加
+
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -58,7 +63,16 @@ void main() async {
   var httpOverrides = new MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
-  runApp(const MyApp());
+
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => ThemeProvider()),
+          ChangeNotifierProvider(create: (context) => AppTheme()),
+        ],
+        child: MyApp(),
+      ),
+    );
 
   FirebaseFirestore.instance.settings = Settings(
     persistenceEnabled: true,
@@ -75,15 +89,28 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      final appTheme = Provider.of<AppTheme>(context, listen: false);
+      await appTheme.loadColorFromPrefs();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ここでBuildContextを定義する
-
+    final appTheme = Provider.of<AppTheme>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return ScreenUtilInit(
         designSize: const Size(392, 759),
         minTextAdapt: true,
@@ -91,20 +118,20 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp(
               debugShowCheckedModeBanner: false,
-              // これを追加するだけ
-
               title: 'ホーム',
               theme: ThemeData(
                 useMaterial3: true,
-                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
+                colorSchemeSeed: appTheme.currentColor,
+
                 fontFamily: 'NotoSansCJKJp',
               ),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,
                 useMaterial3: true,
-                colorSchemeSeed: Color.fromARGB(0, 253, 253, 246),
+                colorSchemeSeed: appTheme.currentColor,
                 fontFamily: 'NotoSansCJKJp',
               ),
+              themeMode: themeProvider.themeMode,
               home: StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
@@ -118,10 +145,12 @@ class MyApp extends StatelessWidget {
                   // User が null である、つまり未サインインのサインイン画面へ
                   return Login();
                 },
-              ));
+              )
+          );
         });
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -280,5 +309,54 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ));
+  }
+}
+
+
+class ThemeProvider extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  ThemeMode get themeMode => _themeMode;
+
+  ThemeProvider() {
+    _initThemeMode();
+  }
+
+  void _initThemeMode() {
+    _loadThemeMode().then((mode) {
+      _themeMode = mode;
+      notifyListeners();
+    });
+  }
+
+  Future<ThemeMode> _loadThemeMode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int storedThemeMode = prefs.getInt('themeMode') ?? 0;
+    return ThemeMode.values[storedThemeMode];
+  }
+
+  Future<void> _saveThemeMode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('themeMode', _themeMode.index);
+  }
+
+
+
+  void light() {
+    _themeMode = ThemeMode.light;
+    _saveThemeMode();
+    notifyListeners();
+  }
+  void dark() {
+    _themeMode = ThemeMode.dark;
+    _saveThemeMode();
+    notifyListeners();
+  }
+
+
+  void useSystemThemeMode() {
+    _themeMode = ThemeMode.system;
+    _saveThemeMode();
+    notifyListeners();
   }
 }

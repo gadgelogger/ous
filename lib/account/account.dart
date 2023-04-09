@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
@@ -54,7 +55,7 @@ class _accountState extends State<account> {
           child: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 150.0,
-            backgroundColor: const Color(0xff8bc34a),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             elevation: 0.0,
             leading: IconButton(
               icon: Icon(
@@ -131,9 +132,20 @@ class _accountState extends State<account> {
                                   clipBehavior: Clip.none,
                                   fit: StackFit.expand,
                                   children: [
-                                    CircleAvatar(
+                                  GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) {
+                                              return account_edit();
+                                            }),
+                                      );
+                                    },
+                                    child:   CircleAvatar(
                                       backgroundImage: NetworkImage(image),
                                     ),
+                                  ),
                                     Positioned(
                                       bottom: 0,
                                       right: -25,
@@ -151,7 +163,7 @@ class _accountState extends State<account> {
                                         fillColor: Color(0xFFF5F6F9),
                                         child: Icon(
                                           Icons.settings_outlined,
-                                          color: Colors.lightGreen,
+                                          color: Theme.of(context).colorScheme.primary
                                         ),
                                         padding: EdgeInsets.all(7.0),
                                         shape: CircleBorder(),
@@ -266,9 +278,10 @@ class _accountState extends State<account> {
   ],
             ),
             CustomPaint(
-              painter: AppBarPainter(),
+              painter: AppBarPainter(context),
               child: Container(height: 0),
             ),
+
           ],
         ),
       );
@@ -276,10 +289,14 @@ class _accountState extends State<account> {
 
 //AppBar改造
 class AppBarPainter extends CustomPainter {
+  final BuildContext context;
+
+  AppBarPainter(this.context);
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint_1 = Paint()
-      ..color = const Color(0xff8bc34a)
+      ..color = Theme.of(context).colorScheme.primary
       ..style = PaintingStyle.fill;
 
     Path path_1 = Path()
@@ -292,7 +309,7 @@ class AppBarPainter extends CustomPainter {
           0.04, //x2,y2
           0.0,
           0.1 * size.width //x3,y3
-          );
+      );
 
     Path path_2 = Path()
       ..moveTo(size.width, 0)
@@ -304,10 +321,10 @@ class AppBarPainter extends CustomPainter {
           0.96, //x2,y2
           size.width,
           0.1 * size.width //x3,y3
-          );
+      );
 
     Paint paint_2 = Paint()
-      ..color = const Color(0xff8bc34a)
+      ..color = Theme.of(context).colorScheme.primary
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
@@ -322,7 +339,6 @@ class AppBarPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+    return false;
   }
 }

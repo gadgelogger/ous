@@ -64,7 +64,7 @@ class _MusicState extends State<Music> {
                 _controller,
                 allowScrubbing: true,
                 colors: new VideoProgressColors(
-                  playedColor: Colors.lightGreen,
+                  playedColor: Theme.of(context).colorScheme.primary,
                   bufferedColor: Colors.black26,
                   backgroundColor: Colors.black26,
                 ),
@@ -84,7 +84,7 @@ class _MusicState extends State<Music> {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(20),
-                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
                   ),
@@ -98,7 +98,7 @@ class _MusicState extends State<Music> {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(20),
-                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
                   ),
@@ -112,7 +112,7 @@ class _MusicState extends State<Music> {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(20),
-                      backgroundColor: Colors.lightGreen, // <-- Button color
+                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
                   )

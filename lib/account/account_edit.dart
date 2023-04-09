@@ -188,12 +188,16 @@ class _account_editState extends State<account_edit> {
                                     bottom: 0,
                                     right: -25,
                                     child: RawMaterialButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        _pickImage(ImageSource.gallery);
+                                        Fluttertoast.showToast(
+                                            msg: "アカウント画像を変更しています\反映されるまでちょっと待ってね。");
+                                      },
                                       elevation: 2.0,
                                       fillColor: Color(0xFFF5F6F9),
                                       child: Icon(
                                         Icons.photo_camera_outlined,
-                                        color: Colors.lightGreen,
+                                        color: Theme.of(context).colorScheme.primary
                                       ),
                                       padding: EdgeInsets.all(7.0),
                                       shape: CircleBorder(),

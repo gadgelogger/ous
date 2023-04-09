@@ -273,7 +273,6 @@ class _homeState extends State<home> {
             ),
             Column(mainAxisAlignment: MainAxisAlignment.start, children: [
 
-
               Text(
                 'バス運行情報',
                 style: TextStyle(
@@ -286,7 +285,7 @@ class _homeState extends State<home> {
                 SizedBox(
                   width: 180.w, //横幅
                   height: 50.h, //高さ
-                  child: ElevatedButton(
+                  child: FilledButton.tonal(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -318,14 +317,14 @@ class _homeState extends State<home> {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      primary: Colors.lightGreen[200],
-                      onPrimary: Colors.green[900],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                        style: FilledButton.styleFrom(
+
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          // Foreground color
+                          // Background color
+                        ),
                     onPressed: (){
                       launch('https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
                     }
@@ -334,13 +333,13 @@ class _homeState extends State<home> {
                 SizedBox(
                   width: 180.w, //横幅
                   height: 50.h, //高さ
-                  child: ElevatedButton(
+                  child: FilledButton.tonal(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
                           '岡山理科大学\正門発',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(fontWeight: FontWeight.bold,),
                         ),
                         StreamBuilder<String>(
                           stream: fetchApproachCaption1(),
@@ -368,13 +367,13 @@ class _homeState extends State<home> {
                         ),
                       ],
                     ),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      primary: Colors.lightGreen[200],
-                      onPrimary: Colors.green[900],
+                    style: FilledButton.styleFrom(
+
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      // Foreground color
+                      // Background color
                     ),
                     onPressed: () => launch(
                         'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'),
@@ -644,7 +643,7 @@ class _WeatherState extends State<Weather> {
                       ),
                       Container(
                           decoration: BoxDecoration(
-                            color: Colors.lightGreen[200],
+                            color:Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(10),
                           ), // 追加
                           height: 230.h,
@@ -683,7 +682,9 @@ class _WeatherState extends State<Weather> {
                                               ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.lightGreen[100],
+                                                color: Theme.of(context).backgroundColor.withOpacity(0.6),
+
+
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
@@ -955,7 +956,7 @@ class _imabariState extends State<imabari> {
                 ),
                 Container(
                     decoration: BoxDecoration(
-                      color: Colors.lightGreen[200],
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(10),
                     ), // 追加
                     height: 230.h,
@@ -994,7 +995,9 @@ class _imabariState extends State<imabari> {
                                   ),
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.lightGreen[100],
+                                    color: Theme.of(context).backgroundColor.withOpacity(0.6),
+
+
                                     borderRadius:
                                     BorderRadius.circular(10),
                                   ),
