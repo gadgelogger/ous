@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:ous/Nav/call.dart';
+import 'package:ous/review/post.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Nav/Calendar/calender.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -73,11 +77,16 @@ void main() async {
         child: MyApp(),
       ),
     );
-
+//ダークモード
   FirebaseFirestore.instance.settings = Settings(
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+
+  //onesignal
+
+
+
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -90,6 +99,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
+
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -98,9 +108,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  @override
+@override
   void initState() {
     super.initState();
+
+
+
+//テーマ
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       final appTheme = Provider.of<AppTheme>(context, listen: false);
       await appTheme.loadColorFromPrefs();

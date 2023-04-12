@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_webview_plugin_ios_android/flutter_webview_plugin_ios_android.dart';
+import 'package:ous/Nav/Calendar/calender.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/account/account.dart';
 import 'package:ous/Nav/link.dart';
@@ -120,8 +121,10 @@ class _NavBarState extends State<NavBar> {
             leading: Icon(Icons.event_available_outlined),
             title: Text('行事予定'),
             onTap: () {
-              launch('https://www.ous.ac.jp/campuslife/academic_calenda/');
-            },
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarPage()),
+              );            },
           ),
           ListTile(
             leading: Icon(Icons.public_outlined),

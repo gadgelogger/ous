@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
@@ -23,13 +24,12 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-class kyouikugakubu extends StatefulWidget {
+class kyouiku extends StatefulWidget {
   @override
-  _kyouikugakubuState createState() => _kyouikugakubuState();
+  _kyouikuState createState() => _kyouikuState();
 }
 
-class _kyouikugakubuState extends State<kyouikugakubu> {
+class _kyouikuState extends State<kyouiku> {
   bool _isPressed = false;
   int _actionCounter = 0;
   final _queryController = TextEditingController();
@@ -44,10 +44,8 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
   int _filterCount = 0;
 
   Future<List<AlgoliaObjectSnapshot>> _search(String query) async {
-    final result = await _algolia.instance
-        .index('kyouiku')
-        .search(query)
-        .getObjects();
+    final result =
+    await _algolia.instance.index('kyouiku').search(query).getObjects();
 
     return result.hits;
   }
@@ -78,7 +76,6 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
       showFloatingActionButton = true;
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +140,8 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                             MaterialPageRoute(
                               builder: (context) => DetailsScreen(
                                 zyugyoumei: hit['zyugyoumei'],
+                                gakki:hit[index]['gakki'],
+                                bumon:hit[index]['bumon'],
                                 kousimei: hit['kousimei'],
                                 tannisuu: hit['tannisuu'],
                                 zyugyoukeisiki: hit['zyugyoukeisiki'],
@@ -157,12 +156,13 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                 senden: hit['senden'],
                                 nenndo: hit['nenndo'],
                                 date: Timestamp.fromMillisecondsSinceEpoch(
-                                    hit['date']).toDate(),
+                                    hit['date'])
+                                    .toDate(),
                                 tesutokeikou: hit['tesutokeikou'],
+                                id:hit['objectID'],
                               ),
                             ),
                           );
-
                         },
                         child: (SizedBox(
                           width: 200.w,
@@ -191,7 +191,9 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                   child: Text(
                                     hit['gakki'],
                                     style: TextStyle(
-                                        color: Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontSize: 15.sp),
                                   ),
                                 ),
@@ -211,7 +213,9 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                       decoration: BoxDecoration(
                                           color: hit['bumon'] == 'エグ単'
                                               ? Colors.red
-                                              : Theme.of(context).colorScheme.primary,
+                                              : Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8),
@@ -220,7 +224,8 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                                       child: Text(
                                         hit['bumon'],
                                         style: TextStyle(
-                                            fontSize: 15.sp, color: textColor),
+                                            fontSize: 15.sp,
+                                            color: textColor),
                                         // Your text
                                       )),
                                 ),
@@ -257,9 +262,8 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
           },
         )
             : StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('kyouiku')
-              .snapshots(),
+          stream:
+          FirebaseFirestore.instance.collection('kyouiku').snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -283,7 +287,6 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                   Fluttertoast.showToast(msg: "エグ単のみ表示");
 
                   return document['bumon'] == 'エグ単';
-
                 } else {
                   Fluttertoast.showToast(msg: "全て表示");
 
@@ -291,109 +294,115 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
                   return true;
                 }
               }).toList();
-              return Scrollbar(child:
-              GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          //firebase
+              return Scrollbar(
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                  ),
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    final document = data[index];
+                    final documentId = document.id;
+                    return Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            //firebase
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                zyugyoumei: data[index]['zyugyoumei'],
-                                kousimei: data[index]['kousimei'],
-                                tannisuu: data[index]['tannisuu'],
-                                zyugyoukeisiki: data[index]['zyugyoukeisiki'],
-                                syusseki: data[index]['syusseki'],
-                                kyoukasyo: data[index]['kyoukasyo'],
-                                tesutokeisiki: data[index]['tesutokeisiki'],
-                                omosirosa: data[index]['omosirosa'],
-                                toriyasusa: data[index]['toriyasusa'],
-                                sougouhyouka: data[index]['sougouhyouka'],
-                                komento: data[index]['komento'],
-                                name: data[index]['name'],
-                                senden: data[index]['senden'],
-                                nenndo: data[index]['nenndo'],
-                                date: data[index]['date'].toDate(),
-                                tesutokeikou: data[index]['tesutokeikou'],
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsScreen(
+                                  zyugyoumei: data[index]['zyugyoumei'],
+                                  gakki:data[index]['gakki'],
+                                  bumon:data[index]['bumon'],
+                                  kousimei: data[index]['kousimei'],
+                                  tannisuu: data[index]['tannisuu'],
+                                  zyugyoukeisiki: data[index]
+                                  ['zyugyoukeisiki'],
+                                  syusseki: data[index]['syusseki'],
+                                  kyoukasyo: data[index]['kyoukasyo'],
+                                  tesutokeisiki: data[index]['tesutokeisiki'],
+                                  omosirosa: data[index]['omosirosa'],
+                                  toriyasusa: data[index]['toriyasusa'],
+                                  sougouhyouka: data[index]['sougouhyouka'],
+                                  komento: data[index]['komento'],
+                                  name: data[index]['name'],
+                                  senden: data[index]['senden'],
+                                  nenndo: data[index]['nenndo'],
+                                  date: data[index]['date'].toDate(),
+                                  tesutokeikou: data[index]['tesutokeikou'],
+                                  id:document.id,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        child: (SizedBox(
-                          width: 200.w,
-                          height: 30.h,
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                    padding: EdgeInsets.all(15),
-                                    child: Align(
-                                        alignment: const Alignment(
-                                          -0.8,
-                                          -0.5,
-                                        ),
+                            );
+                          },
+                          child: (SizedBox(
+                              width: 200.w,
+                              height: 30.h,
+                              child: Card(
+                                elevation: 10,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                child: Stack(
+                                  children: <Widget>[
+                                    // 既存のウィジェット
+                                    Padding(
+                                      padding: EdgeInsets.all(15),
+                                      child: Align(
+                                        alignment: const Alignment(-0.8, -0.5),
                                         child: Text(
                                           data[index]['zyugyoumei'],
                                           style: TextStyle(fontSize: 20.sp),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
-                                        ))),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.4),
-                                  child: Text(
-                                    data[index]['gakki'],
-                                    style: TextStyle(
-                                        color: Theme.of(context).colorScheme.primary,
-                                        fontSize: 15.sp),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.8),
-                                  child: Text(
-                                    data[index]['kousimei'],
-                                    overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: TextStyle(fontSize: 15.sp),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 6),
-                                      decoration: BoxDecoration(
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: const Alignment(-0.8, 0.4),
+                                      child: Text(
+                                        data[index]['gakki'],
+                                        style: TextStyle(
+                                            color: Theme.of(context).colorScheme.primary,
+                                            fontSize: 15.sp),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: const Alignment(-0.8, 0.8),
+                                      child: Text(
+                                        data[index]['kousimei'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(fontSize: 15.sp),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                                        decoration: BoxDecoration(
                                           color: data[index]['bumon'] == 'エグ単'
                                               ? Colors.red
                                               : Theme.of(context).colorScheme.primary,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8),
-                                          ) // green shaped
+                                          ),
+                                        ),
+                                        child: Text(
+                                          data[index]['bumon'],
+                                          style: TextStyle(fontSize: 15.sp, color: textColor),
+                                        ),
                                       ),
-                                      child: Text(
-                                        data[index]['bumon'],
-                                        style: TextStyle(
-                                            fontSize: 15.sp, color: textColor),
-                                        // Your text
-                                      )),
+                                    ),
+                                    // アイコンを追加する Positioned ウィジェット
+
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        )),
-                      ));
-                },
-              ),
+                              )
+
+                          )),
+                        ));
+                  },
+                ),
               );
             }
           },
@@ -406,7 +415,6 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
         children: <Widget>[
           Column(
             children: [
-
               Container(
                 margin: EdgeInsets.only(top: 16),
                 child: FloatingActionButton(
@@ -423,9 +431,10 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
           ),
           FloatingActionButton(
             onPressed: () {
-              setState(() {
-                _filterCount = (_filterCount + 1) % 3;
-              },
+              setState(
+                    () {
+                  _filterCount = (_filterCount + 1) % 3;
+                },
               );
             },
             child: Icon(Icons.filter_list),
@@ -434,9 +443,10 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
       )
           : FloatingActionButton(
         onPressed: () {
-          setState(() {
-            _filterCount = (_filterCount + 1) % 3;
-          },
+          setState(
+                () {
+              _filterCount = (_filterCount + 1) % 3;
+            },
           );
         },
         child: Icon(Icons.filter_list),
@@ -448,6 +458,8 @@ class _kyouikugakubuState extends State<kyouikugakubu> {
 class DetailsScreen extends StatefulWidget {
   final zyugyoumei;
   final kousimei;
+  final gakki;
+  final bumon;
   final tannisuu;
   final zyugyoukeisiki;
   final syusseki;
@@ -462,12 +474,15 @@ class DetailsScreen extends StatefulWidget {
   final nenndo;
   final date;
   final tesutokeikou;
+  final id;
 
   const DetailsScreen({
     Key? key,
     required this.nenndo,
     required this.zyugyoumei,
     required this.kousimei,
+    required this.gakki,
+    required this.bumon,
     required this.tannisuu,
     required this.zyugyoukeisiki,
     required this.syusseki,
@@ -481,6 +496,7 @@ class DetailsScreen extends StatefulWidget {
     required this.senden,
     required this.date,
     required this.tesutokeikou,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -488,6 +504,54 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final userId = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<void> addToFavorites(String documentId, String userId) async {
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final favoriteRef = userRef.doc(userId).collection('favorite');
+    final originalDocRef = FirebaseFirestore.instance.collection('kyouiku').doc(documentId);
+
+    final favoriteDoc = await favoriteRef.doc(documentId).get();
+
+    if (favoriteDoc.exists) {
+      await favoriteRef.doc(documentId).delete();
+      setState(() {
+        _isFavorite = false;
+      });
+    } else {
+      await favoriteRef.doc(documentId).set({
+        'userId': userId,
+        'timestamp': FieldValue.serverTimestamp(),
+        'originalDocRef': originalDocRef,
+      });
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+  }
+
+
+  // いいね状態のチェック
+  Future<void> _checkFavoriteStatus() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final favoriteRef = userRef.doc(userId).collection('favorite');
+
+    final favoriteDoc = await favoriteRef.doc(widget.id).get();
+
+    if (favoriteDoc.exists) {
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+  }
+
+
+
+  //いいね機能のボタン
+  bool _isFavorite = false;
+
+
   final GlobalKey shareKey = GlobalKey(); //追加
 
   Future<ByteData> exportToImage(GlobalKey globalKey) async {
@@ -534,189 +598,248 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.zyugyoumei),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(15),
-        child: SingleChildScrollView(
-            child: RepaintBoundary(
-                key: shareKey,
-                child: Container(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? Color(0xFFFDFDF5)
-                      : Color(0xFF1A1C17),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '講義名',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.zyugyoumei ?? '不明',
+        appBar: AppBar(
+          title: Text(widget.zyugyoumei),
+        ),
+        body: Container(
+          margin: EdgeInsets.all(15),
+          child: SingleChildScrollView(
+              child: RepaintBoundary(
+                  key: shareKey,
+                  child: Container(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).backgroundColor.withOpacity(0.6)
+                        : Theme.of(context).backgroundColor.withOpacity(0.6),
+
+
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '講義名',
                           style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
                           ),
                         ),
-                      ),
-                      Text(
-                        '講師名',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.kousimei ?? '不明',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
                           ),
-                        ),
-                      ),
-                      Text(
-                        '年度',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: SelectableText(
-                          widget.nenndo ?? '不明'.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '単位数',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 10),
-                        child: SelectableText(
-                          widget.tannisuu.toString(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '授業形式',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.zyugyoukeisiki,
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '出席確認の有無',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.syusseki,
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '教科書の有無',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.kyoukasyo,
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'テスト形式',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: 10,
-                          bottom: 10,
-                        ),
-                        child: SelectableText(
-                          widget.tesutokeisiki ?? '不明',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
-                          ),
-                        ),
-                      ),
-                      Divider(),
-                      Container(
-                        child: Column(
-                          children: [
-                            Text(
-                              '講義の面白さ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
-                              ),
+                          child: SelectableText(
+                            widget.zyugyoumei ?? '不明',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
                             ),
-                            Container(
+                          ),
+                        ),
+                        Text(
+                          '講師名',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: SelectableText(
+                            widget.kousimei ?? '不明',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '年度',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: SelectableText(
+                            widget.nenndo ?? '不明'.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '単位数',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          child: SelectableText(
+                            widget.tannisuu.toString(),
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '授業形式',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: SelectableText(
+                            widget.zyugyoukeisiki,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '出席確認の有無',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: SelectableText(
+                            widget.syusseki,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '教科書の有無',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: SelectableText(
+                            widget.kyoukasyo,
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'テスト形式',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.sp,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: SelectableText(
+                            widget.tesutokeisiki ?? '不明',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        Container(
+                          child: Column(
+                            children: [
+                              Text(
+                                '講義の面白さ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.sp,
+                                ),
+                              ),
+                              Container(
+                                  height: 200.h,
+                                  child: SfRadialGauge(axes: <RadialAxis>[
+                                    RadialAxis(
+                                        minimum: 0,
+                                        maximum: 5,
+                                        showLabels: false,
+                                        showTicks: false,
+                                        axisLineStyle: AxisLineStyle(
+                                          thickness: 0.2,
+                                          cornerStyle: CornerStyle.bothCurve,
+                                          color:
+                                          Color.fromARGB(139, 134, 134, 134),
+                                          thicknessUnit: GaugeSizeUnit.factor,
+                                        ),
+                                        pointers: <GaugePointer>[
+                                          RangePointer(
+                                            value: widget.omosirosa.toDouble(),
+                                            cornerStyle: CornerStyle.bothCurve,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            width: 0.2,
+                                            sizeUnit: GaugeSizeUnit.factor,
+                                          )
+                                        ],
+                                        annotations: <GaugeAnnotation>[
+                                          GaugeAnnotation(
+                                              positionFactor: 0.1,
+                                              angle: 90,
+                                              widget: Text(
+                                                widget.omosirosa
+                                                    .toDouble()
+                                                    .toStringAsFixed(0) +
+                                                    ' / 5',
+                                                style: TextStyle(
+                                                    fontSize: 50.sp,
+                                                    fontWeight: FontWeight.bold),
+                                              ))
+                                        ])
+                                  ])),
+                              Text(
+                                '単位の取りやすさ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.sp,
+                                ),
+                              ),
+                              Container(
                                 height: 200.h,
                                 child: SfRadialGauge(axes: <RadialAxis>[
                                   RadialAxis(
@@ -727,15 +850,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       axisLineStyle: AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color:
-                                        Color.fromARGB(139, 134, 134, 134),
+                                        color: Color.fromARGB(139, 134, 134, 134),
                                         thicknessUnit: GaugeSizeUnit.factor,
                                       ),
                                       pointers: <GaugePointer>[
                                         RangePointer(
-                                          value: widget.omosirosa.toDouble(),
+                                          value: widget.toriyasusa.toDouble(),
                                           cornerStyle: CornerStyle.bothCurve,
-                                          color: Theme.of(context).colorScheme.primary,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           width: 0.2,
                                           sizeUnit: GaugeSizeUnit.factor,
                                         )
@@ -745,7 +869,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             positionFactor: 0.1,
                                             angle: 90,
                                             widget: Text(
-                                              widget.omosirosa
+                                              widget.toriyasusa
                                                   .toDouble()
                                                   .toStringAsFixed(0) +
                                                   ' / 5',
@@ -754,232 +878,219 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                   fontWeight: FontWeight.bold),
                                             ))
                                       ])
-                                ])),
-                            Text(
-                              '単位の取りやすさ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                ]),
                               ),
-                            ),
-                            Container(
-                              height: 200.h,
-                              child: SfRadialGauge(axes: <RadialAxis>[
-                                RadialAxis(
-                                    minimum: 0,
-                                    maximum: 5,
-                                    showLabels: false,
-                                    showTicks: false,
-                                    axisLineStyle: AxisLineStyle(
-                                      thickness: 0.2,
-                                      cornerStyle: CornerStyle.bothCurve,
-                                      color: Color.fromARGB(139, 134, 134, 134),
-                                      thicknessUnit: GaugeSizeUnit.factor,
-                                    ),
-                                    pointers: <GaugePointer>[
-                                      RangePointer(
-                                        value: widget.toriyasusa.toDouble(),
-                                        cornerStyle: CornerStyle.bothCurve,
-                                        color: Theme.of(context).colorScheme.primary,
-                                        width: 0.2,
-                                        sizeUnit: GaugeSizeUnit.factor,
-                                      )
-                                    ],
-                                    annotations: <GaugeAnnotation>[
-                                      GaugeAnnotation(
-                                          positionFactor: 0.1,
-                                          angle: 90,
-                                          widget: Text(
-                                            widget.toriyasusa
-                                                .toDouble()
-                                                .toStringAsFixed(0) +
-                                                ' / 5',
-                                            style: TextStyle(
-                                                fontSize: 50.sp,
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                    ])
-                              ]),
-                            ),
-                            Text(
-                              '総合評価',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                              Text(
+                                '総合評価',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.sp,
+                                ),
                               ),
-                            ),
-                            Container(
-                              height: 200.h,
-                              child: SfRadialGauge(axes: <RadialAxis>[
-                                RadialAxis(
-                                    minimum: 0,
-                                    maximum: 5,
-                                    showLabels: false,
-                                    showTicks: false,
-                                    axisLineStyle: AxisLineStyle(
-                                      thickness: 0.2,
-                                      cornerStyle: CornerStyle.bothCurve,
-                                      color: Color.fromARGB(139, 134, 134, 134),
-                                      thicknessUnit: GaugeSizeUnit.factor,
-                                    ),
-                                    pointers: <GaugePointer>[
-                                      RangePointer(
-                                        value: widget.sougouhyouka.toDouble(),
+                              Container(
+                                height: 200.h,
+                                child: SfRadialGauge(axes: <RadialAxis>[
+                                  RadialAxis(
+                                      minimum: 0,
+                                      maximum: 5,
+                                      showLabels: false,
+                                      showTicks: false,
+                                      axisLineStyle: AxisLineStyle(
+                                        thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
-                                        color: Theme.of(context).colorScheme.primary,
-                                        width: 0.2,
-                                        sizeUnit: GaugeSizeUnit.factor,
-                                      )
-                                    ],
-                                    annotations: <GaugeAnnotation>[
-                                      GaugeAnnotation(
-                                          positionFactor: 0.1,
-                                          angle: 90,
-                                          widget: Text(
-                                            widget.sougouhyouka
-                                                .toDouble()
-                                                .toStringAsFixed(0) +
-                                                ' / 5',
-                                            style: TextStyle(
-                                                fontSize: 50.sp,
-                                                fontWeight: FontWeight.bold),
-                                          ))
-                                    ])
-                              ]),
-                            ),
-                            Divider(),
-                          ],
+                                        color: Color.fromARGB(139, 134, 134, 134),
+                                        thicknessUnit: GaugeSizeUnit.factor,
+                                      ),
+                                      pointers: <GaugePointer>[
+                                        RangePointer(
+                                          value: widget.sougouhyouka.toDouble(),
+                                          cornerStyle: CornerStyle.bothCurve,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          width: 0.2,
+                                          sizeUnit: GaugeSizeUnit.factor,
+                                        )
+                                      ],
+                                      annotations: <GaugeAnnotation>[
+                                        GaugeAnnotation(
+                                            positionFactor: 0.1,
+                                            angle: 90,
+                                            widget: Text(
+                                              widget.sougouhyouka
+                                                  .toDouble()
+                                                  .toStringAsFixed(0) +
+                                                  ' / 5',
+                                              style: TextStyle(
+                                                  fontSize: 50.sp,
+                                                  fontWeight: FontWeight.bold),
+                                            ))
+                                      ])
+                                ]),
+                              ),
+                              Divider(),
+                            ],
+                          ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '講義に関するコメント',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '講義に関するコメント',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp,
+                              ),
                             ),
-                          ),
-                          SelectableText(
-                            widget.komento ?? '不明',
-                            style: TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16.sp,
+                            SelectableText(
+                              widget.komento ?? '不明',
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                fontSize: 16.sp,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'テスト傾向',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                            Text(
+                              'テスト傾向',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp,
+                              ),
                             ),
-                          ),
-                          Padding(
+                            Padding(
+                                padding: EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                                child: Text(widget.tesutokeikou)),
+                            Text(
+                              'ニックネーム',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 10,
+                                top: 10,
+                              ),
+                              child: SelectableText(
+                                widget.name ?? '不明',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '投稿日・更新日',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp,
+                              ),
+                            ),
+                            Padding(
                               padding: EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
-                              child: Text(widget.tesutokeikou)),
-                          Text(
-                            'ニックネーム',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 10,
-                              top: 10,
-                            ),
-                            child: SelectableText(
-                              widget.name ?? '不明',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                fontSize: 15.sp,
+                              child: Text(
+                                DateFormat('yyyy年MM月dd日 HH:mm')
+                                    .format(widget.date),
+                                style: TextStyle(fontSize: 15.sp),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          ),
-                          Text(
-                            '投稿日・更新日',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                            Text(
+                              '宣伝',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20.sp,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: 10,
-                              bottom: 10,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 10,
+                                top: 10,
+                              ),
+                              child: SelectableText(
+                                widget.senden?.toString() ?? '不明',
+                                style: TextStyle(fontSize: 15.sp),
+                              ),
                             ),
-                            child: Text(
-                              DateFormat('yyyy年MM月dd日 HH:mm')
-                                  .format(widget.date),
-                              style: TextStyle(fontSize: 15.sp),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          Text(
-                            '宣伝',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 10,
-                              top: 10,
-                            ),
-                            child: SelectableText(
-                              widget.senden?.toString() ?? '不明',
-                              style: TextStyle(fontSize: 15.sp),
-                            ),
-                          ),
-                          SizedBox(height: 20.0.h),
-                          Container(
-                            height: 40.0.h,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      style: BorderStyle.solid,
-                                      width: 1.0.w),
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  //ここにブロック関数
-                                  launch(
-                                      'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'この投稿を開発者に報告する',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Montserrat',
+                            SizedBox(height: 20.0.h),
+                            Container(
+                              height: 40.0.h,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color:
+                                        Theme.of(context).colorScheme.primary,
+                                        style: BorderStyle.solid,
+                                        width: 1.0.w),
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    //ここにブロック関数
+                                    launch(
+                                        'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      'この投稿を開発者に報告する',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 20.0.h),
-                        ],
-                      )
-                    ],
-                  ),
-                ))),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => shareImageAndText(
-          'sample_widget',
-          shareKey,
+                            SizedBox(height: 20.0.h),
+                          ],
+                        )
+                      ],
+                    ),
+                  ))),
         ),
-        child: const Icon(Icons.ios_share),
-      ),
-    );
+        floatingActionButton: Column(
+          verticalDirection: VerticalDirection.up,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Column(
+              children: [
+
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  child: FloatingActionButton(
+                    onPressed: () async {
+                      if (userId != null) {
+                        addToFavorites(widget.id, userId);
+                      }
+                      HapticFeedback.heavyImpact(); // ライトインパクトの振動フィードバック
+
+                    },
+                    child: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: _isFavorite ? Colors.pink : null,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  child: FloatingActionButton(
+                    onPressed: () => shareImageAndText(
+                      'sample_widget',
+                      shareKey,
+                    ),
+                    child: const Icon(Icons.ios_share),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ));
   }
 }

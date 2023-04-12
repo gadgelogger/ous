@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
@@ -23,12 +24,12 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Rigakubu extends StatefulWidget {
+class rigaku extends StatefulWidget {
   @override
-  _RigakubuState createState() => _RigakubuState();
+  _rigakuState createState() => _rigakuState();
 }
 
-class _RigakubuState extends State<Rigakubu> {
+class _rigakuState extends State<rigaku> {
   bool _isPressed = false;
   int _actionCounter = 0;
   final _queryController = TextEditingController();
@@ -139,6 +140,8 @@ class _RigakubuState extends State<Rigakubu> {
                               MaterialPageRoute(
                                 builder: (context) => DetailsScreen(
                                   zyugyoumei: hit['zyugyoumei'],
+                                  gakki:hit[index]['gakki'],
+                                  bumon:hit[index]['bumon'],
                                   kousimei: hit['kousimei'],
                                   tannisuu: hit['tannisuu'],
                                   zyugyoukeisiki: hit['zyugyoukeisiki'],
@@ -156,6 +159,7 @@ class _RigakubuState extends State<Rigakubu> {
                                           hit['date'])
                                       .toDate(),
                                   tesutokeikou: hit['tesutokeikou'],
+                                  id:hit['objectID'],
                                 ),
                               ),
                             );
@@ -297,6 +301,8 @@ class _RigakubuState extends State<Rigakubu> {
                         ),
                         itemCount: data.length,
                         itemBuilder: (context, index) {
+                          final document = data[index];
+                          final documentId = document.id;
                           return Container(
                               child: GestureDetector(
                             onTap: () {
@@ -307,6 +313,8 @@ class _RigakubuState extends State<Rigakubu> {
                                 MaterialPageRoute(
                                   builder: (context) => DetailsScreen(
                                     zyugyoumei: data[index]['zyugyoumei'],
+                                    gakki:data[index]['gakki'],
+                                    bumon:data[index]['bumon'],
                                     kousimei: data[index]['kousimei'],
                                     tannisuu: data[index]['tannisuu'],
                                     zyugyoukeisiki: data[index]
@@ -323,6 +331,7 @@ class _RigakubuState extends State<Rigakubu> {
                                     nenndo: data[index]['nenndo'],
                                     date: data[index]['date'].toDate(),
                                     tesutokeikou: data[index]['tesutokeikou'],
+                                    id:document.id,
                                   ),
                                 ),
                               );
@@ -332,31 +341,28 @@ class _RigakubuState extends State<Rigakubu> {
                               height: 30.h,
                               child: Card(
                                 elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 child: Stack(
                                   children: <Widget>[
+                                    // 既存のウィジェット
                                     Padding(
-                                        padding: EdgeInsets.all(15),
-                                        child: Align(
-                                            alignment: const Alignment(
-                                              -0.8,
-                                              -0.5,
-                                            ),
-                                            child: Text(
-                                              data[index]['zyugyoumei'],
-                                              style: TextStyle(fontSize: 20.sp),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ))),
+                                      padding: EdgeInsets.all(15),
+                                      child: Align(
+                                        alignment: const Alignment(-0.8, -0.5),
+                                        child: Text(
+                                          data[index]['zyugyoumei'],
+                                          style: TextStyle(fontSize: 20.sp),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
                                     Align(
                                       alignment: const Alignment(-0.8, 0.4),
                                       child: Text(
                                         data[index]['gakki'],
                                         style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            color: Theme.of(context).colorScheme.primary,
                                             fontSize: 15.sp),
                                       ),
                                     ),
@@ -364,38 +370,35 @@ class _RigakubuState extends State<Rigakubu> {
                                       alignment: const Alignment(-0.8, 0.8),
                                       child: Text(
                                         data[index]['kousimei'],
-                                        overflow: TextOverflow.ellipsis, //ここ！！
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(fontSize: 15.sp),
                                       ),
                                     ),
                                     Positioned(
                                       top: 0,
                                       child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 4, horizontal: 6),
-                                          decoration: BoxDecoration(
-                                              color:
-                                                  data[index]['bumon'] == 'エグ単'
-                                                      ? Colors.red
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                bottomRight: Radius.circular(8),
-                                              ) // green shaped
-                                              ),
-                                          child: Text(
-                                            data[index]['bumon'],
-                                            style: TextStyle(
-                                                fontSize: 15.sp,
-                                                color: textColor),
-                                            // Your text
-                                          )),
+                                        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                                        decoration: BoxDecoration(
+                                          color: data[index]['bumon'] == 'エグ単'
+                                              ? Colors.red
+                                              : Theme.of(context).colorScheme.primary,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(8),
+                                            bottomRight: Radius.circular(8),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          data[index]['bumon'],
+                                          style: TextStyle(fontSize: 15.sp, color: textColor),
+                                        ),
+                                      ),
                                     ),
+                                    // アイコンを追加する Positioned ウィジェット
+
                                   ],
                                 ),
-                              ),
+                              )
+
                             )),
                           ));
                         },
@@ -455,6 +458,8 @@ class _RigakubuState extends State<Rigakubu> {
 class DetailsScreen extends StatefulWidget {
   final zyugyoumei;
   final kousimei;
+  final gakki;
+  final bumon;
   final tannisuu;
   final zyugyoukeisiki;
   final syusseki;
@@ -469,12 +474,15 @@ class DetailsScreen extends StatefulWidget {
   final nenndo;
   final date;
   final tesutokeikou;
+  final id;
 
   const DetailsScreen({
     Key? key,
     required this.nenndo,
     required this.zyugyoumei,
     required this.kousimei,
+    required this.gakki,
+    required this.bumon,
     required this.tannisuu,
     required this.zyugyoukeisiki,
     required this.syusseki,
@@ -488,6 +496,7 @@ class DetailsScreen extends StatefulWidget {
     required this.senden,
     required this.date,
     required this.tesutokeikou,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -495,6 +504,54 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  final userId = FirebaseAuth.instance.currentUser?.uid;
+
+  Future<void> addToFavorites(String documentId, String userId) async {
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final favoriteRef = userRef.doc(userId).collection('favorite');
+    final originalDocRef = FirebaseFirestore.instance.collection('rigaku').doc(documentId);
+
+    final favoriteDoc = await favoriteRef.doc(documentId).get();
+
+    if (favoriteDoc.exists) {
+      await favoriteRef.doc(documentId).delete();
+      setState(() {
+        _isFavorite = false;
+      });
+    } else {
+      await favoriteRef.doc(documentId).set({
+        'userId': userId,
+        'timestamp': FieldValue.serverTimestamp(),
+        'originalDocRef': originalDocRef,
+      });
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+  }
+
+
+  // いいね状態のチェック
+  Future<void> _checkFavoriteStatus() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userRef = FirebaseFirestore.instance.collection('users');
+    final favoriteRef = userRef.doc(userId).collection('favorite');
+
+    final favoriteDoc = await favoriteRef.doc(widget.id).get();
+
+    if (favoriteDoc.exists) {
+      setState(() {
+        _isFavorite = true;
+      });
+    }
+  }
+
+
+
+  //いいね機能のボタン
+  bool _isFavorite = false;
+
+
   final GlobalKey shareKey = GlobalKey(); //追加
 
   Future<ByteData> exportToImage(GlobalKey globalKey) async {
@@ -541,7 +598,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.zyugyoumei),
@@ -989,13 +1055,42 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ))),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => shareImageAndText(
-          'sample_widget',
-          shareKey,
-        ),
-        child: const Icon(Icons.ios_share),
-      ),
-    );
+     floatingActionButton: Column(
+       verticalDirection: VerticalDirection.up,
+       mainAxisSize: MainAxisSize.min,
+       children: <Widget>[
+         Column(
+           children: [
+
+             Container(
+               margin: EdgeInsets.only(top: 16),
+               child: FloatingActionButton(
+                 onPressed: () async {
+                     if (userId != null) {
+                       addToFavorites(widget.id, userId);
+                   }
+                     HapticFeedback.heavyImpact(); // ライトインパクトの振動フィードバック
+
+                 },
+                 child: Icon(
+                   _isFavorite ? Icons.favorite : Icons.favorite_border,
+                   color: _isFavorite ? Colors.pink : null,
+                 ),
+               ),
+             ),
+             Container(
+               margin: EdgeInsets.only(top: 16),
+               child: FloatingActionButton(
+                 onPressed: () => shareImageAndText(
+                   'sample_widget',
+                   shareKey,
+                 ),
+                 child: const Icon(Icons.ios_share),
+               ),
+             )
+           ],
+         ),
+       ],
+     ));
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
+import 'package:ous/review/favorite.dart';
 import 'package:ous/review/gakubu/keieigakubu.dart';
 import 'package:ous/review/gakubu/kibankamoku.dart';
 import 'package:ous/review/gakubu/kougakubu.dart';
@@ -163,7 +164,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Rigakubu()),
+                          MaterialPageRoute(builder: (context) => rigaku()),
                         );
                       },
 
@@ -253,7 +254,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Kougakubu()),
+                          MaterialPageRoute(builder: (context) => kougakubu()),
                         );
                       },
                     ),
@@ -350,7 +351,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => zyouhourikougakubu()),
+                              builder: (context) => zyouhou()),
                         );
                       },
                     ),
@@ -440,7 +441,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => seibututikyuu()),
+                              builder: (context) => seibutu()),
                         );
                       },
                     ),
@@ -537,7 +538,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => kyouikugakubu()),
+                              builder: (context) => kyouiku()),
                         );
                       },
                     ),
@@ -627,7 +628,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => keieigakubu()),
+                              builder: (context) => keiei()),
                         );
                       },
                     ),
@@ -724,7 +725,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => zyuuigakubu()),
+                              builder: (context) => zyuui()),
                         );
                       },
                     ),
@@ -904,7 +905,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
-                              kibankamoku()),
+                              kiban()),
                         );
                       },
                     ),
@@ -978,7 +979,7 @@ class _ReviewState extends State<Review> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
-                              kyousyokukamoku()),
+                              kyousyoku()),
                         );
                       },
                     ),
@@ -1020,6 +1021,23 @@ class _ReviewState extends State<Review> {
               Container(
                 margin: EdgeInsets.only(top: 16),
                 child: FloatingActionButton(
+                  heroTag: "btn2",
+
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => FavoritesPage()),
+                    );
+                  },
+                  child: const Icon(Icons.favorite_border),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 16),
+                child: FloatingActionButton(
+                  heroTag: "btn3",
+
                   onPressed: () {
                     Navigator.push(
                       context,

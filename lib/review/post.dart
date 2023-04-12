@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 class post extends StatefulWidget {
@@ -32,6 +34,7 @@ class _postState extends State<post> {
 
   String? iskomento = '';
   String? issenden = '';
+
   //総合評価
   double _hyouka = 0;
 
@@ -45,6 +48,7 @@ class _postState extends State<post> {
   String? name;
   String? email;
   String? image;
+
 //投稿者の情報をFirebaseAuthから取得
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -52,17 +56,16 @@ class _postState extends State<post> {
 
   Future<void> getData() async {
     final DocumentSnapshot<Map<String, dynamic>> snapshot =
-    await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
     setState(() {
       name = snapshot.get('displayName');
       email = snapshot.get('email');
     });
   }
-  
+
 //投稿日
   final DateTime now = DateTime.now();
-
 
   TextEditingController _textEditingController0 = TextEditingController();
 
@@ -74,26 +77,49 @@ class _postState extends State<post> {
   TextEditingController _textEditingController6 = TextEditingController();
   TextEditingController _textEditingController7 = TextEditingController();
 
-
 //投稿したら一番上まで移動
   final ScrollController _scrollController = ScrollController();
+
 //スライドボタンの状態をリセットするため
   final slideActionKey = GlobalKey<SlideActionState>();
 
   String? _randomId = Uuid().v4();
 
-
-@override
-void initState(){
-  getData();
+  @override
+  void initState() {
+    getData();
   }
-
 
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
           title: Text('投稿ページ'),
+          actions: [
+            IconButton(icon: Icon(Icons.computer), onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: Text("スマホで投稿するのが\nめんどくさい人へ",textAlign: TextAlign.center,),
+                    content: Text("下記のボタンを押すとPC用クライアントを開きます。\n\nこれをニアバイシェアやAirdrop等を使いPCに送ってください。\n\nhttps://ous-unoffical-20d2c.web.app/\n手動で入力する場合は↑を入力してください。",textAlign: TextAlign.center,),
+                    actions: <Widget>[
+                      // ボタン領域
+                      TextButton(
+                        child: Text("俺はスマホを貫くぜ"),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                      TextButton(
+                        child: Text("開く"),
+                        onPressed: (){
+                          launch('https://ous-unoffical-20d2c.web.app/');
+                        }
+                      ),
+                    ],
+                  );
+                },
+              );            }),
+          ],
         ),
         body: Container(
           child: Scrollbar(
@@ -103,147 +129,142 @@ void initState(){
 
                   child: SingleChildScrollView(
                       controller: _scrollController,
-
                       child: Column(children: [
-                    Center(
-                      child: (Text(
-                        '投稿する学部を選んでください',
-                        style: GoogleFonts.notoSans(
-                          // フォントをnotoSansに指定(
-                          textStyle: TextStyle(
-                            fontSize: 25,
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )),
-                    ),
-                    Center(
-                      child: (Text(
-                        '※基盤and教職関連科目を投稿する場合は学部を選ばずに\nカテゴリの中の”基盤”か”教職科目”を選んでください。',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.red),
-                      )),
-                    ),
-                        SizedBox(height: 20,),
                         Center(
                           child: (Text(
-                            '荒らし防止の為\n学外のメーアドレスからは投稿ができません。\n投稿したい場合は大学のアカウントでログインし直してください。',
+                            '投稿する学部を選んでください',
+                            style: GoogleFonts.notoSans(
+                              // フォントをnotoSansに指定(
+                              textStyle: TextStyle(
+                                fontSize: 25,
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          )),
+                        ),
+                        Center(
+                          child: (Text(
+                            '※基盤and教職関連科目を投稿する場合は学部を選ばずに\nカテゴリの中の”基盤”か”教職科目”を選んでください。',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.red),
                           )),
                         ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('理学部'),
-                          value: 'rigaku',
+                        SizedBox(
+                          height: 20,
                         ),
-                        DropdownMenuItem(
-                          child: Text('工学部'),
-                          value: 'kougakubu',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('情報理工学部'),
-                          value: 'zyouhou',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('生物地球学部'),
-                          value: 'seibutu',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('教育学部'),
-                          value: 'kyouiku',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('経営学部'),
-                          value: 'keiei',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('獣医学部'),
-                          value: 'zyuui',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('生命科学部'),
-                          value: 'seimei',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('基盤教育科目'),
-                          value: 'kiban',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('教職科目'),
-                          value: 'kyousyoku',
-                        ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          iscategory = value;
-                        });
-                      },
-                      //7
-                      value: iscategory,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
 
-
-                    Text(
-                      '投稿する授業の部門を選んでください',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('理学部'),
+                              value: 'rigaku',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('工学部'),
+                              value: 'kougakubu',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('情報理工学部'),
+                              value: 'zyouhou',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('生物地球学部'),
+                              value: 'seibutu',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('教育学部'),
+                              value: 'kyouiku',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('経営学部'),
+                              value: 'keiei',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('獣医学部'),
+                              value: 'zyuui',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('生命科学部'),
+                              value: 'seimei',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('基盤教育科目'),
+                              value: 'kiban',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('教職科目'),
+                              value: 'kyousyoku',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              iscategory = value;
+                            });
+                          },
+                          //7
+                          value: iscategory,
                         ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('ラク単'),
-                          value: 'ラク単',
+                        const SizedBox(
+                          height: 32,
                         ),
-                        DropdownMenuItem(
-                          child: Text('エグ単'),
-                          value: 'エグ単',
+                        Text(
+                          '投稿する授業の部門を選んでください',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        DropdownMenuItem(
-                          child: Text('普通'),
-                          value: '普通',
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('ラク単'),
+                              value: 'ラク単',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('エグ単'),
+                              value: 'エグ単',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('普通'),
+                              value: '普通',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              isbumon = value;
+                            });
+                          },
+                          //7
+                          value: isbumon,
                         ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          isbumon = value;
-                        });
-                      },
-                      //7
-                      value: isbumon,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '年度を記入してください',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(
+                          height: 32,
                         ),
-                      ),
-                    ),
+                        Text(
+                          '年度を記入してください',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,LengthLimitingTextInputFormatter(4)],
                           controller: _textEditingController0,
                           // この一文を追加
                           enabled: true,
@@ -260,444 +281,442 @@ void initState(){
                             });
                           },
                         ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '開講学期を選んでください',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(
+                          height: 32,
                         ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('春１'),
-                          value: '春１',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('春２'),
-                          value: '春２',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('秋１'),
-                          value: '秋１',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('秋２'),
-                          value: '秋２',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('春１と２'),
-                          value: '春１と２',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('秋１と２'),
-                          value: '秋１と２',
-                        ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          isgakki = value;
-                        });
-                      },
-                      //7
-                      value: isgakki,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '授業名を入力してください。',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'マイログに記載されている授業名（正式名称）をコピペして入力してください。。',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    TextField(
-                      controller: _textEditingController1,
-                      // この一文を追加
-                      enabled: true,
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: 'FBD00100 フレッシュマンセミナー',
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          iszyugyoumei = value;
-                        });
-                      },
-                    ),
-                    Text(
-                      '講師名を入力してください。',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'マイログに記載されている正式なフルネーム（空白なし）で入力してください。',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    TextField(
-                      controller: _textEditingController2,
-                      // この一文を追加
-                      enabled: true,
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: '太郎田中',
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          iskousimei = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '単位数を選んでください',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('1'),
-                          value: '1',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('2'),
-                          value: '2',
-                        ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          istanni = value;
-                        });
-                      },
-                      //7
-                      value: istanni,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '授業形式を選んでください',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('オンライン(VOD)'),
-                          value: 'オンライン(VOD)',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('オンライン(リアルタイム）'),
-                          value: 'オンライン(リアルタイム）',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('対面'),
-                          value: '対面',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('対面とオンライン'),
-                          value: '対面とオンライン',
-                        ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          iszyugyoukeisiki = value;
-                        });
-                      },
-                      //7
-                      value: iszyugyoukeisiki,
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '総合評価',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Column(
-                      children: <Widget>[
                         Text(
-                          '${_hyouka.toStringAsFixed(0)}',
-                          style: TextStyle(fontSize: 24),
+                          '開講学期を選んでください',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        Slider(
-                          value: _hyouka,
-                          min: 0,
-                          max: 5,
-                          onChanged: (double value) {
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('春１'),
+                              value: '春１',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('春２'),
+                              value: '春２',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('秋１'),
+                              value: '秋１',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('秋２'),
+                              value: '秋２',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('春１と２'),
+                              value: '春１と２',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('秋１と２'),
+                              value: '秋１と２',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
                             setState(() {
-                              _hyouka = value.roundToDouble();
+                              isgakki = value;
                             });
                           },
-                        )
-                      ],
-                    ),
-                    Text(
-                      '授業の面白さ',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          '${_omosirosa.toStringAsFixed(0)}',
-                          style: TextStyle(fontSize: 24),
+                          //7
+                          value: isgakki,
                         ),
-                        Slider(
-                          value: _omosirosa,
-                          min: 0,
-                          max: 5,
-                          onChanged: (double value) {
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        Text(
+                          '授業名を入力してください。',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'マイログに記載されている授業名（正式名称）をコピペして入力してください。。',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        TextField(
+                          controller: _textEditingController1,
+                          // この一文を追加
+                          enabled: true,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: 'FBD00100 フレッシュマンセミナー',
+                          ),
+                          onChanged: (String value) {
                             setState(() {
-                              _omosirosa = value.roundToDouble();
+                              iszyugyoumei = value;
                             });
                           },
-                        )
-                      ],
-                    ),
-                    Text(
-                      '単位の取りやすさ',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          '${_toriyasusa.toStringAsFixed(0)}',
-                          style: TextStyle(fontSize: 24),
                         ),
-                        Slider(
-                          value: _toriyasusa,
-                          min: 0,
-                          max: 5,
-                          onChanged: (double value) {
+                        Text(
+                          '講師名を入力してください。',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'マイログに記載されている正式なフルネーム（空白なし）で入力してください。',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        TextField(
+                          controller: _textEditingController2,
+                          // この一文を追加
+                          enabled: true,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: '太郎田中',
+                          ),
+                          onChanged: (String value) {
                             setState(() {
-                              _toriyasusa = value.roundToDouble();
+                              iskousimei = value;
                             });
                           },
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    Text(
-                      '出席確認の有無',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('毎日出席を取る'),
-                          value: '毎日出席を取る',
+                        const SizedBox(
+                          height: 32,
                         ),
-                        DropdownMenuItem(
-                          child: Text('ほぼ出席を取る'),
-                          value: 'ほぼ出席を取る',
+                        Text(
+                          '単位数を選んでください',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                        DropdownMenuItem(
-                          child: Text('たまに出席を取る'),
-                          value: 'たまに出席を取る',
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('1'),
+                              value: '1',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('2'),
+                              value: '2',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              istanni = value;
+                            });
+                          },
+                          //7
+                          value: istanni,
                         ),
-                        DropdownMenuItem(
-                          child: Text('出席確認はなし'),
-                          value: '出席確認はなし',
+                        const SizedBox(
+                          height: 32,
                         ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          issyusseki = value;
-                        });
-                      },
-                      //7
-                      value: issyusseki,
-                    ),
-                    Text(
-                      '教科書の有無',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          '授業形式を選んでください',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    DropdownButton(
-                      //4
-                      items: const [
-                        //5
-                        DropdownMenuItem(
-                          child: Text('あり'),
-                          value: 'あり',
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('オンライン(VOD)'),
+                              value: 'オンライン(VOD)',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('オンライン(リアルタイム）'),
+                              value: 'オンライン(リアルタイム）',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('対面'),
+                              value: '対面',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('対面とオンライン'),
+                              value: '対面とオンライン',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              iszyugyoukeisiki = value;
+                            });
+                          },
+                          //7
+                          value: iszyugyoukeisiki,
                         ),
-                        DropdownMenuItem(
-                          child: Text('なし'),
-                          value: 'なし',
+                        const SizedBox(
+                          height: 32,
                         ),
-                      ],
-                      //6
-                      onChanged: (String? value) {
-                        setState(() {
-                          iskyoukasyo = value;
-                        });
-                      },
-                      //7
-                      value: iskyoukasyo,
-                    ),
-                    Text(
-                      'コメント',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          '総合評価',
+                          style: TextStyle(fontSize: 20),
                         ),
-                      ),
-                    ),
-                    TextField(
-                      controller: _textEditingController3,
-                      // この一文を追加
-                      enabled: true,
-                      maxLength: null,
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: 'この講義は楽で〜...',
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          iskomento = value;
-                        });
-                      },
-                    ),
-                    Text(
-                      'テスト形式（期末）',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              '${_hyouka.toStringAsFixed(0)}',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            Slider(
+                              value: _hyouka,
+                              min: 0,
+                              max: 5,
+                              onChanged: (double value) {
+                                setState(() {
+                                  _hyouka = value.roundToDouble();
+                                });
+                              },
+                            )
+                          ],
                         ),
-                      ),
-                    ),
-                    TextField(
-                      controller: _textEditingController4,
-                      // この一文を追加
-                      enabled: true,
-                      maxLength: 20,
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: 'ありorなしorレポートorその他...',
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          istesutokeisiki = value;
-                        });
-                      },
-                    ),
-                    Text(
-                      'テストの傾向',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          '授業の面白さ',
+                          style: TextStyle(fontSize: 20),
                         ),
-                      ),
-                    ),
-                    Text(
-                      'テストの範囲やどのような問題が出るのかを書いてもらえるとありがたいです',
-                    ),
-                    TextField(
-                      controller: _textEditingController5,
-                      // この一文を追加
-                      enabled: true,
-                      maxLength: null,
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              '${_omosirosa.toStringAsFixed(0)}',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            Slider(
+                              value: _omosirosa,
+                              min: 0,
+                              max: 5,
+                              onChanged: (double value) {
+                                setState(() {
+                                  _omosirosa = value.roundToDouble();
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                        Text(
+                          '単位の取りやすさ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text(
+                              '${_toriyasusa.toStringAsFixed(0)}',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            Slider(
+                              value: _toriyasusa,
+                              min: 0,
+                              max: 5,
+                              onChanged: (double value) {
+                                setState(() {
+                                  _toriyasusa = value.roundToDouble();
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 32,
+                        ),
+                        Text(
+                          '出席確認の有無',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('毎日出席を取る'),
+                              value: '毎日出席を取る',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('ほぼ出席を取る'),
+                              value: 'ほぼ出席を取る',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('たまに出席を取る'),
+                              value: 'たまに出席を取る',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('出席確認はなし'),
+                              value: '出席確認はなし',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              issyusseki = value;
+                            });
+                          },
+                          //7
+                          value: issyusseki,
+                        ),
+                        Text(
+                          '教科書の有無',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        DropdownButton(
+                          //4
+                          items: const [
+                            //5
+                            DropdownMenuItem(
+                              child: Text('あり'),
+                              value: 'あり',
+                            ),
+                            DropdownMenuItem(
+                              child: Text('なし'),
+                              value: 'なし',
+                            ),
+                          ],
+                          //6
+                          onChanged: (String? value) {
+                            setState(() {
+                              iskyoukasyo = value;
+                            });
+                          },
+                          //7
+                          value: iskyoukasyo,
+                        ),
+                        Text(
+                          'コメント',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextField(
+                          controller: _textEditingController3,
+                          // この一文を追加
+                          enabled: true,
+                          maxLength: null,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: 'この講義は楽で〜...',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              iskomento = value;
+                            });
+                          },
+                        ),
+                        Text(
+                          'テスト形式（期末）',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        TextField(
+                          controller: _textEditingController4,
+                          // この一文を追加
+                          enabled: true,
+                          maxLength: 20,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: 'ありorなしorレポートorその他...',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              istesutokeisiki = value;
+                            });
+                          },
+                        ),
+                        Text(
+                          'テストの傾向',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'テストの範囲やどのような問題が出るのかを書いてもらえるとありがたいです',
+                        ),
+                        TextField(
+                          controller: _textEditingController5,
+                          // この一文を追加
+                          enabled: true,
+                          maxLength: null,
 
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: 'テストは主に教科書から...',
-
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          istesutokeikou = value;
-                        });
-                      },
-                    ),
-                        Text(
-                            '投稿者名を入力してください'),
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: 'テストは主に教科書から...',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              istesutokeikou = value;
+                            });
+                          },
+                        ),
+                        Text('投稿者名を入力してください'),
                         TextField(
                           controller: _textEditingController7,
                           // この一文を追加
@@ -707,7 +726,8 @@ void initState(){
                           obscureText: false,
                           maxLines: null,
                           decoration: const InputDecoration(
-                            icon: Icon(Icons.drive_file_rename_outline_outlined),
+                            icon:
+                                Icon(Icons.drive_file_rename_outline_outlined),
                             labelText: 'ニックネーム',
                           ),
                           onChanged: (String value) {
@@ -716,133 +736,135 @@ void initState(){
                             });
                           },
                         ),
-                    Text(
-                      '宣伝箇所',
-                      style: GoogleFonts.notoSans(
-                        // フォントをnotoSansに指定(
-                        textStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          '宣伝箇所',
+                          style: GoogleFonts.notoSans(
+                            // フォントをnotoSansに指定(
+                            textStyle: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Text(
-                        '※サークルの宣伝や団体宣伝などが可能です。広報にご活用ください。入力された文字はそのまま反映されますのでご注意ください。'),
-                    TextField(
-                      controller: _textEditingController6,
-                      // この一文を追加
-                      enabled: true,
-                      maxLength: null,
-                      // 入力数
-                      obscureText: false,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.rate_review_outlined),
-                        labelText: '〇〇サークルに属しています！入部よろしく！',
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          issenden = value;
-                        });
-                      },
-                    ),
+                        Text(
+                            '※サークルの宣伝や団体宣伝などが可能です。広報にご活用ください。入力された文字はそのまま反映されますのでご注意ください。'),
+                        TextField(
+                          controller: _textEditingController6,
+                          // この一文を追加
+                          enabled: true,
+                          maxLength: null,
+                          // 入力数
+                          obscureText: false,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.rate_review_outlined),
+                            labelText: '〇〇サークルに属しています！入部よろしく！',
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              issenden = value;
+                            });
+                          },
+                        ),
                         SizedBox(
                           height: 50,
                         ),
-                    SlideAction(
-                        outerColor: Theme.of(context).colorScheme.primary,
-                        child: Text('スワイプして送信',style: TextStyle(color: Colors.black),),
-                        key: slideActionKey,
-                        onSubmit: () async {
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: Text(
-                                  "投稿ありがとうございます！",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                content: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Container(
-                                          width: 100,
-                                          height: 100,
-                                        child:
-                                Image(
-                                image: AssetImage('assets/icon/rocket.gif'),
-                                fit: BoxFit.cover,
-                              )),
-                                      Text(
-                                        'クッソ長いアンケートに答えていただきありがとうございます！\n頂いたアンケートはアプリ内で共有されすぐに反映されます。',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ]),
-                                actions: <Widget>[
-                                  // ボタン領域
-                                  TextButton(
-                                    child: Text("おっけー"),
-                                    onPressed: (){
-                                      Navigator.pop(context);
-                                      _scrollController.animateTo(
-                                          0, // 移動したい位置を指定
-                                          duration: Duration(milliseconds: 1), // 1秒かけて戻る
-                                          curve: Curves.linear);
-                                      slideActionKey.currentState!.reset();
-
-                                    }
-                                  ),
-                                ],
+                        SlideAction(
+                            outerColor: Theme.of(context).colorScheme.primary,
+                            child: Text(
+                              'スワイプして送信',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            key: slideActionKey,
+                            onSubmit: () async {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      "投稿ありがとうございます！",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Container(
+                                              width: 100,
+                                              height: 100,
+                                              child: Image(
+                                                image: AssetImage(
+                                                    'assets/icon/rocket.gif'),
+                                                fit: BoxFit.cover,
+                                              )),
+                                          Text(
+                                            'クッソ長いアンケートに答えていただきありがとうございます！\n頂いたアンケートはアプリ内で共有されすぐに反映されます。',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ]),
+                                    actions: <Widget>[
+                                      // ボタン領域
+                                      TextButton(
+                                          child: Text("おっけー"),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            _scrollController.animateTo(
+                                                0, // 移動したい位置を指定
+                                                duration: Duration(
+                                                    milliseconds: 1), // 1秒かけて戻る
+                                                curve: Curves.linear);
+                                            slideActionKey.currentState!
+                                                .reset();
+                                          }),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
-                          await FirebaseFirestore.instance
-                              .collection(iscategory!) // コレクションID
-                              .doc() // ここは空欄だと自動でIDが付く
-                              .set({
-
-                                'bumon': isbumon,
-                                'gakki': isgakki,
-                                'komento': iskomento,
-                                'kousimei': iskousimei,
-                                'nenndo': isnendo,
-                                'omosirosa': _omosirosa,
-                                'senden': issenden,
-                                'sougouhyouka': _hyouka,
-                                'syusseki': issyusseki,
-                                'tannisuu': istanni,
-                                'tesutokeisiki': istesutokeisiki,
-                                'toriyasusa': _toriyasusa,
-                                'zyugyoukeisiki': iszyugyoukeisiki,
-                                'zyugyoumei': iszyugyoumei,
-                            'name': isname,
-                            'accountname':name,
-                            'accountemail':email,
-                            'accountuid':uid,
-                            'tesutokeikou':istesutokeikou,
-                            'kyoukasyo':iskyoukasyo,
-                            'date':Timestamp.fromDate(now),
-                            'ID':_randomId,
-                          })
-                              .then((value) => print("新規登録に成功"))
-                              .catchError(
-                                  (error) => print("新規登録に失敗しました!: $error"));
-                          _textEditingController0.clear();
-                          _textEditingController1.clear();
-                          _textEditingController2.clear();
-                          _textEditingController3.clear();
-                          _textEditingController4.clear();
-                          _textEditingController5.clear();
-                          _textEditingController6.clear();
-                          _textEditingController7.clear();
-                        }),
-                    const SizedBox(
-                      height: 100,
-                    ),
-                  ])))),
+                              await FirebaseFirestore.instance
+                                  .collection(iscategory!) // コレクションID
+                                  .doc() // ここは空欄だと自動でIDが付く
+                                  .set({
+                                    'bumon': isbumon,
+                                    'gakki': isgakki,
+                                    'komento': iskomento,
+                                    'kousimei': iskousimei,
+                                    'nenndo': isnendo,
+                                    'omosirosa': _omosirosa,
+                                    'senden': issenden,
+                                    'sougouhyouka': _hyouka,
+                                    'syusseki': issyusseki,
+                                    'tannisuu': istanni,
+                                    'tesutokeisiki': istesutokeisiki,
+                                    'toriyasusa': _toriyasusa,
+                                    'zyugyoukeisiki': iszyugyoukeisiki,
+                                    'zyugyoumei': iszyugyoumei,
+                                    'name': isname,
+                                    'accountname': name,
+                                    'accountemail': email,
+                                    'accountuid': uid,
+                                    'tesutokeikou': istesutokeikou,
+                                    'kyoukasyo': iskyoukasyo,
+                                    'date': Timestamp.fromDate(now),
+                                    'ID': _randomId,
+                                  })
+                                  .then((value) => print("新規登録に成功"))
+                                  .catchError(
+                                      (error) => print("新規登録に失敗しました!: $error"));
+                              _textEditingController0.clear();
+                              _textEditingController1.clear();
+                              _textEditingController2.clear();
+                              _textEditingController3.clear();
+                              _textEditingController4.clear();
+                              _textEditingController5.clear();
+                              _textEditingController6.clear();
+                              _textEditingController7.clear();
+                            }),
+                        const SizedBox(
+                          height: 100,
+                        ),
+                      ])))),
         ));
   }
 }

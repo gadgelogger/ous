@@ -21,8 +21,14 @@ class MultipleCollectionsPage extends StatefulWidget {
 class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+
   @override
   Widget build(BuildContext context) {
+    // 背景の明るさをチェック
+    bool isBackgroundBright = Theme.of(context).primaryColor == Brightness.light;
+
+    // 明るい背景の場合は黒、暗い背景の場合は白
+    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
     return Scaffold(
         appBar: AppBar(
           title: Text('投稿した評価'),
@@ -151,7 +157,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                                   child: Text(
                                     document['bumon'],
                                     style: TextStyle(
-                                        fontSize: 15.sp, color: Colors.black),
+                                        fontSize: 15.sp ,color: textColor),
                                     // Your text
                                   )),
                             ),
