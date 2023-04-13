@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
+import 'package:ous/setting/setting.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:share/share.dart';
@@ -422,6 +423,7 @@ class _homeState extends State<home> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+
                       Text(
                         'マイログ稼働情報',
                         style: TextStyle(

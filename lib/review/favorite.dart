@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ous/review.dart';
 import 'package:ous/review/post.dart';
+import 'package:ous/setting/music.dart';
+import 'package:ous/setting/setting.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -115,6 +118,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     itemCount: originalDocs.length,
                     itemBuilder: (BuildContext context, int index) {
                       final originalDoc = originalDocs[index];
+                      final documentId = originalDoc.id;
+
                       return Container(
                           child: GestureDetector(
                             onTap: () {
@@ -139,7 +144,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                     date: originalDoc['date'].toDate(),
 
                                     tesutokeikou: originalDoc['tesutokeikou'],
-                                    id:originalDoc['ID'],
+                                    id:documentId,
                                   ),
                                 ),
                               );
@@ -269,8 +274,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
 
 
-
-
   final GlobalKey shareKey = GlobalKey(); //追加
 
 
@@ -329,7 +332,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    Future<void> removeFavoriteDocument(String documentId) async {
+      final userId = FirebaseAuth.instance.currentUser!.uid;
+      final userRef = FirebaseFirestore.instance.collection('users');
+      final favoriteRef = userRef.doc(userId).collection('favorite');
+
+      await favoriteRef.doc(documentId).delete();
+    }
+
 
     return Scaffold(
         appBar: AppBar(
@@ -778,6 +788,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ))),
         ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.delete_outline,color: Colors.white,),
+        backgroundColor: Colors.red,
+        onPressed: (){
+           removeFavoriteDocument(widget.id); // documentId は削除したいドキュメントの ID
+          Fluttertoast.showToast(msg: "削除しました。");
+          Navigator.pop(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Setting(),
+              ));
+
+        },
+      ),
  );
   }
 }

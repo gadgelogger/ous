@@ -486,14 +486,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  flutter_local_notifications:
-    dependency: "direct main"
-    description:
-      name: flutter_local_notifications
-      sha256: "2f558cb03e9c239500cb6ea3fb1fce01e812cb26af97b75def4a4f7c53555732"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.5"
   flutter_native_splash:
     dependency: "direct main"
     description:
