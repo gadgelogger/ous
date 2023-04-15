@@ -307,6 +307,9 @@ class _homeState extends State<home> {
                   // 日本語ロケールを指定する
                   locale: 'ja',
                 ),
+
+
+
                 Text(
                   'バス運行情報',
                   style: TextStyle(

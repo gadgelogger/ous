@@ -385,6 +385,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  firebase_messaging:
+    dependency: "direct main"
+    description:
+      name: firebase_messaging
+      sha256: e4a5eb079aa9e7bd6b5fb2681f2bb8a6c78f87aacbf1c732c6ce91ad71e595ba
+      url: "https://pub.dev"
+    source: hosted
+    version: "14.4.0"
+  firebase_messaging_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_messaging_platform_interface
+      sha256: "3a007c888e3414c9e4f7c35ea6fa59eafc623c62ee36155710563a1ebc160063"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.0"
+  firebase_messaging_web:
+    dependency: transitive
+    description:
+      name: firebase_messaging_web
+      sha256: a3239662b91b652cea4ce3b3ecac6cccbaebc1b4ac3101224bef805de4195fbf
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.3.0"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -486,6 +510,19 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  flutter_localization:
+    dependency: "direct main"
+    description:
+      name: flutter_localization
+      sha256: "331698b371173f5e49812d5b3829a73b5a0b8d22c5fdd1270c8bd6d03d653716"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.10"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_native_splash:
     dependency: "direct main"
     description:
@@ -777,7 +814,7 @@ packages:
     source: hosted
     version: "2.0.4"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "910f85bce16fb5c6f614e117efa303e85a1731bb0081edf3604a2ae6e9a3cc91"
@@ -1112,6 +1149,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  responsive_builder:
+    dependency: "direct main"
+    description:
+      name: responsive_builder
+      sha256: e23ef8ce1191f878dd50d28f1496d659fc923718dbfd407b121bb167f95ba090
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.4"
   rrule:
     dependency: "direct main"
     description:

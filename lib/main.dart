@@ -31,6 +31,8 @@ import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:ous/setting/globals.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 //algolia
 class Application {
@@ -43,6 +45,31 @@ class Application {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // ここに追加
+
+  // Firebaseの初期化
+  await Firebase.initializeApp();
+
+  // Firebase Messagingインスタンスのアクセス
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: true,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+// トークンの取得
+  final token = await messaging.getToken();
+  print('🐯 FCM TOKEN: $token');
+
+//フォアグラウンドでの通知
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true, // Required to display a heads up notification
+    badge: true,
+    sound: true,
+  );
 
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
@@ -67,16 +94,15 @@ void main() async {
   var httpOverrides = new MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
-
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => ThemeProvider()),
-          ChangeNotifierProvider(create: (context) => AppTheme()),
-        ],
-        child: MyApp(),
-      ),
-    );
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => AppTheme()),
+      ],
+      child: MyApp(),
+    ),
+  );
 //ダークモード
   FirebaseFirestore.instance.settings = Settings(
     persistenceEnabled: true,
@@ -84,9 +110,6 @@ void main() async {
   );
 
   //onesignal
-
-
-
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -99,7 +122,6 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatefulWidget {
-
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -107,12 +129,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-@override
+  @override
   void initState() {
     super.initState();
-
-
 
 //テーマ
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -131,12 +150,20 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: (context, child) {
           return MaterialApp(
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: [
+                const Locale('ja'),
+              ],
+              locale: const Locale('ja'),
               debugShowCheckedModeBanner: false,
               title: 'ホーム',
               theme: ThemeData(
                 useMaterial3: true,
                 colorSchemeSeed: appTheme.currentColor,
-
                 fontFamily: 'NotoSansCJKJp',
               ),
               darkTheme: ThemeData(
@@ -159,12 +186,10 @@ class _MyAppState extends State<MyApp> {
                   // User が null である、つまり未サインインのサインイン画面へ
                   return Login();
                 },
-              )
-          );
+              ));
         });
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -326,7 +351,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
 class ThemeProvider extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.system;
 
@@ -354,19 +378,17 @@ class ThemeProvider extends ChangeNotifier {
     await prefs.setInt('themeMode', _themeMode.index);
   }
 
-
-
   void light() {
     _themeMode = ThemeMode.light;
     _saveThemeMode();
     notifyListeners();
   }
+
   void dark() {
     _themeMode = ThemeMode.dark;
     _saveThemeMode();
     notifyListeners();
   }
-
 
   void useSystemThemeMode() {
     _themeMode = ThemeMode.system;

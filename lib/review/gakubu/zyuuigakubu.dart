@@ -140,8 +140,8 @@ class _zyuuiState extends State<zyuui> {
                             MaterialPageRoute(
                               builder: (context) => DetailsScreen(
                                 zyugyoumei: hit['zyugyoumei'],
-                                gakki:hit[index]['gakki'],
-                                bumon:hit[index]['bumon'],
+                                gakki:hit['gakki'],
+                                bumon:hit['bumon'],
                                 kousimei: hit['kousimei'],
                                 tannisuu: hit['tannisuu'],
                                 zyugyoukeisiki: hit['zyugyoukeisiki'],

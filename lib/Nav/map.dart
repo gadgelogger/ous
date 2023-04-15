@@ -30,6 +30,7 @@ class Map extends StatelessWidget {
             elevation: 0,
             title: Text('学内マップ'),
             bottom: TabBar(
+
                 labelColor: Theme.of(context).colorScheme.primary,
                 unselectedLabelColor: Colors.grey,
                 isScrollable: true,
@@ -54,6 +55,8 @@ class Map extends StatelessWidget {
           body: WillPopScope(
             onWillPop: () async => false,
             child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+
               children: [
                 okayama(),
                 imabari(),

@@ -596,11 +596,11 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - AppAuth (1.6.0):
-    - AppAuth/Core (= 1.6.0)
-    - AppAuth/ExternalUserAgent (= 1.6.0)
-  - AppAuth/Core (1.6.0)
-  - AppAuth/ExternalUserAgent (1.6.0):
+  - AppAuth (1.6.1):
+    - AppAuth/Core (= 1.6.1)
+    - AppAuth/ExternalUserAgent (= 1.6.1)
+  - AppAuth/Core (1.6.1)
+  - AppAuth/ExternalUserAgent (1.6.1):
     - AppAuth/Core
   - BoringSSL-GRPC (0.0.24):
     - BoringSSL-GRPC/Implementation (= 0.0.24)
@@ -628,6 +628,9 @@ PODS:
   - Firebase/Firestore (10.7.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.7.0)
+  - Firebase/Messaging (10.7.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.7.0)
   - Firebase/Storage (10.7.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.7.0)
@@ -641,6 +644,10 @@ PODS:
     - Flutter
   - firebase_core (2.9.0):
     - Firebase/CoreOnly (= 10.7.0)
+    - Flutter
+  - firebase_messaging (14.4.0):
+    - Firebase/Messaging (= 10.7.0)
+    - firebase_core
     - Flutter
   - firebase_storage (11.0.16):
     - Firebase/Storage (= 10.7.0)
@@ -670,14 +677,14 @@ PODS:
     - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
     - GoogleUtilities/Environment (~> 7.8)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
-  - FirebaseAuthInterop (10.7.0)
+  - FirebaseAuthInterop (10.8.0)
   - FirebaseCore (10.7.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreExtension (10.7.0):
+  - FirebaseCoreExtension (10.8.0):
     - FirebaseCore (~> 10.0)
-  - FirebaseCoreInternal (10.7.0):
+  - FirebaseCoreInternal (10.8.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
   - FirebaseFirestore (10.7.0):
     - abseil/algorithm (~> 1.20211102.0)
@@ -692,11 +699,20 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
-  - FirebaseInstallations (10.7.0):
+  - FirebaseInstallations (10.8.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.7.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseStorage (10.7.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -711,6 +727,8 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_localization (0.0.1):
+    - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
   - flutter_native_timezone (0.0.1):
@@ -750,28 +768,32 @@ PODS:
     - GoogleUtilities/Network (~> 7.8)
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - GoogleDataTransport (9.2.2):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
   - GoogleSignIn (6.2.4):
     - AppAuth (~> 1.5)
     - GTMAppAuth (~> 1.3)
     - GTMSessionFetcher/Core (< 3.0, >= 1.1)
-  - GoogleUtilities/AppDelegateSwizzler (7.11.0):
+  - GoogleUtilities/AppDelegateSwizzler (7.11.1):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (7.11.0):
+  - GoogleUtilities/Environment (7.11.1):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.11.0):
+  - GoogleUtilities/Logger (7.11.1):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (7.11.0):
+  - GoogleUtilities/MethodSwizzler (7.11.1):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (7.11.0):
+  - GoogleUtilities/Network (7.11.1):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (7.11.0)"
-  - GoogleUtilities/Reachability (7.11.0):
+  - "GoogleUtilities/NSData+zlib (7.11.1)"
+  - GoogleUtilities/Reachability (7.11.1):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (7.11.0):
+  - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
@@ -832,7 +854,7 @@ PODS:
     - Flutter
   - in_app_review (0.2.0):
     - Flutter
-  - leveldb-library (1.22.1)
+  - leveldb-library (1.22.2)
   - Libuv-gRPC (0.0.10):
     - Libuv-gRPC/Implementation (= 0.0.10)
     - Libuv-gRPC/Interface (= 0.0.10)
@@ -906,9 +928,11 @@ DEPENDENCIES:
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_localization (from `.symlinks/plugins/flutter_localization/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_native_timezone (from `.symlinks/plugins/flutter_native_timezone/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
@@ -951,9 +975,11 @@ SPEC REPOS:
     - FirebaseCoreInternal
     - FirebaseFirestore
     - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseStorage
     - FMDB
     - GoogleAppMeasurement
+    - GoogleDataTransport
     - GoogleSignIn
     - GoogleUtilities
     - "gRPC-C++"
@@ -981,12 +1007,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_localization:
+    :path: ".symlinks/plugins/flutter_localization/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_native_timezone:
@@ -1042,7 +1072,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
-  AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
+  AppAuth: e48b432bb4ba88b10cb2bcc50d7f3af21e78b9c2
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
   camera_avfoundation: 3125e8cd1a4387f6f31c6c63abb8a55892a9eeeb
   cloud_firestore: 464ad9bbaa030ab2b2ef28e386b41f0dacfd8b01
@@ -1050,19 +1080,22 @@ SPEC CHECKSUMS:
   firebase_analytics: 8954db5c9b63075214fa1b3ad2cdced9646f45a0
   firebase_auth: c7c7a37827bf9c810a01d9c76aa9275da73f985d
   firebase_core: d85432877e814811e040e7659f9c82faeab66e04
+  firebase_messaging: 45c0514ca78426630338a42fb7b55af962c7ccd2
   firebase_storage: a5a56012b8b400093d848727b5a0d79b1aa09f9f
   FirebaseAnalytics: f8133442ee6f8512e28ff19e62ce15398bfaeace
   FirebaseAppCheckInterop: 8e907eea79958960a8bd2058e067f31e03a7914b
   FirebaseAuth: dd64c01631df724b09f33e584625775c52f7d71f
-  FirebaseAuthInterop: 46201190fe90ef1f581513eb0f9fa3d7820e7d6d
+  FirebaseAuthInterop: 5ea2a68b83f5222f6d8688ffc3a49a9e92bb3eba
   FirebaseCore: e317665b9d744727a97e623edbbed009320afdd7
-  FirebaseCoreExtension: f17247ba8c61e4d3c8d136b5e2de3cb4ac6a85b6
-  FirebaseCoreInternal: 8845798510aae74703467480f71ac613788d0696
+  FirebaseCoreExtension: d815fd6fec8bb3a0940bc02dd5e3e641ea7229d8
+  FirebaseCoreInternal: fa2899eb1f340054858d289e5a0fb935a0a74e52
   FirebaseFirestore: 3963a6edd1c84b4748dab3e2c62624a29d03eca1
-  FirebaseInstallations: 59c0e4c7a816a0f76710d83f77e5369b3e45eb96
+  FirebaseInstallations: b2a05a3fe707df764345d68685534d07d0664af3
+  FirebaseMessaging: ac9062bcc35ed56e15a0241d8fd317022499baf8
   FirebaseStorage: 4841efa304543e1f9e4ca116c559c7a1ea2a9d0f
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  flutter_localization: f43b18844a2b3d2c71fd64f04ffd6b1e64dd54d4
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_native_timezone: 5f05b2de06c9776b4cc70e1839f03de178394d22
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
@@ -1072,15 +1105,16 @@ SPEC CHECKSUMS:
   gallery_saver: 9fc173c9f4fcc48af53b2a9ebea1b643255be542
   google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
   GoogleAppMeasurement: fe17c92a32207dd5cdd4e8d742767f2da74857f6
+  GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
-  GoogleUtilities: c2bdc4cf2ce786c4d2e6b3bcfd599a25ca78f06f
+  GoogleUtilities: 9aa0ad5a7bc171f8bae016300bfcfa3fb8425749
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
-  leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  leveldb-library: f03246171cce0484482ec291f88b6d563699ee06
   Libuv-gRPC: 55e51798e14ef436ad9bc45d12d43b77b49df378
   map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -1109,4 +1143,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8684035584f6b2c9c7a1cb4738b93ec6f086f302
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.11.3
