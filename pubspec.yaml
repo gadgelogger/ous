@@ -119,6 +119,9 @@ dependencies:
   intl: any
   responsive_builder: ^0.6.4
   firebase_messaging: ^14.4.0
+  cloud_functions: ^4.1.0
+  workmanager: ^0.5.1
+  flutter_local_notifications: ^0.1.5
 dev_dependencies:
   flutter_test:
     sdk: flutter

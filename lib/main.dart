@@ -1,15 +1,13 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:ous/Nav/call.dart';
-import 'package:ous/review/post.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Nav/Calendar/calender.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -20,20 +18,17 @@ import 'package:ous/home.dart';
 import 'package:ous/review.dart';
 import 'package:ous/info/info.dart';
 import 'account/login.dart';
-import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
 import 'dart:core';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:quick_actions/quick_actions.dart';
-import 'package:flutter/services.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:dynamic_themes/dynamic_themes.dart';
+
 import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
 
+import 'package:webfeed/webfeed.dart';
 //algolia
 class Application {
   static final Algolia algolia = Algolia.init(
@@ -94,6 +89,9 @@ void main() async {
   var httpOverrides = new MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
+
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -129,6 +127,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   @override
   void initState() {
     super.initState();
@@ -210,6 +210,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
+
+
 //アップデート通知
   late String _currentVersion;
   late String _latestVersion;
@@ -395,4 +399,7 @@ class ThemeProvider extends ChangeNotifier {
     _saveThemeMode();
     notifyListeners();
   }
+}
+
+void backgroundCheck(SendPort message) {
 }
