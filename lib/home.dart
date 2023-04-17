@@ -308,7 +308,6 @@ class _homeState extends State<home> {
                 ),
 
 
-
                 Text(
                   'バス運行情報',
                   style: TextStyle(
