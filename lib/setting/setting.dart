@@ -141,14 +141,7 @@ class _SettingState extends State<Setting> {
 
          */
 
-        SettingsSection(  title: Text(
-          '通知関連',
-          style: TextStyle(color: Theme.of(context).colorScheme.primary,),
-        ), tiles: <SettingsTile>[
-          SettingsTile.navigation(
-              title: Text('通知設定')
-          )
-        ],),
+
 
         SettingsSection(
           title: Text(

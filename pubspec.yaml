@@ -67,7 +67,6 @@ dependencies:
   package_info_plus: ^3.1.0
   flutter_signin_button: ^2.0.0
   camera: ^0.10.4
-  webfeed: ^0.7.0
   slide_to_act: ^2.0.1
   fluttertoast: ^8.2.1
 
@@ -121,7 +120,7 @@ dependencies:
   firebase_messaging: ^14.4.0
   cloud_functions: ^4.1.0
   workmanager: ^0.5.1
-  flutter_local_notifications: ^8.2.0
+  flutter_local_notifications: ^13.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -155,6 +154,7 @@ flutter:
   - assets/icon/icon_dark.png
   - assets/images/icon.jpeg
   - assets/kouka.mp3
+  - assets/welcome.mp3
   - assets/images/理学部.jpg
   - assets/images/green neutrals desktop.jpeg
   - assets/images/工学部.jpg
@@ -165,6 +165,7 @@ flutter:
   - assets/images/獣医学部.jpg
   - assets/images/生命科学部.jpg
   - assets/images/mockup.PNG
+  - assets/images/are.jpg
   - assets/icon/password.gif
   - assets/icon/rocket.gif
   - assets/icon/error.gif

@@ -9,9 +9,9 @@ import FirebaseCore//追加
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
    // flutter_local_notification
-  if #available(iOS 10.0, *) {
-    UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
-  }
+      if #available(iOS 10.0, *) {
+        UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+      }
       FirebaseApp.configure() //この行を追加
       GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

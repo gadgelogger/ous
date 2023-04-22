@@ -28,7 +28,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:webfeed/webfeed.dart';
 //algolia
 class Application {
   static final Algolia algolia = Algolia.init(

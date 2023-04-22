@@ -424,7 +424,6 @@ class _homeState extends State<home> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       Text(
                         'マイログ稼働情報',
                         style: TextStyle(
