@@ -33,7 +33,12 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-
+//キャッシュ削除
+  Future<void> clearLoginData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('userId');
+    prefs.remove('password');
+  }
   bool isDarkModeEnabled = false;
 
   //アプリバージョン表示
@@ -354,6 +359,40 @@ class _SettingState extends State<Setting> {
             style: TextStyle(color: Theme.of(context).colorScheme.primary,),
           ),
           tiles: <SettingsTile>[
+            SettingsTile.navigation(
+              leading: Icon(Icons.exit_to_app),
+              title: Text(
+                'キャッシュを削除する',
+                style: TextStyle(color: Colors.red),
+              ),
+              onPressed: (BuildContext context) async {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      title: Text("キャッシュを削除します。"),
+                      content: Text("大丈夫そ？",textAlign: TextAlign.center,),
+                      actions: <Widget>[
+                        // ボタン領域
+                        TextButton(
+                          child: Text("ダメやで"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: Text("ええで"),
+                          onPressed: () async {
+
+                            clearLoginData();
+                            Navigator.pop(context);
+                            Fluttertoast.showToast(msg: 'キャッシュを削除しました');
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
             SettingsTile.navigation(
               leading: Icon(Icons.exit_to_app),
               title: Text(

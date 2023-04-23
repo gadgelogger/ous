@@ -23,7 +23,6 @@ import 'package:ous/review/postuser.dart';
 
 import 'dart:async';
 
-
 class Review extends StatefulWidget {
   const Review({Key? key}) : super(key: key);
 
@@ -32,8 +31,6 @@ class Review extends StatefulWidget {
 }
 
 class _ReviewState extends State<Review> {
-
-
 //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
@@ -48,17 +45,16 @@ class _ReviewState extends State<Review> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     // 背景の明るさをチェック
-    bool isBackgroundBright = Theme.of(context).primaryColor == Brightness.light;
+    bool isBackgroundBright =
+        Theme.of(context).primaryColor == Brightness.light;
 
     // 明るい背景の場合は黒、暗い背景の場合は白
     Color textColor = isBackgroundBright ? Colors.black : Colors.white;
 
     return Scaffold(
-
       drawer: NavBar(),
       appBar: AppBar(
         actions: [
@@ -72,16 +68,12 @@ class _ReviewState extends State<Review> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-
-
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -89,11 +81,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -108,28 +100,27 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('rigaku')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
@@ -167,11 +158,9 @@ class _ReviewState extends State<Review> {
                           MaterialPageRoute(builder: (context) => rigaku()),
                         );
                       },
-
                     ),
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -179,11 +168,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -198,35 +187,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('kougakubu')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -267,7 +256,6 @@ class _ReviewState extends State<Review> {
                   children: [
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -275,11 +263,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -294,35 +282,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('zyouhou')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -350,14 +338,12 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => zyouhou()),
+                          MaterialPageRoute(builder: (context) => zyouhou()),
                         );
                       },
                     ),
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -365,11 +351,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -384,35 +370,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('seibutu')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -440,8 +426,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => seibutu()),
+                          MaterialPageRoute(builder: (context) => seibutu()),
                         );
                       },
                     ),
@@ -454,7 +439,6 @@ class _ReviewState extends State<Review> {
                   children: [
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -462,11 +446,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -481,35 +465,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('kyouiku')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -537,14 +521,12 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => kyouiku()),
+                          MaterialPageRoute(builder: (context) => kyouiku()),
                         );
                       },
                     ),
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -552,11 +534,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -571,35 +553,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('keiei')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -627,8 +609,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => keiei()),
+                          MaterialPageRoute(builder: (context) => keiei()),
                         );
                       },
                     ),
@@ -641,7 +622,6 @@ class _ReviewState extends State<Review> {
                   children: [
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -649,11 +629,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -668,35 +648,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('zyuui')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -724,14 +704,12 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => zyuui()),
+                          MaterialPageRoute(builder: (context) => zyuui()),
                         );
                       },
                     ),
                     GestureDetector(
                       child: Card(
-
                         clipBehavior: Clip.antiAlias,
                         child: Container(
                             height: 176.h,
@@ -739,11 +717,11 @@ class _ReviewState extends State<Review> {
                             child: Column(
                               children: [
                                 Container(
-                                  decoration: BoxDecoration(color: Theme
-                                      .of(context)
-                                      .primaryColor
-                                      .withOpacity(0.1),),
-
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.1),
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Image.asset(
@@ -758,35 +736,35 @@ class _ReviewState extends State<Review> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 4, horizontal: 6),
                                             decoration: BoxDecoration(
-                                                color: Theme
-                                                    .of(context)
+                                                color: Theme.of(context)
                                                     .colorScheme
                                                     .primary,
                                                 borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(8),
-                                                  bottomRight: Radius.circular(
-                                                      8),
+                                                  bottomRight:
+                                                      Radius.circular(8),
                                                 ) // green shaped
-                                            ),
+                                                ),
                                             child: StreamBuilder<QuerySnapshot>(
                                               stream: FirebaseFirestore.instance
                                                   .collection('seimei')
                                                   .snapshots(),
                                               builder: (context, snapshot) {
                                                 if (snapshot.hasData) {
-                                                  final count = snapshot.data!
-                                                      .size;
+                                                  final count =
+                                                      snapshot.data!.size;
                                                   return Text(
                                                     '$count',
                                                     style: TextStyle(
-                                                        fontSize: 16.0,
+                                                        fontSize: 16.0.sp,
                                                         color: textColor),
                                                   );
                                                 } else {
                                                   return SizedBox(
                                                     height: 3,
                                                     width: 3,
-                                                    child: CircularProgressIndicator(),
+                                                    child:
+                                                        CircularProgressIndicator(),
                                                   );
                                                 }
                                               },
@@ -814,8 +792,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => seimei()),
+                          MaterialPageRoute(builder: (context) => seimei()),
                         );
                       },
                     ),
@@ -868,25 +845,23 @@ class _ReviewState extends State<Review> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4, horizontal: 6),
                               decoration: BoxDecoration(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .primary,
+                                color: Theme.of(context).colorScheme.primary,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8),
                                 ),
                               ),
                               child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection(
-                                    'kiban').snapshots(),
+                                stream: FirebaseFirestore.instance
+                                    .collection('kiban')
+                                    .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     final count = snapshot.data!.size;
                                     return Text(
                                       '$count',
                                       style: TextStyle(
-                                          fontSize: 16.0, color: textColor),
+                                          fontSize: 16.0.sp, color: textColor),
                                     );
                                   } else {
                                     return SizedBox(
@@ -904,8 +879,7 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>
-                              kiban()),
+                          MaterialPageRoute(builder: (context) => kiban()),
                         );
                       },
                     ),
@@ -942,25 +916,23 @@ class _ReviewState extends State<Review> {
                               padding: const EdgeInsets.symmetric(
                                   vertical: 4, horizontal: 6),
                               decoration: BoxDecoration(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .primary,
+                                color: Theme.of(context).colorScheme.primary,
                                 borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(8),
                                   bottomRight: Radius.circular(8),
                                 ),
                               ),
                               child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection(
-                                    'kyousyoku').snapshots(),
+                                stream: FirebaseFirestore.instance
+                                    .collection('kyousyoku')
+                                    .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     final count = snapshot.data!.size;
                                     return Text(
                                       '$count',
                                       style: TextStyle(
-                                          fontSize: 16.0, color: textColor),
+                                          fontSize: 16.0.sp, color: textColor),
                                     );
                                   } else {
                                     return SizedBox(
@@ -978,27 +950,25 @@ class _ReviewState extends State<Review> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>
-                              kyousyoku()),
+                          MaterialPageRoute(builder: (context) => kyousyoku()),
                         );
                       },
                     ),
                   ],
                 ),
               ),
-
             ],
           ),
         ),
       ),
       floatingActionButton: showFloatingActionButton
           ? Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            children: [
-              /*   Container(
+              verticalDirection: VerticalDirection.up,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Column(
+                  children: [
+                    /*   Container(
               margin: EdgeInsets.only(bottom: 16),
               child: FloatingActionButton(
                 onPressed: () {
@@ -1008,52 +978,49 @@ class _ReviewState extends State<Review> {
                 child: const Icon(Icons.favorite_border),
               ),
             ),*/
-              FloatingActionButton(
-                heroTag: "btn1",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MultipleCollectionsPage()),
-                  );
-                }, child: Icon(Icons.person_2_outlined),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
-                  heroTag: "btn2",
-
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => FavoritesPage()),
-                    );
-                  },
-                  child: const Icon(Icons.favorite_border),
+                    FloatingActionButton(
+                      heroTag: "btn1",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MultipleCollectionsPage()),
+                        );
+                      },
+                      child: Icon(Icons.person_2_outlined),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: FloatingActionButton(
+                        heroTag: "btn2",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FavoritesPage()),
+                          );
+                        },
+                        child: const Icon(Icons.favorite_border),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 16),
+                      child: FloatingActionButton(
+                        heroTag: "btn3",
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => post()),
+                          );
+                        },
+                        child: const Icon(Icons.upload_outlined),
+                      ),
+                    )
+                  ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
-                  heroTag: "btn3",
-
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => post()),
-                    );
-                  },
-                  child: const Icon(Icons.upload_outlined),
-                ),
-              )
-            ],
-          ),
-        ],
-      )
+              ],
+            )
           : null,
-
-
     );
   }
 }

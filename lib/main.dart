@@ -42,7 +42,7 @@ void main() async {
 
   // Firebaseの初期化
   await Firebase.initializeApp();
-
+/*
   // Firebase Messagingインスタンスのアクセス
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
@@ -64,7 +64,7 @@ void main() async {
     badge: true,
     sound: true,
   );
-
+*/
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -84,6 +84,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+//ジェスチャーナビゲーションを透明にしていい感じにする。
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: Colors.transparent,
+  ));
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
+
   await ScreenUtil.ensureScreenSize();
   var httpOverrides = new MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
@@ -244,7 +252,6 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         _latestVersion = data['version'];
       });
-      print(_latestVersion);
       if (_currentVersion != _latestVersion) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
