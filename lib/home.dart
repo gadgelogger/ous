@@ -317,11 +317,6 @@ class _homeState extends State<home> {
                       locale: 'ja',
                     ),
                 ),
-                ElevatedButton(onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => WebViewLogin(),
-                  ));
-                }, child: Text('a')),
                 Text(
                   'バス運行情報',
                   style: TextStyle(

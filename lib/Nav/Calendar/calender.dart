@@ -60,6 +60,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
       if (end == null) {
         end = start.add(Duration(hours: 1));
+      } else {
+        // 終了日を1日減らす
+        end = end.subtract(Duration(days: 1));
       }
 
       return Appointment(
@@ -67,9 +70,11 @@ class _CalendarPageState extends State<CalendarPage> {
         endTime: end,
         subject: event['summary'] ?? 'Untitled',
         color: Colors.blue,
+        isAllDay: true, // 終日イベントとして設定
       );
     }).toList();
   }
+
 
   bool _isScheduleView = true;
   int _selectedCalendarIndex = 0;

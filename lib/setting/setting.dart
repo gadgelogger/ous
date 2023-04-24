@@ -23,6 +23,7 @@ import '../main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import '../mylog.dart';
 import 'globals.dart';
 
 class Setting extends StatefulWidget {
@@ -349,7 +350,14 @@ class _SettingState extends State<Setting> {
             SettingsTile(
               leading: const Icon(Icons.info_outline),
               title: const Text('アプリのバージョン'),
-              value: Text(_version),
+              value: GestureDetector(
+                onLongPress:(){
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => WebViewLogin(),
+                  ));
+                } ,
+                child: Text(_version),
+              )
             ),
           ],
         ),

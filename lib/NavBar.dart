@@ -109,11 +109,6 @@ class _NavBarState extends State<NavBar> {
                   ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          'https://pbs.twimg.com/profile_banners/1394312681209749510/1634787753/1500x500'),
-                      fit: BoxFit.cover,
-                    ),
                   ),
                 );
               },
