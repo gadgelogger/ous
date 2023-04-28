@@ -23,7 +23,7 @@ import '../main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import '../mylog.dart';
+import '../info/mylog.dart';
 import 'globals.dart';
 
 class Setting extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
-import 'package:ous/mylog.dart';
+import 'package:ous/info/mylog.dart';
 import 'package:ous/setting/setting.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -317,6 +317,7 @@ class _homeState extends State<home> {
                       locale: 'ja',
                     ),
                 ),
+
                 Text(
                   'バス運行情報',
                   style: TextStyle(

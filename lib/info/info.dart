@@ -9,13 +9,31 @@ import 'package:ous/info/5.dart';
 import 'package:ous/info/6.dart';
 import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
-class Info extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'mylog.dart';
+class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
+
+  @override
+  State<Info> createState() => _InfoState();
+}
+
+class _InfoState extends State<Info> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _shouldShowMylog = false;
+
+  @override
+  void initState() {
+    super.initState();
+    User? user = _auth.currentUser;
+    _shouldShowMylog = user != null && user.email!.endsWith('@ous.jp');
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: _shouldShowMylog ? 8 : 7,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -29,12 +47,17 @@ class Info extends StatelessWidget {
               labelPadding: EdgeInsets.symmetric(horizontal:15,vertical: 12),
 
               tabs: [
-            Text('全て',
-              style: TextStyle(
-                fontSize: 15.0.sp,
-              ),
-            ),
-
+                if (_shouldShowMylog)
+                  Text('マイログ',
+                    style: TextStyle(
+                      fontSize: 15.0.sp,
+                    ),
+                  ),
+                Text('全て',
+                  style: TextStyle(
+                    fontSize: 15.0.sp,
+                  ),
+                ),
                 Text('重要',
                   style: TextStyle(
                     fontSize: 15.0.sp,
@@ -65,16 +88,13 @@ class Info extends StatelessWidget {
                     fontSize: 15.0.sp,
                   ),
                 ),
-
-
-
-
               ]),
         ),
         body: WillPopScope(
           onWillPop: ()async => false,
           child: TabBarView(
             children: [
+              if (_shouldShowMylog) WebViewLogin(),
               all(),
               important(),
               news(),
@@ -82,7 +102,7 @@ class Info extends StatelessWidget {
               report(),
               business(),
               movie(),
-            ],
+            ].where((widget) => widget != null).toList(),
           ),
         ),
       ),
