@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ous/apikey.dart';
 import 'package:ous/review/post.dart';
 
 import 'package:path/path.dart';
@@ -35,8 +36,8 @@ class _keieiState extends State<keiei> {
   final _queryController = TextEditingController();
 
   Algolia _algolia = Algolia.init(
-    applicationId: '78CZVABC2W',
-    apiKey: 'c2377e7faad9a408d5867b849f25fae4',
+    applicationId: '${algoiaid}',
+    apiKey: '${algoliakey}',
   );
 
   String _query = '';

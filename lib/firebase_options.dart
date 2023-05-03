@@ -3,6 +3,8 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'apikey.dart';
+
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -15,6 +17,7 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
@@ -50,7 +53,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCWTdKyY5SV2JuL2lcYcjUZjMTHJhbylLw',
+
+    apiKey: FirebaseOptions_android_key,
     appId: '1:550367521697:android:4ac0dd32af43f5e8a539e0',
     messagingSenderId: '550367521697',
     projectId: 'ous-unoffical-20d2c',
@@ -58,7 +62,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCzpNrYyg5yDqkTobE4PBYjc1s3kAgBaw0',
+    apiKey: FirebaseOptions_ios_key,
     appId: '1:550367521697:ios:dee6af6b9a1392aba539e0',
     messagingSenderId: '550367521697',
     projectId: 'ous-unoffical-20d2c',

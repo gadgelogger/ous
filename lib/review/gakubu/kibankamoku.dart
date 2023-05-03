@@ -24,6 +24,8 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../apikey.dart';
+
 class kiban extends StatefulWidget {
   @override
   _kibanState createState() => _kibanState();
@@ -35,8 +37,8 @@ class _kibanState extends State<kiban> {
   final _queryController = TextEditingController();
 
   Algolia _algolia = Algolia.init(
-    applicationId: '78CZVABC2W',
-    apiKey: 'c2377e7faad9a408d5867b849f25fae4',
+    applicationId: '${algoiaid}',
+    apiKey: '${algoliakey}',
   );
 
   String _query = '';

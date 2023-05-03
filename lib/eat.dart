@@ -9,6 +9,7 @@ class Eat extends StatelessWidget {
     ),
     body: Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
         Text(
         '食堂一覧',

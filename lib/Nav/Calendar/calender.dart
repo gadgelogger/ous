@@ -49,10 +49,12 @@ class _CalendarPageState extends State<CalendarPage> {
     }
 
     return iCalendar.data.map((event) {
-      DateTime? start = event['dtstart'] is IcsDateTime ? event['dtstart']
-          .toDateTime() : DateTime.tryParse(event['dtstart']);
-      DateTime? end = event['dtend'] is IcsDateTime ? event['dtend']
-          .toDateTime() : DateTime.tryParse(event['dtend']);
+      DateTime? start = event['dtstart'] is IcsDateTime
+          ? event['dtstart'].toDateTime()
+          : DateTime.tryParse(event['dtstart']);
+      DateTime? end = event['dtend'] is IcsDateTime
+          ? event['dtend'].toDateTime()
+          : DateTime.tryParse(event['dtend']);
 
       if (start == null) {
         start = DateTime.now();
@@ -75,75 +77,76 @@ class _CalendarPageState extends State<CalendarPage> {
     }).toList();
   }
 
-
   bool _isScheduleView = true;
   int _selectedCalendarIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('行事予定'),
-        actions: [
+      appBar: AppBar(title: Text('行事予定'), actions: [
         DropdownButton<int>(
-        value: _selectedCalendarIndex,
-        onChanged: (int? newValue) {
-          if (newValue != null) {
-            setState(() {
-              _selectedCalendarIndex = newValue;
-            });
-            _saveSelectedCalendarIndex(newValue);
+          value: _selectedCalendarIndex,
+          onChanged: (int? newValue) {
+            if (newValue != null) {
+              setState(() {
+                _selectedCalendarIndex = newValue;
+              });
+              _saveSelectedCalendarIndex(newValue);
+            }
+          },
+          items: [
+            DropdownMenuItem(
+              child: Text('岡山'),
+              value: 0,
+            ),
+            DropdownMenuItem(
+              child: Text('今治'),
+              value: 1,
+            ),
+          ],
+        ),
+      ]),
+      body: FutureBuilder<List<ICalendar>>(
+        future: _iCalendarFutures,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ICalendar>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final selectedCalendar = snapshot.data?[_selectedCalendarIndex];
+            return SfCalendar(
+              scheduleViewSettings: ScheduleViewSettings(
+                appointmentItemHeight: 70,
+                hideEmptyScheduleWeek: true,
+                monthHeaderSettings: MonthHeaderSettings(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              view: CalendarView.schedule,
+              cellBorderColor: Theme.of(context).colorScheme.primary,
+              dataSource:
+                  AppointmentDataSource(_getAppointments(selectedCalendar)),
+
+            );
           }
         },
-        items: [
-          DropdownMenuItem(
-            child: Text('岡山'),
-            value: 0,
-          ),
-          DropdownMenuItem(
-            child: Text('今治'),
-            value: 1,
-          ),
-        ],
       ),
-    ]),
-    body: FutureBuilder<List<ICalendar>>(
-    future: _iCalendarFutures,
-    builder: (BuildContext context, AsyncSnapshot<List<ICalendar>> snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-    return const Center(child: CircularProgressIndicator());
-    } else if (snapshot.hasError) {
-    return Text('Error: ${snapshot.error}');
-    } else {
-    final selectedCalendar = snapshot.data?[_selectedCalendarIndex];
-    return SfCalendar(
-    scheduleViewSettings: ScheduleViewSettings(
-    appointmentItemHeight: 70,
-    hideEmptyScheduleWeek: true,
-    monthHeaderSettings: MonthHeaderSettings(
-    backgroundColor: Theme.of(context).colorScheme.primary,
-    ),
-    ),
-    view: CalendarView.schedule,
-    cellBorderColor: Theme.of(context).colorScheme.primary,
-    dataSource: AppointmentDataSource(_getAppointments(selectedCalendar)),
-    );
-    }
-    },
-    ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.calendar_month_outlined),
-          onPressed: () {
-            String url;
-            if (_selectedCalendarIndex == 0) {
-              url = 'https://www.ous.ac.jp/common/files//285/202303131022360193654.pdf';
-            } else {
-              url = 'https://www.ous.ac.jp/common/files//285/202304181332270709155.pdf'; // 今治カレンダーのURLを指定してください
-            }
-            launch(url);
-          },
-        ),
-
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.calendar_month_outlined),
+        onPressed: () {
+          String url;
+          if (_selectedCalendarIndex == 0) {
+            url =
+                'https://www.ous.ac.jp/common/files//285/202303131022360193654.pdf';
+          } else {
+            url =
+                'https://www.ous.ac.jp/common/files//285/202304181332270709155.pdf'; // 今治カレンダーのURLを指定してください
+          }
+          launch(url);
+        },
+      ),
     );
   }
 }

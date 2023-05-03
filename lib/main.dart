@@ -8,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'apikey.dart';
+import 'eat.dart';
 import 'firebase_options.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -27,12 +29,12 @@ import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 //algolia
 class Application {
   static final Algolia algolia = Algolia.init(
-    applicationId: '78CZVABC2W',
-    apiKey: 'c2377e7faad9a408d5867b849f25fae4',
+    applicationId: '${algoiaid}',
+    apiKey: '${algoliakey}',
   );
 }
 //algolia
@@ -128,17 +130,22 @@ class MyHttpOverrides extends HttpOverrides {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
 
+//脱獄検知
+  bool _isJailBroken = false;
+
+
 
   @override
   void initState() {
     super.initState();
+//脱獄検知
+    _checkJailBrokenDevice(); // 脱獄検知メソッドの呼び出し
 
 //テーマ
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
@@ -146,7 +153,34 @@ class _MyAppState extends State<MyApp> {
       await appTheme.loadColorFromPrefs();
     });
   }
+  // 脱獄検知メソッド
+  Future<void> _checkJailBrokenDevice() async {
+    bool isJailBroken = await FlutterJailbreakDetection.jailbroken;
+    setState(() {
+      _isJailBroken = isJailBroken;
+    });
 
+    if (_isJailBroken) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("セキュリティ警告"),
+            content: Text("脱獄デバイスはサポートされません。\nアプリの使用を中止してください。",textAlign: TextAlign.center,),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text("閉じる"),
+                onPressed: () {
+                  exit(0);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
@@ -326,7 +360,7 @@ class _MyHomePageState extends State<MyHomePage> {
     home(),
     Info(),
     Review(),
-    Business(),
+    Eat(),
   ];
 
   @override
@@ -355,6 +389,10 @@ class _MyHomePageState extends State<MyHomePage> {
             NavigationDestination(
               icon: Icon(Icons.school_outlined),
               label: '講義評価',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.restaurant_outlined),
+              label: '食堂',
             ),
           ],
         ));

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:universal_html/parsing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
-
+import 'package:ous/apikey.dart';
 class movie extends StatefulWidget {
   const movie({Key? key}) : super(key: key);
 
@@ -15,7 +15,7 @@ class movie extends StatefulWidget {
 }
 
 class _movieState extends State<movie> {
-  static String key = "AIzaSyBIcxrqy1q6MOKAkdnZkYIlGTEMUUdDLgw";
+  static String key = "${info_movie_key}";
 
 
 

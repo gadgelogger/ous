@@ -25,7 +25,7 @@ import 'NavBar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'apikey.dart';
 class home extends StatefulWidget {
   const home({Key? key}) : super(key: key);
 
@@ -50,9 +50,8 @@ class _homeState extends State<home> {
   //天気予報　岡山
   void getWeatherData() async {
     String city = "Okayama";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
     String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=${Weatherkey}&lang=ja";
 
     var response = await http.get(Uri.parse(url));
 
@@ -62,13 +61,14 @@ class _homeState extends State<home> {
         weatherData = jsonData;
       });
     }
+    print(url);
+
   }
 
   void getWeatherData1() async {
     String city = "Aichi-ken";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
     String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=${Weatherkey}&lang=ja";
 
     var response = await http.get(Uri.parse(url));
 
@@ -78,6 +78,7 @@ class _homeState extends State<home> {
         weatherData1 = jsonData;
       });
     }
+    print(url);
   }
 
 //岡山駅
@@ -489,7 +490,7 @@ class _WeatherState extends State<Weather> {
 
   void getWeatherData() async {
     String city = "Okayama";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String apiKey = "${Weatherkey}";
     String url =
         "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
 
@@ -505,7 +506,7 @@ class _WeatherState extends State<Weather> {
 
   void getWeatherForecast() async {
     String city = "Okayama";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String apiKey = "${Weatherkey}";
     String url =
         "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey";
     var response = await http.get(Uri.parse(url));
@@ -817,7 +818,7 @@ class _imabariState extends State<imabari> {
 
   void getWeatherData() async {
     String city = "Aichi-ken";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String apiKey = "${Weatherkey}";
     String url =
         "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
 
@@ -833,7 +834,7 @@ class _imabariState extends State<imabari> {
 
   void getWeatherForecast() async {
     String city = "Aichi-ken";
-    String apiKey = "d4838ba76c2416889981636c11a76054";
+    String apiKey = "${Weatherkey}";
     String url =
         "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey";
     var response = await http.get(Uri.parse(url));

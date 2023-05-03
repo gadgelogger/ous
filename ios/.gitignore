@@ -32,3 +32,6 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+ios/Runner/GoogleService-Info.plist
+/Users/gadgelogger/StudioProjects/ous/ous-unoffical-20d2c-firebase-adminsdk-ya7dt-ed2d6790d9.json
+/Users/gadgelogger/StudioProjects/ous/ios/firebase_app_id_file.json
