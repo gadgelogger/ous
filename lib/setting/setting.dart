@@ -130,7 +130,7 @@ class _SettingState extends State<Setting> {
         ),
       ),
       body: SettingsList(sections: [
-        /*  SettingsSection(
+        SettingsSection(
             title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
@@ -145,7 +145,7 @@ class _SettingState extends State<Setting> {
             ],
           ),
 
-         */
+
 
 
 
@@ -490,7 +490,7 @@ class _SettingState extends State<Setting> {
                                     ),
                                     actions: <Widget>[
                                       SlideAction(
-                                        outerColor: Theme.of(context).colorScheme.primary,
+                                        outerColor: Theme.of(context).colorScheme.secondary,
                                         text: 'スライドして退会',
                                         textStyle:
                                             const TextStyle(fontSize: 20),

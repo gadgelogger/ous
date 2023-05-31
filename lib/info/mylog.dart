@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/parser.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:html/dom.dart' as dom;
 
 import '../main.dart';
 
@@ -386,11 +387,12 @@ class ContentScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Html(
             data: content,
-            onLinkTap: (String? url, _, Map<String, String> attributes, element) {
+            onLinkTap: (String? url, Map<String, String> attributes, dom.Element? element) {
               if (url != null) {
                 _launchURL(url);
               }
-            },
+            } as void Function(String?, Map<String, String>, dom.Element?)?,
+
           ),
         ),
       ),

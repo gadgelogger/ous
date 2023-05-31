@@ -770,7 +770,7 @@ class _postState extends State<post> {
                           height: 50,
                         ),
                         SlideAction(
-                            outerColor: Theme.of(context).colorScheme.primary,
+                            outerColor: Theme.of(context).colorScheme.secondary,
                             child: Text(
                               'スワイプして送信',
                               style: TextStyle(color: Colors.black),

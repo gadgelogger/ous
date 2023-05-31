@@ -73,12 +73,11 @@ dependencies:
 
 
   shake: ^2.2.0
-  google_fonts: ^2.3.3
+  google_fonts: ^4.0.4
   flutter_webview_plugin_ios_android: ^0.3.12
   sign_in_with_apple: ^4.3.0
   youtube_api: ^1.0.4
   flutter_native_splash: ^2.2.0+1
-  auth_buttons: ^2.0.4
   flutter_emoji: ^2.4.0
   flutter_stream_listener: ^2.0.0
   flutter_overboard: ^3.1.1
@@ -107,7 +106,6 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   rrule: ^0.2.13
   table_calendar: ^3.0.8
-  ical: ^0.2.2
   icalendar_parser: ^1.1.1
   flutter_colorpicker: ^1.0.3
   onesignal_flutter: ^3.5.1
@@ -115,8 +113,7 @@ dependencies:
   flutter_localization: ^0.1.10
   flutter_localizations:
     sdk: flutter
-  intl: ^0.17.0
-  responsive_builder: ^0.6.4
+  intl: ^0.18.0
   firebase_messaging: ^14.4.0
   cloud_functions: ^4.1.0
   workmanager: ^0.5.1
@@ -126,6 +123,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 
 
@@ -168,6 +166,12 @@ flutter:
   - assets/images/生命科学部.jpg
   - assets/images/mockup.PNG
   - assets/images/are.jpg
+  - assets/images/食堂/うどん.jpg
+  - assets/images/食堂/たんぽぽ.jpg
+  - assets/images/食堂/るるぱ.jpg
+  - assets/images/食堂/ゼロイチ.jpg
+  - assets/images/食堂/ハラール.jpg
+  - assets/images/食堂/697kitchen.jpg
   - assets/icon/password.gif
   - assets/icon/rocket.gif
   - assets/icon/error.gif
