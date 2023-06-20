@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,8 +12,6 @@ import 'eat.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/business.dart';
-import 'package:ous/test.dart';
 import 'package:ous/home.dart';
 import 'package:ous/review.dart';
 import 'package:ous/info/info.dart';
@@ -23,12 +20,10 @@ import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
 import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
+
 //algolia
 class Application {
   static final Algolia algolia = Algolia.init(
@@ -95,9 +90,6 @@ void main() async {
   var httpOverrides = new MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
-
-
-
   runApp(
     MultiProvider(
       providers: [
@@ -127,16 +119,14 @@ class MyHttpOverrides extends HttpOverrides {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
 //脱獄検知
   bool _isJailBroken = false;
-
-
 
   @override
   void initState() {
@@ -150,6 +140,7 @@ class _MyAppState extends State<MyApp> {
       await appTheme.loadColorFromPrefs();
     });
   }
+
   // 脱獄検知メソッド
   Future<void> _checkJailBrokenDevice() async {
     bool isJailBroken = await FlutterJailbreakDetection.jailbroken;
@@ -164,7 +155,10 @@ class _MyAppState extends State<MyApp> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("セキュリティ警告"),
-            content: Text("脱獄デバイスはサポートされません。\nアプリの使用を中止してください。",textAlign: TextAlign.center,),
+            content: Text(
+              "脱獄デバイスはサポートされません。\nアプリの使用を中止してください。",
+              textAlign: TextAlign.center,
+            ),
             actions: <Widget>[
               ElevatedButton(
                 child: Text("閉じる"),
@@ -178,6 +172,7 @@ class _MyAppState extends State<MyApp> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
@@ -248,10 +243,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
-
-
 //アップデート通知
   late String _currentVersion;
   late String _latestVersion;
@@ -442,5 +433,4 @@ class ThemeProvider extends ChangeNotifier {
   }
 }
 
-void backgroundCheck(SendPort message) {
-}
+void backgroundCheck(SendPort message) {}

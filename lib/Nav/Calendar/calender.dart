@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:icalendar_parser/icalendar_parser.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarPage extends StatefulWidget {

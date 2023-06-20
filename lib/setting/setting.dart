@@ -1,27 +1,19 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
-import 'package:ous/Nav/userpolicie.dart';
-import 'package:ous/setting/payment.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:ous/home.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import '../main.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:dynamic_themes/dynamic_themes.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../info/mylog.dart';
 import 'globals.dart';
@@ -40,6 +32,7 @@ class _SettingState extends State<Setting> {
     prefs.remove('userId');
     prefs.remove('password');
   }
+
   bool isDarkModeEnabled = false;
 
   //アプリバージョン表示
@@ -130,29 +123,32 @@ class _SettingState extends State<Setting> {
         ),
       ),
       body: SettingsList(sections: [
+        /*
         SettingsSection(
-            title: Text('基本的な設定',style: TextStyle(color: Colors.lightGreen),),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: Icon(Icons.language),
-                title: Text('言語'),
-                value: Text('日本語'),
-              ),
-              SettingsTile.navigation(
-                leading: Icon(Icons.notifications_none),
-                title: Text('通知設定'),
-              ),
-            ],
+          title: Text(
+            '基本的な設定',
+            style: TextStyle(color: Colors.lightGreen),
           ),
-
-
-
-
-
+          tiles: <SettingsTile>[
+            SettingsTile.navigation(
+              leading: Icon(Icons.language),
+              title: Text('言語'),
+              value: Text('日本語'),
+            ),
+            SettingsTile.navigation(
+              leading: Icon(Icons.notifications_none),
+              title: Text('通知設定'),
+            ),
+          ],
+        ),
+        /%
+         */
         SettingsSection(
           title: Text(
             'テーマ',
-            style: TextStyle(color: Theme.of(context).colorScheme.primary,),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
@@ -212,55 +208,58 @@ class _SettingState extends State<Setting> {
             SettingsTile.navigation(
                 leading: Icon(Icons.color_lens_outlined),
                 title: Text('色変更'),
-             onPressed:(context){
+                onPressed: (context) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      Color pickerColor = currentColor;
+                      void changeColor(Color color) {
+                        pickerColor = color;
+                      }
 
-                 showDialog(
-                   context: context,
-                   builder: (BuildContext context) {
-                     Color pickerColor = currentColor;
-                     void changeColor(Color color) {
-                       pickerColor = color;
-                     }
-                     List<Color> availableColors = List<Color>.from(Colors.primaries)
-                       ..removeWhere((color) => color.value == Colors.black);
+                      List<Color> availableColors = List<Color>.from(
+                          Colors.primaries)
+                        ..removeWhere((color) => color.value == Colors.black);
 
-                     return AlertDialog(
-                       title: const Text('色変更'),
-                       content: SingleChildScrollView(
-                         child: BlockPicker(
-                           pickerColor: pickerColor,
-                           onColorChanged: changeColor,
-                             availableColors: availableColors,
-                         ),
-                       ),
-                       actions: <Widget>[
-                         ElevatedButton(
-                           child: const Text('初期状態に戻す'),
-                           onPressed: () {
-                             Provider.of<AppTheme>(context, listen: false).updateColor(Colors.lightGreen);
-                             Navigator.of(context).pop();
-                           },
-                         ),
-                         ElevatedButton(
-                           child: const Text('これにする'),
-                           onPressed: () {
-                             Provider.of<AppTheme>(context, listen: false).updateColor(pickerColor);
-                             Navigator.of(context).pop();
-                           },
-                         ),
-
-                       ],
-                     );
-                   },
-                 );
-             }
-                ),
+                      return AlertDialog(
+                        title: const Text('色変更'),
+                        content: SingleChildScrollView(
+                          child: BlockPicker(
+                            pickerColor: pickerColor,
+                            onColorChanged: changeColor,
+                            availableColors: availableColors,
+                          ),
+                        ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            child: const Text('初期状態に戻す'),
+                            onPressed: () {
+                              Provider.of<AppTheme>(context, listen: false)
+                                  .updateColor(Colors.lightGreen);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          ElevatedButton(
+                            child: const Text('これにする'),
+                            onPressed: () {
+                              Provider.of<AppTheme>(context, listen: false)
+                                  .updateColor(pickerColor);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }),
           ],
         ),
         SettingsSection(
           title: Text(
             '基本的な設定',
-            style: TextStyle(color: Theme.of(context).colorScheme.primary,),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
@@ -342,29 +341,32 @@ class _SettingState extends State<Setting> {
           ],
         ),
         SettingsSection(
-          title:  Text(
+          title: Text(
             'アプリについて',
-            style: TextStyle(color: Theme.of(context).colorScheme.primary,),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           tiles: <SettingsTile>[
             SettingsTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('アプリのバージョン'),
-              value: GestureDetector(
-                onLongPress:(){
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => WebViewLogin(),
-                  ));
-                } ,
-                child: Text(_version),
-              )
-            ),
+                leading: const Icon(Icons.info_outline),
+                title: const Text('アプリのバージョン'),
+                value: GestureDetector(
+                  onLongPress: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => WebViewLogin(),
+                    ));
+                  },
+                  child: Text(_version),
+                )),
           ],
         ),
         SettingsSection(
           title: Text(
             'アカウント関連',
-            style: TextStyle(color: Theme.of(context).colorScheme.primary,),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
@@ -379,7 +381,10 @@ class _SettingState extends State<Setting> {
                   builder: (_) {
                     return AlertDialog(
                       title: Text("キャッシュを削除します。"),
-                      content: Text("大丈夫そ？",textAlign: TextAlign.center,),
+                      content: Text(
+                        "大丈夫そ？",
+                        textAlign: TextAlign.center,
+                      ),
                       actions: <Widget>[
                         // ボタン領域
                         TextButton(
@@ -389,7 +394,6 @@ class _SettingState extends State<Setting> {
                         TextButton(
                           child: Text("ええで"),
                           onPressed: () async {
-
                             clearLoginData();
                             Navigator.pop(context);
                             Fluttertoast.showToast(msg: 'キャッシュを削除しました');
@@ -490,7 +494,9 @@ class _SettingState extends State<Setting> {
                                     ),
                                     actions: <Widget>[
                                       SlideAction(
-                                        outerColor: Theme.of(context).colorScheme.secondary,
+                                        outerColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
                                         text: 'スライドして退会',
                                         textStyle:
                                             const TextStyle(fontSize: 20),
@@ -522,5 +528,3 @@ class _SettingState extends State<Setting> {
     );
   }
 }
-
-

@@ -1,18 +1,11 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html/parser.dart';
-import 'package:ous/info/mylog.dart';
-import 'package:ous/setting/setting.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart';
 import 'package:share/share.dart';
 import 'package:uuid/uuid.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webviewx/webviewx.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,8 +16,6 @@ import 'package:calendar_timeline/calendar_timeline.dart';
 import 'Nav/Calendar/calender.dart';
 import 'NavBar.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'apikey.dart';
 class home extends StatefulWidget {
   const home({Key? key}) : super(key: key);
