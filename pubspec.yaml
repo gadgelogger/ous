@@ -120,6 +120,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   flutter_html: ^3.0.0-alpha.6
   flutter_jailbreak_detection: ^1.10.0
+  flutter_staggered_animations: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

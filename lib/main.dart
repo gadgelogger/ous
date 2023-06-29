@@ -38,29 +38,7 @@ void main() async {
 
   // Firebaseの初期化
   await Firebase.initializeApp();
-/*
-  // Firebase Messagingインスタンスのアクセス
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: true,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-// トークンの取得
-  final token = await messaging.getToken();
-  print('🐯 FCM TOKEN: $token');
 
-//フォアグラウンドでの通知
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true, // Required to display a heads up notification
-    badge: true,
-    sound: true,
-  );
-*/
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -125,53 +103,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-//脱獄検知
-  bool _isJailBroken = false;
 
-  @override
-  void initState() {
-    super.initState();
-//脱獄検知
-    _checkJailBrokenDevice(); // 脱獄検知メソッドの呼び出し
 
-//テーマ
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      final appTheme = Provider.of<AppTheme>(context, listen: false);
-      await appTheme.loadColorFromPrefs();
-    });
-  }
 
-  // 脱獄検知メソッド
-  Future<void> _checkJailBrokenDevice() async {
-    bool isJailBroken = await FlutterJailbreakDetection.jailbroken;
-    setState(() {
-      _isJailBroken = isJailBroken;
-    });
-
-    if (_isJailBroken) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("セキュリティ警告"),
-            content: Text(
-              "脱獄デバイスはサポートされません。\nアプリの使用を中止してください。",
-              textAlign: TextAlign.center,
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: Text("閉じる"),
-                onPressed: () {
-                  exit(0);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,14 +161,6 @@ class _MyAppState extends State<MyApp> {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
