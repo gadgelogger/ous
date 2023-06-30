@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,20 +8,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
-
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pie_chart/pie_chart.dart';
-
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../../apikey.dart';
 
@@ -125,7 +119,7 @@ class _kougakubuState extends State<kougakubu> {
               );
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               final data = snapshot.data!;
-              return GridView.builder(
+              return AnimationLimiter(child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
@@ -236,7 +230,7 @@ class _kougakubuState extends State<kougakubu> {
                         )),
                       ));
                 },
-              );
+              ));
             } else {
               return Center(
                   child: Column(
@@ -296,113 +290,123 @@ class _kougakubuState extends State<kougakubu> {
                 }
               }).toList();
               return Scrollbar(
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                child: AnimationLimiter(
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+
+                      final document = data[index];
+                      final documentId = document.id;
+                      return AnimationConfiguration.staggeredList(
+                        position: index,
+                        duration: const Duration(milliseconds: 375),
+                        child: ScaleAnimation(
+                          child: FadeInAnimation(
+                            child:Container(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    //firebase
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => DetailsScreen(
+                                          zyugyoumei: data[index]['zyugyoumei'],
+                                          gakki:data[index]['gakki'],
+                                          bumon:data[index]['bumon'],
+                                          kousimei: data[index]['kousimei'],
+                                          tannisuu: data[index]['tannisuu'],
+                                          zyugyoukeisiki: data[index]
+                                          ['zyugyoukeisiki'],
+                                          syusseki: data[index]['syusseki'],
+                                          kyoukasyo: data[index]['kyoukasyo'],
+                                          tesutokeisiki: data[index]['tesutokeisiki'],
+                                          omosirosa: data[index]['omosirosa'],
+                                          toriyasusa: data[index]['toriyasusa'],
+                                          sougouhyouka: data[index]['sougouhyouka'],
+                                          komento: data[index]['komento'],
+                                          name: data[index]['name'],
+                                          senden: data[index]['senden'],
+                                          nenndo: data[index]['nenndo'],
+                                          date: data[index]['date'].toDate(),
+                                          tesutokeikou: data[index]['tesutokeikou'],
+                                          id:document.id,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: (SizedBox(
+                                      width: 200.w,
+                                      height: 30.h,
+                                      child: Card(
+                                        elevation: 10,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            // 既存のウィジェット
+                                            Padding(
+                                              padding: EdgeInsets.all(15),
+                                              child: Align(
+                                                alignment: const Alignment(-0.8, -0.5),
+                                                child: Text(
+                                                  data[index]['zyugyoumei'],
+                                                  style: TextStyle(fontSize: 20.sp),
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: const Alignment(-0.8, 0.4),
+                                              child: Text(
+                                                data[index]['gakki'],
+                                                style: TextStyle(
+                                                    color: Theme.of(context).colorScheme.primary,
+                                                    fontSize: 15.sp),
+                                              ),
+                                            ),
+                                            Align(
+                                              alignment: const Alignment(-0.8, 0.8),
+                                              child: Text(
+                                                data[index]['kousimei'],
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 15.sp),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                                                decoration: BoxDecoration(
+                                                  color: data[index]['bumon'] == 'エグ単'
+                                                      ? Colors.red
+                                                      : Theme.of(context).colorScheme.primary,
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomRight: Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  data[index]['bumon'],
+                                                  style: TextStyle(fontSize: 15.sp, color: textColor),
+                                                ),
+                                              ),
+                                            ),
+                                            // アイコンを追加する Positioned ウィジェット
+
+                                          ],
+                                        ),
+                                      )
+
+                                  )),
+                                )),
+                          ),
+                        ),
+                      );                          },
                   ),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    final document = data[index];
-                    final documentId = document.id;
-                    return Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            //firebase
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsScreen(
-                                  zyugyoumei: data[index]['zyugyoumei'],
-                                  gakki:data[index]['gakki'],
-                                  bumon:data[index]['bumon'],
-                                  kousimei: data[index]['kousimei'],
-                                  tannisuu: data[index]['tannisuu'],
-                                  zyugyoukeisiki: data[index]
-                                  ['zyugyoukeisiki'],
-                                  syusseki: data[index]['syusseki'],
-                                  kyoukasyo: data[index]['kyoukasyo'],
-                                  tesutokeisiki: data[index]['tesutokeisiki'],
-                                  omosirosa: data[index]['omosirosa'],
-                                  toriyasusa: data[index]['toriyasusa'],
-                                  sougouhyouka: data[index]['sougouhyouka'],
-                                  komento: data[index]['komento'],
-                                  name: data[index]['name'],
-                                  senden: data[index]['senden'],
-                                  nenndo: data[index]['nenndo'],
-                                  date: data[index]['date'].toDate(),
-                                  tesutokeikou: data[index]['tesutokeikou'],
-                                  id:document.id,
-                                ),
-                              ),
-                            );
-                          },
-                          child: (SizedBox(
-                              width: 200.w,
-                              height: 30.h,
-                              child: Card(
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                child: Stack(
-                                  children: <Widget>[
-                                    // 既存のウィジェット
-                                    Padding(
-                                      padding: EdgeInsets.all(15),
-                                      child: Align(
-                                        alignment: const Alignment(-0.8, -0.5),
-                                        child: Text(
-                                          data[index]['zyugyoumei'],
-                                          style: TextStyle(fontSize: 20.sp),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: const Alignment(-0.8, 0.4),
-                                      child: Text(
-                                        data[index]['gakki'],
-                                        style: TextStyle(
-                                            color: Theme.of(context).colorScheme.primary,
-                                            fontSize: 15.sp),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: const Alignment(-0.8, 0.8),
-                                      child: Text(
-                                        data[index]['kousimei'],
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: 15.sp),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 0,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                                        decoration: BoxDecoration(
-                                          color: data[index]['bumon'] == 'エグ単'
-                                              ? Colors.red
-                                              : Theme.of(context).colorScheme.primary,
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8),
-                                            bottomRight: Radius.circular(8),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          data[index]['bumon'],
-                                          style: TextStyle(fontSize: 15.sp, color: textColor),
-                                        ),
-                                      ),
-                                    ),
-                                    // アイコンを追加する Positioned ウィジェット
-
-                                  ],
-                                ),
-                              )
-
-                          )),
-                        ));
-                  },
                 ),
               );
             }
