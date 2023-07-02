@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		009FD4EDAEB6BC70505E1EEA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87BEC7C8C2D1AEC09E386A12 /* GoogleService-Info.plist */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		2EAE17F328EB0410003F0725 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EAE17F228EB0410003F0725 /* GoogleService-Info.plist */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
@@ -163,6 +162,7 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
@@ -200,7 +200,6 @@
 				2EAE17F328EB0410003F0725 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				009FD4EDAEB6BC70505E1EEA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,6 @@ import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'mylog.dart';
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
 
@@ -33,7 +32,7 @@ class _InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: _shouldShowMylog ? 8 : 7,
+      length:7,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -48,11 +47,6 @@ class _InfoState extends State<Info> {
 
               tabs: [
                 if (_shouldShowMylog)
-                  Text('マイログ',
-                    style: TextStyle(
-                      fontSize: 15.0.sp,
-                    ),
-                  ),
                 Text('全て',
                   style: TextStyle(
                     fontSize: 15.0.sp,
@@ -94,7 +88,6 @@ class _InfoState extends State<Info> {
           onWillPop: ()async => false,
           child: TabBarView(
             children: [
-              if (_shouldShowMylog) WebViewLogin(),
               all(),
               important(),
               news(),
@@ -102,7 +95,7 @@ class _InfoState extends State<Info> {
               report(),
               business(),
               movie(),
-            ].where((widget) => widget != null).toList(),
+            ]
           ),
         ),
       ),

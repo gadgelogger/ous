@@ -22,7 +22,6 @@ import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 
 //algolia
 class Application {
@@ -105,8 +104,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
 
-
-
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
@@ -140,7 +137,7 @@ class _MyAppState extends State<MyApp> {
                 fontFamily: 'NotoSansCJKJp',
               ),
               themeMode: themeProvider.themeMode,
-              home: StreamBuilder<User?>(
+              home:StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -195,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
         .doc('3wmNMFXQArQHWpJA20je')
         .get();
     Map<String, dynamic>? data =
-        documentSnapshot.data() as Map<String, dynamic>?;
+    documentSnapshot.data() as Map<String, dynamic>?;
     if (data != null) {
       setState(() {
         _latestVersion = data['version'];
