@@ -103,10 +103,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final appTheme = Provider.of<AppTheme>(context);
@@ -160,7 +156,6 @@ class _MyAppState extends State<MyApp> {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
 
   final String title;
 
@@ -274,7 +269,6 @@ class _MyHomePageState extends State<MyHomePage> {
     home(),
     Info(),
     Review(),
-    Eat(),
   ];
 
   @override
@@ -303,10 +297,6 @@ class _MyHomePageState extends State<MyHomePage> {
             NavigationDestination(
               icon: Icon(Icons.school_outlined),
               label: '講義評価',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.restaurant_outlined),
-              label: '食堂',
             ),
           ],
         ));

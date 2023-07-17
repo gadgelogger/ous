@@ -1,9 +1,6 @@
-import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
@@ -20,8 +17,8 @@ import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
-
-import 'dart:async';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Review extends StatefulWidget {
   const Review({Key? key}) : super(key: key);
@@ -962,64 +959,79 @@ class _ReviewState extends State<Review> {
         ),
       ),
       floatingActionButton: showFloatingActionButton
-          ? Column(
-              verticalDirection: VerticalDirection.up,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Column(
-                  children: [
-                    /*   Container(
-              margin: EdgeInsets.only(bottom: 16),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Fluttertoast.showToast(msg: "開発中です!完成まで待ってね。");
-
-                },
-                child: const Icon(Icons.favorite_border),
+          ? SpeedDial(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(
+                    18.0)), // adjust this value according to your button's height
               ),
-            ),*/
-                    FloatingActionButton(
-                      heroTag: "btn1",
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MultipleCollectionsPage()),
-                        );
-                      },
-                      child: Icon(Icons.person_2_outlined),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 16),
-                      child: FloatingActionButton(
-                        heroTag: "btn2",
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FavoritesPage()),
-                          );
-                        },
-                        child: const Icon(Icons.favorite_border),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 16),
-                      child: FloatingActionButton(
-                        heroTag: "btn3",
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => post()),
-                          );
-                        },
-                        child: const Icon(Icons.upload_outlined),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            )
+              icon: Icons.menu,
+              activeIcon: Icons.close,
+              childPadding: const EdgeInsets.all(5),
+              spaceBetweenChildren: 10,
+              children: [
+                  SpeedDialChild(
+                    child: const Icon(Icons.upload_outlined),
+                    label: "投稿",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => post()),
+                      );
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.favorite_border),
+                    label: "お気に入り",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FavoritesPage()),
+                      );
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.person_2_outlined),
+                    label: "自分の投稿",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MultipleCollectionsPage()),
+                      );
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.info),
+                    label: "教務ガイド（履修削除はこちら）",
+                    onTap: () async {
+                      final url = Uri.parse(
+                        'https://accounts.google.com/AccountChooser/signinchooser?continue=https%3A%2F%2Fsites.google.com%2Fous.ac.jp%2Facademicaffairs%2F%25E5%2590%2584%25E7%25A8%25AE%25E7%2594%25B3%25E8%25AB%258B%2F%25E5%25B1%25A5%25E4%25BF%25AE%25E9%2596%25A2%25E4%25BF%2582&flowName=GlifWebSignIn&flowEntry=AccountChooser',
+                      );
+                      if (await canLaunchUrl(url)) {
+                        launchUrl(url, mode: LaunchMode.externalApplication);
+                      } else {
+                        // ignore: avoid_print
+                        print("Can't launch $url");
+                      }
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.book),
+                    label: "シラバス",
+                    onTap: () async {
+                      final url = Uri.parse(
+                        'https://mylog.pub.ous.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006',
+                      );
+                      if (await canLaunchUrl(url)) {
+                        launchUrl(url, mode: LaunchMode.externalApplication);
+                      } else {
+                        // ignore: avoid_print
+                        print("Can't launch $url");
+                      }
+                    },
+                  ),
+                ])
           : null,
     );
   }
