@@ -1005,15 +1005,39 @@ class _ReviewState extends State<Review> {
                     child: const Icon(Icons.info),
                     label: "教務ガイド（履修削除はこちら）",
                     onTap: () async {
-                      final url = Uri.parse(
-                        'https://accounts.google.com/AccountChooser/signinchooser?continue=https%3A%2F%2Fsites.google.com%2Fous.ac.jp%2Facademicaffairs%2F%25E5%2590%2584%25E7%25A8%25AE%25E7%2594%25B3%25E8%25AB%258B%2F%25E5%25B1%25A5%25E4%25BF%25AE%25E9%2596%25A2%25E4%25BF%2582&flowName=GlifWebSignIn&flowEntry=AccountChooser',
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("注意"),
+                          content: const Text(
+                            "この先ログイン画面が表示されます\n大学のGoogleアカウントでログインしてください。",
+                            textAlign: TextAlign.center,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("やめる"),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                final url = Uri.parse(
+                                  'https://accounts.google.com/AccountChooser/signinchooser?continue=https%3A%2F%2Fsites.google.com%2Fous.ac.jp%2Facademicaffairs%2F%25E5%2590%2584%25E7%25A8%25AE%25E7%2594%25B3%25E8%25AB%258B%2F%25E5%25B1%25A5%25E4%25BF%25AE%25E9%2596%25A2%25E4%25BF%2582&flowName=GlifWebSignIn&flowEntry=AccountChooser',
+                                );
+                                if (await canLaunchUrl(url)) {
+                                  launchUrl(url,
+                                      mode: LaunchMode.externalApplication);
+                                } else {
+                                  // ignore: avoid_print
+                                  print("Can't launch $url");
+                                }
+                              },
+                              child: const Text("おっけー"),
+                            )
+                          ],
+                        ),
                       );
-                      if (await canLaunchUrl(url)) {
-                        launchUrl(url, mode: LaunchMode.externalApplication);
-                      } else {
-                        // ignore: avoid_print
-                        print("Can't launch $url");
-                      }
                     },
                   ),
                   SpeedDialChild(

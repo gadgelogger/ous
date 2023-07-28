@@ -9,9 +9,7 @@ import 'package:ous/info/5.dart';
 import 'package:ous/info/6.dart';
 import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-import 'mylog.dart';
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
 
@@ -20,20 +18,11 @@ class Info extends StatefulWidget {
 }
 
 class _InfoState extends State<Info> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool _shouldShowMylog = false;
-
   @override
-  void initState() {
-    super.initState();
-    User? user = _auth.currentUser;
-    _shouldShowMylog = user != null && user.email!.endsWith('@ous.jp');
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: _shouldShowMylog ? 8 : 7,
+      length: 7,
       child: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
@@ -44,46 +33,46 @@ class _InfoState extends State<Info> {
               unselectedLabelColor: Colors.grey,
               isScrollable: true,
               indicatorColor: Theme.of(context).colorScheme.primary,
-              labelPadding: EdgeInsets.symmetric(horizontal:15,vertical: 12),
-
+              labelPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               tabs: [
-                if (_shouldShowMylog)
-                  Text('マイログ',
-                    style: TextStyle(
-                      fontSize: 15.0.sp,
-                    ),
-                  ),
-                Text('全て',
+                Text(
+                  '全て',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('重要',
+                Text(
+                  '重要',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('お知らせ',
+                Text(
+                  'お知らせ',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('学科レポート',
+                Text(
+                  '学科レポート',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('理大レポート',
+                Text(
+                  '理大レポート',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('キャリア支援センター',
+                Text(
+                  'キャリア支援センター',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
                 ),
-                Text('おかりかチャンネル',
+                Text(
+                  'おかりかチャンネル',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
@@ -91,10 +80,9 @@ class _InfoState extends State<Info> {
               ]),
         ),
         body: WillPopScope(
-          onWillPop: ()async => false,
+          onWillPop: () async => false,
           child: TabBarView(
             children: [
-              if (_shouldShowMylog) WebViewLogin(),
               all(),
               important(),
               news(),
@@ -102,7 +90,7 @@ class _InfoState extends State<Info> {
               report(),
               business(),
               movie(),
-            ].where((widget) => widget != null).toList(),
+            ],
           ),
         ),
       ),

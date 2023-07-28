@@ -15,7 +15,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import '../main.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import '../info/mylog.dart';
 import 'globals.dart';
 
 class Setting extends StatefulWidget {
@@ -349,16 +348,10 @@ class _SettingState extends State<Setting> {
           ),
           tiles: <SettingsTile>[
             SettingsTile(
-                leading: const Icon(Icons.info_outline),
-                title: const Text('アプリのバージョン'),
-                value: GestureDetector(
-                  onLongPress: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => WebViewLogin(),
-                    ));
-                  },
-                  child: Text(_version),
-                )),
+              leading: const Icon(Icons.info_outline),
+              title: const Text('アプリのバージョン'),
+              value: Text(_version),
+            ),
           ],
         ),
         SettingsSection(
