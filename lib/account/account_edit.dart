@@ -7,12 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ous/home.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
-import '../main.dart';
 
 class account_edit extends StatefulWidget {
   const account_edit({Key? key}) : super(key: key);
@@ -191,14 +187,15 @@ class _account_editState extends State<account_edit> {
                                       onPressed: () {
                                         _pickImage(ImageSource.gallery);
                                         Fluttertoast.showToast(
-                                            msg: "アカウント画像を変更しています\反映されるまでちょっと待ってね。");
+                                            msg:
+                                                "アカウント画像を変更しています\反映されるまでちょっと待ってね。");
                                       },
                                       elevation: 2.0,
                                       fillColor: Color(0xFFF5F6F9),
-                                      child: Icon(
-                                        Icons.photo_camera_outlined,
-                                        color: Theme.of(context).colorScheme.primary
-                                      ),
+                                      child: Icon(Icons.photo_camera_outlined,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                       padding: EdgeInsets.all(7.0),
                                       shape: CircleBorder(),
                                     ),
@@ -206,17 +203,17 @@ class _account_editState extends State<account_edit> {
                                 ],
                               ),
                               Positioned(
-                                child: _isUploading
-                                    ? Container(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CircularProgressIndicator()
-                                    ],
-                                  ),
-                                )
-                                    : SizedBox()
-                              ),
+                                  child: _isUploading
+                                      ? Container(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              CircularProgressIndicator()
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox()),
                             ],
                           )),
                     )),
@@ -300,7 +297,6 @@ class _account_editState extends State<account_edit> {
               );
             }),
       ),
-
     );
   }
 }

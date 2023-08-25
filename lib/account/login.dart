@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,7 +167,7 @@ class _Login extends State<Login> {
         child: Scaffold(
             resizeToAvoidBottomInset: false,
             body: Scrollbar(
-                isAlwaysShown: true,
+                thumbVisibility: true,
                 child: SingleChildScrollView(
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,63 +439,67 @@ class _Login extends State<Login> {
                             GestureDetector(
                               onTap: _isChecked
                                   ? () async {
-                                Fluttertoast.showToast(
-                                    msg: "ログイン中です\nちょっと待ってね。");
-                                try {
-                                  // メール/パスワードでログイン
-                                  UserCredential _result = await _auth
-                                      .signInWithEmailAndPassword(
-                                    email: _login_Email,
-                                    password: _login_Password,
-                                  );
+                                      Fluttertoast.showToast(
+                                          msg: "ログイン中です\nちょっと待ってね。");
+                                      try {
+                                        // メール/パスワードでログイン
+                                        UserCredential _result = await _auth
+                                            .signInWithEmailAndPassword(
+                                          email: _login_Email,
+                                          password: _login_Password,
+                                        );
 
-                                  // ログイン成功
-                                  User _user =
-                                  _result.user!; // ログインユーザーのIDを取得
+                                        // ログイン成功
+                                        User _user =
+                                            _result.user!; // ログインユーザーのIDを取得
 
-                                  // Email確認が済んでいる場合のみHome画面へ
-                                  if (_user.emailVerified) {
-                                    Navigator.push(context,
-                                        MaterialPageRoute(
-                                            builder: (context) {
-                                              return MyHomePage(title: 'home');
-                                            }));
-                                    Fluttertoast.showToast(
-                                        msg: "ログインしました");
+                                        // Email確認が済んでいる場合のみHome画面へ
+                                        if (_user.emailVerified) {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return MyHomePage(title: 'home');
+                                          }));
+                                          Fluttertoast.showToast(
+                                              msg: "ログインしました");
 
-                                    DocumentReference userDoc = FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(_user.uid);
+                                          DocumentReference userDoc =
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(_user.uid);
 
-                                    userDoc.get().then((docSnapshot) async {
-                                      if (!docSnapshot.exists) {
-                                        await userDoc.set({
-                                          'email': _login_Email,
-                                          'uid': _user.uid,
-                                          'displayName': '名前未設定',
-                                          'day': DateFormat(
-                                              'yyyy/MM/dd(E) HH:mm:ss')
-                                              .format(now),
-                                          'photoURL': 'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
-                                        });
-                                        print("Created");
-                                      } else {
-                                        print("User already exists");
-                                      }
-                                    });
-                                  } else {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              Emailcheck(
-                                                  email: _login_Email,
-                                                  pswd: _login_Password,
-                                                  from: 2)),
-                                    );
-                                    Fluttertoast.showToast(
-                                        msg: "ログインしました");
-                                  }
+                                          userDoc
+                                              .get()
+                                              .then((docSnapshot) async {
+                                            if (!docSnapshot.exists) {
+                                              await userDoc.set({
+                                                'email': _login_Email,
+                                                'uid': _user.uid,
+                                                'displayName': '名前未設定',
+                                                'day': DateFormat(
+                                                        'yyyy/MM/dd(E) HH:mm:ss')
+                                                    .format(now),
+                                                'photoURL':
+                                                    'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+                                              });
+                                              print("Created");
+                                            } else {
+                                              print("User already exists");
+                                            }
+                                          });
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Emailcheck(
+                                                        email: _login_Email,
+                                                        pswd: _login_Password,
+                                                        from: 2)),
+                                          );
+                                          Fluttertoast.showToast(
+                                              msg: "ログインしました");
+                                        }
                                       } on FirebaseAuthException catch (e) {
                                         String errorMessage;
                                         if (e.code == 'weak-password') {
@@ -858,7 +861,7 @@ class _Login extends State<Login> {
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =
-    await googleUser!.authentication;
+        await googleUser!.authentication;
 
     final OAuthCredential credential = GoogleAuthProvider.credential(
       idToken: googleAuth!.idToken,
@@ -875,7 +878,8 @@ class _Login extends State<Login> {
     // Firestoreにユーザー情報が存在しない場合、ユーザー情報を書き込む
     final User? user = userCredential.user;
     final firestoreInstance = FirebaseFirestore.instance;
-    DocumentReference userDoc = firestoreInstance.collection('users').doc(user!.uid);
+    DocumentReference userDoc =
+        firestoreInstance.collection('users').doc(user!.uid);
 
     userDoc.get().then((docSnapshot) async {
       if (!docSnapshot.exists) {
@@ -894,7 +898,6 @@ class _Login extends State<Login> {
 
     return userCredential;
   }
-
 }
 
 // Firebase Authentication利用時の日本語エラーメッセージ

@@ -96,34 +96,42 @@ class _postState extends State<post> {
           elevation: 0,
           title: Text('投稿ページ'),
           actions: [
-            IconButton(icon: Icon(Icons.computer), onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text("スマホで投稿するのが\nめんどくさい人へ",textAlign: TextAlign.center,),
-                    content: Text("下記のボタンを押すとPC用クライアントを開きます。\n\nこれをニアバイシェアやAirdrop等を使いPCに送ってください。\n\nhttps://ous-unoffical-20d2c.web.app/\n手動で入力する場合は↑を入力してください。",textAlign: TextAlign.center,),
-                    actions: <Widget>[
-                      // ボタン領域
-                      TextButton(
-                        child: Text("俺はスマホを貫くぜ"),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                      TextButton(
-                        child: Text("開く"),
-                        onPressed: (){
-                          launch('https://ous-unoffical-20d2c.web.app/');
-                        }
-                      ),
-                    ],
+            IconButton(
+                icon: Icon(Icons.computer),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                        title: Text(
+                          "スマホで投稿するのが\nめんどくさい人へ",
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Text(
+                          "下記のボタンを押すとPC用クライアントを開きます。\n\nこれをニアバイシェアやAirdrop等を使いPCに送ってください。\n\nhttps://ous-unoffical-20d2c.web.app/\n手動で入力する場合は↑を入力してください。",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          // ボタン領域
+                          TextButton(
+                            child: Text("俺はスマホを貫くぜ"),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                              child: Text("開く"),
+                              onPressed: () {
+                                launch('https://ous-unoffical-20d2c.web.app/');
+                              }),
+                        ],
+                      );
+                    },
                   );
-                },
-              );            }),
+                }),
           ],
         ),
         body: Container(
           child: Scrollbar(
-              isAlwaysShown: true,
+              thumbVisibility: true,
               child: Padding(
                   padding: EdgeInsets.all(15.0), //全方向にパディング１００
 
@@ -153,7 +161,6 @@ class _postState extends State<post> {
                         SizedBox(
                           height: 20,
                         ),
-
                         DropdownButton(
                           //4
                           items: const [
@@ -264,7 +271,10 @@ class _postState extends State<post> {
                         ),
                         TextField(
                           keyboardType: TextInputType.number,
-                          inputFormatters: [FilteringTextInputFormatter.digitsOnly,LengthLimitingTextInputFormatter(4)],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(4)
+                          ],
                           controller: _textEditingController0,
                           // この一文を追加
                           enabled: true,
