@@ -17,7 +17,7 @@ class _TestState extends State<Test> {
   List<Reference> _folderRefs = [];
 
   // Define the folder names that should not be displayed
-  List<String> _ignoredFolders = ['DL', 'UP','users'];
+  List<String> _ignoredFolders = ['DL', 'UP', 'users'];
 
   @override
   void initState() {
@@ -28,11 +28,11 @@ class _TestState extends State<Test> {
   Future<void> _getFolders() async {
     ListResult result = await _storage.ref().listAll();
     setState(() {
-      _folderRefs = result.prefixes.where((ref) => !_ignoredFolders.contains(ref.name)).toList();
+      _folderRefs = result.prefixes
+          .where((ref) => !_ignoredFolders.contains(ref.name))
+          .toList();
     });
   }
-
-
 
   late File _image;
 
@@ -84,7 +84,7 @@ class _TestState extends State<Test> {
 
       String uploadName = generateNonce();
       final storageRef =
-      FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+          FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
     } catch (e) {
       print(e);
@@ -114,7 +114,7 @@ class _TestState extends State<Test> {
 
       String uploadName = generateNonce();
       final storageRef =
-      FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
+          FirebaseStorage.instance.ref().child('UP/$userID/$uploadName');
       final task = await storageRef.putFile(file);
     } catch (e) {
       print(e);
@@ -124,8 +124,6 @@ class _TestState extends State<Test> {
   Future<ListResult> _getFilesInFolder(Reference folderRef) async {
     return await folderRef.listAll();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,17 +135,20 @@ class _TestState extends State<Test> {
         itemCount: _folderRefs.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
-            child:  ListTile(
+            child: ListTile(
               leading: Icon(Icons.folder),
               trailing: Icon(Icons.chevron_right),
               title: Text(_folderRefs[index].name),
               onTap: () async {
                 ListResult result = await _getFilesInFolder(_folderRefs[index]);
-                List<Reference> fileRefs = result.items.where((ref) => !ref.name.endsWith('/')).toList();
+                List<Reference> fileRefs = result.items
+                    .where((ref) => !ref.name.endsWith('/'))
+                    .toList();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => FileListScreen(folderRef: _folderRefs[index]),
+                    builder: (context) =>
+                        FileListScreen(folderRef: _folderRefs[index]),
                   ),
                 );
               },
@@ -158,7 +159,7 @@ class _TestState extends State<Test> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-            //モーダルの背景の色、透過
+              //モーダルの背景の色、透過
               backgroundColor: Colors.transparent,
               //ドラッグ可能にする（高さもハーフサイズからフルサイズになる様子）
               isScrollControlled: true,
@@ -168,8 +169,9 @@ class _TestState extends State<Test> {
                     margin: EdgeInsets.only(top: 450),
                     decoration: BoxDecoration(
                       //モーダル自体の色
-                      color: Theme.of(context).brightness == Brightness.light ?  Colors.white :  Color(
-                          0xFF424242),
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.white
+                          : Color(0xFF424242),
                       //角丸にする
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
@@ -184,8 +186,7 @@ class _TestState extends State<Test> {
                           Text(
                             '過去問をアップロード',
                             style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 30, fontWeight: FontWeight.bold),
                           ),
                           LimitedBox(
                             maxHeight: 200,
@@ -222,8 +223,7 @@ class _TestState extends State<Test> {
                           Text(
                             '投稿ありがとうございます！',
                             style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.normal),
+                                fontSize: 20, fontWeight: FontWeight.normal),
                           ),
                         ],
                       )),
@@ -235,8 +235,6 @@ class _TestState extends State<Test> {
     );
   }
 }
-
-
 
 class FileListScreen extends StatefulWidget {
   final Reference folderRef;
@@ -285,10 +283,13 @@ class _FileListScreenState extends State<FileListScreen> {
                 trailing: Icon(Icons.chevron_right),
                 title: Text(_folderNames[index]),
                 onTap: () async {
-                  Reference folderRef = widget.folderRef.child(_folderNames[index]);
+                  Reference folderRef =
+                      widget.folderRef.child(_folderNames[index]);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => FileListScreen(folderRef: folderRef)),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            FileListScreen(folderRef: folderRef)),
                   );
                 },
               ),
@@ -321,7 +322,8 @@ class _FileListScreenState extends State<FileListScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ImageViewerScreen(imageRef: fileRef),
+                        builder: (context) =>
+                            ImageViewerScreen(imageRef: fileRef),
                       ),
                     );
                   }
@@ -334,7 +336,6 @@ class _FileListScreenState extends State<FileListScreen> {
     );
   }
 }
-
 
 class ImageViewerScreen extends StatelessWidget {
   final Reference imageRef;
@@ -351,15 +352,14 @@ class ImageViewerScreen extends StatelessWidget {
           if (snapshot.hasData) {
             return Center(
                 child: InteractiveViewer(
-                  minScale: 0.1,
-                  maxScale: 5,
-                  child: Container(
-                      child: Image.network(
-                        snapshot.data!,
-                        height: double.infinity,
-                      )
-                  ),
-                ));
+              minScale: 0.1,
+              maxScale: 5,
+              child: Container(
+                  child: Image.network(
+                snapshot.data!,
+                height: double.infinity,
+              )),
+            ));
           } else {
             return Center(child: CircularProgressIndicator());
           }
