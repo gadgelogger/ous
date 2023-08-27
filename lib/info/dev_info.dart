@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:ous/apikey.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:uuid/uuid.dart';
 
 class DevInfo extends StatefulWidget {
   const DevInfo({Key? key}) : super(key: key);
@@ -182,6 +183,7 @@ class _DevPostState extends State<DevPost> {
         'title': _titleController.text,
         'text': _textController.text,
         'day': _selectedDate,
+        'uuid': Uuid().v4(),
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('投稿しました')),
@@ -315,6 +317,21 @@ class _DevPostState extends State<DevPost> {
                                         ),
                                       );
                                     },
+                                    leading: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => EditPost(
+                                              text: data['text'],
+                                              id: data['uuid'],
+                                              title: data['title'],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(Icons.edit),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -331,22 +348,102 @@ class _DevPostState extends State<DevPost> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(2021),
-            lastDate: DateTime(2100),
-          ).then((value) {
-            if (value != null) {
-              setState(() {
-                _selectedDate = value;
-              });
-            }
-          });
-        },
-        child: const Icon(Icons.calendar_today),
+    );
+  }
+}
+
+class EditPost extends StatefulWidget {
+  final String? id;
+  final String? title;
+  final String? text;
+
+  const EditPost({Key? key, this.id, this.title, this.text}) : super(key: key);
+
+  @override
+  State<EditPost> createState() => _EditPostState();
+}
+
+class _EditPostState extends State<EditPost> {
+  final _formKey = GlobalKey<FormState>();
+  late String _title;
+  late String _text;
+
+  @override
+  void initState() {
+    super.initState();
+    _title = widget.title ?? '';
+    _text = widget.text ?? '';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('投稿編集'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                initialValue: _title,
+                decoration: const InputDecoration(
+                  hintText: 'タイトル',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'タイトルを入力してください';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  _title = value;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                initialValue: _text,
+                decoration: const InputDecoration(
+                  hintText: '本文',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '本文を入力してください';
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  _text = value;
+                },
+                maxLines: null,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    final snapshot = await FirebaseFirestore.instance
+                        .collection('dev_info')
+                        .where('uuid', isEqualTo: widget.id)
+                        .limit(1)
+                        .get();
+                    if (snapshot.docs.isNotEmpty) {
+                      final doc = snapshot.docs.first;
+                      await doc.reference.update({
+                        'title': _title,
+                        'text': _text,
+                      });
+                      Navigator.pop(context);
+                    }
+                  }
+                },
+                child: const Text('更新する'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
