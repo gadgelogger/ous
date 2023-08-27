@@ -71,7 +71,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
         ChangeNotifierProvider(create: (context) => AppTheme()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 //ダークモード
