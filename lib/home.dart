@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  @override
+  int _current = 0;
   var weatherData;
   var weatherData1;
 
@@ -318,31 +318,89 @@ class _HomeState extends State<Home> {
                   ),
                 ]),
                 Card(
-                    child: Column(children: [
-                  Text(
-                    'バス運行情報',
-                    style: TextStyle(
-                      fontSize: 30.sp,
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Column(children: [
+                    Text(
+                      'バス運行情報',
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                      ),
                     ),
-                  ),
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 80.h,
-                      viewportFraction: 1.0,
-                      enableInfiniteScroll: false,
-                      reverse: false,
-                      autoPlay: false,
-                      enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                    items: [
-                      //岡山駅西口発と理大正門発
-                      Row(children: [
-                        ButtonBar(children: [
-                          SizedBox(
-                            width: 180.w, //横幅
-                            height: 50.h, //高さ
-                            child: FilledButton.tonal(
+                    CarouselSlider(
+                      options: CarouselOptions(
+                          height: 80.h,
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: false,
+                          reverse: false,
+                          autoPlay: false,
+                          enlargeCenterPage: true,
+                          scrollDirection: Axis.horizontal,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          }),
+                      items: [
+                        //岡山駅西口発と理大正門発
+                        Row(children: [
+                          ButtonBar(children: [
+                            SizedBox(
+                              width: 180.w, //横幅
+                              height: 50.h, //高さ
+                              child: FilledButton.tonal(
+                                  style: FilledButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    // Foreground color
+                                    // Background color
+                                  ),
+                                  onPressed: () {
+                                    launch(
+                                        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        '岡山駅西口発',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      FutureBuilder<String>(
+                                        future: fetchApproachCaption(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            var approachCaption = snapshot.data;
+                                            if (approachCaption!
+                                                .contains('あと')) {
+                                              return Text(approachCaption);
+                                            } else {
+                                              var index =
+                                                  approachCaption.indexOf(':');
+                                              var time = approachCaption
+                                                  .substring(0, index + 3);
+                                              return Text(time);
+                                            }
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                snapshot.error.toString());
+                                          }
+                                          return SizedBox(
+                                              height: 20.h,
+                                              width: 20.w,
+                                              child:
+                                                  const CircularProgressIndicator());
+                                        },
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 180.w, //横幅
+                              height: 50.h, //高さ
+                              child: FilledButton.tonal(
                                 style: FilledButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -350,25 +408,28 @@ class _HomeState extends State<Home> {
                                   // Foreground color
                                   // Background color
                                 ),
-                                onPressed: () {
-                                  launch(
-                                      'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
-                                },
+                                onPressed: () => launch(
+                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      '岡山駅西口発',
+                                      '岡山理科大学\正門発',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     FutureBuilder<String>(
-                                      future: fetchApproachCaption(),
+                                      future: fetchApproachCaption1(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           var approachCaption = snapshot.data;
                                           if (approachCaption!.contains('あと')) {
-                                            return Text(approachCaption);
+                                            var index = approachCaption
+                                                .indexOf('で到着予定');
+                                            var time = approachCaption
+                                                .substring(0, index);
+                                            return Text(time);
                                           } else {
                                             var index =
                                                 approachCaption.indexOf(':');
@@ -381,78 +442,77 @@ class _HomeState extends State<Home> {
                                               snapshot.error.toString());
                                         }
                                         return SizedBox(
-                                            height: 30.h,
-                                            width: 30.w,
+                                            height: 20.h,
+                                            width: 20.w,
                                             child:
                                                 const CircularProgressIndicator());
                                       },
                                     ),
                                   ],
-                                )),
-                          ),
-                          SizedBox(
-                            width: 180.w, //横幅
-                            height: 50.h, //高さ
-                            child: FilledButton.tonal(
-                              style: FilledButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                // Foreground color
-                                // Background color
-                              ),
-                              onPressed: () => launch(
-                                  'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0'),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    '岡山理科大学\正門発',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  FutureBuilder<String>(
-                                    future: fetchApproachCaption1(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        var approachCaption = snapshot.data;
-                                        if (approachCaption!.contains('あと')) {
-                                          var index =
-                                              approachCaption.indexOf('で到着予定');
-                                          var time = approachCaption.substring(
-                                              0, index);
-                                          return Text(time);
-                                        } else {
-                                          var index =
-                                              approachCaption.indexOf(':');
-                                          var time = approachCaption.substring(
-                                              0, index + 3);
-                                          return Text(time);
-                                        }
-                                      } else if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
-                                      }
-                                      return SizedBox(
-                                          height: 30.h,
-                                          width: 30.w,
-                                          child:
-                                              const CircularProgressIndicator());
-                                    },
-                                  ),
-                                ],
                               ),
                             ),
-                          ),
+                          ]),
                         ]),
-                      ]),
-                      //天満屋発と岡山理科大学発
-                      Row(children: [
-                        ButtonBar(children: [
-                          SizedBox(
-                            width: 180.w, //横幅
-                            height: 50.h, //高さ
-                            child: FilledButton.tonal(
+                        //天満屋発と岡山理科大学発
+                        Row(children: [
+                          ButtonBar(children: [
+                            SizedBox(
+                              width: 180.w, //横幅
+                              height: 50.h, //高さ
+                              child: FilledButton.tonal(
+                                  style: FilledButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    // Foreground color
+                                    // Background color
+                                  ),
+                                  onPressed: () {
+                                    launch(
+                                        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=27&stopCdTo=768&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        '岡山天満屋発',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      FutureBuilder<String>(
+                                        future: fetchApproachCaption2(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            var approachCaption = snapshot.data;
+                                            if (approachCaption!
+                                                .contains('あと')) {
+                                              return Text(approachCaption);
+                                            } else {
+                                              var index =
+                                                  approachCaption.indexOf(':');
+                                              var time = approachCaption
+                                                  .substring(0, index + 3);
+                                              return Text(time);
+                                            }
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                snapshot.error.toString());
+                                          }
+                                          return SizedBox(
+                                              height: 20.h,
+                                              width: 20.w,
+                                              child:
+                                                  const CircularProgressIndicator());
+                                        },
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            SizedBox(
+                              width: 180.w, //横幅
+                              height: 50.h, //高さ
+                              child: FilledButton.tonal(
                                 style: FilledButton.styleFrom(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -460,25 +520,28 @@ class _HomeState extends State<Home> {
                                   // Foreground color
                                   // Background color
                                 ),
-                                onPressed: () {
-                                  launch(
-                                      'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=27&stopCdTo=768&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0');
-                                },
+                                onPressed: () => launch(
+                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?returnCdFrom=768&returnCdTo=27&returnHour=&returnMinute=&returnAD=-1&returnVehicleTypeCd=&returnCorpCd=&lang=0'),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      '岡山天満屋発',
+                                      '岡山理科大学\東門発',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     FutureBuilder<String>(
-                                      future: fetchApproachCaption2(),
+                                      future: fetchApproachCaption3(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           var approachCaption = snapshot.data;
                                           if (approachCaption!.contains('あと')) {
-                                            return Text(approachCaption);
+                                            var index = approachCaption
+                                                .indexOf('で到着予定');
+                                            var time = approachCaption
+                                                .substring(0, index);
+                                            return Text(time);
                                           } else {
                                             var index =
                                                 approachCaption.indexOf(':');
@@ -491,74 +554,42 @@ class _HomeState extends State<Home> {
                                               snapshot.error.toString());
                                         }
                                         return SizedBox(
-                                            height: 30.h,
-                                            width: 30.w,
+                                            height: 20.h,
+                                            width: 20.w,
                                             child:
                                                 const CircularProgressIndicator());
                                       },
                                     ),
                                   ],
-                                )),
-                          ),
-                          SizedBox(
-                            width: 180.w, //横幅
-                            height: 50.h, //高さ
-                            child: FilledButton.tonal(
-                              style: FilledButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                // Foreground color
-                                // Background color
-                              ),
-                              onPressed: () => launch(
-                                  'https://loc.bus-vision.jp/ryobi/view/approach.html?returnCdFrom=768&returnCdTo=27&returnHour=&returnMinute=&returnAD=-1&returnVehicleTypeCd=&returnCorpCd=&lang=0'),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    '岡山理科大学\東門発',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  FutureBuilder<String>(
-                                    future: fetchApproachCaption3(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        var approachCaption = snapshot.data;
-                                        if (approachCaption!.contains('あと')) {
-                                          var index =
-                                              approachCaption.indexOf('で到着予定');
-                                          var time = approachCaption.substring(
-                                              0, index);
-                                          return Text(time);
-                                        } else {
-                                          var index =
-                                              approachCaption.indexOf(':');
-                                          var time = approachCaption.substring(
-                                              0, index + 3);
-                                          return Text(time);
-                                        }
-                                      } else if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
-                                      }
-                                      return SizedBox(
-                                          height: 30.h,
-                                          width: 30.w,
-                                          child:
-                                              const CircularProgressIndicator());
-                                    },
-                                  ),
-                                ],
                               ),
                             ),
-                          ),
+                          ]),
                         ]),
-                      ]),
-                    ],
-                  ),
-                ])),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        2, // ここは CarouselSlider のスライド数に合わせてください
+                        (index) => Container(
+                          width: 8.0,
+                          height: 8.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 2.0),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: _current == index
+                                ? const Color.fromRGBO(
+                                    0, 0, 0, 0.9) // 選択中のドットの色
+                                : const Color.fromRGBO(
+                                    0, 0, 0, 0.4), // 非選択のドットの色
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]),
+                )),
               ],
             ),
           ),

@@ -6,7 +6,6 @@ import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,13 +24,6 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-//キャッシュ削除
-  Future<void> clearLoginData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('userId');
-    prefs.remove('password');
-  }
-
   bool isDarkModeEnabled = false;
 
   //アプリバージョン表示
@@ -362,42 +354,6 @@ class _SettingState extends State<Setting> {
             ),
           ),
           tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              leading: Icon(Icons.exit_to_app),
-              title: Text(
-                'キャッシュを削除する',
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: (BuildContext context) async {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: Text("キャッシュを削除します。"),
-                      content: Text(
-                        "大丈夫そ？",
-                        textAlign: TextAlign.center,
-                      ),
-                      actions: <Widget>[
-                        // ボタン領域
-                        TextButton(
-                          child: Text("ダメやで"),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        TextButton(
-                          child: Text("ええで"),
-                          onPressed: () async {
-                            clearLoginData();
-                            Navigator.pop(context);
-                            Fluttertoast.showToast(msg: 'キャッシュを削除しました');
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
             SettingsTile.navigation(
               leading: Icon(Icons.exit_to_app),
               title: Text(
