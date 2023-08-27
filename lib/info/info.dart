@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ous/Nav/call.dart';
 import 'package:ous/NavBar.dart';
 import 'package:ous/info/2.dart';
 import 'package:ous/info/3.dart';
@@ -24,16 +23,17 @@ class _InfoState extends State<Info> {
     return DefaultTabController(
       length: 7,
       child: Scaffold(
-        drawer: NavBar(),
+        drawer: const NavBar(),
         appBar: AppBar(
           elevation: 0,
-          title: Text('News'),
+          title: const Text('News'),
           bottom: TabBar(
               labelColor: Theme.of(context).colorScheme.primary,
               unselectedLabelColor: Colors.grey,
               isScrollable: true,
               indicatorColor: Theme.of(context).colorScheme.primary,
-              labelPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              labelPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
               tabs: [
                 Text(
                   '全て',
@@ -81,15 +81,15 @@ class _InfoState extends State<Info> {
         ),
         body: WillPopScope(
           onWillPop: () async => false,
-          child: TabBarView(
+          child: const TabBarView(
             children: [
-              all(),
-              important(),
-              news(),
+              All(),
+              Important(),
+              News(),
               Departmentreport(),
-              report(),
-              business(),
-              movie(),
+              Report(),
+              Business(),
+              Movie(),
             ],
           ),
         ),

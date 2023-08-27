@@ -1,17 +1,19 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:html/dom.dart' as UserModel;
 import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class important extends StatefulWidget {
-  const important({Key? key}) : super(key: key);
+class Important extends StatefulWidget {
+  const Important({Key? key}) : super(key: key);
 
   @override
-  State<important> createState() => _importantState();
+  State<Important> createState() => _ImportantState();
 }
 
-class _importantState extends State<important> {
+class _ImportantState extends State<Important>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   List<Article> articles = [];
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _importantState extends State<important> {
       method: 'GET',
       uri: Uri.parse('https://www.ous.ac.jp/topics/?cat=1'),
     );
-    final document = controller.window!.document;
+    final document = controller.window.document;
 
     final titles = document
         .querySelectorAll("dl > dd >a")
@@ -64,7 +66,9 @@ class _importantState extends State<important> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         body: RefreshIndicator(
       onRefresh: () async {
@@ -72,8 +76,8 @@ class _importantState extends State<important> {
         await getWebsiteData();
       },
       child: Center(
-        child: (articles == null || articles.length == 0)
-            ? CircularProgressIndicator()
+        child: (articles.isEmpty)
+            ? const CircularProgressIndicator()
             : ListView.builder(
                 padding: const EdgeInsets.all(12),
                 itemCount: articles.length,
@@ -93,7 +97,14 @@ class _importantState extends State<important> {
                               fontWeight: FontWeight.bold,
                               fontSize: 15.sp),
                         ),
-                        onTap: () => launch(article.url),
+                        onTap: () async {
+                          if (await canLaunchUrl(Uri.parse(article.url))) {
+                            await launchUrl(Uri.parse(article.url),
+                                mode: LaunchMode.platformDefault);
+                          } else {
+                            throw 'Could not launch ${article.url}';
+                          }
+                        },
                       ),
                       Divider(),
                       //区切り線
