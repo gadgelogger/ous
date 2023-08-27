@@ -149,7 +149,6 @@ class _GpaState extends State<Gpa> {
                       ),
                     ),
                   ),
-                  const Text('総単位数を入力してください'),
                   TextField(
                     controller: _totalUnitController,
                     onChanged: (value) {
@@ -160,11 +159,10 @@ class _GpaState extends State<Gpa> {
                     enabled: true,
                     obscureText: false,
                     decoration: const InputDecoration(
-                      labelText: '総単位数',
+                      labelText: '総単位数を入力',
                     ),
                     keyboardType: TextInputType.number,
                   ),
-                  const Text('Sの単位数を入力してください'),
                   TextField(
                     controller: _sUnitController,
                     onChanged: (value) {
@@ -175,11 +173,10 @@ class _GpaState extends State<Gpa> {
                     enabled: true,
                     obscureText: false,
                     decoration: const InputDecoration(
-                      labelText: 'Sの単位数',
+                      labelText: 'Sの単位数を入力',
                     ),
                     keyboardType: TextInputType.number,
                   ),
-                  const Text('Aの単位数を入力してください'),
                   TextField(
                     controller: _aUnitController,
                     onChanged: (value) {
@@ -190,11 +187,10 @@ class _GpaState extends State<Gpa> {
                     enabled: true,
                     obscureText: false,
                     decoration: const InputDecoration(
-                      labelText: 'Aの単位数',
+                      labelText: 'Aの単位数を入力',
                     ),
                     keyboardType: TextInputType.number,
                   ),
-                  const Text('Bの単位数を入力してください'),
                   TextField(
                     controller: _bUnitController,
                     onChanged: (value) {
@@ -205,11 +201,10 @@ class _GpaState extends State<Gpa> {
                     enabled: true,
                     obscureText: false,
                     decoration: const InputDecoration(
-                      labelText: 'Bの単位数',
+                      labelText: 'Bの単位数を入力',
                     ),
                     keyboardType: TextInputType.number,
                   ),
-                  const Text('Cの単位数を入力してください'),
                   TextField(
                     controller: _cUnitController,
                     onChanged: (value) {
@@ -220,7 +215,7 @@ class _GpaState extends State<Gpa> {
                     enabled: true,
                     obscureText: false,
                     decoration: const InputDecoration(
-                      labelText: 'Cの単位数',
+                      labelText: 'Cの単位数を入力',
                     ),
                     keyboardType: TextInputType.number,
                   ),

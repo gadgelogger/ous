@@ -1213,14 +1213,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
-  pointer_interceptor:
-    dependency: transitive
-    description:
-      name: pointer_interceptor
-      sha256: "6aa680b30d96dccef496933d00208ad25f07e047f644dc98ce03ec6141633a9a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.3+4"
   pointycastle:
     dependency: transitive
     description:
@@ -1438,7 +1430,7 @@ packages:
     source: hosted
     version: "2.3.0"
   shimmer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shimmer
       sha256: "1f1009b5845a1f88f1c5630212279540486f97409e9fc3f63883e71070d107bf"
@@ -1906,14 +1898,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.9.5"
-  webviewx:
-    dependency: "direct main"
-    description:
-      name: webviewx
-      sha256: "51845c6440645279dc9245876743a05d19233421b19e45c7519b13bd6c647b82"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.2"
   win32:
     dependency: transitive
     description:

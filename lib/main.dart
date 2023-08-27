@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _currentindex = 0;
   List<Widget> pages = [
-    const home(),
+    const Home(),
     const Info(),
     const Review(),
   ];
