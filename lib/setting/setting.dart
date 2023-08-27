@@ -294,6 +294,14 @@ class _SettingState extends State<Setting> {
                   );
                 }),
             SettingsTile.navigation(
+              leading: Icon(Icons.description),
+              title: Text('開発ロードマップ'),
+              onPressed: (context) {
+                launch(
+                    'https://laced-egret-3b6.notion.site/7f9bc72309ab4fa2a5dcb1dc7aa256ea');
+              },
+            ),
+            SettingsTile.navigation(
               leading: Icon(Icons.rate_review),
               title: Text('このアプリを評価する'),
               onPressed: (BuildContext context) async {

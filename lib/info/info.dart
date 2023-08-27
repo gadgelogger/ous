@@ -8,6 +8,7 @@ import 'package:ous/info/5.dart';
 import 'package:ous/info/6.dart';
 import 'package:ous/info/7.dart';
 import 'package:ous/info/all.dart';
+import 'package:ous/info/dev_info.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _InfoState extends State<Info> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: 8,
       child: Scaffold(
         drawer: const NavBar(),
         appBar: AppBar(
@@ -43,6 +44,12 @@ class _InfoState extends State<Info> {
                 ),
                 Text(
                   '重要',
+                  style: TextStyle(
+                    fontSize: 15.0.sp,
+                  ),
+                ),
+                Text(
+                  '開発者から',
                   style: TextStyle(
                     fontSize: 15.0.sp,
                   ),
@@ -85,6 +92,7 @@ class _InfoState extends State<Info> {
             children: [
               All(),
               Important(),
+              DevInfo(),
               News(),
               Departmentreport(),
               Report(),
