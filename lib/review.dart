@@ -15,6 +15,7 @@ import 'package:ous/review/gakubu/seibututikyuugakubu.dart';
 import 'package:ous/review/gakubu/seimeikagaku.dart';
 import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
 import 'package:ous/review/gakubu/zyuuigakubu.dart';
+import 'package:ous/review/gpa.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -52,751 +53,743 @@ class _ReviewState extends State<Review> {
     Color textColor = isBackgroundBright ? Colors.black : Colors.white;
 
     return Scaffold(
-      drawer: NavBar(),
+      drawer: const NavBar(),
       appBar: AppBar(
-        actions: [
+        actions: const [
           //ここにアイコン設置
         ],
         elevation: 0,
-        title: Text('講義評価'),
+        title: const Text('講義評価'),
       ),
       body: WillPopScope(
         onWillPop: () async => false,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/理学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('rigaku')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child: Text('0'),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '理学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/理学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('rigaku')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child: Text('0'),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '理学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => rigaku()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/工学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('kougakubu')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => rigaku()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '工学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/工学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('kougakubu')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '工学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kougakubu()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => kougakubu()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/情報理工学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('zyouhou')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '情報理工学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/情報理工学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('zyouhou')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '情報理工学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => zyouhou()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/生物地球学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('seibutu')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => zyouhou()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '生物地球学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/生物地球学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('seibutu')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '生物地球学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => seibutu()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => seibutu()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/教育学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('kyouiku')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '教育学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/教育学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('kyouiku')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '教育学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kyouiku()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/経営学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('keiei')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => kyouiku()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '経営学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/経営学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('keiei')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '経営学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => keiei()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => keiei()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/獣医学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('zyuui')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '獣医学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/獣医学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('zyuui')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '獣医学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => zyuui()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                    GestureDetector(
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                            height: 176.h,
-                            width: 180.w,
-                            child: Column(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .primaryColor
-                                        .withOpacity(0.1),
-                                  ),
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        'assets/images/生命科学部.jpg',
-                                        height: 110.h,
-                                        width: 200.w,
-                                        fit: BoxFit.contain,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                ) // green shaped
-                                                ),
-                                            child: StreamBuilder<QuerySnapshot>(
-                                              stream: FirebaseFirestore.instance
-                                                  .collection('seimei')
-                                                  .snapshots(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasData) {
-                                                  final count =
-                                                      snapshot.data!.size;
-                                                  return Text(
-                                                    '$count',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0.sp,
-                                                        color: textColor),
-                                                  );
-                                                } else {
-                                                  return SizedBox(
-                                                    height: 3,
-                                                    width: 3,
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                              },
-                                            )),
-                                      ),
-                                    ],
-                                  ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => zyuui()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      child: SizedBox(
+                          height: 176.h,
+                          width: 180.w,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.1),
                                 ),
-                                ListTile(
-                                  title: Text(
-                                    '生命科学部',
-                                    style: GoogleFonts.notoSans(
-                                      // フォントをnotoSansに指定(
-                                      textStyle: TextStyle(
-                                        fontSize: 20.sp,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      'assets/images/生命科学部.jpg',
+                                      height: 110.h,
+                                      width: 200.w,
+                                      fit: BoxFit.contain,
+                                    ),
+                                    Positioned(
+                                      top: 0,
+                                      child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4, horizontal: 6),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomRight: Radius.circular(8),
+                                              ) // green shaped
+                                              ),
+                                          child: StreamBuilder<QuerySnapshot>(
+                                            stream: FirebaseFirestore.instance
+                                                .collection('seimei')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                final count =
+                                                    snapshot.data!.size;
+                                                return Text(
+                                                  '$count',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0.sp,
+                                                      color: textColor),
+                                                );
+                                              } else {
+                                                return const SizedBox(
+                                                  height: 3,
+                                                  width: 3,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                );
+                                              }
+                                            },
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  '生命科学部',
+                                  style: GoogleFonts.notoSans(
+                                    // フォントをnotoSansに指定(
+                                    textStyle: TextStyle(
+                                      fontSize: 20.sp,
+                                      overflow: TextOverflow.ellipsis,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => seimei()),
-                        );
-                      },
+                              ),
+                            ],
+                          )),
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => seimei()),
+                      );
+                    },
+                  ),
+                ],
               ),
-              Divider(), //区切り線
+              const Divider(), //区切り線
               Text(
                 '共通科目はこちら',
                 style: TextStyle(
@@ -805,154 +798,152 @@ class _ReviewState extends State<Review> {
                 ),
               ),
 
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      child: Stack(
-                        children: <Widget>[
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Container(
-                              height: 100.h,
-                              width: 180.w,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      '基盤教育科目',
-                                      style: GoogleFonts.notoSans(
-                                        textStyle: TextStyle(
-                                          fontSize: 20.sp,
-                                          overflow: TextOverflow.ellipsis,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  GestureDetector(
+                    child: Stack(
+                      children: <Widget>[
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: SizedBox(
+                            height: 100.h,
+                            width: 180.w,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    '基盤教育科目',
+                                    style: GoogleFonts.notoSans(
+                                      textStyle: TextStyle(
+                                        fontSize: 20.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 6),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
                                 ),
-                              ),
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('kiban')
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    final count = snapshot.data!.size;
-                                    return Text(
-                                      '$count',
-                                      style: TextStyle(
-                                          fontSize: 16.0.sp, color: textColor),
-                                    );
-                                  } else {
-                                    return SizedBox(
-                                      height: 3,
-                                      width: 3,
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                },
-                              ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kiban()),
-                        );
-                      },
+                        ),
+                        Positioned(
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 6),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ),
+                            ),
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('kiban')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final count = snapshot.data!.size;
+                                  return Text(
+                                    '$count',
+                                    style: TextStyle(
+                                        fontSize: 16.0.sp, color: textColor),
+                                  );
+                                } else {
+                                  return const SizedBox(
+                                    height: 3,
+                                    width: 3,
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    GestureDetector(
-                      child: Stack(
-                        children: <Widget>[
-                          Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Container(
-                              height: 100.h,
-                              width: 180.w,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      '教職関連科目',
-                                      style: GoogleFonts.notoSans(
-                                        textStyle: TextStyle(
-                                          fontSize: 20.sp,
-                                          overflow: TextOverflow.ellipsis,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => kiban()),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Stack(
+                      children: <Widget>[
+                        Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                            height: 100.h,
+                            width: 180.w,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    '教職関連科目',
+                                    style: GoogleFonts.notoSans(
+                                      textStyle: TextStyle(
+                                        fontSize: 20.sp,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 4, horizontal: 6),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomRight: Radius.circular(8),
                                 ),
-                              ),
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance
-                                    .collection('kyousyoku')
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    final count = snapshot.data!.size;
-                                    return Text(
-                                      '$count',
-                                      style: TextStyle(
-                                          fontSize: 16.0.sp, color: textColor),
-                                    );
-                                  } else {
-                                    return SizedBox(
-                                      height: 3,
-                                      width: 3,
-                                      child: Text('0'),
-                                    );
-                                  }
-                                },
-                              ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => kyousyoku()),
-                        );
-                      },
+                        ),
+                        Positioned(
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4, horizontal: 6),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ),
+                            ),
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('kyousyoku')
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final count = snapshot.data!.size;
+                                  return Text(
+                                    '$count',
+                                    style: TextStyle(
+                                        fontSize: 16.0.sp, color: textColor),
+                                  );
+                                } else {
+                                  return const SizedBox(
+                                    height: 3,
+                                    width: 3,
+                                    child: Text('0'),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => kyousyoku()),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -960,7 +951,7 @@ class _ReviewState extends State<Review> {
       ),
       floatingActionButton: showFloatingActionButton
           ? SpeedDial(
-              shape: RoundedRectangleBorder(
+              shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(
                     18.0)), // adjust this value according to your button's height
               ),
@@ -1053,6 +1044,16 @@ class _ReviewState extends State<Review> {
                         // ignore: avoid_print
                         print("Can't launch $url");
                       }
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: const Icon(Icons.calculate),
+                    label: "GPA計算機",
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Gpa()),
+                      );
                     },
                   ),
                 ])

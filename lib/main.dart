@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +7,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'apikey.dart';
-import 'eat.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +20,12 @@ import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 
 //algolia
 class Application {
-  static final Algolia algolia = Algolia.init(
-    applicationId: '${algoiaid}',
-    apiKey: '${algoliakey}',
+  static const Algolia algolia = Algolia.init(
+    applicationId: algoiaid,
+    apiKey: algoliakey,
   );
 }
 //algolia
@@ -44,7 +41,7 @@ void main() async {
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
   //Setting SysemUIOverlay（ナビゲーションバー透過）
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       systemStatusBarContrastEnforced: true,
       systemNavigationBarColor: Colors.transparent,
       systemNavigationBarDividerColor: Colors.transparent,
@@ -65,7 +62,7 @@ void main() async {
       overlays: [SystemUiOverlay.top]);
 
   await ScreenUtil.ensureScreenSize();
-  var httpOverrides = new MyHttpOverrides();
+  var httpOverrides = MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
   runApp(
@@ -78,7 +75,7 @@ void main() async {
     ),
   );
 //ダークモード
-  FirebaseFirestore.instance.settings = Settings(
+  FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
@@ -118,8 +115,8 @@ class _MyAppState extends State<MyApp> {
                 GlobalCupertinoLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
               ],
-              supportedLocales: [
-                const Locale('ja'),
+              supportedLocales: const [
+                Locale('ja'),
               ],
               locale: const Locale('ja'),
               debugShowCheckedModeBanner: false,
@@ -144,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                   }
                   if (snapshot.hasData) {
                     // User が null でなない、つまりサインイン済みのホーム画面へ
-                    return MyHomePage(title: 'home');
+                    return const MyHomePage(title: 'home');
                   }
                   // User が null である、つまり未サインインのサインイン画面へ
                   return Login();
@@ -167,8 +164,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //アップデート通知
   late String _currentVersion;
   late String _latestVersion;
-  late bool _updateRequired;
-  late String _updateUrl;
 
   @override
   void initState() {
@@ -198,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_currentVersion != _latestVersion) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('アプリのアップデートがあるぞ！'),
+            content: const Text('アプリのアップデートがあるぞ！'),
             duration: const Duration(seconds: 5),
             action: SnackBarAction(
               label: '見てくれ',
@@ -208,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text(
+                      title: const Text(
                         "アップデートのお知らせ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -220,11 +215,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             Container(
                                 width: 100,
                                 height: 100,
-                                child: Image(
+                                child: const Image(
                                   image: AssetImage('assets/icon/rocket.gif'),
                                   fit: BoxFit.cover,
                                 )),
-                            Text(
+                            const Text(
                               'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。',
                               textAlign: TextAlign.center,
                             ),
@@ -232,20 +227,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       actions: <Widget>[
                         // ボタン領域
                         ElevatedButton(
-                            child: Text("後で"),
+                            child: const Text("後で"),
                             onPressed: () {
                               Navigator.pop(context);
                             }),
                         if (Platform.isIOS)
                           ElevatedButton(
-                              child: Text("おっけー"),
+                              child: const Text("おっけー"),
                               onPressed: () {
                                 launch(
                                     'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
                               }),
                         if (Platform.isAndroid)
                           ElevatedButton(
-                              child: Text("おっけー"),
+                              child: const Text("おっけー"),
                               onPressed: () {
                                 launch(
                                     'https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
@@ -266,17 +261,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int _currentindex = 0;
   List<Widget> pages = [
-    home(),
-    Info(),
-    Review(),
+    const home(),
+    const Info(),
+    const Review(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(child: pages[_currentindex]),
-        drawer: NavBar(),
-        backgroundColor: Color.fromARGB(0, 253, 253, 246),
+        drawer: const NavBar(),
+        backgroundColor: const Color.fromARGB(0, 253, 253, 246),
         bottomNavigationBar: NavigationBar(
           selectedIndex: _currentindex,
           onDestinationSelected: (index) {
@@ -285,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
             });
             HapticFeedback.heavyImpact(); // ライトインパクトの振動フィードバック
           },
-          destinations: [
+          destinations: const [
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               label: 'ホーム',
