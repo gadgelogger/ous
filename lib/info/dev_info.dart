@@ -32,62 +32,70 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
         (user.email == dev_email || user.email == dev_email2)) {
       showFloatingActionButton = true;
     }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      body: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection('dev_info').get(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.none ||
-              snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('何もありません'));
-          }
-
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map<String, dynamic> data =
-                  snapshot.data!.docs[index].data()! as Map<String, dynamic>;
-              return Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      data['title'],
-                      style: TextStyle(fontSize: 15.sp),
-                    ),
-                    subtitle: Text(
-                      DateFormat('yyyy/MM/dd').format(data['day'].toDate()),
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ViewPost(
-                            text: data['text'],
-                            day: data['day'],
-                            title: data['title'],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(),
-                ],
-              );
-            },
-          );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1)); // 1秒待機
+          initState();
         },
+        child: FutureBuilder<QuerySnapshot>(
+          future: FirebaseFirestore.instance.collection('dev_info').get(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.none ||
+                snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              return const Center(child: Text('何もありません'));
+            }
+
+            return ListView.builder(
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                Map<String, dynamic> data =
+                    snapshot.data!.docs[index].data()! as Map<String, dynamic>;
+                return Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        data['title'],
+                        style: TextStyle(fontSize: 15.sp),
+                      ),
+                      subtitle: Text(
+                        DateFormat('yyyy/MM/dd').format(data['day'].toDate()),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewPost(
+                              text: data['text'],
+                              day: data['day'],
+                              title: data['title'],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: showFloatingActionButton
           ? FloatingActionButton(
@@ -214,53 +222,57 @@ class _DevPostState extends State<DevPost> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('開発者からのお知らせ'),
+        title: const Text('投稿管理画面'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'タイトル',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Center(
+                    child: Text(
+                  'この画面は開発者のアカウントでのみ表示されます。\nThis screen is only visible for developer accounts.',
+                  textAlign: TextAlign.center,
+                )),
+                TextFormField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'タイトル',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'タイトルを入力してください';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'タイトルを入力してください';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: _textController,
-                decoration: const InputDecoration(
-                  labelText: '本文',
+                TextFormField(
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  controller: _textController,
+                  decoration: const InputDecoration(
+                    labelText: '本文',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '本文を入力してください';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '本文を入力してください';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    await _addPost();
-                  }
-                },
-                child: const Text('投稿する'),
-              ),
-              const Divider(),
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await _addPost();
+                    }
+                  },
+                  child: const Text('投稿する'),
+                ),
+                const Divider(),
+                StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('dev_info')
                       .orderBy('day', descending: true)
@@ -272,6 +284,8 @@ class _DevPostState extends State<DevPost> {
                       );
                     }
                     return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         final data = snapshot.data!.docs[index];
@@ -343,8 +357,8 @@ class _DevPostState extends State<DevPost> {
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -381,67 +395,69 @@ class _EditPostState extends State<EditPost> {
       appBar: AppBar(
         title: const Text('投稿編集'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                initialValue: _title,
-                decoration: const InputDecoration(
-                  hintText: 'タイトル',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'タイトルを入力してください';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _title = value;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                initialValue: _text,
-                decoration: const InputDecoration(
-                  hintText: '本文',
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return '本文を入力してください';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _text = value;
-                },
-                maxLines: null,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final snapshot = await FirebaseFirestore.instance
-                        .collection('dev_info')
-                        .where('uuid', isEqualTo: widget.id)
-                        .limit(1)
-                        .get();
-                    if (snapshot.docs.isNotEmpty) {
-                      final doc = snapshot.docs.first;
-                      await doc.reference.update({
-                        'title': _title,
-                        'text': _text,
-                      });
-                      Navigator.pop(context);
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  initialValue: _title,
+                  decoration: const InputDecoration(
+                    hintText: 'タイトル',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'タイトルを入力してください';
                     }
-                  }
-                },
-                child: const Text('更新する'),
-              ),
-            ],
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _title = value;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  initialValue: _text,
+                  decoration: const InputDecoration(
+                    hintText: '本文',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return '本文を入力してください';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _text = value;
+                  },
+                  maxLines: null,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final snapshot = await FirebaseFirestore.instance
+                          .collection('dev_info')
+                          .where('uuid', isEqualTo: widget.id)
+                          .limit(1)
+                          .get();
+                      if (snapshot.docs.isNotEmpty) {
+                        final doc = snapshot.docs.first;
+                        await doc.reference.update({
+                          'title': _title,
+                          'text': _text,
+                        });
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                  child: const Text('更新する'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
