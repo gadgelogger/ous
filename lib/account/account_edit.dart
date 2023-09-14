@@ -73,7 +73,7 @@ class _account_editState extends State<account_edit> {
           .doc(uid)
           .update({"photoURL": downloadURL});
       Fluttertoast.showToast(msg: "アカウント画像を変更しました");
-      Center(
+      const Center(
         child: CircularProgressIndicator(),
       );
     } catch (e) {
@@ -86,7 +86,7 @@ class _account_editState extends State<account_edit> {
 
   final uid = FirebaseAuth.instance.currentUser?.uid;
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   String _text = '';
 
 // テキストの編集が完了したときに呼び出されるコールバック
@@ -130,7 +130,7 @@ class _account_editState extends State<account_edit> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('プロフィール変更'),
+        title: const Text('プロフィール変更'),
       ),
       body: SafeArea(
         child: StreamBuilder<DocumentSnapshot>(
@@ -139,13 +139,13 @@ class _account_editState extends State<account_edit> {
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // データ読み込み中の場合の処理
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               if (!snapshot.hasData || snapshot.data == null) {
                 // データが取得できなかった場合の処理
-                return Text('データが見つかりませんでした。');
+                return const Text('データが見つかりませんでした。');
               }
               // データが正常に取得できた場合の処理
               _data = snapshot.data!;
@@ -165,7 +165,7 @@ class _account_editState extends State<account_edit> {
                       onTap: () {
                         _pickImage(ImageSource.gallery);
                         Fluttertoast.showToast(
-                            msg: "アカウント画像を変更しています\反映されるまでちょっと待ってね。");
+                            msg: "アカウント画像を変更しています反映されるまでちょっと待ってね。");
                       },
                       child: SizedBox(
                           height: 150,
@@ -188,16 +188,16 @@ class _account_editState extends State<account_edit> {
                                         _pickImage(ImageSource.gallery);
                                         Fluttertoast.showToast(
                                             msg:
-                                                "アカウント画像を変更しています\反映されるまでちょっと待ってね。");
+                                                "アカウント画像を変更しています反映されるまでちょっと待ってね。");
                                       },
                                       elevation: 2.0,
-                                      fillColor: Color(0xFFF5F6F9),
+                                      fillColor: const Color(0xFFF5F6F9),
+                                      padding: const EdgeInsets.all(7.0),
+                                      shape: const CircleBorder(),
                                       child: Icon(Icons.photo_camera_outlined,
                                           color: Theme.of(context)
                                               .colorScheme
                                               .primary),
-                                      padding: EdgeInsets.all(7.0),
-                                      shape: CircleBorder(),
                                     ),
                                   ),
                                 ],
@@ -205,7 +205,7 @@ class _account_editState extends State<account_edit> {
                               Positioned(
                                   child: _isUploading
                                       ? Container(
-                                          child: Column(
+                                          child: const Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
@@ -213,12 +213,12 @@ class _account_editState extends State<account_edit> {
                                             ],
                                           ),
                                         )
-                                      : SizedBox()),
+                                      : const SizedBox()),
                             ],
                           )),
                     )),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   Center(
@@ -226,7 +226,7 @@ class _account_editState extends State<account_edit> {
                     'ユーザー名',
                     style: GoogleFonts.notoSans(
                       // フォントをnotoSansに指定(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 30,
                         overflow: TextOverflow.ellipsis,
                         fontWeight: FontWeight.bold,
@@ -247,21 +247,20 @@ class _account_editState extends State<account_edit> {
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("注意"),
+                                title: const Text("注意"),
                                 content: Text("アカウント情報を$nameから$_textに変更しますか？"),
                                 actions: <Widget>[
                                   // ボタン領域
                                   ElevatedButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   ElevatedButton(
-                                    child: Text("いいよ"),
+                                    child: const Text("いいよ"),
                                     onPressed: () {
                                       _onTextEditingComplete();
 
                                       Navigator.pop(context);
-                                      ;
                                     },
                                   ),
                                 ],
@@ -269,7 +268,7 @@ class _account_editState extends State<account_edit> {
                             },
                           );
                         },
-                        icon: Icon(Icons.arrow_circle_right),
+                        icon: const Icon(Icons.arrow_circle_right),
                       ),
                     ),
                   ),
@@ -278,20 +277,20 @@ class _account_editState extends State<account_edit> {
                     '登録アカウント',
                     style: GoogleFonts.notoSans(
                       // フォントをnotoSansに指定(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 30,
                         overflow: TextOverflow.ellipsis,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   )),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Center(
                       child: Text(
                     email ?? '',
-                    style: TextStyle(fontSize: 20),
+                    style: const TextStyle(fontSize: 20),
                   )),
                 ],
               );

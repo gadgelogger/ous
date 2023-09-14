@@ -144,7 +144,7 @@ class _MyAppState extends State<MyApp> {
                     return const MyHomePage(title: 'home');
                   }
                   // User が null である、つまり未サインインのサインイン画面へ
-                  return Login();
+                  return const Login();
                 },
               ));
         });
@@ -209,17 +209,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold),
                       ),
-                      content: Column(
+                      content: const Column(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Container(
+                            SizedBox(
                                 width: 100,
                                 height: 100,
-                                child: const Image(
+                                child: Image(
                                   image: AssetImage('assets/icon/rocket.gif'),
                                   fit: BoxFit.cover,
                                 )),
-                            const Text(
+                            Text(
                               'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。',
                               textAlign: TextAlign.center,
                             ),

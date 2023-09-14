@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ous/account/tutorial.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'authentication_error.dart';
 import 'signuppage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:ous/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
@@ -32,6 +28,8 @@ extension OnPrimary on Color {
 }
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
   @override
   _Login createState() => _Login();
 }
@@ -102,7 +100,7 @@ class _Login extends State<Login> {
 
       // ここに画面遷移をするコードを書く!
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return MyHomePage(title: 'home');
+        return const MyHomePage(title: 'home');
       }));
       Fluttertoast.showToast(msg: "Appleでログインしました");
 
@@ -111,6 +109,7 @@ class _Login extends State<Login> {
     } catch (error) {
       print(error);
     }
+    return null;
   }
 
 //ゲストモード
@@ -121,7 +120,7 @@ class _Login extends State<Login> {
 
       Navigator.of(context)
           .pushReplacement(MaterialPageRoute(builder: (context) {
-        return MyHomePage(title: 'home');
+        return const MyHomePage(title: 'home');
       }));
       Fluttertoast.showToast(msg: "ゲストでログインしました");
     } catch (e) {
@@ -129,7 +128,7 @@ class _Login extends State<Login> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: Text('エラー'),
+              title: const Text('エラー'),
               content: Text(e.toString()),
             );
           });
@@ -204,12 +203,12 @@ class _Login extends State<Login> {
                       ),
                     ),
                     Container(
-                        padding:
-                            EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                        padding: const EdgeInsets.only(
+                            top: 35.0, left: 20.0, right: 20.0),
                         child: Column(
                           children: <Widget>[
                             TextField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   labelText: 'メールアドレス',
                                   labelStyle: TextStyle(
                                       fontFamily: 'Montserrat',
@@ -223,11 +222,11 @@ class _Login extends State<Login> {
                                   _login_Email = value;
                                 });
                               },
-                              inputFormatters: [],
+                              inputFormatters: const [],
                             ),
                             SizedBox(height: 20.0.h),
                             TextField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   labelText: 'パスワード',
                                   labelStyle: TextStyle(
                                       fontFamily: 'Montserrat',
@@ -275,7 +274,7 @@ class _Login extends State<Login> {
                                           launch(
                                               'https://tan-q-bot-unofficial.com/terms_of_service/');
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           '利用規約に同意した？',
                                           style: TextStyle(
                                               color: Colors.lightGreen,
@@ -288,10 +287,11 @@ class _Login extends State<Login> {
                                 ),
                                 SizedBox(height: 5.0.h),
                                 Container(
-                                  alignment: Alignment(-1.0, 0.0),
-                                  padding: EdgeInsets.only(top: 15.0, left: 10),
+                                  alignment: const Alignment(-1.0, 0.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 15.0, left: 10),
                                   child: InkWell(
-                                      child: Text(
+                                      child: const Text(
                                         'パスワードを忘れた方へ',
                                         style: TextStyle(
                                             color: Colors.lightGreen,
@@ -305,7 +305,7 @@ class _Login extends State<Login> {
                                           context: context,
                                           builder: (_) {
                                             return AlertDialog(
-                                              title: Text(
+                                              title: const Text(
                                                 "パスワードを忘れた人へ",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
@@ -316,7 +316,7 @@ class _Login extends State<Login> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: <Widget>[
-                                                    Container(
+                                                    const SizedBox(
                                                         width: 100,
                                                         height: 100,
                                                         child: Image(
@@ -324,13 +324,13 @@ class _Login extends State<Login> {
                                                               'assets/icon/password.gif'),
                                                           fit: BoxFit.cover,
                                                         )),
-                                                    Text(
+                                                    const Text(
                                                       '下のテキストボックスにメールアドレスを入力して、リセットボタンを押してください。',
                                                       textAlign:
                                                           TextAlign.center,
                                                     ),
                                                     TextField(
-                                                      decoration: InputDecoration(
+                                                      decoration: const InputDecoration(
                                                           labelText: 'メールアドレス',
                                                           labelStyle: TextStyle(
                                                               fontFamily:
@@ -358,12 +358,12 @@ class _Login extends State<Login> {
                                               actions: <Widget>[
                                                 // ボタン領域
                                                 TextButton(
-                                                  child: Text("やっぱやめる"),
+                                                  child: const Text("やっぱやめる"),
                                                   onPressed: () =>
                                                       Navigator.pop(context),
                                                 ),
                                                 TextButton(
-                                                    child: Text("リセットする"),
+                                                    child: const Text("リセットする"),
                                                     onPressed: () {
                                                       _auth.sendPasswordResetEmail(
                                                           email:
@@ -373,7 +373,7 @@ class _Login extends State<Login> {
                                                           context: context,
                                                           builder: (_) {
                                                             return AlertDialog(
-                                                              title: Text(
+                                                              title: const Text(
                                                                 "パスワードリセット完了",
                                                                 textAlign:
                                                                     TextAlign
@@ -385,12 +385,13 @@ class _Login extends State<Login> {
                                                                           .bold,
                                                                 ),
                                                               ),
-                                                              content: Column(
+                                                              content:
+                                                                  const Column(
                                                                 mainAxisSize:
                                                                     MainAxisSize
                                                                         .min,
                                                                 children: [
-                                                                  Container(
+                                                                  SizedBox(
                                                                       width:
                                                                           100,
                                                                       height:
@@ -412,8 +413,9 @@ class _Login extends State<Login> {
                                                               ),
                                                               actions: <Widget>[
                                                                 TextButton(
-                                                                  child: Text(
-                                                                      "オッケー"),
+                                                                  child:
+                                                                      const Text(
+                                                                          "オッケー"),
                                                                   onPressed: () =>
                                                                       Navigator.pop(
                                                                           context),
@@ -443,22 +445,23 @@ class _Login extends State<Login> {
                                           msg: "ログイン中です\nちょっと待ってね。");
                                       try {
                                         // メール/パスワードでログイン
-                                        UserCredential _result = await _auth
+                                        UserCredential result = await _auth
                                             .signInWithEmailAndPassword(
                                           email: _login_Email,
                                           password: _login_Password,
                                         );
 
                                         // ログイン成功
-                                        User _user =
-                                            _result.user!; // ログインユーザーのIDを取得
+                                        User user =
+                                            result.user!; // ログインユーザーのIDを取得
 
                                         // Email確認が済んでいる場合のみHome画面へ
-                                        if (_user.emailVerified) {
+                                        if (user.emailVerified) {
                                           Navigator.push(context,
                                               MaterialPageRoute(
                                                   builder: (context) {
-                                            return MyHomePage(title: 'home');
+                                            return const MyHomePage(
+                                                title: 'home');
                                           }));
                                           Fluttertoast.showToast(
                                               msg: "ログインしました");
@@ -466,7 +469,7 @@ class _Login extends State<Login> {
                                           DocumentReference userDoc =
                                               FirebaseFirestore.instance
                                                   .collection('users')
-                                                  .doc(_user.uid);
+                                                  .doc(user.uid);
 
                                           userDoc
                                               .get()
@@ -474,7 +477,7 @@ class _Login extends State<Login> {
                                             if (!docSnapshot.exists) {
                                               await userDoc.set({
                                                 'email': _login_Email,
-                                                'uid': _user.uid,
+                                                'uid': user.uid,
                                                 'displayName': '名前未設定',
                                                 'day': DateFormat(
                                                         'yyyy/MM/dd(E) HH:mm:ss')
@@ -520,11 +523,11 @@ class _Login extends State<Login> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return AlertDialog(
-                                              title: Text('エラー'),
+                                              title: const Text('エラー'),
                                               content: Text(_infoText),
                                               actions: <Widget>[
                                                 TextButton(
-                                                  child: Text('OK'),
+                                                  child: const Text('OK'),
                                                   onPressed: () {
                                                     // OKボタンが押されたときの処理
                                                     Navigator.of(context).pop();
@@ -545,13 +548,13 @@ class _Login extends State<Login> {
                                       Fluttertoast.showToast(
                                           msg: "利用規約に同意してね！"); // ボタンが無効なときの処理
                                     },
-                              child: Container(
+                              child: SizedBox(
                                 height: 40.0.h,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20.0),
                                   color: Colors.lightGreen[200],
                                   child: Container(
-                                      child: Column(
+                                      child: const Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -587,17 +590,18 @@ class _Login extends State<Login> {
                                             .pushReplacement(
                                                 MaterialPageRoute(builder:
                                                     (context) {
-                                          return MyHomePage(title: 'home');
+                                          return const MyHomePage(
+                                              title: 'home');
                                         }),
                                                 result: Fluttertoast.showToast(
                                                     msg: "大学のアカウントでログインしました"));
-                                      } on PlatformException catch (e) {}
+                                      } on PlatformException {}
                                     }
                                   : () {
                                       Fluttertoast.showToast(
                                           msg: "利用規約に同意してね！"); // ボタンが無効なときの処理
                                     },
-                              child: Container(
+                              child: SizedBox(
                                 height: 40.0.h,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -608,7 +612,7 @@ class _Login extends State<Login> {
                                       color: Colors.transparent,
                                       borderRadius:
                                           BorderRadius.circular(20.0)),
-                                  child: Center(
+                                  child: const Center(
                                       child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -629,7 +633,7 @@ class _Login extends State<Login> {
 
                             if (Platform.isIOS)
                               Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                     top: 0, right: 0, bottom: 20, left: 0),
                                 child: GestureDetector(
                                   onTap: _isChecked
@@ -638,23 +642,23 @@ class _Login extends State<Login> {
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
-                                                title: Text(
+                                                title: const Text(
                                                   "注意",
                                                   textAlign: TextAlign.center,
                                                 ),
-                                                content: Text(
+                                                content: const Text(
                                                   "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
                                                   textAlign: TextAlign.center,
                                                 ),
                                                 actions: <Widget>[
                                                   // ボタン領域
                                                   TextButton(
-                                                    child: Text("やっぱやめる"),
+                                                    child: const Text("やっぱやめる"),
                                                     onPressed: () =>
                                                         Navigator.pop(context),
                                                   ),
                                                   TextButton(
-                                                      child: Text("ええで"),
+                                                      child: const Text("ええで"),
                                                       onPressed: () async {
                                                         Fluttertoast.showToast(
                                                             msg:
@@ -671,7 +675,7 @@ class _Login extends State<Login> {
                                               msg:
                                                   "利用規約に同意してね！"); // ボタンが無効なときの処理 // ボタンが無効なときの処理
                                         },
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 40.0.h,
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -686,7 +690,7 @@ class _Login extends State<Login> {
                                           color: Colors.transparent,
                                           borderRadius:
                                               BorderRadius.circular(20.0)),
-                                      child: Center(
+                                      child: const Center(
                                           child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -714,10 +718,11 @@ class _Login extends State<Login> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Registration()),
+                                      builder: (context) =>
+                                          const Registration()),
                                 );
                               },
-                              child: Container(
+                              child: SizedBox(
                                 height: 40.0.h,
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -728,7 +733,7 @@ class _Login extends State<Login> {
                                       color: Colors.transparent,
                                       borderRadius:
                                           BorderRadius.circular(20.0)),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'サインアップ',
                                       style: TextStyle(
@@ -860,11 +865,11 @@ class _Login extends State<Login> {
     }
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser!.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth!.idToken,
+      idToken: googleAuth.idToken,
       accessToken: googleAuth.accessToken,
     );
 
@@ -903,43 +908,43 @@ class _Login extends State<Login> {
 // Firebase Authentication利用時の日本語エラーメッセージ
 class Authentication_error_to_ja {
   // ログイン時の日本語エラーメッセージ
-  login_error_msg(int error_code, String org_error_msg) {
-    String error_msg;
+  login_error_msg(int errorCode, String orgErrorMsg) {
+    String errorMsg;
 
-    if (error_code == 360587416) {
-      error_msg = '有効なメールアドレスを入力してください。';
-    } else if (error_code == 505284406) {
+    if (errorCode == 360587416) {
+      errorMsg = '有効なメールアドレスを入力してください。';
+    } else if (errorCode == 505284406) {
       // 入力されたメールアドレスが登録されていない場合
-      error_msg = 'メールアドレスかパスワードが間違っています。';
-    } else if (error_code == 185768934) {
+      errorMsg = 'メールアドレスかパスワードが間違っています。';
+    } else if (errorCode == 185768934) {
       // 入力されたパスワードが間違っている場合
-      error_msg = 'メールアドレスかパスワードが間違っています。';
-    } else if (error_code == 362765553) {
+      errorMsg = 'メールアドレスかパスワードが間違っています。';
+    } else if (errorCode == 362765553) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = 'メールアドレスとパスワードを入力してください。';
+      errorMsg = 'メールアドレスとパスワードを入力してください。';
     } else {
-      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+      errorMsg = '$orgErrorMsg[$errorCode]';
     }
 
-    return error_msg;
+    return errorMsg;
   }
 
   // アカウント登録時の日本語エラーメッセージ
-  register_error_msg(int error_code, String org_error_msg) {
-    String error_msg;
+  register_error_msg(int errorCode, String orgErrorMsg) {
+    String errorMsg;
 
-    if (error_code == 360587416) {
-      error_msg = '有効なメールアドレスを入力してください。';
-    } else if (error_code == 34618382) {
+    if (errorCode == 360587416) {
+      errorMsg = '有効なメールアドレスを入力してください。';
+    } else if (errorCode == 34618382) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = '既に登録済みのメールアドレスです。';
-    } else if (error_code == 447031946) {
+      errorMsg = '既に登録済みのメールアドレスです。';
+    } else if (errorCode == 447031946) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = 'メールアドレスとパスワードを入力してください。';
+      errorMsg = 'メールアドレスとパスワードを入力してください。';
     } else {
-      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+      errorMsg = '$orgErrorMsg[$errorCode]';
     }
 
-    return error_msg;
+    return errorMsg;
   }
 }

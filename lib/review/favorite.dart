@@ -1,23 +1,16 @@
 import 'dart:io';
 
-import 'package:algolia/algolia.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/review.dart';
-import 'package:ous/review/post.dart';
-import 'package:ous/setting/music.dart';
 import 'package:ous/setting/setting.dart';
 
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pie_chart/pie_chart.dart';
 
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -27,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({Key? key}) : super(key: key);
+
   @override
   _FavoritesPageState createState() => _FavoritesPageState();
 }
@@ -48,19 +43,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('お気に入り'),
+        title: const Text('お気に入り'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: favoriteRef.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Center(
+            return const Center(
               child: Text('エラーが発生しました'),
             );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -75,13 +70,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
             future: Future.wait(originalDocFutures),
             builder: (BuildContext context, AsyncSnapshot<List<DocumentSnapshot>> originalDocSnapshot) {
               if (originalDocSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
 
               if (originalDocSnapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text('エラーが発生しました'),
                 );
               }
@@ -93,14 +88,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
+                        const SizedBox(
                             width: 200,
                             height: 200,
                             child: Image(
                               image: AssetImage('assets/icon/found.gif'),
                               fit: BoxFit.cover,
                             )),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         Text(
@@ -112,7 +107,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     ));
               } else {
                 return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
                     itemCount: originalDocs.length,
@@ -159,7 +154,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 child: Stack(
                                   children: <Widget>[
                                     Padding(
-                                        padding: EdgeInsets.all(15),
+                                        padding: const EdgeInsets.all(15),
                                         child: Align(
                                             alignment: const Alignment(
                                               -0.8,
@@ -190,13 +185,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                     Positioned(
                                       top: 0,
                                       child: Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 4, horizontal: 6),
                                           decoration: BoxDecoration(
                                               color: originalDoc['bumon'] == 'エグ単'
                                                   ? Colors.red
                                                   : Theme.of(context).colorScheme.primary,
-                                              borderRadius: BorderRadius.only(
+                                              borderRadius: const BorderRadius.only(
                                                 topLeft: Radius.circular(8),
                                                 bottomRight: Radius.circular(8),
                                               ) // green shaped
@@ -346,14 +341,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
           title: Text(widget.zyugyoumei),
         ),
         body: Container(
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           child: SingleChildScrollView(
               child: RepaintBoundary(
                   key: shareKey,
                   child: Container(
                     color: Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).backgroundColor.withOpacity(0.6)
-                        : Theme.of(context).backgroundColor.withOpacity(0.6),
+                        ? Theme.of(context).colorScheme.background.withOpacity(0.6)
+                        : Theme.of(context).colorScheme.background.withOpacity(0.6),
 
 
                     child: Column(
@@ -367,7 +362,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -387,7 +382,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -407,7 +402,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: SelectableText(
                             widget.nenndo ?? '不明'.toString(),
                             style: TextStyle(
@@ -424,7 +419,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: SelectableText(
                             widget.tannisuu.toString(),
                             style: TextStyle(
@@ -441,7 +436,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -461,7 +456,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -481,7 +476,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -501,7 +496,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -513,7 +508,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ),
                         ),
-                        Divider(),
+                        const Divider(),
                         Container(
                           child: Column(
                             children: [
@@ -524,7 +519,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                   height: 200.h,
                                   child: SfRadialGauge(axes: <RadialAxis>[
                                     RadialAxis(
@@ -532,7 +527,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         maximum: 5,
                                         showLabels: false,
                                         showTicks: false,
-                                        axisLineStyle: AxisLineStyle(
+                                        axisLineStyle: const AxisLineStyle(
                                           thickness: 0.2,
                                           cornerStyle: CornerStyle.bothCurve,
                                           color:
@@ -572,7 +567,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 200.h,
                                 child: SfRadialGauge(axes: <RadialAxis>[
                                   RadialAxis(
@@ -580,7 +575,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       maximum: 5,
                                       showLabels: false,
                                       showTicks: false,
-                                      axisLineStyle: AxisLineStyle(
+                                      axisLineStyle: const AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
                                         color: Color.fromARGB(139, 134, 134, 134),
@@ -620,7 +615,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 200.h,
                                 child: SfRadialGauge(axes: <RadialAxis>[
                                   RadialAxis(
@@ -628,7 +623,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       maximum: 5,
                                       showLabels: false,
                                       showTicks: false,
-                                      axisLineStyle: AxisLineStyle(
+                                      axisLineStyle: const AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
                                         color: Color.fromARGB(139, 134, 134, 134),
@@ -661,7 +656,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ])
                                 ]),
                               ),
-                              Divider(),
+                              const Divider(),
                             ],
                           ),
                         ),
@@ -690,7 +685,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                   top: 10,
                                   bottom: 10,
                                 ),
@@ -703,7 +698,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 10,
                                 top: 10,
                               ),
@@ -723,7 +718,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -742,7 +737,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 10,
                                 top: 10,
                               ),
@@ -752,7 +747,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             SizedBox(height: 20.0.h),
-                            Container(
+                            SizedBox(
                               height: 40.0.h,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -769,7 +764,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     launch(
                                         'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
                                   },
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'この投稿を開発者に報告する',
                                       style: TextStyle(
@@ -789,7 +784,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ))),
         ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete_outline,color: Colors.white,),
         backgroundColor: Colors.red,
         onPressed: (){
            removeFavoriteDocument(widget.id); // documentId は削除したいドキュメントの ID
@@ -797,10 +791,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Navigator.pop(
               context,
               MaterialPageRoute(
-                builder: (context) => Setting(),
+                builder: (context) => const Setting(),
               ));
 
         },
+        child: const Icon(Icons.delete_outline,color: Colors.white,),
       ),
  );
   }

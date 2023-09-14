@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ous/review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -67,15 +65,15 @@ class _postState extends State<post> {
 //投稿日
   final DateTime now = DateTime.now();
 
-  TextEditingController _textEditingController0 = TextEditingController();
+  final TextEditingController _textEditingController0 = TextEditingController();
 
-  TextEditingController _textEditingController1 = TextEditingController();
-  TextEditingController _textEditingController2 = TextEditingController();
-  TextEditingController _textEditingController3 = TextEditingController();
-  TextEditingController _textEditingController4 = TextEditingController();
-  TextEditingController _textEditingController5 = TextEditingController();
-  TextEditingController _textEditingController6 = TextEditingController();
-  TextEditingController _textEditingController7 = TextEditingController();
+  final TextEditingController _textEditingController1 = TextEditingController();
+  final TextEditingController _textEditingController2 = TextEditingController();
+  final TextEditingController _textEditingController3 = TextEditingController();
+  final TextEditingController _textEditingController4 = TextEditingController();
+  final TextEditingController _textEditingController5 = TextEditingController();
+  final TextEditingController _textEditingController6 = TextEditingController();
+  final TextEditingController _textEditingController7 = TextEditingController();
 
 //投稿したら一番上まで移動
   final ScrollController _scrollController = ScrollController();
@@ -83,42 +81,43 @@ class _postState extends State<post> {
 //スライドボタンの状態をリセットするため
   final slideActionKey = GlobalKey<SlideActionState>();
 
-  String? _randomId = Uuid().v4();
+  final String _randomId = const Uuid().v4();
 
   @override
   void initState() {
     getData();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('投稿ページ'),
+          title: const Text('投稿ページ'),
           actions: [
             IconButton(
-                icon: Icon(Icons.computer),
+                icon: const Icon(Icons.computer),
                 onPressed: () {
                   showDialog(
                     context: context,
                     builder: (_) {
                       return AlertDialog(
-                        title: Text(
+                        title: const Text(
                           "スマホで投稿するのが\nめんどくさい人へ",
                           textAlign: TextAlign.center,
                         ),
-                        content: Text(
+                        content: const Text(
                           "下記のボタンを押すとPC用クライアントを開きます。\n\nこれをニアバイシェアやAirdrop等を使いPCに送ってください。\n\nhttps://ous-unoffical-20d2c.web.app/\n手動で入力する場合は↑を入力してください。",
                           textAlign: TextAlign.center,
                         ),
                         actions: <Widget>[
                           // ボタン領域
                           TextButton(
-                            child: Text("俺はスマホを貫くぜ"),
+                            child: const Text("俺はスマホを貫くぜ"),
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                              child: Text("開く"),
+                              child: const Text("開く"),
                               onPressed: () {
                                 launch('https://ous-unoffical-20d2c.web.app/');
                               }),
@@ -133,7 +132,7 @@ class _postState extends State<post> {
           child: Scrollbar(
               thumbVisibility: true,
               child: Padding(
-                  padding: EdgeInsets.all(15.0), //全方向にパディング１００
+                  padding: const EdgeInsets.all(15.0), //全方向にパディング１００
 
                   child: SingleChildScrollView(
                       controller: _scrollController,
@@ -143,7 +142,7 @@ class _postState extends State<post> {
                             '投稿する学部を選んでください',
                             style: GoogleFonts.notoSans(
                               // フォントをnotoSansに指定(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontSize: 25,
                                 overflow: TextOverflow.ellipsis,
                                 fontWeight: FontWeight.bold,
@@ -151,14 +150,14 @@ class _postState extends State<post> {
                             ),
                           )),
                         ),
-                        Center(
+                        const Center(
                           child: (Text(
                             '※基盤and教職関連科目を投稿する場合は学部を選ばずに\nカテゴリの中の”基盤”か”教職科目”を選んでください。',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.red),
                           )),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         DropdownButton(
@@ -166,44 +165,44 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('理学部'),
                               value: 'rigaku',
+                              child: Text('理学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('工学部'),
                               value: 'kougakubu',
+                              child: Text('工学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('情報理工学部'),
                               value: 'zyouhou',
+                              child: Text('情報理工学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('生物地球学部'),
                               value: 'seibutu',
+                              child: Text('生物地球学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('教育学部'),
                               value: 'kyouiku',
+                              child: Text('教育学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('経営学部'),
                               value: 'keiei',
+                              child: Text('経営学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('獣医学部'),
                               value: 'zyuui',
+                              child: Text('獣医学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('生命科学部'),
                               value: 'seimei',
+                              child: Text('生命科学部'),
                             ),
                             DropdownMenuItem(
-                              child: Text('基盤教育科目'),
                               value: 'kiban',
+                              child: Text('基盤教育科目'),
                             ),
                             DropdownMenuItem(
-                              child: Text('教職科目'),
                               value: 'kyousyoku',
+                              child: Text('教職科目'),
                             ),
                           ],
                           //6
@@ -222,7 +221,7 @@ class _postState extends State<post> {
                           '投稿する授業の部門を選んでください',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -234,16 +233,16 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('ラク単'),
                               value: 'ラク単',
+                              child: Text('ラク単'),
                             ),
                             DropdownMenuItem(
-                              child: Text('エグ単'),
                               value: 'エグ単',
+                              child: Text('エグ単'),
                             ),
                             DropdownMenuItem(
-                              child: Text('普通'),
                               value: '普通',
+                              child: Text('普通'),
                             ),
                           ],
                           //6
@@ -262,7 +261,7 @@ class _postState extends State<post> {
                           '年度を記入してください',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -298,7 +297,7 @@ class _postState extends State<post> {
                           '開講学期を選んでください',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -310,28 +309,28 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('春１'),
                               value: '春１',
+                              child: Text('春１'),
                             ),
                             DropdownMenuItem(
-                              child: Text('春２'),
                               value: '春２',
+                              child: Text('春２'),
                             ),
                             DropdownMenuItem(
-                              child: Text('秋１'),
                               value: '秋１',
+                              child: Text('秋１'),
                             ),
                             DropdownMenuItem(
-                              child: Text('秋２'),
                               value: '秋２',
+                              child: Text('秋２'),
                             ),
                             DropdownMenuItem(
-                              child: Text('春１と２'),
                               value: '春１と２',
+                              child: Text('春１と２'),
                             ),
                             DropdownMenuItem(
-                              child: Text('秋１と２'),
                               value: '秋１と２',
+                              child: Text('秋１と２'),
                             ),
                           ],
                           //6
@@ -350,14 +349,14 @@ class _postState extends State<post> {
                           '授業名を入力してください。',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'マイログに記載されている授業名（正式名称）をコピペして入力してください。。',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -382,14 +381,14 @@ class _postState extends State<post> {
                           '講師名を入力してください。',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'マイログに記載されている正式なフルネーム（空白なし）で入力してください。',
                           style: TextStyle(fontSize: 15),
                         ),
@@ -417,7 +416,7 @@ class _postState extends State<post> {
                           '単位数を選んでください',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -429,12 +428,12 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('1'),
                               value: '1',
+                              child: Text('1'),
                             ),
                             DropdownMenuItem(
-                              child: Text('2'),
                               value: '2',
+                              child: Text('2'),
                             ),
                           ],
                           //6
@@ -453,7 +452,7 @@ class _postState extends State<post> {
                           '授業形式を選んでください',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -465,20 +464,20 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('オンライン(VOD)'),
                               value: 'オンライン(VOD)',
+                              child: Text('オンライン(VOD)'),
                             ),
                             DropdownMenuItem(
-                              child: Text('オンライン(リアルタイム）'),
                               value: 'オンライン(リアルタイム）',
+                              child: Text('オンライン(リアルタイム）'),
                             ),
                             DropdownMenuItem(
-                              child: Text('対面'),
                               value: '対面',
+                              child: Text('対面'),
                             ),
                             DropdownMenuItem(
-                              child: Text('対面とオンライン'),
                               value: '対面とオンライン',
+                              child: Text('対面とオンライン'),
                             ),
                           ],
                           //6
@@ -493,15 +492,15 @@ class _postState extends State<post> {
                         const SizedBox(
                           height: 32,
                         ),
-                        Text(
+                        const Text(
                           '総合評価',
                           style: TextStyle(fontSize: 20),
                         ),
                         Column(
                           children: <Widget>[
                             Text(
-                              '${_hyouka.toStringAsFixed(0)}',
-                              style: TextStyle(fontSize: 24),
+                              _hyouka.toStringAsFixed(0),
+                              style: const TextStyle(fontSize: 24),
                             ),
                             Slider(
                               value: _hyouka,
@@ -515,15 +514,15 @@ class _postState extends State<post> {
                             )
                           ],
                         ),
-                        Text(
+                        const Text(
                           '授業の面白さ',
                           style: TextStyle(fontSize: 20),
                         ),
                         Column(
                           children: <Widget>[
                             Text(
-                              '${_omosirosa.toStringAsFixed(0)}',
-                              style: TextStyle(fontSize: 24),
+                              _omosirosa.toStringAsFixed(0),
+                              style: const TextStyle(fontSize: 24),
                             ),
                             Slider(
                               value: _omosirosa,
@@ -537,15 +536,15 @@ class _postState extends State<post> {
                             )
                           ],
                         ),
-                        Text(
+                        const Text(
                           '単位の取りやすさ',
                           style: TextStyle(fontSize: 20),
                         ),
                         Column(
                           children: <Widget>[
                             Text(
-                              '${_toriyasusa.toStringAsFixed(0)}',
-                              style: TextStyle(fontSize: 24),
+                              _toriyasusa.toStringAsFixed(0),
+                              style: const TextStyle(fontSize: 24),
                             ),
                             Slider(
                               value: _toriyasusa,
@@ -566,7 +565,7 @@ class _postState extends State<post> {
                           '出席確認の有無',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -578,20 +577,20 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('毎日出席を取る'),
                               value: '毎日出席を取る',
+                              child: Text('毎日出席を取る'),
                             ),
                             DropdownMenuItem(
-                              child: Text('ほぼ出席を取る'),
                               value: 'ほぼ出席を取る',
+                              child: Text('ほぼ出席を取る'),
                             ),
                             DropdownMenuItem(
-                              child: Text('たまに出席を取る'),
                               value: 'たまに出席を取る',
+                              child: Text('たまに出席を取る'),
                             ),
                             DropdownMenuItem(
-                              child: Text('出席確認はなし'),
                               value: '出席確認はなし',
+                              child: Text('出席確認はなし'),
                             ),
                           ],
                           //6
@@ -607,7 +606,7 @@ class _postState extends State<post> {
                           '教科書の有無',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -619,12 +618,12 @@ class _postState extends State<post> {
                           items: const [
                             //5
                             DropdownMenuItem(
-                              child: Text('あり'),
                               value: 'あり',
+                              child: Text('あり'),
                             ),
                             DropdownMenuItem(
-                              child: Text('なし'),
                               value: 'なし',
+                              child: Text('なし'),
                             ),
                           ],
                           //6
@@ -640,7 +639,7 @@ class _postState extends State<post> {
                           'コメント',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -669,7 +668,7 @@ class _postState extends State<post> {
                           'テスト形式（期末）',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               overflow: TextOverflow.ellipsis,
                               fontWeight: FontWeight.bold,
@@ -698,13 +697,13 @@ class _postState extends State<post> {
                           'テストの傾向',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'テストの範囲やどのような問題が出るのかを書いてもらえるとありがたいです',
                         ),
                         TextField(
@@ -726,7 +725,7 @@ class _postState extends State<post> {
                             });
                           },
                         ),
-                        Text('投稿者名を入力してください'),
+                        const Text('投稿者名を入力してください'),
                         TextField(
                           controller: _textEditingController7,
                           // この一文を追加
@@ -750,13 +749,13 @@ class _postState extends State<post> {
                           '宣伝箇所',
                           style: GoogleFonts.notoSans(
                             // フォントをnotoSansに指定(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                             '※サークルの宣伝や団体宣伝などが可能です。広報にご活用ください。入力された文字はそのまま反映されますのでご注意ください。'),
                         TextField(
                           controller: _textEditingController6,
@@ -776,32 +775,28 @@ class _postState extends State<post> {
                             });
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 50,
                         ),
                         SlideAction(
                             outerColor: Theme.of(context).colorScheme.secondary,
-                            child: Text(
-                              'スワイプして送信',
-                              style: TextStyle(color: Colors.black),
-                            ),
                             key: slideActionKey,
                             onSubmit: () async {
                               showDialog(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text(
+                                    title: const Text(
                                       "投稿ありがとうございます！",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    content: Column(
+                                    content: const Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
-                                          Container(
+                                          SizedBox(
                                               width: 100,
                                               height: 100,
                                               child: Image(
@@ -817,12 +812,12 @@ class _postState extends State<post> {
                                     actions: <Widget>[
                                       // ボタン領域
                                       TextButton(
-                                          child: Text("おっけー"),
+                                          child: const Text("おっけー"),
                                           onPressed: () {
                                             Navigator.pop(context);
                                             _scrollController.animateTo(
                                                 0, // 移動したい位置を指定
-                                                duration: Duration(
+                                                duration: const Duration(
                                                     milliseconds: 1), // 1秒かけて戻る
                                                 curve: Curves.linear);
                                             slideActionKey.currentState!
@@ -870,7 +865,11 @@ class _postState extends State<post> {
                               _textEditingController5.clear();
                               _textEditingController6.clear();
                               _textEditingController7.clear();
-                            }),
+                            },
+                            child: const Text(
+                              'スワイプして送信',
+                              style: TextStyle(color: Colors.black),
+                            )),
                         const SizedBox(
                           height: 100,
                         ),

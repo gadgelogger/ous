@@ -1,43 +1,43 @@
 // Firebase Authentication利用時の日本語エラーメッセージ
 class Authentication_error_to_ja {
   // ログイン時の日本語エラーメッセージ
-  login_error_msg(int error_code, String org_error_msg) {
-    String error_msg;
+  login_error_msg(int errorCode, String orgErrorMsg) {
+    String errorMsg;
 
-    if (error_code == 360587416) {
-      error_msg = '有効なメールアドレスを入力してください。';
-    } else if (error_code == 505284406) {
+    if (errorCode == 360587416) {
+      errorMsg = '有効なメールアドレスを入力してください。';
+    } else if (errorCode == 505284406) {
       // 入力されたメールアドレスが登録されていない場合
-      error_msg = 'メールアドレスかパスワードが間違っています。';
-    } else if (error_code == 185768934) {
+      errorMsg = 'メールアドレスかパスワードが間違っています。';
+    } else if (errorCode == 185768934) {
       // 入力されたパスワードが間違っている場合
-      error_msg = 'メールアドレスかパスワードが間違っています。';
-    } else if (error_code == 382293344) {
+      errorMsg = 'メールアドレスかパスワードが間違っています。';
+    } else if (errorCode == 382293344) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = 'メールアドレスとパスワードを入力してください。';
+      errorMsg = 'メールアドレスとパスワードを入力してください。';
     } else {
-      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+      errorMsg = '$orgErrorMsg[$errorCode]';
     }
 
-    return error_msg;
+    return errorMsg;
   }
 
   // アカウント登録時の日本語エラーメッセージ
-  register_error_msg(int error_code, String org_error_msg) {
-    String error_msg;
+  register_error_msg(int errorCode, String orgErrorMsg) {
+    String errorMsg;
 
-    if (error_code == 360587416) {
-      error_msg = '有効なメールアドレスを入力してください。';
-    } else if (error_code == 34618382) {
+    if (errorCode == 360587416) {
+      errorMsg = '有効なメールアドレスを入力してください。';
+    } else if (errorCode == 34618382) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = '既に登録済みのメールアドレスです。';
-    } else if (error_code == 447031946) {
+      errorMsg = '既に登録済みのメールアドレスです。';
+    } else if (errorCode == 447031946) {
       // メールアドレスかパスワードがEmpty or Nullの場合
-      error_msg = 'メールアドレスとパスワードを入力してください。';
+      errorMsg = 'メールアドレスとパスワードを入力してください。';
     } else {
-      error_msg = org_error_msg + '[' + error_code.toString() + ']';
+      errorMsg = '$orgErrorMsg[$errorCode]';
     }
 
-    return error_msg;
+    return errorMsg;
   }
 }

@@ -106,7 +106,7 @@ class _ImportantState extends State<Important>
                           }
                         },
                       ),
-                      Divider(),
+                      const Divider(),
                       //区切り線
                     ],
                   );

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:ous/main.dart';
 import 'package:ous/review.dart';
 import 'package:rxdart/streams.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -13,6 +11,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
 class MultipleCollectionsPage extends StatefulWidget {
+  const MultipleCollectionsPage({Key? key}) : super(key: key);
+
   @override
   _MultipleCollectionsPageState createState() =>
       _MultipleCollectionsPageState();
@@ -31,7 +31,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
     Color textColor = isBackgroundBright ? Colors.black : Colors.white;
     return Scaffold(
         appBar: AppBar(
-          title: Text('投稿した評価'),
+          title: const Text('投稿した評価'),
         ),
         body: StreamBuilder<List<QuerySnapshot<Map<String, dynamic>>>>(
           stream: _getStream(),
@@ -39,11 +39,11 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
               AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>>
                   snapshot) {
             if (snapshot.hasError) {
-              return Text('Something went wrong');
+              return const Text('Something went wrong');
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
@@ -62,14 +62,14 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
+                  const SizedBox(
                       width: 200,
                       height: 200,
                       child: Image(
                         image: AssetImage('assets/icon/found.gif'),
                         fit: BoxFit.cover,
                       )),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   Text(
@@ -82,7 +82,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
             }
 
             return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
                 itemCount: documents.length,
@@ -112,7 +112,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                         child: Stack(
                           children: <Widget>[
                             Padding(
-                                padding: EdgeInsets.all(15),
+                                padding: const EdgeInsets.all(15),
                                 child: Align(
                                     alignment: const Alignment(
                                       -0.8,
@@ -143,13 +143,13 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                             Positioned(
                               top: 0,
                               child: Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       vertical: 4, horizontal: 6),
                                   decoration: BoxDecoration(
                                       color: document['bumon'] == 'エグ単'
                                           ? Colors.red
                                           : Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.only(
+                                      borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(8),
                                         bottomRight: Radius.circular(8),
                                       ) // green shaped
@@ -172,8 +172,8 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   }
 
   Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -206,7 +206,7 @@ class DetailsScreen extends StatefulWidget {
   final userid;
 
 
-  DetailsScreen({
+  const DetailsScreen({
     Key? key,
     required this.ID,
     required this.userid,
@@ -238,8 +238,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //取得
   Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -268,8 +268,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
 //更新-授業名
   Future<void> updateAllDocuments() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -310,8 +310,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //更新-講師名
   Future<void> updateAllDocuments1() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -351,8 +351,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
 //更新-年度
   Future<void> updateAllDocuments2() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -392,8 +392,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //単位数
   Future<void> updateAllDocuments3() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -433,8 +433,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //授業形式
   Future<void> updateAllDocuments4() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -474,8 +474,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //出席確認の有無
   Future<void> updateAllDocuments5() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -515,8 +515,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //教科書の有無
   Future<void> updateAllDocuments6() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -556,8 +556,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //テスト形式
   Future<void> updateAllDocuments7() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -597,8 +597,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //講義の面白さ
   Future<void> updateAllDocuments8() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -638,8 +638,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //単位の取りやすさ
   Future<void> updateAllDocuments9() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -679,8 +679,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //総合評価
   Future<void> updateAllDocuments10() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -720,8 +720,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   //コメント
   Future<void> updateAllDocuments11() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -760,8 +760,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
   //ニックネーム
   Future<void> updateAllDocuments12() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -800,8 +800,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
   //宣伝
   Future<void> updateAllDocuments13() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -840,8 +840,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 //学期
   Future<void> updateAllDocuments14() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -880,8 +880,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 //部門
   Future<void> updateAllDocuments15() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -921,8 +921,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
 //削除
   Future<void> deleteAllDocuments() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     String? uid = user?.uid;
 
     List<String> collections = [
@@ -960,13 +960,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   //テキストフォーム関連
-  TextEditingController _controller = TextEditingController();
-  TextEditingController _controller1 = TextEditingController();
-  TextEditingController _controller2 = TextEditingController();
-  TextEditingController _controller3 = TextEditingController();
-  TextEditingController _controller4 = TextEditingController();
-  TextEditingController _controller5 = TextEditingController();
-  TextEditingController _controller6 = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller1 = TextEditingController();
+  final TextEditingController _controller2 = TextEditingController();
+  final TextEditingController _controller3 = TextEditingController();
+  final TextEditingController _controller4 = TextEditingController();
+  final TextEditingController _controller5 = TextEditingController();
+  final TextEditingController _controller6 = TextEditingController();
 
   // テキストの編集が完了したときに呼び出されるコールバック
   void _onTextEditingComplete() {
@@ -1061,26 +1061,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
             }
 
             // Placeholder title until data is loaded
-            return Text('Loading...');
+            return const Text('Loading...');
           },
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.mode_edit_outlined),
+              icon: const Icon(Icons.mode_edit_outlined),
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: Text("編集モード"),
-                      content: Text(
+                      title: const Text("編集モード"),
+                      content: const Text(
                         "編集モードです\n各項目上で長押しをすると\n編集できます\nまた各項目でダブルタップをするとクリップボードにコピーできます。",
                         textAlign: TextAlign.center,
                       ),
                       actions: <Widget>[
                         // ボタン領域
                         TextButton(
-                          child: Text("おけ"),
+                          child: const Text("おけ"),
                           onPressed: () => Navigator.pop(context),
                         ),
                       ],
@@ -1096,11 +1096,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
         builder: (BuildContext context,
             AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -1119,14 +1119,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                const SizedBox(
                     width: 200,
                     height: 200,
                     child: Image(
                       image: AssetImage('assets/icon/found.gif'),
                       fit: BoxFit.cover,
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 Text(
@@ -1144,7 +1144,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               DocumentSnapshot<Map<String, dynamic>> document =
                   documents[index];
               return Container(
-                margin: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1154,14 +1154,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['zyugyoumei']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("授業名"),
+                                title: const Text("授業名"),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1169,7 +1169,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       controller: _controller,
                                       decoration: InputDecoration(
                                           hintText: 'ここに入力してね',
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey),
@@ -1182,11 +1182,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"),
+                                      child: const Text("おけ"),
                                       onPressed: () async {
                                         textview();
                                         _onTextEditingComplete();
@@ -1211,7 +1211,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1231,14 +1231,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['gakki']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("開講学期"),
+                                title: const Text("開講学期"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1253,28 +1253,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           items: const [
                                             //5
                                             DropdownMenuItem(
-                                              child: Text('春１'),
                                               value: '春１',
+                                              child: Text('春１'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('春２'),
                                               value: '春２',
+                                              child: Text('春２'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('秋１'),
                                               value: '秋１',
+                                              child: Text('秋１'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('秋２'),
                                               value: '秋２',
+                                              child: Text('秋２'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('春１と２'),
                                               value: '春１と２',
+                                              child: Text('春１と２'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('秋１と２'),
                                               value: '秋１と２',
+                                              child: Text('秋１と２'),
                                             ),
                                           ],
                                         );
@@ -1286,11 +1286,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments14();
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(msg: "完了しました");
@@ -1311,7 +1311,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1331,14 +1331,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['bumon']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("部門"),
+                                title: const Text("部門"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1353,16 +1353,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           items: const [
                                             //5
                                             DropdownMenuItem(
-                                              child: Text('ラク単'),
                                               value: 'ラク単',
+                                              child: Text('ラク単'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('エグ単'),
                                               value: 'エグ単',
+                                              child: Text('エグ単'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('普通'),
                                               value: '普通',
+                                              child: Text('普通'),
                                             ),
                                           ],
                                         );
@@ -1374,11 +1374,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments15();
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(msg: "完了しました");
@@ -1399,7 +1399,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1419,14 +1419,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['kousimei']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("講師名"),
+                                title: const Text("講師名"),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1434,7 +1434,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       controller: _controller1,
                                       decoration: InputDecoration(
                                           hintText: 'ここに入力してね',
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey),
@@ -1447,11 +1447,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"),
+                                      child: const Text("おけ"),
                                       onPressed: () async {
                                         textview1();
                                         _onTextEditingComplete();
@@ -1476,7 +1476,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1496,14 +1496,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['nenndo']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("年度"),
+                                title: const Text("年度"),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1511,7 +1511,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       controller: _controller2,
                                       decoration: InputDecoration(
                                           hintText: '例：2023',
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey),
@@ -1524,11 +1524,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"),
+                                      child: const Text("おけ"),
                                       onPressed: () async {
                                         textview2();
                                         _onTextEditingComplete();
@@ -1553,7 +1553,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              padding: const EdgeInsets.only(top: 10, bottom: 10),
                               child: Text(
                                 document['nenndo'] ?? '不明'.toString(),
                                 style: TextStyle(
@@ -1570,14 +1570,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           Clipboard.setData(
                               ClipboardData(text: document['tannisuu']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("単位数"),
+                                title: const Text("単位数"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1612,11 +1612,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments3();
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(msg: "完了しました");
@@ -1637,7 +1637,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              padding: const EdgeInsets.only(top: 10, bottom: 10),
                               child: Text(
                                 document['tannisuu'].toString(),
                                 style: TextStyle(
@@ -1653,14 +1653,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         onDoubleTap: () {
                           Clipboard.setData(ClipboardData(text: document['zyugyoukeisiki']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("授業形式"),
+                                title: const Text("授業形式"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1675,20 +1675,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           items: const [
                                             //5
                                             DropdownMenuItem(
-                                              child: Text('オンライン(VOD)'),
                                               value: 'オンライン(VOD)',
+                                              child: Text('オンライン(VOD)'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('オンライン(リアルタイム）'),
                                               value: 'オンライン(リアルタイム）',
+                                              child: Text('オンライン(リアルタイム）'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('対面'),
                                               value: '対面',
+                                              child: Text('対面'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('対面とオンライン'),
                                               value: '対面とオンライン',
+                                              child: Text('対面とオンライン'),
                                             ),
                                           ],
                                         );
@@ -1700,11 +1700,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments4();
                                     Navigator.pop(context);
 
@@ -1726,7 +1726,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1745,14 +1745,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         onDoubleTap: () {
                           Clipboard.setData(ClipboardData(text: document['syusseki']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("出席確認の有無"),
+                                title: const Text("出席確認の有無"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1767,20 +1767,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           items: const [
                                             //5
                                             DropdownMenuItem(
-                                              child: Text('毎日出席を取る'),
                                               value: '毎日出席を取る',
+                                              child: Text('毎日出席を取る'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('ほぼ出席を取る'),
                                               value: 'ほぼ出席を取る',
+                                              child: Text('ほぼ出席を取る'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('たまに出席を取る'),
                                               value: 'たまに出席を取る',
+                                              child: Text('たまに出席を取る'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('出席確認はなし'),
                                               value: '出席確認はなし',
+                                              child: Text('出席確認はなし'),
                                             ),
                                           ],
                                         );
@@ -1792,11 +1792,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments5();
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(msg: "完了しました");
@@ -1817,7 +1817,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1836,14 +1836,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         onDoubleTap: () {
                           Clipboard.setData(ClipboardData(text: document['kyoukasyo']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("単位数"),
+                                title: const Text("単位数"),
                                 content:Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1858,12 +1858,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           items: const [
                                             //5
                                             DropdownMenuItem(
-                                              child: Text('あり'),
                                               value: 'あり',
+                                              child: Text('あり'),
                                             ),
                                             DropdownMenuItem(
-                                              child: Text('なし'),
                                               value: 'なし',
+                                              child: Text('なし'),
                                             ),
                                           ],
                                         );
@@ -1875,11 +1875,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"), onPressed: () {
+                                      child: const Text("おけ"), onPressed: () {
                                     updateAllDocuments6();
                                     Navigator.pop(context);
                                     Fluttertoast.showToast(msg: "完了しました");
@@ -1900,7 +1900,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1919,14 +1919,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         onDoubleTap: () {
                           Clipboard.setData(ClipboardData(text: document['tesutokeisiki']));
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('クリップボードにコピーしました')));
+                              const SnackBar(content: Text('クリップボードにコピーしました')));
                         },
                         onLongPress: () {
                           showDialog(
                             context: context,
                             builder: (_) {
                               return AlertDialog(
-                                title: Text("テスト形式"),
+                                title: const Text("テスト形式"),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -1934,7 +1934,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       controller: _controller3,
                                       decoration: InputDecoration(
                                           labelText: 'ありorなしorレポートorその他...',
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               fontFamily: 'Montserrat',
                                               fontWeight: FontWeight.bold,
                                               color: Colors.grey),
@@ -1947,11 +1947,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 actions: <Widget>[
                                   // ボタン領域
                                   TextButton(
-                                    child: Text("やっぱやめる"),
+                                    child: const Text("やっぱやめる"),
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: Text("おけ"),
+                                      child: const Text("おけ"),
                                       onPressed: () async {
                                         textview3();
                                         _onTextEditingComplete();
@@ -1976,7 +1976,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1991,7 +1991,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ],
                         ),
                       ),//テスト形式
-                      Divider(),
+                      const Divider(),
                       Container(
                         child: Column(
                           children: [
@@ -2001,7 +2001,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   context: context,
                                   builder: (_) {
                                     return AlertDialog(
-                                      title: Text("講義の面白さ"),
+                                      title: const Text("講義の面白さ"),
                                       content:Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -2011,8 +2011,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           return   Column(
                                             children: <Widget>[
                                               Text(
-                                                '${omosirosa.value.toStringAsFixed(0)}',
-                                                style: TextStyle(fontSize: 24),
+                                                omosirosa.value.toStringAsFixed(0),
+                                                style: const TextStyle(fontSize: 24),
                                               ),
                                               Slider(
                                                 value: omosirosa.value,
@@ -2033,11 +2033,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       actions: <Widget>[
                                         // ボタン領域
                                         TextButton(
-                                          child: Text("やっぱやめる"),
+                                          child: const Text("やっぱやめる"),
                                           onPressed: () => Navigator.pop(context),
                                         ),
                                         TextButton(
-                                            child: Text("おけ"), onPressed: () {
+                                            child: const Text("おけ"), onPressed: () {
                                           updateAllDocuments8();
                                           Navigator.pop(context);
                                           Fluttertoast.showToast(msg: "完了しました");
@@ -2057,7 +2057,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       fontSize: 20.sp,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                       height: 200.h,
                                       child: SfRadialGauge(axes: <RadialAxis>[
                                         RadialAxis(
@@ -2065,7 +2065,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             maximum: 5,
                                             showLabels: false,
                                             showTicks: false,
-                                            axisLineStyle: AxisLineStyle(
+                                            axisLineStyle: const AxisLineStyle(
                                               thickness: 0.2,
                                               cornerStyle:
                                                   CornerStyle.bothCurve,
@@ -2111,7 +2111,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   context: context,
                                   builder: (_) {
                                     return AlertDialog(
-                                      title: Text("単位の取りやすさ"),
+                                      title: const Text("単位の取りやすさ"),
                                       content:Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -2121,8 +2121,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               return   Column(
                                                 children: <Widget>[
                                                   Text(
-                                                    '${toriyasusa.value.toStringAsFixed(0)}',
-                                                    style: TextStyle(fontSize: 24),
+                                                    toriyasusa.value.toStringAsFixed(0),
+                                                    style: const TextStyle(fontSize: 24),
                                                   ),
                                                   Slider(
                                                     value: toriyasusa.value,
@@ -2143,11 +2143,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       actions: <Widget>[
                                         // ボタン領域
                                         TextButton(
-                                          child: Text("やっぱやめる"),
+                                          child: const Text("やっぱやめる"),
                                           onPressed: () => Navigator.pop(context),
                                         ),
                                         TextButton(
-                                            child: Text("おけ"), onPressed: () {
+                                            child: const Text("おけ"), onPressed: () {
                                           updateAllDocuments9();
                                           Navigator.pop(context);
                                           Fluttertoast.showToast(msg: "完了しました");
@@ -2167,7 +2167,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       fontSize: 20.sp,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 200.h,
                                     child: SfRadialGauge(axes: <RadialAxis>[
                                       RadialAxis(
@@ -2175,7 +2175,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           maximum: 5,
                                           showLabels: false,
                                           showTicks: false,
-                                          axisLineStyle: AxisLineStyle(
+                                          axisLineStyle: const AxisLineStyle(
                                             thickness: 0.2,
                                             cornerStyle: CornerStyle.bothCurve,
                                             color: Color.fromARGB(
@@ -2219,7 +2219,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   context: context,
                                   builder: (_) {
                                     return AlertDialog(
-                                      title: Text("総合評価"),
+                                      title: const Text("総合評価"),
                                       content:Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -2229,8 +2229,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               return   Column(
                                                 children: <Widget>[
                                                   Text(
-                                                    '${hyouka.value.toStringAsFixed(0)}',
-                                                    style: TextStyle(fontSize: 24),
+                                                    hyouka.value.toStringAsFixed(0),
+                                                    style: const TextStyle(fontSize: 24),
                                                   ),
                                                   Slider(
                                                     value: hyouka.value,
@@ -2251,11 +2251,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       actions: <Widget>[
                                         // ボタン領域
                                         TextButton(
-                                          child: Text("やっぱやめる"),
+                                          child: const Text("やっぱやめる"),
                                           onPressed: () => Navigator.pop(context),
                                         ),
                                         TextButton(
-                                            child: Text("おけ"), onPressed: () {
+                                            child: const Text("おけ"), onPressed: () {
                                           updateAllDocuments10();
                                           Navigator.pop(context);
                                           Fluttertoast.showToast(msg: "完了しました");
@@ -2275,7 +2275,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       fontSize: 20.sp,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 200.h,
                                     child: SfRadialGauge(axes: <RadialAxis>[
                                       RadialAxis(
@@ -2283,7 +2283,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           maximum: 5,
                                           showLabels: false,
                                           showTicks: false,
-                                          axisLineStyle: AxisLineStyle(
+                                          axisLineStyle: const AxisLineStyle(
                                             thickness: 0.2,
                                             cornerStyle: CornerStyle.bothCurve,
                                             color: Color.fromARGB(
@@ -2321,7 +2321,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ],
                               ),
                             ),//総合評価
-                            Divider(),
+                            const Divider(),
                           ],
                         ),
                       ),
@@ -2333,14 +2333,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               Clipboard.setData(
                                   ClipboardData(text: document['komento']));
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('クリップボードにコピーしました')));
+                                  const SnackBar(content: Text('クリップボードにコピーしました')));
                             },
                             onLongPress: () {
                               showDialog(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text("コメント"),
+                                    title: const Text("コメント"),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -2362,11 +2362,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     actions: <Widget>[
                                       // ボタン領域
                                       TextButton(
-                                        child: Text("やっぱやめる"),
+                                        child: const Text("やっぱやめる"),
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: Text("おけ"),
+                                          child: const Text("おけ"),
                                           onPressed: () async {
                                             textview4();
                                             _onTextEditingComplete();
@@ -2400,20 +2400,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ],
                             ),
                           ),//コメント
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                           GestureDetector(
                             onDoubleTap: () {
                               Clipboard.setData(
                                   ClipboardData(text: document['name']));
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('クリップボードにコピーしました')));
+                                  const SnackBar(content: Text('クリップボードにコピーしました')));
                             },
                             onLongPress: () {
                               showDialog(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text("ニックネーム"),
+                                    title: const Text("ニックネーム"),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -2436,11 +2436,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     actions: <Widget>[
                                       // ボタン領域
                                       TextButton(
-                                        child: Text("やっぱやめる"),
+                                        child: const Text("やっぱやめる"),
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: Text("おけ"),
+                                          child: const Text("おけ"),
                                           onPressed: () async {
                                             textview5();
                                             _onTextEditingComplete();
@@ -2465,7 +2465,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     bottom: 50,
                                   ),
                                   child: Text(
@@ -2490,7 +2490,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                   bottom: 50,
                                 ),
                                 child: Text(
@@ -2507,14 +2507,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               Clipboard.setData(
                                   ClipboardData(text: document['senden']));
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('クリップボードにコピーしました')));
+                                  const SnackBar(content: Text('クリップボードにコピーしました')));
                             },
                             onLongPress: () {
                               showDialog(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text("宣伝"),
+                                    title: const Text("宣伝"),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -2537,11 +2537,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     actions: <Widget>[
                                       // ボタン領域
                                       TextButton(
-                                        child: Text("やっぱやめる"),
+                                        child: const Text("やっぱやめる"),
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: Text("おけ"),
+                                          child: const Text("おけ"),
                                           onPressed: () async {
                                             textview6();
                                             _onTextEditingComplete();
@@ -2566,7 +2566,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
                                     bottom: 50,
                                   ),
                                   child: Text(
@@ -2637,7 +2637,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),*/
                           SizedBox(height: 20.0.h),
-                          Container(
+                          SizedBox(
                             height: 40.0.h,
                             child: Container(
                               decoration: BoxDecoration(
@@ -2653,7 +2653,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   launch(
                                       'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
                                 },
-                                child: Center(
+                                child: const Center(
                                   child: Text(
                                     'この投稿を開発者に報告する',
                                     style: TextStyle(
@@ -2678,7 +2678,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        child: Icon(
+        child: const Icon(
           Icons.delete_outline,
           color: Colors.white,
         ),
@@ -2687,26 +2687,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
             context: context,
             builder: (_) {
               return AlertDialog(
-                title: Text("投稿の削除"),
-                content: Text(
+                title: const Text("投稿の削除"),
+                content: const Text(
                   "この投稿を削除します\n大丈夫か？\n\n※削除した投稿は復元できないぞ",
                   textAlign: TextAlign.center,
                 ),
                 actions: <Widget>[
                   // ボタン領域
                   TextButton(
-                    child: Text("やっぱやめる"),
+                    child: const Text("やっぱやめる"),
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                      child: Text("ええで"),
+                      child: const Text("ええで"),
                       onPressed: () {
                         deleteAllDocuments();
                         Fluttertoast.showToast(msg: "削除しました");
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => Review(),
+                              builder: (context) => const Review(),
                             ));
                       }),
                 ],

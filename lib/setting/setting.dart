@@ -60,13 +60,11 @@ class _SettingState extends State<Setting> {
     String? applicationLegalese,
     bool useRootNavigator = false,
   }) {
-    assert(context != null);
-    assert(useRootNavigator != null);
     Navigator.of(context, rootNavigator: useRootNavigator)
         .push(MaterialPageRoute<void>(
       builder: (BuildContext context) => LicensePage(
         applicationName: "非公式岡理アプリ",
-        applicationIcon: Container(
+        applicationIcon: SizedBox(
           width: 100,
           height: 100,
           child: ClipRRect(
@@ -89,8 +87,8 @@ class _SettingState extends State<Setting> {
     final themeProvider =
         context.watch<ThemeProvider>(); // ここで themeProvider を取得
 // create some values
-    Color pickerColor = Color(0xff443a49);
-    Color currentColor = Color(0xff443a49);
+    Color pickerColor = const Color(0xff443a49);
+    Color currentColor = const Color(0xff443a49);
 
 // ValueChanged<Color> callback
     void changeColor(Color color) {
@@ -100,14 +98,14 @@ class _SettingState extends State<Setting> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('アプリの設定'),
+        title: const Text('アプリの設定'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return MyHomePage(title: 'home');
+                return const MyHomePage(title: 'home');
               }),
             );
           },
@@ -143,13 +141,13 @@ class _SettingState extends State<Setting> {
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
-              title: Text('テーマ'),
+              title: const Text('テーマ'),
               value: Text(themeProvider.themeMode == ThemeMode.system
                   ? 'システム設定に従う'
                   : (themeProvider.themeMode == ThemeMode.light
                       ? 'ライトモード'
                       : 'ダークモード')),
-              leading: Icon(Icons.color_lens),
+              leading: const Icon(Icons.color_lens),
               onPressed: (context) async {
                 ThemeMode? newThemeMode = await showDialog<ThemeMode>(
                   context: context,
@@ -158,7 +156,7 @@ class _SettingState extends State<Setting> {
                       title: const Text('テーマを選択'),
                       children: [
                         SimpleDialogOption(
-                          child: Text('システム設定に従う'),
+                          child: const Text('システム設定に従う'),
                           onPressed: () {
                             Navigator.pop(context, ThemeMode.system);
                           },
@@ -197,8 +195,8 @@ class _SettingState extends State<Setting> {
               },
             ),
             SettingsTile.navigation(
-                leading: Icon(Icons.color_lens_outlined),
-                title: Text('色変更'),
+                leading: const Icon(Icons.color_lens_outlined),
+                title: const Text('色変更'),
                 onPressed: (context) {
                   showDialog(
                     context: context,
@@ -254,37 +252,37 @@ class _SettingState extends State<Setting> {
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
-                leading: Icon(Icons.music_note),
-                title: Text('校歌'),
+                leading: const Icon(Icons.music_note),
+                title: const Text('校歌'),
                 onPressed: (context) {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => Music(),
+                    builder: (_) => const Music(),
                   ));
                 }),
             SettingsTile.navigation(
-              leading: Icon(Icons.description),
-              title: Text('利用規約について'),
+              leading: const Icon(Icons.description),
+              title: const Text('利用規約について'),
               onPressed: (context) {
                 launch('https://tan-q-bot-unofficial.com/terms_of_service/');
               },
             ),
             SettingsTile.navigation(
-              leading: Icon(Icons.reply),
-              title: Text('記事の掲載元'),
+              leading: const Icon(Icons.reply),
+              title: const Text('記事の掲載元'),
               onPressed: (context) {
                 launch('https://www.ous.ac.jp/topics/');
               },
             ),
             SettingsTile.navigation(
-              leading: Icon(Icons.email),
-              title: Text('お問合わせ'),
+              leading: const Icon(Icons.email),
+              title: const Text('お問合わせ'),
               onPressed: (context) {
                 launch('https://twitter.com/notifications');
               },
             ),
             SettingsTile.navigation(
-                leading: Icon(Icons.terminal),
-                title: Text('ライセンスについて'),
+                leading: const Icon(Icons.terminal),
+                title: const Text('ライセンスについて'),
                 onPressed: (context) {
                   showLicensePage(
                     context: context,
@@ -294,16 +292,16 @@ class _SettingState extends State<Setting> {
                   );
                 }),
             SettingsTile.navigation(
-              leading: Icon(Icons.description),
-              title: Text('開発ロードマップ'),
+              leading: const Icon(Icons.description),
+              title: const Text('開発ロードマップ'),
               onPressed: (context) {
                 launch(
                     'https://laced-egret-3b6.notion.site/7f9bc72309ab4fa2a5dcb1dc7aa256ea');
               },
             ),
             SettingsTile.navigation(
-              leading: Icon(Icons.rate_review),
-              title: Text('このアプリを評価する'),
+              leading: const Icon(Icons.rate_review),
+              title: const Text('このアプリを評価する'),
               onPressed: (BuildContext context) async {
                 final InAppReview inAppReview = InAppReview.instance;
                 if (await inAppReview.isAvailable()) {
@@ -313,8 +311,8 @@ class _SettingState extends State<Setting> {
             ),
             if (Platform.isIOS)
               SettingsTile.navigation(
-                leading: Icon(Icons.share),
-                title: Text('このアプリをシェアする'),
+                leading: const Icon(Icons.share),
+                title: const Text('このアプリをシェアする'),
                 onPressed: (BuildContext context) async {
                   Share.share(
                       'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931');
@@ -322,8 +320,8 @@ class _SettingState extends State<Setting> {
               ),
             if (Platform.isAndroid)
               SettingsTile.navigation(
-                leading: Icon(Icons.share),
-                title: Text('このアプリをシェアする'),
+                leading: const Icon(Icons.share),
+                title: const Text('このアプリをシェアする'),
                 onPressed: (BuildContext context) async {
                   Share.share(
                       'https://play.google.com/store/apps/details?id=com.ous.unoffical.app');
@@ -331,8 +329,8 @@ class _SettingState extends State<Setting> {
               ),
             if (Platform.isIOS)
               SettingsTile.navigation(
-                leading: Icon(Icons.public_outlined),
-                title: Text('アプリの公式サイト'),
+                leading: const Icon(Icons.public_outlined),
+                title: const Text('アプリの公式サイト'),
                 onPressed: (context) {
                   launch('https://ous-unoffical-app.studio.site');
                 },
@@ -363,8 +361,8 @@ class _SettingState extends State<Setting> {
           ),
           tiles: <SettingsTile>[
             SettingsTile.navigation(
-              leading: Icon(Icons.exit_to_app),
-              title: Text(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text(
                 'ログアウトする',
                 style: TextStyle(color: Colors.red),
               ),
@@ -373,16 +371,16 @@ class _SettingState extends State<Setting> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: Text("ログアウトします。"),
-                      content: Text("ログインページに戻るけどいい？"),
+                      title: const Text("ログアウトします。"),
+                      content: const Text("ログインページに戻るけどいい？"),
                       actions: <Widget>[
                         // ボタン領域
                         TextButton(
-                          child: Text("ダメやで"),
+                          child: const Text("ダメやで"),
                           onPressed: () => Navigator.pop(context),
                         ),
                         TextButton(
-                          child: Text("ええで"),
+                          child: const Text("ええで"),
                           onPressed: () async {
                             // ログアウト処理
                             // 内部で保持しているログイン情報等が初期化される
@@ -390,7 +388,7 @@ class _SettingState extends State<Setting> {
                             // ログイン画面に遷移＋チャット画面を破棄
                             await Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) {
-                                return Login();
+                                return const Login();
                               }),
                             );
                           },
@@ -402,8 +400,8 @@ class _SettingState extends State<Setting> {
               },
             ),
             SettingsTile.navigation(
-              leading: Icon(Icons.exit_to_app),
-              title: Text(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text(
                 'アカウントを削除する。',
                 style: TextStyle(color: Colors.red),
               ),
@@ -412,7 +410,7 @@ class _SettingState extends State<Setting> {
                   context: context,
                   builder: (_) {
                     return AlertDialog(
-                      title: Text(
+                      title: const Text(
                         "アカウントを削除します。",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -420,24 +418,24 @@ class _SettingState extends State<Setting> {
                           color: Colors.red,
                         ),
                       ),
-                      content: Text(
+                      content: const Text(
                         "本当に良いか？\n全てのデータが消えるぞ。\n\n\n※一度アカウントを削除すると戻すことはできません。",
                         textAlign: TextAlign.center,
                       ),
                       actions: <Widget>[
                         // ボタン領域
                         TextButton(
-                          child: Text("やっぱやめる"),
+                          child: const Text("やっぱやめる"),
                           onPressed: () => Navigator.pop(context),
                         ),
                         TextButton(
-                          child: Text("OK"),
+                          child: const Text("OK"),
                           onPressed: () async {
                             showDialog(
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
-                                    title: Text(
+                                    title: const Text(
                                       "最終確認。",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -445,7 +443,7 @@ class _SettingState extends State<Setting> {
                                         color: Colors.red,
                                       ),
                                     ),
-                                    content: Text(
+                                    content: const Text(
                                       "本当に良いか？\n引き返せないで。\n※画面外をタップで戻れます",
                                       textAlign: TextAlign.center,
                                     ),
@@ -465,7 +463,7 @@ class _SettingState extends State<Setting> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Login()));
+                                                      const Login()));
                                         },
                                       ),
                                     ],

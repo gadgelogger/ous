@@ -4,6 +4,8 @@ import 'package:ous/account/login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class tutorial extends StatelessWidget {
+  tutorial({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,18 +18,20 @@ class tutorial extends StatelessWidget {
             context,
             MaterialPageRoute(
               // 遷移先のクラス
-              builder: (BuildContext context) =>  Login(),
+              builder: (BuildContext context) => const Login(),
             ),
-          );        },
+          );
+        },
         finishCallback: () {
           // when user select NEXT
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               // 遷移先のクラス
-              builder: (BuildContext context) =>  Login(),
+              builder: (BuildContext context) => const Login(),
             ),
-          );        },
+          );
+        },
       ),
     );
   }
@@ -35,10 +39,11 @@ class tutorial extends StatelessWidget {
   final pages = [
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 0.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             child: Column(
               children: [
-                Image.asset('assets/images/mockup.PNG', width: 250.0.w, height: 550.0.h),
+                Image.asset('assets/images/mockup.PNG',
+                    width: 250.0.w, height: 550.0.h),
                 Text(
                   "非公式岡理アプリ",
                   style: TextStyle(
@@ -47,7 +52,9 @@ class tutorial extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "入りたてほやほやの新入生と\n単位ギリギリの人が\n単位を取れますように。",
                   style: TextStyle(
@@ -55,19 +62,18 @@ class tutorial extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
-
                 )
               ],
-            )
-        ),
+            )),
         color: Colors.lightGreen,
         doAnimateChild: true),
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 0.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             child: Column(
               children: [
-                Image.asset('assets/icon/book.png', width: 250.0.w, height: 550.0.h),
+                Image.asset('assets/icon/book.png',
+                    width: 250.0.w, height: 550.0.h),
                 Text(
                   "豊富な講義評価",
                   style: TextStyle(
@@ -76,7 +82,9 @@ class tutorial extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "100以上の\n講義評価をどこからでも。",
                   style: TextStyle(
@@ -84,20 +92,18 @@ class tutorial extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
-
                 )
               ],
-            )
-        ),
+            )),
         color: const Color(0xFF56BCA7),
         doAnimateChild: true),
-
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 0.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             child: Column(
               children: [
-                Image.asset('assets/icon/news.png', width: 250.0.w, height: 550.0.h),
+                Image.asset('assets/icon/news.png',
+                    width: 250.0.w, height: 550.0.h),
                 Text(
                   "最新ニュース",
                   style: TextStyle(
@@ -106,7 +112,9 @@ class tutorial extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "大学サイトよりも\n見やすく、シンプル。",
                   style: TextStyle(
@@ -114,19 +122,18 @@ class tutorial extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
-
                 )
               ],
-            )
-        ),
+            )),
         color: const Color(0xff4fadf8),
         doAnimateChild: true),
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 0.0),
+            padding: const EdgeInsets.only(bottom: 0.0),
             child: Column(
               children: [
-                Image.asset('assets/icon/book.png', width: 250.0.w, height: 550.0.h),
+                Image.asset('assets/icon/book.png',
+                    width: 250.0.w, height: 550.0.h),
                 Text(
                   "機能は随時追加中",
                   style: TextStyle(
@@ -135,7 +142,9 @@ class tutorial extends StatelessWidget {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "どんどん進化します。",
                   style: TextStyle(
@@ -143,16 +152,14 @@ class tutorial extends StatelessWidget {
                     fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
-
                 )
               ],
-            )
-        ),
+            )),
         color: const Color(0xfffc7f7f),
         doAnimateChild: true),
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 25.0),
+            padding: const EdgeInsets.only(bottom: 25.0),
             child: Text(
               "さあ、始めよう！",
               style: TextStyle(

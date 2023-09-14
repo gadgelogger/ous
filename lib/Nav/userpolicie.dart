@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ous/home.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 class policy extends StatelessWidget {
   const policy({Key? key}) : super(key: key);
@@ -9,15 +8,15 @@ class policy extends StatelessWidget {
     appBar: AppBar(
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.home),
+        icon: const Icon(Icons.home),
         onPressed: (){
           Navigator.popUntil(context, (route) => route.isFirst);
 
         },
       ),
-      title: Text('利用規約'),
+      title: const Text('利用規約'),
     ),
-    body: WebView(
+    body: const WebView(
         initialUrl: 'https://tan-q-bot-unofficial.com/terms_of_service/',
         javascriptMode: JavascriptMode.unrestricted
     ),  );

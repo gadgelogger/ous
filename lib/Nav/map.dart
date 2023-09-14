@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:map_launcher/map_launcher.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../main.dart';
 
@@ -17,18 +15,18 @@ class Map extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return MyHomePage(title: 'home');
+                    return const MyHomePage(title: 'home');
                   }),
                 );
               },
             ),
             elevation: 0,
-            title: Text('学内マップ'),
+            title: const Text('学内マップ'),
             bottom: TabBar(
 
                 labelColor: Theme.of(context).colorScheme.primary,
@@ -36,7 +34,7 @@ class Map extends StatelessWidget {
                 isScrollable: true,
                 indicatorColor: Theme.of(context).colorScheme.primary,
                 labelPadding:
-                    EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
                 tabs: [
                   Text(
                     '岡山キャンパス',
@@ -54,7 +52,7 @@ class Map extends StatelessWidget {
           ),
           body: WillPopScope(
             onWillPop: () async => false,
-            child: TabBarView(
+            child: const TabBarView(
               physics: NeverScrollableScrollPhysics(),
 
               children: [
@@ -83,7 +81,7 @@ class _okayamaState extends State<okayama> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('起動するマップアプリ'),
+          title: const Text('起動するマップアプリ'),
           content: SingleChildScrollView(
             child: ListBody(
               children: availableMaps
@@ -117,7 +115,7 @@ class _okayamaState extends State<okayama> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('起動するマップアプリ'),
+          title: const Text('起動するマップアプリ'),
           content: SingleChildScrollView(
             child: ListBody(
               children: availableMaps
@@ -166,25 +164,25 @@ class _okayamaState extends State<okayama> {
                         context: context,
                         builder: (BuildContext context) {
                           return Container(
-                              margin: EdgeInsets.only(top: 450),
+                              margin: const EdgeInsets.only(top: 450),
                               decoration: BoxDecoration(
                                 //モーダル自体の色
                                 color: Theme.of(context).brightness ==
                                     Brightness.light
                                     ? Colors.white
-                                    : Color(0xFF424242),
+                                    : const Color(0xFF424242),
                                 //角丸にする
-                                borderRadius: BorderRadius.only(
+                                borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(20),
                                   topRight: Radius.circular(20),
                                 ),
                               ),
                               child: Container(
-                                margin: EdgeInsets.all(15),
+                                margin: const EdgeInsets.all(15),
                                 child: (Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'キャンパスへのアクセス',
                                       style: TextStyle(
                                           fontSize: 30,
@@ -197,10 +195,10 @@ class _okayamaState extends State<okayama> {
                                           Card(
                                             child: ListTile(
                                               leading:
-                                              Icon(Icons.door_sliding_outlined),
+                                              const Icon(Icons.door_sliding_outlined),
                                               trailing:
-                                              Icon(Icons.chevron_right),
-                                              title: Text('正門'),
+                                              const Icon(Icons.chevron_right),
+                                              title: const Text('正門'),
                                               onTap: () {
                                                 _openMaps();
                                               },
@@ -208,10 +206,10 @@ class _okayamaState extends State<okayama> {
                                           ),
                                           Card(
                                             child: ListTile(
-                                              leading: Icon(Icons.door_back_door_outlined),
+                                              leading: const Icon(Icons.door_back_door_outlined),
                                               trailing:
-                                              Icon(Icons.chevron_right),
-                                              title: Text('東門'),
+                                              const Icon(Icons.chevron_right),
+                                              title: const Text('東門'),
                                               onTap: () {
                                                 _openMaps1();
                                               },
@@ -221,7 +219,7 @@ class _okayamaState extends State<okayama> {
                                       ),
                                     ),
 
-                                    Text(
+                                    const Text(
                                       '自家用車で来られる方は\n東門からお入りください\n正門からはアクセスできません。',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -233,21 +231,21 @@ class _okayamaState extends State<okayama> {
                               ));
                         });
                   },
-                  child: Icon(Icons.navigation_outlined),
+                  child: const Icon(Icons.navigation_outlined),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16),
                   child: FloatingActionButton(
                     onPressed: () {
                       // Do something when FAB is pressed
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) {
-                          return okayama_aed();
+                          return const okayama_aed();
                         }),
                       );
                     },
-                    child: Icon(Icons.autorenew_outlined),
+                    child: const Icon(Icons.autorenew_outlined),
                   ),
                 )
               ],
@@ -275,7 +273,7 @@ class _imabariState extends State<imabari> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('起動するマップアプリ'),
+          title: const Text('起動するマップアプリ'),
           content: SingleChildScrollView(
             child: ListBody(
               children: availableMaps
@@ -323,25 +321,25 @@ class _imabariState extends State<imabari> {
                       context: context,
                       builder: (BuildContext context) {
                         return Container(
-                            margin: EdgeInsets.only(top: 450),
+                            margin: const EdgeInsets.only(top: 450),
                             decoration: BoxDecoration(
                               //モーダル自体の色
                               color: Theme.of(context).brightness ==
                                   Brightness.light
                                   ? Colors.white
-                                  : Color(0xFF424242),
+                                  : const Color(0xFF424242),
                               //角丸にする
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20),
                                 topRight: Radius.circular(20),
                               ),
                             ),
                             child: Container(
-                              margin: EdgeInsets.all(15),
+                              margin: const EdgeInsets.all(15),
                               child: (Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'キャンパスへのアクセス',
                                     style: TextStyle(
                                         fontSize: 30,
@@ -351,10 +349,10 @@ class _imabariState extends State<imabari> {
                                     child:    Card(
                                       child: ListTile(
                                         leading:
-                                        Icon(Icons.school_outlined),
+                                        const Icon(Icons.school_outlined),
                                         trailing:
-                                        Icon(Icons.chevron_right),
-                                        title: Text('今治キャンパスに行く'),
+                                        const Icon(Icons.chevron_right),
+                                        title: const Text('今治キャンパスに行く'),
                                         onTap: () {
                                           _openMaps();
                                         },
@@ -366,21 +364,21 @@ class _imabariState extends State<imabari> {
                             ));
                       });
                 },
-                child: Icon(Icons.navigation_outlined),
+                child: const Icon(Icons.navigation_outlined),
               ),
               Container(
-                margin: EdgeInsets.only(top: 16),
+                margin: const EdgeInsets.only(top: 16),
                 child: FloatingActionButton(
                   onPressed: () {
                     // Do something when FAB is pressed
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return okayama_aed();
+                        return const okayama_aed();
                       }),
                     );
                   },
-                  child: Icon(Icons.autorenew_outlined),
+                  child: const Icon(Icons.autorenew_outlined),
                 ),
               )
             ],
@@ -400,7 +398,7 @@ class okayama_aed extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('AED設置場所'),
+        title: const Text('AED設置場所'),
       ),
       body: Container(
           child:
@@ -411,11 +409,11 @@ class okayama_aed extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              return Map();
+              return const Map();
             }),
           );
         },
-        child: Icon(Icons.autorenew_outlined),
+        child: const Icon(Icons.autorenew_outlined),
       ),
     );
   }
@@ -429,7 +427,7 @@ class imabari_aed extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('AED設置場所'),
+        title: const Text('AED設置場所'),
       ),
       body: Container(
           child: SfPdfViewer.network(
@@ -440,11 +438,11 @@ class imabari_aed extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) {
-              return Map();
+              return const Map();
             }),
           );
         },
-        child: Icon(Icons.autorenew_outlined),
+        child: const Icon(Icons.autorenew_outlined),
       ),
     );
   }

@@ -2,16 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' as parser;
 
 class Mylog extends StatefulWidget {
+  const Mylog({Key? key}) : super(key: key);
+
   @override
   State<Mylog> createState() => _MylogState();
 }
 
 class _MylogState extends State<Mylog> {
   String? _upText;
-  bool _isLoading = true;
+  final bool _isLoading = true;
 
   @override
   void initState() {
@@ -20,9 +21,9 @@ class _MylogState extends State<Mylog> {
   }
 
   Future<void> fetchPanelData() async {
-    final dashboardUid = 'c6b912ae-b50a-476e-94dd-f6a2ab6ec19f';
-    final panelId = 4;
-    final url =
+    const dashboardUid = 'c6b912ae-b50a-476e-94dd-f6a2ab6ec19f';
+    const panelId = 4;
+    const url =
         'https://grafana-mine-pop.ciphergrus.com/api/dashboards/uid/$dashboardUid';
     final response = await http.get(Uri.parse(url));
     final data = jsonDecode(response.body);
@@ -35,11 +36,11 @@ class _MylogState extends State<Mylog> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mylog'),
+        title: const Text('Mylog'),
       ),
       body: Center(
         child: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Text(_upText ?? 'No data'),
       ),
     );

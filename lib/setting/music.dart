@@ -40,37 +40,40 @@ class _MusicState extends State<Music> {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: Text('校歌'),
+            title: const Text('校歌'),
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 child: Container(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Image.network(
                       'https://www.ous.ac.jp/common/files/100/gakka.gif'),
                 ),
               ),
               Center(
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     launch('https://twitter.com/music_genki');
                   },
-                  child: Text('楽曲\n@music_genki',textAlign: TextAlign.center,),
+                  child: const Text(
+                    '楽曲\n@music_genki',
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               VideoProgressIndicator(
                 _controller,
                 allowScrubbing: true,
-                colors: new VideoProgressColors(
+                colors: VideoProgressColors(
                   playedColor: Theme.of(context).colorScheme.primary,
                   bufferedColor: Colors.black26,
                   backgroundColor: Colors.black26,
                 ),
               ),
               _ProgressText(controller: _controller),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -80,13 +83,15 @@ class _MusicState extends State<Music> {
                           .seekTo(Duration.zero)
                           .then((_) => _controller.play());
                     },
-                    child: Icon(Icons.refresh, color: Colors.white),
                     style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
-                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(20),
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
+                    child: const Icon(Icons.refresh, color: Colors.white),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -94,13 +99,15 @@ class _MusicState extends State<Music> {
                           .seekTo(Duration.zero)
                           .then((_) => _controller.play());
                     },
-                    child: Icon(Icons.play_arrow, color: Colors.white),
                     style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
-                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(20),
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
+                    child: const Icon(Icons.play_arrow, color: Colors.white),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -108,13 +115,15 @@ class _MusicState extends State<Music> {
                           .seekTo(Duration.zero)
                           .then((_) => _controller.pause());
                     },
-                    child: Icon(Icons.pause, color: Colors.white),
                     style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
-                      backgroundColor: Theme.of(context).colorScheme.primary, // <-- Button color
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(20),
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primary, // <-- Button color
                       foregroundColor: Colors.red, // <-- Splash color
                     ),
+                    child: const Icon(Icons.pause, color: Colors.white),
                   )
                 ],
               ),
@@ -176,10 +185,10 @@ class HomeModel extends ChangeNotifier {
             context: context,
             builder: (_) {
               return AlertDialog(
-                title: Text('陬上Γ繝九Η繝ｼ縺ｫ蜈･繧翫∪縺'),
+                title: const Text('陬上Γ繝九Η繝ｼ縺ｫ蜈･繧翫∪縺'),
                 actions: [
                   ElevatedButton(
-                    child: Text('オ????ー'),
+                    child: const Text('オ????ー'),
                     onPressed: () {
                       Navigator.push(
                         context,

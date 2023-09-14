@@ -1,15 +1,11 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/Account/Account_edit.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import '../main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class account extends StatefulWidget {
@@ -51,14 +47,14 @@ class _accountState extends State<account> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(160.0),
+          preferredSize: const Size.fromHeight(160.0),
           child: AppBar(
             automaticallyImplyLeading: false,
             toolbarHeight: 150.0,
             backgroundColor: Theme.of(context).colorScheme.primary,
             elevation: 0.0,
             leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
               ),
@@ -66,7 +62,7 @@ class _accountState extends State<account> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return MyHomePage(title: 'home',);
+                    return const MyHomePage(title: 'home',);
                   }),
                 );
               },
@@ -78,11 +74,11 @@ class _accountState extends State<account> {
                   builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // データ読み込み中の場合の処理
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     }
                     if (!snapshot.hasData || snapshot.data == null) {
                       // データが取得できなかった場合の処理
-                      return Text('データが見つかりませんでした。');
+                      return const Text('データが見つかりませんでした。');
                     }
                     // データが正常に取得できた場合の処理
                     _data = snapshot.data!;
@@ -114,7 +110,7 @@ class _accountState extends State<account> {
                                       maxLines: 1,
                                       style: GoogleFonts.notoSans(
                                         // フォントをnotoSansに指定(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                           fontSize: 30,
                                           overflow: TextOverflow.ellipsis,
                                           fontWeight: FontWeight.bold,
@@ -138,7 +134,7 @@ class _accountState extends State<account> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) {
-                                              return account_edit();
+                                              return const account_edit();
                                             }),
                                       );
                                     },
@@ -155,18 +151,18 @@ class _accountState extends State<account> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                              return account_edit();
+                                              return const account_edit();
                                             }),
                                           );
                                         },
                                         elevation: 2.0,
-                                        fillColor: Color(0xFFF5F6F9),
+                                        fillColor: const Color(0xFFF5F6F9),
+                                        padding: const EdgeInsets.all(7.0),
+                                        shape: const CircleBorder(),
                                         child: Icon(
                                           Icons.settings_outlined,
                                           color: Theme.of(context).colorScheme.primary
                                         ),
-                                        padding: EdgeInsets.all(7.0),
-                                        shape: CircleBorder(),
                                       ),
                                     ),
                                   ],
@@ -185,7 +181,7 @@ class _accountState extends State<account> {
                                 maxLines: 1,
                                 style: GoogleFonts.notoSans(
                                   // フォントをnotoSansに指定(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                     fontSize: 20,
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold,
@@ -217,7 +213,7 @@ class _accountState extends State<account> {
       }
 
       if (!snapshot.hasData) {
-        return SizedBox();
+        return const SizedBox();
       }
 
       // Firestoreから取得したデータを取り出す
@@ -245,22 +241,22 @@ class _accountState extends State<account> {
       return Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
+              SizedBox(
                 width: 100,
                 height: 100,
                 child: Image.asset('assets/images/icon2.jpg'),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 30),
+                padding: const EdgeInsets.only(top: 10, bottom: 30),
                 child: Text(
                   '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.notoSans(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       overflow: TextOverflow.ellipsis,
                       fontWeight: FontWeight.bold,
                       color: Color.fromRGBO(184, 189, 211, 1),

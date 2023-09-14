@@ -10,7 +10,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/review/post.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -21,18 +20,20 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../apikey.dart';
 
 class kyousyoku extends StatefulWidget {
+  const kyousyoku({Key? key}) : super(key: key);
+
   @override
   _kyousyokuState createState() => _kyousyokuState();
 }
 
 class _kyousyokuState extends State<kyousyoku> {
-  bool _isPressed = false;
-  int _actionCounter = 0;
+  final bool _isPressed = false;
+  final int _actionCounter = 0;
   final _queryController = TextEditingController();
 
-  Algolia _algolia = Algolia.init(
-    applicationId: '${algoiaid}',
-    apiKey: '${algoliakey}',
+  final Algolia _algolia = const Algolia.init(
+    applicationId: algoiaid,
+    apiKey: algoliakey,
   );
 
   String _query = '';
@@ -92,11 +93,11 @@ class _kyousyokuState extends State<kyousyoku> {
               _query = value;
             });
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: '講義名or講師名',
           ),
         )
-            : Text('教職関連科目'),
+            : const Text('教職関連科目'),
         actions: <Widget>[
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
@@ -115,13 +116,13 @@ class _kyousyokuState extends State<kyousyoku> {
           builder: (context,
               AsyncSnapshot<List<AlgoliaObjectSnapshot>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
               final data = snapshot.data!;
               return AnimationLimiter(child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
                 itemCount: data.length,
@@ -170,7 +171,7 @@ class _kyousyokuState extends State<kyousyoku> {
                             child: Stack(
                               children: <Widget>[
                                 Padding(
-                                    padding: EdgeInsets.all(15),
+                                    padding: const EdgeInsets.all(15),
                                     child: Align(
                                         alignment: const Alignment(
                                           -0.8,
@@ -204,7 +205,7 @@ class _kyousyokuState extends State<kyousyoku> {
                                 Positioned(
                                   top: 0,
                                   child: Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 4, horizontal: 6),
                                       decoration: BoxDecoration(
                                           color: hit['bumon'] == 'エグ単'
@@ -212,7 +213,7 @@ class _kyousyokuState extends State<kyousyoku> {
                                               : Theme.of(context)
                                               .colorScheme
                                               .primary,
-                                          borderRadius: BorderRadius.only(
+                                          borderRadius: const BorderRadius.only(
                                             topLeft: Radius.circular(8),
                                             bottomRight: Radius.circular(8),
                                           ) // green shaped
@@ -237,14 +238,14 @@ class _kyousyokuState extends State<kyousyoku> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
+                      const SizedBox(
                           width: 200,
                           height: 200,
                           child: Image(
                             image: AssetImage('assets/icon/found.gif'),
                             fit: BoxFit.cover,
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Text(
@@ -263,12 +264,12 @@ class _kyousyokuState extends State<kyousyoku> {
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text('Error'),
               );
             } else if (snapshot.connectionState ==
                 ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else {
@@ -293,7 +294,7 @@ class _kyousyokuState extends State<kyousyoku> {
               return Scrollbar(
                 child: AnimationLimiter(
                   child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
                     itemCount: data.length,
@@ -349,7 +350,7 @@ class _kyousyokuState extends State<kyousyoku> {
                                           children: <Widget>[
                                             // 既存のウィジェット
                                             Padding(
-                                              padding: EdgeInsets.all(15),
+                                              padding: const EdgeInsets.all(15),
                                               child: Align(
                                                 alignment: const Alignment(-0.8, -0.5),
                                                 child: Text(
@@ -380,12 +381,12 @@ class _kyousyokuState extends State<kyousyoku> {
                                             Positioned(
                                               top: 0,
                                               child: Container(
-                                                padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
                                                 decoration: BoxDecoration(
                                                   color: data[index]['bumon'] == 'エグ単'
                                                       ? Colors.red
                                                       : Theme.of(context).colorScheme.primary,
-                                                  borderRadius: BorderRadius.only(
+                                                  borderRadius: const BorderRadius.only(
                                                     topLeft: Radius.circular(8),
                                                     bottomRight: Radius.circular(8),
                                                   ),
@@ -422,12 +423,12 @@ class _kyousyokuState extends State<kyousyoku> {
           Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 16),
+                margin: const EdgeInsets.only(top: 16),
                 child: FloatingActionButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => post()),
+                      MaterialPageRoute(builder: (context) => const post()),
                     );
                   },
                   child: const Icon(Icons.upload_outlined),
@@ -443,7 +444,7 @@ class _kyousyokuState extends State<kyousyoku> {
                 },
               );
             },
-            child: Icon(Icons.filter_list),
+            child: const Icon(Icons.filter_list),
           ),
         ],
       )
@@ -455,7 +456,7 @@ class _kyousyokuState extends State<kyousyoku> {
             },
           );
         },
-        child: Icon(Icons.filter_list),
+        child: const Icon(Icons.filter_list),
       ),
     );
   }
@@ -619,14 +620,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
           title: Text(widget.zyugyoumei),
         ),
         body: Container(
-          margin: EdgeInsets.all(15),
+          margin: const EdgeInsets.all(15),
           child: SingleChildScrollView(
               child: RepaintBoundary(
                   key: shareKey,
                   child: Container(
                     color: Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).backgroundColor.withOpacity(0.6)
-                        : Theme.of(context).backgroundColor.withOpacity(0.6),
+                        ? Theme.of(context).colorScheme.background.withOpacity(0.6)
+                        : Theme.of(context).colorScheme.background.withOpacity(0.6),
 
 
                     child: Column(
@@ -640,7 +641,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -660,7 +661,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -680,7 +681,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: SelectableText(
                             widget.nenndo ?? '不明'.toString(),
                             style: TextStyle(
@@ -697,7 +698,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10),
                           child: SelectableText(
                             widget.tannisuu.toString(),
                             style: TextStyle(
@@ -714,7 +715,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -734,7 +735,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -754,7 +755,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -774,7 +775,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                             top: 10,
                             bottom: 10,
                           ),
@@ -786,7 +787,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                           ),
                         ),
-                        Divider(),
+                        const Divider(),
                         Container(
                           child: Column(
                             children: [
@@ -797,7 +798,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                   height: 200.h,
                                   child: SfRadialGauge(axes: <RadialAxis>[
                                     RadialAxis(
@@ -805,7 +806,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         maximum: 5,
                                         showLabels: false,
                                         showTicks: false,
-                                        axisLineStyle: AxisLineStyle(
+                                        axisLineStyle: const AxisLineStyle(
                                           thickness: 0.2,
                                           cornerStyle: CornerStyle.bothCurve,
                                           color:
@@ -845,7 +846,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 200.h,
                                 child: SfRadialGauge(axes: <RadialAxis>[
                                   RadialAxis(
@@ -853,7 +854,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       maximum: 5,
                                       showLabels: false,
                                       showTicks: false,
-                                      axisLineStyle: AxisLineStyle(
+                                      axisLineStyle: const AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
                                         color: Color.fromARGB(139, 134, 134, 134),
@@ -893,7 +894,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fontSize: 20.sp,
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 200.h,
                                 child: SfRadialGauge(axes: <RadialAxis>[
                                   RadialAxis(
@@ -901,7 +902,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       maximum: 5,
                                       showLabels: false,
                                       showTicks: false,
-                                      axisLineStyle: AxisLineStyle(
+                                      axisLineStyle: const AxisLineStyle(
                                         thickness: 0.2,
                                         cornerStyle: CornerStyle.bothCurve,
                                         color: Color.fromARGB(139, 134, 134, 134),
@@ -934,7 +935,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ])
                                 ]),
                               ),
-                              Divider(),
+                              const Divider(),
                             ],
                           ),
                         ),
@@ -963,7 +964,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                   top: 10,
                                   bottom: 10,
                                 ),
@@ -976,7 +977,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 10,
                                 top: 10,
                               ),
@@ -996,7 +997,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 top: 10,
                                 bottom: 10,
                               ),
@@ -1015,7 +1016,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(
+                              padding: const EdgeInsets.only(
                                 bottom: 10,
                                 top: 10,
                               ),
@@ -1025,7 +1026,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                             SizedBox(height: 20.0.h),
-                            Container(
+                            SizedBox(
                               height: 40.0.h,
                               child: Container(
                                 decoration: BoxDecoration(
@@ -1042,7 +1043,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     launch(
                                         'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
                                   },
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       'この投稿を開発者に報告する',
                                       style: TextStyle(
@@ -1069,7 +1070,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               children: [
 
                 Container(
-                  margin: EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16),
                   child: FloatingActionButton(
                     onPressed: () async {
                       if (userId != null) {
@@ -1085,7 +1086,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16),
                   child: FloatingActionButton(
                     onPressed: () => shareImageAndText(
                       'sample_widget',

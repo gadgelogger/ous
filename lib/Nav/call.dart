@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ous/main.dart';
-import 'package:ous/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 class Call extends StatelessWidget {
   const Call({Key? key}) : super(key: key);
@@ -14,195 +13,195 @@ class Call extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) {
-                return MyHomePage(title: 'home');
+                return const MyHomePage(title: 'home');
               }),);
           },
         ),
-        title: Text('各種連絡先'),
+        title: const Text('各種連絡先'),
       ),
       body: ListView(
         children: <Widget>[
           Container(
+            decoration: BoxDecoration(
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary
+            ),
             child: ListTile(
               title: Text(
                 "岡山キャンパス",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: textColor),
               ),
             ),
+          ),
+          ListTile(
+            title: const Text('健康管理センター(外線)',),
+            subtitle: const Text('0862568434'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568434'),
+          ),
+          ListTile(
+            title: const Text('A1号館学部運営事務部'),
+            subtitle: const Text('0862568451'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568451'),
+          ),
+          ListTile(
+            title: const Text('学部運営事務部C2号館分室'),
+            subtitle: const Text('0862568003'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568003'),
+          ),
+          ListTile(
+            title: const Text('正面インフォメーション'),
+            subtitle: const Text('0862568439'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568439'),
+          ),
+          ListTile(
+            title: const Text('入試広報部'),
+            subtitle: const Text('0862568412'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568412	'),
+          ),
+          ListTile(
+            title: const Text('受験生ホットライン	'),
+            subtitle: const Text('08008881124'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:08008881124'),
+          ),
+          ListTile(
+            title: const Text('入試広報部'),
+            subtitle: const Text('0862568415'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568415'),
+          ),
+          ListTile(
+            title: const Text('庶務部'),
+            subtitle: const Text('0862568431'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568431'),
+          ),
+          ListTile(
+            title: const Text('学生支援部・コミュニケーション支援課	'),
+            subtitle: const Text('0862568464'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568464'),
+          ),
+          ListTile(
+            title: const Text('学生支援部・学生課'),
+            subtitle: const Text('0862568442'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568442'),
+          ),
+          ListTile(
+            title: const Text('学生支援部・学生課 学生係'),
+            subtitle: const Text('0862568442'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568442'),
+          ),
+          ListTile(
+            title: const Text('教学支援部・教務課'),
+            subtitle: const Text('0862568447'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568447'),
+          ),
+          ListTile(
+            title: const Text('経理部'),
+            subtitle: const Text('0862568449'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568449'),
+          ),
+          ListTile(
+            title: const Text('研究・社会連携部'),
+            subtitle: const Text('0862569731'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862569731'),
+          ),
+          ListTile(
+            title: const Text('キャリア支援センター'),
+            subtitle: const Text('0862568435'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568435'),
+          ),
+          ListTile(
+            title: const Text('教学支援部・教務課'),
+            subtitle: const Text('0862568447'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568447'),
+          ),
+          ListTile(
+            title: const Text('加計学園広報室'),
+            subtitle: const Text('0862568609'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568609'),
+          ),
+          ListTile(
+            title: const Text('健康管理センター'),
+            subtitle: const Text('0862568434'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568434'),
+          ),
+          ListTile(
+            title: const Text('学習支援センター'),
+            subtitle: const Text('0862568438'),
+            trailing: const Icon(Icons.call),
+            onTap: () => launch('tel:0862568438'),
+          ),
+          Container(
             decoration: BoxDecoration(
                 color: Theme
                     .of(context)
                     .colorScheme
                     .primary
             ),
-          ),
-          ListTile(
-            title: Text('健康管理センター(外線)',),
-            subtitle: Text('0862568434'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568434'),
-          ),
-          ListTile(
-            title: Text('A1号館学部運営事務部'),
-            subtitle: Text('0862568451'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568451'),
-          ),
-          ListTile(
-            title: Text('学部運営事務部C2号館分室'),
-            subtitle: Text('0862568003'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568003'),
-          ),
-          ListTile(
-            title: Text('正面インフォメーション'),
-            subtitle: Text('0862568439'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568439'),
-          ),
-          ListTile(
-            title: Text('入試広報部'),
-            subtitle: Text('0862568412'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568412	'),
-          ),
-          ListTile(
-            title: Text('受験生ホットライン	'),
-            subtitle: Text('08008881124'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:08008881124'),
-          ),
-          ListTile(
-            title: Text('入試広報部'),
-            subtitle: Text('0862568415'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568415'),
-          ),
-          ListTile(
-            title: Text('庶務部'),
-            subtitle: Text('0862568431'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568431'),
-          ),
-          ListTile(
-            title: Text('学生支援部・コミュニケーション支援課	'),
-            subtitle: Text('0862568464'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568464'),
-          ),
-          ListTile(
-            title: Text('学生支援部・学生課'),
-            subtitle: Text('0862568442'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568442'),
-          ),
-          ListTile(
-            title: Text('学生支援部・学生課 学生係'),
-            subtitle: Text('0862568442'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568442'),
-          ),
-          ListTile(
-            title: Text('教学支援部・教務課'),
-            subtitle: Text('0862568447'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568447'),
-          ),
-          ListTile(
-            title: Text('経理部'),
-            subtitle: Text('0862568449'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568449'),
-          ),
-          ListTile(
-            title: Text('研究・社会連携部'),
-            subtitle: Text('0862569731'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862569731'),
-          ),
-          ListTile(
-            title: Text('キャリア支援センター'),
-            subtitle: Text('0862568435'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568435'),
-          ),
-          ListTile(
-            title: Text('教学支援部・教務課'),
-            subtitle: Text('0862568447'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568447'),
-          ),
-          ListTile(
-            title: Text('加計学園広報室'),
-            subtitle: Text('0862568609'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568609'),
-          ),
-          ListTile(
-            title: Text('健康管理センター'),
-            subtitle: Text('0862568434'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568434'),
-          ),
-          ListTile(
-            title: Text('学習支援センター'),
-            subtitle: Text('0862568438'),
-            trailing: Icon(Icons.call),
-            onTap: () => launch('tel:0862568438'),
-          ),
-          Container(
             child: ListTile(
               title: Text(
                 "今治キャンパス",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color:textColor ),
               ),
             ),
-            decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .primary
-            ),
           ),
           ListTile(
-            title: Text('キャリア支援係'),
-            subtitle: Text('0898529017'),
-            trailing: Icon(Icons.call),
+            title: const Text('キャリア支援係'),
+            subtitle: const Text('0898529017'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0898529017'),
           ),
           ListTile(
-            title: Text('教務係'),
-            subtitle: Text('0898529029'),
-            trailing: Icon(Icons.call),
+            title: const Text('教務係'),
+            subtitle: const Text('0898529029'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0898529029'),
           ),
           ListTile(
-            title: Text('学生係'),
-            subtitle: Text('0898529019'),
-            trailing: Icon(Icons.call),
+            title: const Text('学生係'),
+            subtitle: const Text('0898529019'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0898529019'),
           ),
           ListTile(
-            title: Text('庶務係'),
-            subtitle: Text('0898529021'),
-            trailing: Icon(Icons.call),
+            title: const Text('庶務係'),
+            subtitle: const Text('0898529021'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0898529021'),
           ),
           ListTile(
-            title: Text('経理係'),
-            subtitle: Text('0898529025'),
-            trailing: Icon(Icons.call),
+            title: const Text('経理係'),
+            subtitle: const Text('0898529025'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0898529025'),
           ),
           ListTile(
-            title: Text('グローバル教育センター'),
-            subtitle: Text('0862569814'),
-            trailing: Icon(Icons.call),
+            title: const Text('グローバル教育センター'),
+            subtitle: const Text('0862569814'),
+            trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0862569814'),
           ),
         ],

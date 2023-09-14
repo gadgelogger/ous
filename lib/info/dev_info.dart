@@ -41,7 +41,7 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          await Future.delayed(Duration(seconds: 1)); // 1秒待機
+          await Future.delayed(const Duration(seconds: 1)); // 1秒待機
           initState();
         },
         child: FutureBuilder<QuerySnapshot>(
@@ -155,7 +155,7 @@ class _ViewPostState extends State<ViewPost> {
               const Divider(),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Container(
+                  child: SizedBox(
                     height: 600.h,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -183,7 +183,7 @@ class _DevPostState extends State<DevPost> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _textController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  final DateTime _selectedDate = DateTime.now();
 
   Future<void> _addPost() async {
     try {
@@ -191,7 +191,7 @@ class _DevPostState extends State<DevPost> {
         'title': _titleController.text,
         'text': _textController.text,
         'day': _selectedDate,
-        'uuid': Uuid().v4(),
+        'uuid': const Uuid().v4(),
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('投稿しました')),
@@ -297,7 +297,7 @@ class _DevPostState extends State<DevPost> {
                                   onPressed: () {
                                     _deletePost(data.id);
                                   },
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                 ),
                                 Expanded(
                                   child: ListTile(
@@ -344,7 +344,7 @@ class _DevPostState extends State<DevPost> {
                                           ),
                                         );
                                       },
-                                      icon: Icon(Icons.edit),
+                                      icon: const Icon(Icons.edit),
                                     ),
                                   ),
                                 ),

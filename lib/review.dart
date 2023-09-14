@@ -152,7 +152,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => rigaku()),
+                        MaterialPageRoute(builder: (context) => const rigaku()),
                       );
                     },
                   ),
@@ -240,7 +240,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => kougakubu()),
+                        MaterialPageRoute(builder: (context) => const kougakubu()),
                       );
                     },
                   ),
@@ -333,7 +333,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => zyouhou()),
+                        MaterialPageRoute(builder: (context) => const zyouhou()),
                       );
                     },
                   ),
@@ -421,7 +421,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => seibutu()),
+                        MaterialPageRoute(builder: (context) => const seibutu()),
                       );
                     },
                   ),
@@ -514,7 +514,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => kyouiku()),
+                        MaterialPageRoute(builder: (context) => const kyouiku()),
                       );
                     },
                   ),
@@ -602,7 +602,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => keiei()),
+                        MaterialPageRoute(builder: (context) => const keiei()),
                       );
                     },
                   ),
@@ -695,7 +695,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => zyuui()),
+                        MaterialPageRoute(builder: (context) => const zyuui()),
                       );
                     },
                   ),
@@ -783,7 +783,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => seimei()),
+                        MaterialPageRoute(builder: (context) => const seimei()),
                       );
                     },
                   ),
@@ -868,7 +868,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => kiban()),
+                        MaterialPageRoute(builder: (context) => const kiban()),
                       );
                     },
                   ),
@@ -877,7 +877,7 @@ class _ReviewState extends State<Review> {
                       children: <Widget>[
                         Card(
                           clipBehavior: Clip.antiAlias,
-                          child: Container(
+                          child: SizedBox(
                             height: 100.h,
                             width: 180.w,
                             child: Column(
@@ -939,7 +939,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => kyousyoku()),
+                        MaterialPageRoute(builder: (context) => const kyousyoku()),
                       );
                     },
                   ),
@@ -966,7 +966,7 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => post()),
+                        MaterialPageRoute(builder: (context) => const post()),
                       );
                     },
                   ),
@@ -977,7 +977,7 @@ class _ReviewState extends State<Review> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => FavoritesPage()),
+                            builder: (context) => const FavoritesPage()),
                       );
                     },
                   ),
@@ -988,7 +988,7 @@ class _ReviewState extends State<Review> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MultipleCollectionsPage()),
+                            builder: (context) => const MultipleCollectionsPage()),
                       );
                     },
                   ),

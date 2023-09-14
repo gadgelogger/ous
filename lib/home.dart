@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
   void getWeatherData() async {
     String city = "Okayama";
     String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=${Weatherkey}&lang=ja";
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$Weatherkey&lang=ja";
 
     var response = await http.get(Uri.parse(url));
 
@@ -54,7 +54,7 @@ class _HomeState extends State<Home> {
   void getWeatherData1() async {
     String city = "Aichi-ken";
     String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=${Weatherkey}&lang=ja";
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$Weatherkey&lang=ja";
 
     var response = await http.get(Uri.parse(url));
 
@@ -298,7 +298,7 @@ class _HomeState extends State<Home> {
                   GestureDetector(
                     onDoubleTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => CalendarPage(),
+                        builder: (_) => const CalendarPage(),
                       ));
                     },
                     child: CalendarTimeline(
@@ -415,7 +415,7 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      '岡山理科大学\正門発',
+                                      '岡山理科大学正門発',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -527,7 +527,7 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      '岡山理科大学\東門発',
+                                      '岡山理科大学東門発',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -592,10 +592,10 @@ class _HomeState extends State<Home> {
                     ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => Mylog(),
+                            builder: (_) => const Mylog(),
                           ));
                         },
-                        child: Text('test'))
+                        child: const Text('test'))
                   ]),
                 )),
               ],

@@ -17,7 +17,7 @@ class _TestState extends State<Test> {
   List<Reference> _folderRefs = [];
 
   // Define the folder names that should not be displayed
-  List<String> _ignoredFolders = ['DL', 'UP', 'users'];
+  final List<String> _ignoredFolders = ['DL', 'UP', 'users'];
 
   @override
   void initState() {

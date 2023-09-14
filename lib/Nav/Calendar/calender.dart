@@ -6,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({Key? key}) : super(key: key);
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -55,15 +57,13 @@ class _CalendarPageState extends State<CalendarPage> {
           ? event['dtend'].toDateTime()
           : DateTime.tryParse(event['dtend']);
 
-      if (start == null) {
-        start = DateTime.now();
-      }
+      start ??= DateTime.now();
 
       if (end == null) {
-        end = start.add(Duration(hours: 1));
+        end = start.add(const Duration(hours: 1));
       } else {
         // 終了日を1日減らす
-        end = end.subtract(Duration(days: 1));
+        end = end.subtract(const Duration(days: 1));
       }
 
       return Appointment(
@@ -76,13 +76,13 @@ class _CalendarPageState extends State<CalendarPage> {
     }).toList();
   }
 
-  bool _isScheduleView = true;
+  final bool _isScheduleView = true;
   int _selectedCalendarIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('行事予定'), actions: [
+      appBar: AppBar(title: const Text('行事予定'), actions: [
         DropdownButton<int>(
           value: _selectedCalendarIndex,
           onChanged: (int? newValue) {
@@ -93,14 +93,14 @@ class _CalendarPageState extends State<CalendarPage> {
               _saveSelectedCalendarIndex(newValue);
             }
           },
-          items: [
+          items: const [
             DropdownMenuItem(
-              child: Text('岡山'),
               value: 0,
+              child: Text('岡山'),
             ),
             DropdownMenuItem(
-              child: Text('今治'),
               value: 1,
+              child: Text('今治'),
             ),
           ],
         ),
@@ -133,7 +133,7 @@ class _CalendarPageState extends State<CalendarPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.calendar_month_outlined),
+        child: const Icon(Icons.calendar_month_outlined),
         onPressed: () {
           String url;
           if (_selectedCalendarIndex == 0) {

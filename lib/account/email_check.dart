@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/home.dart';
 import 'package:ous/main.dart';
 import 'package:intl/intl.dart';
 
@@ -12,7 +11,7 @@ class Emailcheck extends StatefulWidget {
   final String? pswd;
   final int? from; //1 → アカウント作成画面から    2 → ログイン画面から
 
-  Emailcheck({Key? key, @required this.email, this.pswd, this.from})
+  const Emailcheck({Key? key, @required this.email, this.pswd, this.from})
       : super(key: key);
 
   @override
@@ -60,10 +59,10 @@ class _Emailcheck extends State<Emailcheck> {
           children: [
             // 確認メール未完了時のメッセージ
             Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
               child: Text(
                 _nocheckText,
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
               ),
             ),
 
@@ -73,34 +72,33 @@ class _Emailcheck extends State<Emailcheck> {
 
             // 確認メールの再送信ボタン
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, 0, 30.0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
               child: ButtonTheme(
                 minWidth: 200.0,
                 // height: 100.0,
                 child: ElevatedButton(
                   // ボタンの形状や背景色など
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.grey, // background-color
-                    onPrimary: Colors.white, //text-color
+                    foregroundColor: Colors.white, backgroundColor: Colors.grey, //text-color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
 
                   // ボタン内の文字や書式
-                  child: Text(
+                  child: const Text(
                     '確認メールを再送信',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
 
                   onPressed: () async {
-                    UserCredential _result =
+                    UserCredential result =
                     await _auth.signInWithEmailAndPassword(
                       email: _email,
                       password: _pswd,
                     );
 
-                    _result.user!.sendEmailVerification();
+                    result.user!.sendEmailVerification();
                     setState(() {
                       _btn_click_num++;
                       _sentEmailText = '${widget.email}\nに確認メールを送信しました。';
@@ -117,46 +115,45 @@ class _Emailcheck extends State<Emailcheck> {
               child: ElevatedButton(
                 // ボタンの形状や背景色など
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.lightGreen, // background-color
-                  onPrimary: Colors.white, //text-color
+                  foregroundColor: Colors.white, backgroundColor: Colors.lightGreen, //text-color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
 
                 // ボタン内の文字や書式
-                child: Text(
+                child: const Text(
                   'メール確認が完了したで',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
 
                 onPressed: () async {
-                  UserCredential _result =
+                  UserCredential result =
                   await _auth.signInWithEmailAndPassword(
                     email: _email,
                     password: _pswd,
                   );
 
-                  User _user = _result
+                  User user = result
                       .user!; // ログインユーザーのIDを取得
 
                   // Email確認が済んでいる場合は、Home画面へ遷移
-                  if (_result.user!.emailVerified) {
+                  if (result.user!.emailVerified) {
                     Fluttertoast.showToast(
                         msg: "ログインしました");
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) {
-                      return MyHomePage(title: 'home');
+                      return const MyHomePage(title: 'home');
 
                     }));
 
                     FirebaseFirestore.instance
                         .collection('users')
-                        .doc(_user.uid)
+                        .doc(user.uid)
                         .set({
                       'email':_email,
-                      'uid': _user.uid,
+                      'uid': user.uid,
                       'displayName': '名前未設定',
                       'day': DateFormat(
                           'yyyy/MM/dd(E) HH:mm:ss')
