@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:ous/Weather/weatger_top.dart';
-import 'package:ous/mylog.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -589,13 +588,6 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => const Mylog(),
-                          ));
-                        },
-                        child: const Text('test'))
                   ]),
                 )),
               ],

@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +5,6 @@ import 'package:ous/Account/Account_edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import '../main.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 
 class account extends StatefulWidget {
   const account({Key? key}) : super(key: key);
@@ -16,15 +14,6 @@ class account extends StatefulWidget {
 }
 
 class _accountState extends State<account> {
-  //アプリバージョン表示
-  String _version = '';
-  Future getVer() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    setState(() {
-      _version = packageInfo.version;
-    });
-  }
-
 //firestoreキャッシュ
   Stream<DocumentSnapshot>? _stream;
   late DocumentSnapshot _data;
@@ -32,12 +21,9 @@ class _accountState extends State<account> {
   @override
   void initState() {
     super.initState();
-    getVer();
 
-    _stream = FirebaseFirestore.instance
-        .collection('users')
-        .doc(uid)
-        .snapshots();
+    _stream =
+        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
   }
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -62,7 +48,9 @@ class _accountState extends State<account> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return const MyHomePage(title: 'home',);
+                    return const MyHomePage(
+                      title: 'home',
+                    );
                   }),
                 );
               },
@@ -71,7 +59,8 @@ class _accountState extends State<account> {
               onWillPop: () async => false,
               child: StreamBuilder<DocumentSnapshot>(
                   stream: _stream,
-                  builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // データ読み込み中の場合の処理
                       return const CircularProgressIndicator();
@@ -128,20 +117,19 @@ class _accountState extends State<account> {
                                   clipBehavior: Clip.none,
                                   fit: StackFit.expand,
                                   children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) {
-                                              return const account_edit();
-                                            }),
-                                      );
-                                    },
-                                    child:   CircleAvatar(
-                                      backgroundImage: NetworkImage(image),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return const account_edit();
+                                          }),
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage(image),
+                                      ),
                                     ),
-                                  ),
                                     Positioned(
                                       bottom: 0,
                                       right: -25,
@@ -159,10 +147,10 @@ class _accountState extends State<account> {
                                         fillColor: const Color(0xFFF5F6F9),
                                         padding: const EdgeInsets.all(7.0),
                                         shape: const CircleBorder(),
-                                        child: Icon(
-                                          Icons.settings_outlined,
-                                          color: Theme.of(context).colorScheme.primary
-                                        ),
+                                        child: Icon(Icons.settings_outlined,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
                                       ),
                                     ),
                                   ],
@@ -205,79 +193,83 @@ class _accountState extends State<account> {
                 // ここにリストアイテムを追加する
                 // 画面中央下部に配置するウィジェット
 
-        StreamBuilder<DocumentSnapshot>(
-        stream: firestore.collection('users').doc(uid).snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-      if (snapshot.hasError) {
-        print('error');
-      }
+                StreamBuilder<DocumentSnapshot>(
+                  stream: firestore.collection('users').doc(uid).snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      print('error');
+                    }
 
-      if (!snapshot.hasData) {
-        return const SizedBox();
-      }
+                    if (!snapshot.hasData) {
+                      return const SizedBox();
+                    }
 
-      // Firestoreから取得したデータを取り出す
-      Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-      String day = data['day'] ?? '値が見つかりませんでした';
-      String displayname = data['displayName'] ?? '値が見つかりませんでした';
-      final DateFormat inputFormat = DateFormat('yyyy/MM/dd(EEE) HH:mm:ss');
-      final DateFormat outputFormat = DateFormat('yyyy年MM月dd日');
-      final DateTime dateTime = inputFormat.parse(day);
-      final String formattedDate = outputFormat.format(dateTime); // 登録した日付
+                    // Firestoreから取得したデータを取り出す
+                    Map<String, dynamic> data =
+                        snapshot.data!.data() as Map<String, dynamic>;
+                    String day = data['day'] ?? '値が見つかりませんでした';
+                    String displayname = data['displayName'] ?? '値が見つかりませんでした';
+                    final DateFormat inputFormat =
+                        DateFormat('yyyy/MM/dd(EEE) HH:mm:ss');
+                    final DateFormat outputFormat = DateFormat('yyyy年MM月dd日');
+                    final DateTime dateTime = inputFormat.parse(day);
+                    final String formattedDate =
+                        outputFormat.format(dateTime); // 登録した日付
 
-      final DateTime now = DateTime.now();
-      final Duration difference = now.difference(dateTime);
+                    final DateTime now = DateTime.now();
+                    final Duration difference = now.difference(dateTime);
 
-      final int days = difference.inDays;
-      final int hours = difference.inHours % 24;
-      final int minutes = difference.inMinutes % 60;
+                    final int days = difference.inDays;
+                    final int hours = difference.inHours % 24;
+                    final int minutes = difference.inMinutes % 60;
 
-      final String differenceString = '$days days $hours hours $minutes minutes ago';
+                    final String differenceString =
+                        '$days days $hours hours $minutes minutes ago';
 
-      print(formattedDate); // 2023/03/04
-      print(differenceString); // 740 days 0 hours 25 minutes
+                    print(formattedDate); // 2023/03/04
+                    print(differenceString); // 740 days 0 hours 25 minutes
 
-      // テキストを表示する
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Image.asset('assets/images/icon2.jpg'),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 30),
-                child: Text(
-                  '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.notoSans(
-                    textStyle: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(184, 189, 211, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  )
-
-  ],
+                    // テキストを表示する
+                    return Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: Image.asset('assets/images/icon2.jpg'),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10, bottom: 30),
+                              child: Text(
+                                '$displaynameさんご愛用ありがとうございます\nアプリを$formattedDateから使い始めて\n$days日が経過しました。',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.notoSans(
+                                  textStyle: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(184, 189, 211, 1),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+              ],
             ),
             CustomPaint(
               painter: AppBarPainter(context),
               child: Container(height: 0),
             ),
-
           ],
         ),
       );
@@ -305,7 +297,7 @@ class AppBarPainter extends CustomPainter {
           0.04, //x2,y2
           0.0,
           0.1 * size.width //x3,y3
-      );
+          );
 
     Path path_2 = Path()
       ..moveTo(size.width, 0)
@@ -317,7 +309,7 @@ class AppBarPainter extends CustomPainter {
           0.96, //x2,y2
           size.width,
           0.1 * size.width //x3,y3
-      );
+          );
 
     Paint paint_2 = Paint()
       ..color = Theme.of(context).colorScheme.primary

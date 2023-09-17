@@ -151,10 +151,7 @@ class _account_editState extends State<account_edit> {
               _data = snapshot.data!;
               final email = _data['email'] as String;
               final name = _data['displayName'] as String;
-              final isStudent = email.contains('@ous.jp');
-              final isStaff = email.contains('@ous.ac.jp');
               final image = _data['photoURL'] as String;
-              String text = _controller.text;
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -239,7 +236,7 @@ class _account_editState extends State<account_edit> {
                       FilteringTextInputFormatter.deny(RegExp('ゲストユーザー'))
                     ],
                     decoration: InputDecoration(
-                      hintText: name ?? "ゲストユーザー",
+                      hintText: name,
                       suffixIcon: IconButton(
                         onPressed: () {
                           textview();
@@ -289,7 +286,7 @@ class _account_editState extends State<account_edit> {
                   ),
                   Center(
                       child: Text(
-                    email ?? '',
+                    email,
                     style: const TextStyle(fontSize: 20),
                   )),
                 ],
