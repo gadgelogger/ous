@@ -39,7 +39,6 @@ class _SettingState extends State<Setting> {
   //退会処理
   void deleteUser() async {
     final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
 
     // ユーザーを削除
     await user?.delete();
@@ -79,6 +78,7 @@ class _SettingState extends State<Setting> {
 
   @override
   void initState() {
+    super.initState();
     getVer();
   }
 
@@ -87,13 +87,7 @@ class _SettingState extends State<Setting> {
     final themeProvider =
         context.watch<ThemeProvider>(); // ここで themeProvider を取得
 // create some values
-    Color pickerColor = const Color(0xff443a49);
     Color currentColor = const Color(0xff443a49);
-
-// ValueChanged<Color> callback
-    void changeColor(Color color) {
-      setState(() => pickerColor = color);
-    }
 
     return Scaffold(
       appBar: AppBar(
