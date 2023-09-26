@@ -45,7 +45,10 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
           initState();
         },
         child: FutureBuilder<QuerySnapshot>(
-          future: FirebaseFirestore.instance.collection('dev_info').get(),
+          future: FirebaseFirestore.instance
+              .collection('dev_info')
+              .orderBy('day', descending: true)
+              .get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.none ||

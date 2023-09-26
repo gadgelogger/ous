@@ -112,26 +112,6 @@ class _SettingState extends State<Setting> {
         ),
       ),
       body: SettingsList(sections: [
-        /*
-        SettingsSection(
-          title: Text(
-            '基本的な設定',
-            style: TextStyle(color: Colors.lightGreen),
-          ),
-          tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              leading: Icon(Icons.language),
-              title: Text('言語'),
-              value: Text('日本語'),
-            ),
-            SettingsTile.navigation(
-              leading: Icon(Icons.notifications_none),
-              title: Text('通知設定'),
-            ),
-          ],
-        ),
-        /%
-         */
         SettingsSection(
           title: Text(
             'テーマ',

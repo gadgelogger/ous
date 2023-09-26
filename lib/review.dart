@@ -5,16 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
 import 'package:ous/review/favorite.dart';
-import 'package:ous/review/gakubu/keieigakubu.dart';
-import 'package:ous/review/gakubu/kibankamoku.dart';
-import 'package:ous/review/gakubu/kougakubu.dart';
-import 'package:ous/review/gakubu/kyouikugakubu.dart';
-import 'package:ous/review/gakubu/kyousyokukamoku.dart';
-import 'package:ous/review/gakubu/rigakubu.dart';
-import 'package:ous/review/gakubu/seibututikyuugakubu.dart';
-import 'package:ous/review/gakubu/seimeikagaku.dart';
-import 'package:ous/review/gakubu/zyouhourikougakubu.dart';
-import 'package:ous/review/gakubu/zyuuigakubu.dart';
+import 'package:ous/review/gakubu/view.dart';
 import 'package:ous/review/gpa.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
@@ -152,7 +143,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const rigaku()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'rigaku',
+                                  title: '理学部',
+                                )),
                       );
                     },
                   ),
@@ -240,7 +235,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const kougakubu()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'kougakubu',
+                                  title: '工学部',
+                                )),
                       );
                     },
                   ),
@@ -333,7 +332,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const zyouhou()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'zyouhou',
+                                  title: '情報理工学部',
+                                )),
                       );
                     },
                   ),
@@ -421,7 +424,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const seibutu()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'seibutu',
+                                  title: '生物地球学部',
+                                )),
                       );
                     },
                   ),
@@ -514,7 +521,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const kyouiku()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'kyouiku',
+                                  title: '教育学部',
+                                )),
                       );
                     },
                   ),
@@ -602,7 +613,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const keiei()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'keiei',
+                                  title: '経営学部',
+                                )),
                       );
                     },
                   ),
@@ -695,7 +710,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const zyuui()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'zyuui',
+                                  title: '獣医学部',
+                                )),
                       );
                     },
                   ),
@@ -783,7 +802,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const seimei()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'seimei',
+                                  title: '生命科学部',
+                                )),
                       );
                     },
                   ),
@@ -868,7 +891,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const kiban()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'kiban',
+                                  title: '基盤教育科目',
+                                )),
                       );
                     },
                   ),
@@ -939,7 +966,11 @@ class _ReviewState extends State<Review> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const kyousyoku()),
+                        MaterialPageRoute(
+                            builder: (context) => ReviewView(
+                                  gakubu: 'kyousyoku',
+                                  title: '教職関連科目',
+                                )),
                       );
                     },
                   ),
@@ -988,7 +1019,8 @@ class _ReviewState extends State<Review> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MultipleCollectionsPage()),
+                            builder: (context) =>
+                                const MultipleCollectionsPage()),
                       );
                     },
                   ),

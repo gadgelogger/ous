@@ -10,12 +10,10 @@ class Tcp extends StatefulWidget {
 
 class _TcpState extends State<Tcp> {
   bool _isLoading = true;
-  late CookieManager cookieManager; // CookieManagerを宣言
 
   @override
   void initState() {
     super.initState();
-    cookieManager = CookieManager.instance(); // インスタンスを生成
   }
 
   @override
@@ -26,22 +24,17 @@ class _TcpState extends State<Tcp> {
         children: [
           InAppWebView(
             initialUrlRequest: URLRequest(
-                url: Uri.parse('https://app.tcpapp.net/tcpapp/login.html')),
+                url: WebUri('https://app.tcpapp.net/tcpapp/login.html')),
             onLoadStop: (controller, url) async {
               setState(() {
                 _isLoading = false;
               });
-
-              // クッキーを取得（オプション）
-              var cookies = await cookieManager.getCookies(
-                  url: Uri.parse("https://app.tcpapp.net"));
-              print("Cookies: $cookies");
             },
           ),
           if (_isLoading)
             const Center(
               child: CircularProgressIndicator(),
-            ),
+            )
         ],
       ),
     );

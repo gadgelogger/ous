@@ -20,6 +20,7 @@ import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 //algolia
 class Application {
@@ -65,6 +66,9 @@ void main() async {
   var httpOverrides = MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
+  //初期化処理終わるまで待機
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(
     MultiProvider(
       providers: [
