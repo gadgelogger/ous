@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/review/gakubu/detail_view.dart';
+import 'package:ous/review/detail_view.dart';
 import 'package:ous/review/post.dart';
 import 'dart:async';
 

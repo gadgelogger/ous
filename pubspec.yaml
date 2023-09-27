@@ -89,6 +89,8 @@ dependencies:
   slide_to_act: ^2.0.1
   markdown_widget: ^2.2.0
   video_player: ^2.7.0
+  weather_animation: ^0.0.2
+  showcaseview: ^2.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

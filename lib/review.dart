@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ous/NavBar.dart';
 import 'package:ous/review/favorite.dart';
-import 'package:ous/review/gakubu/view.dart';
+import 'package:ous/review/view.dart';
 import 'package:ous/review/gpa.dart';
 import 'package:ous/review/post.dart';
 import 'package:ous/review/postuser.dart';
