@@ -66,9 +66,6 @@ void main() async {
   var httpOverrides = MyHttpOverrides();
   HttpOverrides.global = httpOverrides;
 
-  //初期化処理終わるまで待機
-  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(
     MultiProvider(
       providers: [

@@ -160,8 +160,6 @@ class _Login extends State<Login> {
       return true;
     }
 
-    final Color primaryColor;
-
     return ShowCaseWidget(
       builder: Builder(
           builder: (context) => WillPopScope(
@@ -609,6 +607,7 @@ class _Login extends State<Login> {
                                                 msg: "ログイン中です\nちょっと待ってね。");
                                             try {
                                               // メール/パスワードでログイン
+                                              // ignore: unused_local_variable
                                               final userCredential =
                                                   await signInWithGoogle();
                                               // ログインに成功した場合
@@ -801,8 +800,14 @@ class _Login extends State<Login> {
   }
 
   Future<UserCredential> signInWithGoogle() async {
+    // GoogleSignInインスタンスを作成
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      // 制限したいドメインを指定
+      hostedDomain: 'ous.jp',
+    );
+
     // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
     if (googleUser == null) {
       throw FirebaseAuthException(

@@ -45,7 +45,6 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       setState(() {
-        FlutterNativeSplash.remove();
         weatherData = jsonData;
       });
     }
@@ -62,8 +61,6 @@ class _HomeState extends State<Home> {
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
       setState(() {
-        FlutterNativeSplash.remove();
-
         weatherData1 = jsonData;
       });
     }
@@ -342,8 +339,6 @@ class _HomeState extends State<Home> {
                           scrollDirection: Axis.horizontal,
                           onPageChanged: (index, reason) {
                             setState(() {
-                              FlutterNativeSplash.remove();
-
                               _current = index;
                             });
                           }),
