@@ -85,6 +85,7 @@ class _postState extends State<post> {
 
   @override
   void initState() {
+    super.initState();
     getData();
   }
 

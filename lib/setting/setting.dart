@@ -9,12 +9,9 @@ import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import '../main.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'globals.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -84,11 +81,6 @@ class _SettingState extends State<Setting> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider =
-        context.watch<ThemeProvider>(); // ここで themeProvider を取得
-// create some values
-    Color currentColor = const Color(0xff443a49);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -106,117 +98,6 @@ class _SettingState extends State<Setting> {
         ),
       ),
       body: SettingsList(sections: [
-        SettingsSection(
-          title: Text(
-            'テーマ',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          ),
-          tiles: <SettingsTile>[
-            SettingsTile.navigation(
-              title: const Text('テーマ'),
-              value: Text(themeProvider.themeMode == ThemeMode.system
-                  ? 'システム設定に従う'
-                  : (themeProvider.themeMode == ThemeMode.light
-                      ? 'ライトモード'
-                      : 'ダークモード')),
-              leading: const Icon(Icons.color_lens),
-              onPressed: (context) async {
-                ThemeMode? newThemeMode = await showDialog<ThemeMode>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SimpleDialog(
-                      title: const Text('テーマを選択'),
-                      children: [
-                        SimpleDialogOption(
-                          child: const Text('システム設定に従う'),
-                          onPressed: () {
-                            Navigator.pop(context, ThemeMode.system);
-                          },
-                        ),
-                        SimpleDialogOption(
-                          child: const Text('ライトモード'),
-                          onPressed: () {
-                            Navigator.pop(context, ThemeMode.light);
-                          },
-                        ),
-                        SimpleDialogOption(
-                          child: const Text('ダークモード'),
-                          onPressed: () {
-                            Navigator.pop(context, ThemeMode.dark);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-
-                if (newThemeMode != null) {
-                  switch (newThemeMode) {
-                    case ThemeMode.system:
-                      themeProvider.useSystemThemeMode();
-                      break;
-                    case ThemeMode.light:
-                      themeProvider.light();
-                      break;
-                    case ThemeMode.dark:
-                      themeProvider.dark();
-
-                      break;
-                  }
-                }
-              },
-            ),
-            SettingsTile.navigation(
-                leading: const Icon(Icons.color_lens_outlined),
-                title: const Text('色変更'),
-                onPressed: (context) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      Color pickerColor = currentColor;
-                      void changeColor(Color color) {
-                        pickerColor = color;
-                      }
-
-                      List<Color> availableColors = List<Color>.from(
-                          Colors.primaries)
-                        ..removeWhere((color) => color.value == Colors.black);
-
-                      return AlertDialog(
-                        title: const Text('色変更'),
-                        content: SingleChildScrollView(
-                          child: BlockPicker(
-                            pickerColor: pickerColor,
-                            onColorChanged: changeColor,
-                            availableColors: availableColors,
-                          ),
-                        ),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            child: const Text('初期状態に戻す'),
-                            onPressed: () {
-                              Provider.of<AppTheme>(context, listen: false)
-                                  .updateColor(Colors.lightGreen);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            child: const Text('これにする'),
-                            onPressed: () {
-                              Provider.of<AppTheme>(context, listen: false)
-                                  .updateColor(pickerColor);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }),
-          ],
-        ),
         SettingsSection(
           title: Text(
             '基本的な設定',

@@ -1,11 +1,8 @@
 import 'dart:io';
-import 'dart:isolate';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'apikey.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -18,9 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:algolia/algolia.dart';
 import 'dart:core';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:ous/setting/globals.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 //algolia
 class Application {
@@ -67,21 +62,13 @@ void main() async {
   HttpOverrides.global = httpOverrides;
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-        ChangeNotifierProvider(create: (context) => AppTheme()),
-      ],
-      child: const MyApp(),
-    ),
+    const MyApp(),
   );
 //ダークモード
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
-
-  //onesignal
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -103,8 +90,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    final appTheme = Provider.of<AppTheme>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context);
     return ScreenUtilInit(
         designSize: const Size(392, 759),
         minTextAdapt: true,
@@ -124,16 +109,15 @@ class _MyAppState extends State<MyApp> {
               title: 'ホーム',
               theme: ThemeData(
                 useMaterial3: true,
-                colorSchemeSeed: appTheme.currentColor,
+                colorSchemeSeed: Colors.lightGreen,
                 fontFamily: 'NotoSansCJKJp',
               ),
               darkTheme: ThemeData(
                 brightness: Brightness.dark,
                 useMaterial3: true,
-                colorSchemeSeed: appTheme.currentColor,
+                colorSchemeSeed: Colors.lightGreen,
                 fontFamily: 'NotoSansCJKJp',
               ),
-              themeMode: themeProvider.themeMode,
               home: StreamBuilder<User?>(
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
@@ -298,51 +282,3 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 }
-
-class ThemeProvider extends ChangeNotifier {
-  ThemeMode _themeMode = ThemeMode.system;
-
-  ThemeMode get themeMode => _themeMode;
-
-  ThemeProvider() {
-    _initThemeMode();
-  }
-
-  void _initThemeMode() {
-    _loadThemeMode().then((mode) {
-      _themeMode = mode;
-      notifyListeners();
-    });
-  }
-
-  Future<ThemeMode> _loadThemeMode() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int storedThemeMode = prefs.getInt('themeMode') ?? 0;
-    return ThemeMode.values[storedThemeMode];
-  }
-
-  Future<void> _saveThemeMode() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('themeMode', _themeMode.index);
-  }
-
-  void light() {
-    _themeMode = ThemeMode.light;
-    _saveThemeMode();
-    notifyListeners();
-  }
-
-  void dark() {
-    _themeMode = ThemeMode.dark;
-    _saveThemeMode();
-    notifyListeners();
-  }
-
-  void useSystemThemeMode() {
-    _themeMode = ThemeMode.system;
-    _saveThemeMode();
-    notifyListeners();
-  }
-}
-
-void backgroundCheck(SendPort message) {}
