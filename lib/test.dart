@@ -8,11 +8,13 @@ import 'dart:math';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class Test extends StatefulWidget {
+  const Test({Key? key}) : super(key: key);
+
   @override
-  _TestState createState() => _TestState();
+  TestState createState() => TestState();
 }
 
-class _TestState extends State<Test> {
+class TestState extends State<Test> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   List<Reference> _folderRefs = [];
 
@@ -33,8 +35,6 @@ class _TestState extends State<Test> {
           .toList();
     });
   }
-
-  late File _image;
 
   final userID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
@@ -129,7 +129,7 @@ class _TestState extends State<Test> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('過去問まとめ'),
+        title: const Text('過去問まとめ'),
       ),
       body: ListView.builder(
         itemCount: _folderRefs.length,

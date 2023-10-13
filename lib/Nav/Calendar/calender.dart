@@ -9,10 +9,10 @@ class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
 
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  CalendarPageState createState() => CalendarPageState();
 }
 
-class _CalendarPageState extends State<CalendarPage> {
+class CalendarPageState extends State<CalendarPage> {
   late Future<List<ICalendar>> _iCalendarFutures;
 
   Future<ICalendar> _loadLocalICalendarFile(String fileName) async {
@@ -76,7 +76,6 @@ class _CalendarPageState extends State<CalendarPage> {
     }).toList();
   }
 
-  final bool _isScheduleView = true;
   int _selectedCalendarIndex = 0;
 
   @override
@@ -127,7 +126,6 @@ class _CalendarPageState extends State<CalendarPage> {
               cellBorderColor: Theme.of(context).colorScheme.primary,
               dataSource:
                   AppointmentDataSource(_getAppointments(selectedCalendar)),
-
             );
           }
         },
@@ -135,15 +133,15 @@ class _CalendarPageState extends State<CalendarPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.calendar_month_outlined),
         onPressed: () {
-          String url;
+          Uri url;
           if (_selectedCalendarIndex == 0) {
-            url =
-                'https://www.ous.ac.jp/common/files//285/202303131022360193654.pdf';
+            url = Uri.parse(
+                'https://www.ous.ac.jp/common/files//285/202303131022360193654.pdf');
           } else {
-            url =
-                'https://www.ous.ac.jp/common/files//285/202304181332270709155.pdf'; // 今治カレンダーのURLを指定してください
+            url = Uri.parse(
+                'https://www.ous.ac.jp/common/files//285/202304181332270709155.pdf'); // 今治カレンダーのURLを指定してください
           }
-          launch(url);
+          launchUrl(url);
         },
       ),
     );

@@ -20,12 +20,10 @@ class ReviewView extends StatefulWidget {
     required this.title,
   }) : super(key: key);
   @override
-  _ReviewViewState createState() => _ReviewViewState();
+  ReviewViewState createState() => ReviewViewState();
 }
 
-class _ReviewViewState extends State<ReviewView> {
-  final bool _isPressed = false;
-  final int _actionCounter = 0;
+class ReviewViewState extends State<ReviewView> {
   final _queryController = TextEditingController();
   //値わたし
   late String state;
@@ -40,22 +38,9 @@ class _ReviewViewState extends State<ReviewView> {
 
   Future<List<AlgoliaObjectSnapshot>> _search(String query) async {
     final result =
-        await _algolia.instance.index(widget.gakubu).search(query).getObjects();
+        await _algolia.instance.index(widget.gakubu).query(query).getObjects();
 
     return result.hits;
-  }
-
-  List<DocumentSnapshot> _filterData(List<DocumentSnapshot> data) {
-    if (_filterCount == 1) {
-      // Filter Rakutan only
-      return data.where((document) => document['bumon'] == 'ラク単').toList();
-    } else if (_filterCount == 2) {
-      // Filter Egutan only
-      return data.where((document) => document['bumon'] == 'エグ単').toList();
-    } else {
-      // Return all data
-      return data;
-    }
   }
 
   //大学のアカウント以外は非表示にする
@@ -76,12 +61,10 @@ class _ReviewViewState extends State<ReviewView> {
   @override
   Widget build(BuildContext context) {
     // 背景の明るさをチェック
-    bool isBackgroundBright =
-        Theme.of(context).primaryColor == Brightness.light;
+    bool isBackgroundBright = Theme.of(context).brightness == Brightness.light;
 
-    // 明るい背景の場合は黒、暗い背景の場合は白
-    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
-
+// 明るい背景の場合は黒、暗い背景の場合は白
+    Color textColor = isBackgroundBright ? Colors.white : Colors.black;
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
@@ -130,8 +113,7 @@ class _ReviewViewState extends State<ReviewView> {
                       itemCount: data.length,
                       itemBuilder: (context, index) {
                         final hit = data[index].data;
-                        return Container(
-                            child: GestureDetector(
+                        return GestureDetector(
                           onTap: () {
 //algolia
                             Navigator.push(
@@ -233,7 +215,7 @@ class _ReviewViewState extends State<ReviewView> {
                               ),
                             ),
                           )),
-                        ));
+                        );
                       },
                     ));
                   } else {
@@ -305,14 +287,12 @@ class _ReviewViewState extends State<ReviewView> {
                           itemCount: data.length,
                           itemBuilder: (context, index) {
                             final document = data[index];
-                            final documentId = document.id;
                             return AnimationConfiguration.staggeredList(
                               position: index,
                               duration: const Duration(milliseconds: 375),
                               child: ScaleAnimation(
                                 child: FadeInAnimation(
-                                  child: Container(
-                                      child: GestureDetector(
+                                  child: GestureDetector(
                                     onTap: () {
                                       //firebase
 
@@ -434,7 +414,7 @@ class _ReviewViewState extends State<ReviewView> {
                                             ],
                                           ),
                                         ))),
-                                  )),
+                                  ),
                                 ),
                               ),
                             );
