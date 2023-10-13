@@ -16,38 +16,25 @@ import 'package:flutter/services.dart';
 import 'email_check.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-extension OnPrimary on Color {
-  /// 輝度が高ければ黒, 低ければ白を返す
-  Color get onPrimary {
-    // 輝度により黒か白かを決定する
-    if (computeLuminance() < 0.5) {
-      return Colors.white;
-    }
-    return Colors.black;
-  }
-}
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  _Login createState() => _Login();
+  LoginState createState() => LoginState();
 }
 
-class _Login extends State<Login> {
+class LoginState extends State<Login> {
   //利用規約に同意したかの確認
-  bool _isChecked = false;
+  bool isChecked = false;
 
   // Firebase 認証
-  final _auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
 
-  String _login_Email = ""; // 入力されたメールアドレス
-  String _login_Password = ""; // 入力されたパスワード
-  String _login_forgot_Email = ""; // 入力されたパスワード
+  String loginEmail = ""; // 入力されたメールアドレス
+  String loginPassword = ""; // 入力されたパスワード
+  String loginForgotEmail = ""; // 入力されたパスワード
 
-  String _infoText = ""; // ログインに関する情報を表示
-  // エラーメッセージを日本語化するためのクラス
-  final auth_error = Authentication_error_to_ja();
+  String infoText = ""; // ログインに関する情報を表示
 
   final DateTime now = DateTime.now();
   //スポットライト
@@ -57,83 +44,47 @@ class _Login extends State<Login> {
 
 //Appleサインイン
 
-  // 上のとほぼ一緒。登録とログインができる。
-  Future<UserCredential?> AppleSignIn() async {
-    print('AppSignInを実行');
-    // To prevent replay attacks with the credential returned from Apple, we
-    // include a nonce in the credential request. When signing in with
-    // Firebase, the nonce in the id token returned by Apple, is expected to
-    // match the sha256 hash of `rawNonce`.
+  Future<UserCredential?> appleSignIn() async {
+    final navigator =
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const MyHomePage(title: 'home');
+    }));
     final rawNonce = generateNonce();
 
-    // Request credential for the currently signed in Apple account.
     final appleCredential = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
         AppleIDAuthorizationScopes.fullName,
       ],
     );
-    print(appleCredential);
-    // Create an `OAuthCredential` from the credential returned by Apple.
     final oauthCredential = OAuthProvider("apple.com").credential(
       idToken: appleCredential.identityToken,
       rawNonce: rawNonce,
     );
 
-    try {
-      final authResult =
-          await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-      final firebaseUser = authResult.user;
+    final authResult =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+    final firebaseUser = authResult.user;
 
-      final userRef =
-          FirebaseFirestore.instance.collection('users').doc(firebaseUser?.uid);
+    final userRef =
+        FirebaseFirestore.instance.collection('users').doc(firebaseUser?.uid);
 
-      userRef.set({
-        'uid': firebaseUser?.uid ?? '未設定',
-        'email': firebaseUser?.email ?? '未設定',
-        'displayName': firebaseUser?.displayName ?? '名前未設定',
-        'photoURL': firebaseUser?.photoURL ??
-            'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
-        'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
+    userRef.set({
+      'uid': firebaseUser?.uid ?? '未設定',
+      'email': firebaseUser?.email ?? '未設定',
+      'displayName': firebaseUser?.displayName ?? '名前未設定',
+      'photoURL': firebaseUser?.photoURL ??
+          'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+      'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now)
 
-        // その他のユーザー情報を追加
-      }, SetOptions(merge: true));
+      // その他のユーザー情報を追加
+    }, SetOptions(merge: true));
 
-      // ここに画面遷移をするコードを書く!
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return const MyHomePage(title: 'home');
-      }));
-      Fluttertoast.showToast(msg: "Appleでログインしました");
+    // ここに画面遷移をするコードを書く!
+    await navigator;
+    Fluttertoast.showToast(msg: "Appleでログインしました");
 
-      print(appleCredential);
-      return authResult;
-    } catch (error) {
-      print(error);
-    }
-    return null;
-  }
-
-//ゲストモード
-  Future<void> _onSignInWithAnonymousUser() async {
-    final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-    try {
-      await firebaseAuth.signInAnonymously();
-
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return const MyHomePage(title: 'home');
-      }));
-      Fluttertoast.showToast(msg: "ゲストでログインしました");
-    } catch (e) {
-      await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('エラー'),
-              content: Text(e.toString()),
-            );
-          });
-    }
+    return authResult;
   }
 
 //初回チュートリアル表示
@@ -156,14 +107,14 @@ class _Login extends State<Login> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _showTutorial(context));
 
-    Future<bool> _willPopCallback() async {
+    Future<bool> willPopCallback() async {
       return true;
     }
 
     return ShowCaseWidget(
       builder: Builder(
           builder: (context) => WillPopScope(
-              onWillPop: _willPopCallback,
+              onWillPop: willPopCallback,
               child: Scaffold(
                   resizeToAvoidBottomInset: false,
                   body: Scrollbar(
@@ -172,36 +123,28 @@ class _Login extends State<Login> {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Container(
-                            child: Stack(
-                              children: <Widget>[
-                                Container(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left: ScreenUtil().setWidth(15),
-                                      top: ScreenUtil().setWidth(110),
-                                    ),
-                                    child: Text('Hello',
-                                        style: TextStyle(
-                                            fontSize: 80.0.sp,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
+                          Stack(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: ScreenUtil().setWidth(15),
+                                  top: ScreenUtil().setWidth(110),
                                 ),
-                                Container(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: ScreenUtil().setWidth(13),
-                                        top: ScreenUtil().setWidth(180)),
-                                    child: Container(
-                                      child: Text('OUS',
-                                          style: TextStyle(
-                                              fontSize: 80.0.sp,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                                child: Text('Hello',
+                                    style: TextStyle(
+                                        fontSize: 80.0.sp,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: ScreenUtil().setWidth(13),
+                                    top: ScreenUtil().setWidth(180)),
+                                child: Text('OUS',
+                                    style: TextStyle(
+                                        fontSize: 80.0.sp,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ],
                           ),
                           Container(
                               padding: const EdgeInsets.only(
@@ -220,7 +163,7 @@ class _Login extends State<Login> {
                                                 color: Colors.lightGreen))),
                                     onChanged: (String value) {
                                       setState(() {
-                                        _login_Email = value;
+                                        loginEmail = value;
                                       });
                                     },
                                     inputFormatters: const [],
@@ -239,7 +182,7 @@ class _Login extends State<Login> {
                                     obscureText: true,
                                     onChanged: (String value) {
                                       setState(() {
-                                        _login_Password = value;
+                                        loginPassword = value;
                                       });
                                     },
                                   ),
@@ -267,10 +210,10 @@ class _Login extends State<Login> {
                                                     color: Colors.transparent),
                                               ),
                                               child: Checkbox(
-                                                value: _isChecked,
+                                                value: isChecked,
                                                 onChanged: (bool? value) {
                                                   setState(() {
-                                                    _isChecked = value ?? false;
+                                                    isChecked = value ?? false;
                                                   });
                                                 },
                                                 materialTapTargetSize:
@@ -280,8 +223,9 @@ class _Login extends State<Login> {
                                             ),
                                             InkWell(
                                                 onTap: () {
-                                                  launch(
+                                                  final url = Uri.parse(
                                                       'https://tan-q-bot-unofficial.com/terms_of_service/');
+                                                  launchUrl(url);
                                                 },
                                                 child: const Text(
                                                   '利用規約に同意した？',
@@ -362,7 +306,7 @@ class _Login extends State<Login> {
                                                             onChanged:
                                                                 (String value) {
                                                               setState(() {
-                                                                _login_forgot_Email =
+                                                                loginForgotEmail =
                                                                     value;
                                                               });
                                                             },
@@ -381,9 +325,9 @@ class _Login extends State<Login> {
                                                           child: const Text(
                                                               "リセットする"),
                                                           onPressed: () {
-                                                            _auth.sendPasswordResetEmail(
+                                                            auth.sendPasswordResetEmail(
                                                                 email:
-                                                                    _login_forgot_Email);
+                                                                    loginForgotEmail);
 
                                                             showDialog(
                                                                 context:
@@ -452,16 +396,16 @@ class _Login extends State<Login> {
 
                                   //ログインボタン
                                   GestureDetector(
-                                    onTap: _isChecked
+                                    onTap: isChecked
                                         ? () async {
                                             Fluttertoast.showToast(
                                                 msg: "ログイン中です\nちょっと待ってね。");
                                             try {
                                               // メール/パスワードでログイン
-                                              UserCredential result = await _auth
+                                              UserCredential result = await auth
                                                   .signInWithEmailAndPassword(
-                                                email: _login_Email,
-                                                password: _login_Password,
+                                                email: loginEmail,
+                                                password: loginPassword,
                                               );
 
                                               // ログイン成功
@@ -489,7 +433,7 @@ class _Login extends State<Login> {
                                                     .then((docSnapshot) async {
                                                   if (!docSnapshot.exists) {
                                                     await userDoc.set({
-                                                      'email': _login_Email,
+                                                      'email': loginEmail,
                                                       'uid': user.uid,
                                                       'displayName': '名前未設定',
                                                       'day': DateFormat(
@@ -510,10 +454,9 @@ class _Login extends State<Login> {
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           Emailcheck(
-                                                              email:
-                                                                  _login_Email,
+                                                              email: loginEmail,
                                                               pswd:
-                                                                  _login_Password,
+                                                                  loginPassword,
                                                               from: 2)),
                                                 );
                                                 Fluttertoast.showToast(
@@ -546,7 +489,7 @@ class _Login extends State<Login> {
                                                     (BuildContext context) {
                                                   return AlertDialog(
                                                     title: const Text('エラー'),
-                                                    content: Text(_infoText),
+                                                    content: Text(infoText),
                                                     actions: <Widget>[
                                                       TextButton(
                                                         child: const Text('OK'),
@@ -563,7 +506,7 @@ class _Login extends State<Login> {
                                               print(
                                                   'FirebaseAuthのエラー: $errorMessage');
                                               setState(() {
-                                                _infoText = errorMessage;
+                                                infoText = errorMessage;
                                               });
                                             }
                                           }
@@ -601,7 +544,7 @@ class _Login extends State<Login> {
                                   SizedBox(height: 20.0.h),
                                   //大学のアカウントでログイン
                                   GestureDetector(
-                                    onTap: _isChecked
+                                    onTap: isChecked
                                         ? () async {
                                             Fluttertoast.showToast(
                                                 msg: "ログイン中です\nちょっと待ってね。");
@@ -668,7 +611,7 @@ class _Login extends State<Login> {
                                           bottom: 20,
                                           left: 0),
                                       child: GestureDetector(
-                                        onTap: _isChecked
+                                        onTap: isChecked
                                             ? () async {
                                                 showDialog(
                                                   context: context,
@@ -702,7 +645,7 @@ class _Login extends State<Login> {
                                                                   .showToast(
                                                                       msg:
                                                                           "ログイン中です\nちょっと待ってね。");
-                                                              AppleSignIn(); // ボタンをタップしたときの処理
+                                                              appleSignIn(); // ボタンをタップしたときの処理
                                                             }),
                                                       ],
                                                     );
@@ -854,49 +797,5 @@ class _Login extends State<Login> {
     });
 
     return userCredential;
-  }
-}
-
-// Firebase Authentication利用時の日本語エラーメッセージ
-class Authentication_error_to_ja {
-  // ログイン時の日本語エラーメッセージ
-  login_error_msg(int errorCode, String orgErrorMsg) {
-    String errorMsg;
-
-    if (errorCode == 360587416) {
-      errorMsg = '有効なメールアドレスを入力してください。';
-    } else if (errorCode == 505284406) {
-      // 入力されたメールアドレスが登録されていない場合
-      errorMsg = 'メールアドレスかパスワードが間違っています。';
-    } else if (errorCode == 185768934) {
-      // 入力されたパスワードが間違っている場合
-      errorMsg = 'メールアドレスかパスワードが間違っています。';
-    } else if (errorCode == 362765553) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = 'メールアドレスとパスワードを入力してください。';
-    } else {
-      errorMsg = '$orgErrorMsg[$errorCode]';
-    }
-
-    return errorMsg;
-  }
-
-  // アカウント登録時の日本語エラーメッセージ
-  register_error_msg(int errorCode, String orgErrorMsg) {
-    String errorMsg;
-
-    if (errorCode == 360587416) {
-      errorMsg = '有効なメールアドレスを入力してください。';
-    } else if (errorCode == 34618382) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = '既に登録済みのメールアドレスです。';
-    } else if (errorCode == 447031946) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = 'メールアドレスとパスワードを入力してください。';
-    } else {
-      errorMsg = '$orgErrorMsg[$errorCode]';
-    }
-
-    return errorMsg;
   }
 }

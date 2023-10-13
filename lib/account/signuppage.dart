@@ -2,31 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'email_check.dart';
 import 'package:showcaseview/showcaseview.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
 
   @override
-  _RegistrationState createState() => _RegistrationState();
+  RegistrationState createState() => RegistrationState();
 }
 
-class _RegistrationState extends State<Registration> {
+class RegistrationState extends State<Registration> {
   // Firebase Authenticationを利用するためのインスタンス
   final _auth = FirebaseAuth.instance;
 
-  final String _username = "";
   String _newEmail = ""; // 入力されたメールアドレス
   String _newPassword = ""; // 入力されたパスワード
   String _infoText = ""; // 登録に関する情報を表示
-  bool _pswd_OK = false; // パスワードが有効な文字数を満たしているかどうか
+  bool _pswdOK = false; // パスワードが有効な文字数を満たしているかどうか
   bool _isChecked = false;
 
-  // エラーメッセージを日本語化するためのクラス
-  final auth_error = Authentication_error_to_ja();
   //スポット
   final GlobalKey spot = GlobalKey();
 
@@ -39,31 +34,29 @@ class _RegistrationState extends State<Registration> {
               body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Container(
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                15.0, 110.0, 0.0, 0.0),
-                            child: const Text(
-                              'Signup',
-                              style: TextStyle(
-                                  fontSize: 80.0, fontWeight: FontWeight.bold),
-                            ),
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
+                          child: const Text(
+                            'Signup',
+                            style: TextStyle(
+                                fontSize: 80.0, fontWeight: FontWeight.bold),
                           ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(
-                                260.0, 125.0, 0.0, 0.0),
-                            child: const Text(
-                              '.',
-                              style: TextStyle(
-                                  fontSize: 80.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green),
-                            ),
-                          )
-                        ],
-                      ),
+                        ),
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(260.0, 125.0, 0.0, 0.0),
+                          child: const Text(
+                            '.',
+                            style: TextStyle(
+                                fontSize: 80.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green),
+                          ),
+                        )
+                      ],
                     ),
                     Container(
                         padding: const EdgeInsets.only(
@@ -106,9 +99,9 @@ class _RegistrationState extends State<Registration> {
                                 onChanged: (String value) {
                                   if (value.length >= 8) {
                                     _newPassword = value;
-                                    _pswd_OK = true;
+                                    _pswdOK = true;
                                   } else {
-                                    _pswd_OK = false;
+                                    _pswdOK = false;
                                   }
                                 }),
                             Showcase(
@@ -137,8 +130,9 @@ class _RegistrationState extends State<Registration> {
                                   ),
                                   InkWell(
                                       onTap: () {
-                                        launch(
+                                        final url = Uri.parse(
                                             'https://tan-q-bot-unofficial.com/terms_of_service/');
+                                        launchUrl(url);
                                       },
                                       child: const Text(
                                         '利用規約に同意した？',
@@ -191,7 +185,7 @@ class _RegistrationState extends State<Registration> {
                                                     Fluttertoast.showToast(
                                                         msg:
                                                             "ログイン中です\nちょっと待ってね。");
-                                                    if (_pswd_OK) {
+                                                    if (_pswdOK) {
                                                       try {
                                                         // メール/パスワードでユーザー登録
                                                         UserCredential result =
@@ -206,31 +200,13 @@ class _RegistrationState extends State<Registration> {
                                                         User user = result
                                                             .user!; // 登録したユーザー情報
                                                         user.sendEmailVerification(); // Email確認のメールを送信
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  Emailcheck(
-                                                                      email:
-                                                                          _newEmail,
-                                                                      pswd:
-                                                                          _newPassword,
-                                                                      from: 1),
-                                                            ));
                                                       } catch (e) {
                                                         // 登録に失敗した場合
                                                         setState(() {
-                                                          _infoText = auth_error
-                                                              .register_error_msg(
-                                                                  e.hashCode,
-                                                                  e.toString());
+                                                          _infoText =
+                                                              '登録に失敗しました。';
                                                         });
                                                       }
-                                                    } else {
-                                                      setState(() {
-                                                        _infoText =
-                                                            'パスワードは8文字以上です。';
-                                                      });
                                                     }
                                                   }),
                                             ],
@@ -247,8 +223,7 @@ class _RegistrationState extends State<Registration> {
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20.0),
                                   color: Colors.lightGreen[200],
-                                  child: Container(
-                                      child: const Column(
+                                  child: const Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
@@ -262,7 +237,7 @@ class _RegistrationState extends State<Registration> {
                                         ),
                                       )
                                     ],
-                                  )),
+                                  ),
                                 ),
                               ),
                             ),
@@ -298,49 +273,5 @@ class _RegistrationState extends State<Registration> {
                         )),
                   ]))),
     );
-  }
-}
-
-// Firebase Authentication利用時の日本語エラーメッセージ
-class Authentication_error_to_ja {
-  // ログイン時の日本語エラーメッセージ
-  login_error_msg(int errorCode, String orgErrorMsg) {
-    String errorMsg;
-
-    if (errorCode == 360587416) {
-      errorMsg = '有効なメールアドレスを入力してください。';
-    } else if (errorCode == 505284406) {
-      // 入力されたメールアドレスが登録されていない場合
-      errorMsg = 'メールアドレスかパスワードが間違っています。';
-    } else if (errorCode == 185768934) {
-      // 入力されたパスワードが間違っている場合
-      errorMsg = 'メールアドレスかパスワードが間違っています。';
-    } else if (errorCode == 447031946) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = 'メールアドレスとパスワードを入力してください。';
-    } else {
-      errorMsg = '$orgErrorMsg[$errorCode]';
-    }
-
-    return errorMsg;
-  }
-
-  // アカウント登録時の日本語エラーメッセージ
-  register_error_msg(int errorCode, String orgErrorMsg) {
-    String errorMsg;
-
-    if (errorCode == 360587416) {
-      errorMsg = '有効なメールアドレスを入力してください。';
-    } else if (errorCode == 34618382) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = '既に登録済みのメールアドレスです。';
-    } else if (errorCode == 447031946) {
-      // メールアドレスかパスワードがEmpty or Nullの場合
-      errorMsg = 'メールアドレスとパスワードを入力してください。';
-    } else {
-      errorMsg = '$orgErrorMsg[$errorCode]';
-    }
-
-    return errorMsg;
   }
 }
