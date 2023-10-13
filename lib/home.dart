@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:ous/Weather/weatger_top.dart';
+import 'package:ous/debug.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -327,6 +328,13 @@ class _HomeState extends State<Home> {
                         fontSize: 30.sp,
                       ),
                     ),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => const Debug(),
+                          ));
+                        },
+                        child: Text('debug')),
                     CarouselSlider(
                       options: CarouselOptions(
                           height: 80.h,

@@ -89,7 +89,7 @@ dependencies:
   slide_to_act: ^2.0.1
   markdown_widget: ^2.2.0
   video_player: ^2.7.0
-  weather_animation: ^0.0.2
+  weather_animation: ^1.0.0
   showcaseview: ^2.0.3
   salomon_bottom_bar: ^3.3.2
   cupertino_icons: ^1.0.6
