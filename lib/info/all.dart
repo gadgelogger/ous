@@ -1,41 +1,56 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import "package:universal_html/controller.dart";
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as parser;
 import 'package:url_launcher/url_launcher.dart';
 
-class All extends StatefulWidget {
-  const All({Key? key}) : super(key: key);
+class Article {
+  final String title;
+  final String date;
+  final String url;
 
-  @override
-  State<All> createState() => _AllState();
+  Article({
+    required this.title,
+    required this.date,
+    required this.url,
+  });
 }
 
-class _AllState extends State<All> with AutomaticKeepAliveClientMixin {
+class All extends StatefulWidget {
   @override
-  bool get wantKeepAlive => true;
-  List<Article> articles = [];
+  _AllState createState() => _AllState();
+}
+
+class _AllState extends State<All> {
+  List<Article> _articles = [];
+  int _page = 1;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    getWebsiteData();
+    _getWebsiteData();
   }
 
-  Future getWebsiteData() async {
-    final controller = WindowController();
-    await controller.openHttp(
-      method: 'GET',
-      uri: Uri.parse('https://www.ous.ac.jp/topics/'),
-    );
-    final document = controller.window.document;
+  Future<void> _getWebsiteData() async {
+    if (_isLoading) {
+      return;
+    }
+    _isLoading = true;
+    final response =
+        await http.get(Uri.parse('https://www.ous.ac.jp/topics/?page=$_page'));
+    final document = parser.parse(response.body);
 
     final titles = document
-        .querySelectorAll("dl > dd >a")
-        .map((element) => element.innerText)
+        .querySelectorAll("dl > dd > a")
+        .map((element) => element.text)
         .toList();
-
+    final dates = document
+        .querySelectorAll("div > .p10 > dt")
+        .map((element) => element.text)
+        .toList();
     final urls = document.querySelectorAll("dl > dd > a").map((element) {
-      var href = element.getAttribute("href")!;
+      var href = element.attributes["href"]!;
       // リンクが相対パスの場合、絶対URLに変換する
       if (!href.startsWith('http')) {
         href = 'https://www.ous.ac.jp$href';
@@ -43,39 +58,68 @@ class _AllState extends State<All> with AutomaticKeepAliveClientMixin {
       return href;
     }).toList();
 
-    final dates = document
-        .querySelectorAll("div > .p10 > dt")
-        .map((element) => element.innerText)
-        .toList();
+    final articles = List.generate(
+      titles.length,
+      (index) => Article(
+        title: titles[index],
+        date: dates[index],
+        url: urls[index],
+      ),
+    );
 
     setState(() {
-      articles = List.generate(
-        titles.length,
-        (index) => Article(
-          title: titles[index],
-          url: urls[index],
-          date: dates[index],
-        ),
-      );
+      if (_page == 1) {
+        _articles = articles;
+      } else {
+        _articles.addAll(articles);
+      }
+      _isLoading = false;
     });
+  }
+
+  Future<void> _onRefresh() async {
+    _page = 1;
+    _articles.clear();
+    await _getWebsiteData();
+  }
+
+  Future<void> _onLoadMore() async {
+    _page++;
+    await _getWebsiteData();
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
         body: RefreshIndicator(
-      onRefresh: () async {
-        await getWebsiteData();
-      },
+      onRefresh: _onRefresh,
       child: Center(
-        child: (articles.isEmpty)
+        child: (_articles.isEmpty)
             ? const CircularProgressIndicator()
             : ListView.builder(
-                padding: const EdgeInsets.all(12),
-                itemCount: articles.length,
+                itemCount: _articles.length + 1,
                 itemBuilder: (context, index) {
-                  final article = articles[index];
+                  if (index == _articles.length) {
+                    if (_isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      _onLoadMore();
+                      return const Center(
+                        child: LinearProgressIndicator(),
+                      );
+                    }
+                  }
+                  final article = _articles[index];
                   return Column(
                     children: [
                       ListTile(
@@ -108,16 +152,4 @@ class _AllState extends State<All> with AutomaticKeepAliveClientMixin {
       ),
     ));
   }
-}
-
-class Article {
-  final String url;
-  final String title;
-  final String date;
-
-  const Article({
-    required this.url,
-    required this.title,
-    required this.date,
-  });
 }

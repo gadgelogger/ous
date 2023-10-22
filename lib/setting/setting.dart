@@ -59,13 +59,16 @@ class _SettingState extends State<Setting> {
     Navigator.of(context, rootNavigator: useRootNavigator)
         .push(MaterialPageRoute<void>(
       builder: (BuildContext context) => LicensePage(
-        applicationName: "非公式岡理アプリ",
-        applicationIcon: SizedBox(
-          width: 100,
-          height: 100,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: Image.asset('assets/images/icon.png'),
+        applicationName: "岡理アプリ",
+        applicationIcon: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            width: 100,
+            height: 100,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(100.0),
+              child: Image.asset('assets/images/icon.png'),
+            ),
           ),
         ),
         applicationLegalese: "@TAN_Q_BOT_LOCAL",
@@ -139,12 +142,7 @@ class _SettingState extends State<Setting> {
                 leading: const Icon(Icons.terminal),
                 title: const Text('ライセンスについて'),
                 onPressed: (context) {
-                  showLicensePage(
-                    context: context,
-                    applicationName: "非公式岡理アプリ",
-                    applicationIcon: Image.asset("assets/images/icon.png"),
-                    applicationLegalese: "@TAN_Q_BOT_LOCAL",
-                  );
+                  showLicensePage(context: context);
                 }),
             SettingsTile.navigation(
               leading: const Icon(Icons.description),

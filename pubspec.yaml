@@ -93,6 +93,10 @@ dependencies:
   showcaseview: ^2.0.3
   salomon_bottom_bar: ^3.3.2
   cupertino_icons: ^1.0.6
+  dio: ^5.3.3
+  xml: ^6.3.0
+  pull_to_refresh: ^2.0.0
+  flutter_riverpod: ^2.4.4
 dev_dependencies:
   flutter_test:
     sdk: flutter

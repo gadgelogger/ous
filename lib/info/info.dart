@@ -88,7 +88,7 @@ class _InfoState extends State<Info> {
         ),
         body: WillPopScope(
           onWillPop: () async => false,
-          child: const TabBarView(
+          child: TabBarView(
             children: [
               All(),
               Important(),
