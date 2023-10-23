@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:ous/Weather/weatger_top.dart';
-import 'package:ous/debug.dart';
+import 'package:ous/adbmob.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,6 +30,7 @@ class _HomeState extends State<Home> {
   int _current = 0;
   var weatherData;
   var weatherData1;
+  late BannerAd _myBanner;
 
   @override
   void initState() {
@@ -36,6 +38,16 @@ class _HomeState extends State<Home> {
     getWeatherData();
     getWeatherData1();
     mylogMonitor();
+
+//広告
+    final bannerId = getAdBannerUnitId();
+    _myBanner = BannerAd(
+      adUnitId: bannerId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: const BannerAdListener(),
+    );
+    _myBanner.load();
   }
 
   //天気予報　岡山
@@ -372,13 +384,6 @@ class _HomeState extends State<Home> {
                       fontSize: 30.sp,
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const Debug(),
-                        ));
-                      },
-                      child: Text('debug')),
                   CarouselSlider(
                     options: CarouselOptions(
                         height: 80.h,
@@ -415,10 +420,12 @@ class _HomeState extends State<Home> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      '岡山駅西口発',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    const FittedBox(
+                                      child: Text(
+                                        '岡山駅西口発',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                     FutureBuilder<String>(
                                       future: fetchApproachCaption(),
@@ -464,10 +471,12 @@ class _HomeState extends State<Home> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    '岡山理科大学正門発',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  const FittedBox(
+                                    child: Text(
+                                      '岡山理科大学正門発',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   FutureBuilder<String>(
@@ -525,10 +534,12 @@ class _HomeState extends State<Home> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      '岡山天満屋発',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                    const FittedBox(
+                                      child: Text(
+                                        '岡山天満屋発',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                     FutureBuilder<String>(
                                       future: fetchApproachCaption2(),
@@ -572,10 +583,12 @@ class _HomeState extends State<Home> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    '岡山理科大学東門発',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
+                                  const FittedBox(
+                                    child: Text(
+                                      '岡山理科大学東門発',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                   FutureBuilder<String>(
@@ -645,89 +658,119 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 10,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    final url = Uri.parse(
-                        'https://grafana-mine-pop.ciphergrus.com/d/c6b912ae-b50a-476e-94dd-f6a2ab6ec19f/mylog?orgId=2&from=1697702379434&to=1697723979434');
-                    launchUrl(url);
-                  },
-                  child: Row(// 正方形を横に並べる
-                      children: [
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: 1.0,
+                Row(children: [
+                  ButtonBar(children: [
+                    SizedBox(
+                      width: 180.w, //横幅
+                      height: 180.h, //高さ
+                      child: FilledButton.tonal(
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          // Foreground color
+                          // Background color
+                        ),
+                        onPressed: () {
+                          final url = Uri.parse(
+                              'https://stats.uptimerobot.com/4KzW2hJvY6');
+
+                          launchUrl(url);
+                        },
                         child: Container(
-                          color: Colors.lightGreen[200],
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'PC版',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
+                              const FittedBox(
+                                child: Text(
+                                  'PC版',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              Text(
-                                '$_title',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
+                              FittedBox(
+                                child: Text(
+                                  '$_title',
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               Text(
                                 '$_pubDate',
                                 style: const TextStyle(
-                                  color: Colors.white,
                                   fontSize: 15,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 50,
-                      child: VerticalDivider(),
-                    ),
-                    Expanded(
-                      child: AspectRatio(
-                        aspectRatio: 1.0,
+                    SizedBox(
+                      width: 180.w, //横幅
+                      height: 180.h, //高さ
+                      child: FilledButton.tonal(
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          // Foreground color
+                          // Background color
+                        ),
+                        onPressed: () {
+                          final url = Uri.parse(
+                              'https://stats.uptimerobot.com/4KzW2hJvY6');
+
+                          launchUrl(url);
+                        },
                         child: Container(
-                          color: Colors.lightGreen[200],
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'スマホ版',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
+                              const FittedBox(
+                                child: Text(
+                                  'スマホ版',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                              Text(
-                                '$_title',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 19,
+                              FittedBox(
+                                child: Text(
+                                  '$_title',
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               Text(
                                 '$_pubDate',
                                 style: const TextStyle(
-                                  color: Colors.white,
                                   fontSize: 15,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ]),
-                )
-              ]))
+                ])
+              ])),
+              Container(
+                width: _myBanner.size.width.toDouble(),
+                height: _myBanner.size.height.toDouble(),
+                alignment: Alignment.center,
+                child: AdWidget(ad: _myBanner),
+              ),
             ],
           ))),
     );

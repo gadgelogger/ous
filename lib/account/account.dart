@@ -45,14 +45,7 @@ class _accountState extends State<account> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return const MyHomePage(
-                      title: 'home',
-                    );
-                  }),
-                );
+                Navigator.pop(context);
               },
             ),
             title: WillPopScope(

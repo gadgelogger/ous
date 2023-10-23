@@ -88,17 +88,6 @@ class _SettingState extends State<Setting> {
       appBar: AppBar(
         elevation: 0,
         title: const Text('アプリの設定'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return const MyHomePage(title: 'home');
-              }),
-            );
-          },
-        ),
       ),
       body: SettingsList(sections: [
         SettingsSection(

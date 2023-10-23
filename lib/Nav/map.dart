@@ -3,10 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:map_launcher/map_launcher.dart';
 
-import '../main.dart';
-
 class Map extends StatelessWidget {
-
   const Map({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -14,21 +11,9 @@ class Map extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) {
-                    return const MyHomePage(title: 'home');
-                  }),
-                );
-              },
-            ),
             elevation: 0,
             title: const Text('学内マップ'),
             bottom: TabBar(
-
                 labelColor: Theme.of(context).colorScheme.primary,
                 unselectedLabelColor: Colors.grey,
                 isScrollable: true,
@@ -50,16 +35,12 @@ class Map extends StatelessWidget {
                   ),
                 ]),
           ),
-          body: WillPopScope(
-            onWillPop: () async => false,
-            child: const TabBarView(
-              physics: NeverScrollableScrollPhysics(),
-
-              children: [
-                okayama(),
-                imabari(),
-              ],
-            ),
+          body: const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              okayama(),
+              imabari(),
+            ],
           ),
         ));
   }
@@ -73,7 +54,6 @@ class okayama extends StatefulWidget {
 }
 
 class _okayamaState extends State<okayama> {
-
   Future<void> _openMaps() async {
     final availableMaps = await MapLauncher.installedMaps;
 
@@ -87,18 +67,17 @@ class _okayamaState extends State<okayama> {
               children: availableMaps
                   .map(
                     (map) => ListTile(
-
-                  title: Text(map.mapName),
-                  onTap: () {
-                    map.showMarker(
-                      coords: Coords(34.696149, 133.927399),
-                      title: '岡山理科大学正門',
-                      description: '正門',
-                    );
-                    Navigator.of(context).pop();
-                  },
-                ),
-              )
+                      title: Text(map.mapName),
+                      onTap: () {
+                        map.showMarker(
+                          coords: Coords(34.696149, 133.927399),
+                          title: '岡山理科大学正門',
+                          description: '正門',
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -106,7 +85,6 @@ class _okayamaState extends State<okayama> {
       },
     );
   }
-
 
   Future<void> _openMaps1() async {
     final availableMaps = await MapLauncher.installedMaps;
@@ -121,17 +99,17 @@ class _okayamaState extends State<okayama> {
               children: availableMaps
                   .map(
                     (map) => ListTile(
-                  title: Text(map.mapName),
-                  onTap: () {
-                    map.showMarker(
-                      coords: Coords(34.697074, 133.930168),
-                      title: '岡山理科大学東門',
-                      description: '東門',
-                    );
-                    Navigator.of(context).pop();
-                  },
-                ),
-              )
+                      title: Text(map.mapName),
+                      onTap: () {
+                        map.showMarker(
+                          coords: Coords(34.697074, 133.930168),
+                          title: '岡山理科大学東門',
+                          description: '東門',
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -139,7 +117,6 @@ class _okayamaState extends State<okayama> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +131,11 @@ class _okayamaState extends State<okayama> {
             Column(
               children: [
                 FloatingActionButton(
+                  heroTag: "hero1",
                   onPressed: () {
                     // Do something when FAB is pressed
                     showModalBottomSheet(
-                      //モーダルの背景の色、透過
+                        //モーダルの背景の色、透過
                         backgroundColor: Colors.transparent,
                         //ドラッグ可能にする（高さもハーフサイズからフルサイズになる様子）
                         isScrollControlled: true,
@@ -168,7 +146,7 @@ class _okayamaState extends State<okayama> {
                               decoration: BoxDecoration(
                                 //モーダル自体の色
                                 color: Theme.of(context).brightness ==
-                                    Brightness.light
+                                        Brightness.light
                                     ? Colors.white
                                     : const Color(0xFF424242),
                                 //角丸にする
@@ -194,10 +172,10 @@ class _okayamaState extends State<okayama> {
                                         children: [
                                           Card(
                                             child: ListTile(
-                                              leading:
-                                              const Icon(Icons.door_sliding_outlined),
-                                              trailing:
-                                              const Icon(Icons.chevron_right),
+                                              leading: const Icon(
+                                                  Icons.door_sliding_outlined),
+                                              trailing: const Icon(
+                                                  Icons.chevron_right),
                                               title: const Text('正門'),
                                               onTap: () {
                                                 _openMaps();
@@ -206,9 +184,10 @@ class _okayamaState extends State<okayama> {
                                           ),
                                           Card(
                                             child: ListTile(
-                                              leading: const Icon(Icons.door_back_door_outlined),
-                                              trailing:
-                                              const Icon(Icons.chevron_right),
+                                              leading: const Icon(Icons
+                                                  .door_back_door_outlined),
+                                              trailing: const Icon(
+                                                  Icons.chevron_right),
                                               title: const Text('東門'),
                                               onTap: () {
                                                 _openMaps1();
@@ -218,7 +197,6 @@ class _okayamaState extends State<okayama> {
                                         ],
                                       ),
                                     ),
-
                                     const Text(
                                       '自家用車で来られる方は\n東門からお入りください\n正門からはアクセスできません。',
                                       textAlign: TextAlign.center,
@@ -236,6 +214,7 @@ class _okayamaState extends State<okayama> {
                 Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: FloatingActionButton(
+                    heroTag: "hero2",
                     onPressed: () {
                       // Do something when FAB is pressed
                       Navigator.pushReplacement(
@@ -253,9 +232,7 @@ class _okayamaState extends State<okayama> {
           ],
         ));
   }
-
 }
-
 
 class imabari extends StatefulWidget {
   const imabari({Key? key}) : super(key: key);
@@ -265,7 +242,6 @@ class imabari extends StatefulWidget {
 }
 
 class _imabariState extends State<imabari> {
-
   Future<void> _openMaps() async {
     final availableMaps = await MapLauncher.installedMaps;
 
@@ -279,17 +255,17 @@ class _imabariState extends State<imabari> {
               children: availableMaps
                   .map(
                     (map) => ListTile(
-                  title: Text(map.mapName),
-                  onTap: () {
-                    map.showMarker(
-                      coords: Coords(34.07121945750315, 132.97883199999697),
-                      title: '今治キャンパス',
-                      description: '今治キャンパス',
-                    );
-                    Navigator.of(context).pop();
-                  },
-                ),
-              )
+                      title: Text(map.mapName),
+                      onTap: () {
+                        map.showMarker(
+                          coords: Coords(34.07121945750315, 132.97883199999697),
+                          title: '今治キャンパス',
+                          description: '今治キャンパス',
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -301,94 +277,94 @@ class _imabariState extends State<imabari> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          child: SfPdfViewer.network(
-              'https://www.ous.ac.jp/common/files//230/0405_imabari_map_omote_OL_fuchinashi.pdf')),
-      floatingActionButton:  Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  // Do something when FAB is pressed
-                  showModalBottomSheet(
-                    //モーダルの背景の色、透過
-                      backgroundColor: Colors.transparent,
-                      //ドラッグ可能にする（高さもハーフサイズからフルサイズになる様子）
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                            margin: const EdgeInsets.only(top: 450),
-                            decoration: BoxDecoration(
-                              //モーダル自体の色
-                              color: Theme.of(context).brightness ==
-                                  Brightness.light
-                                  ? Colors.white
-                                  : const Color(0xFF424242),
-                              //角丸にする
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.all(15),
-                              child: (Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'キャンパスへのアクセス',
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Center(
-                                    child:    Card(
-                                      child: ListTile(
-                                        leading:
-                                        const Icon(Icons.school_outlined),
-                                        trailing:
-                                        const Icon(Icons.chevron_right),
-                                        title: const Text('今治キャンパスに行く'),
-                                        onTap: () {
-                                          _openMaps();
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              )),
-                            ));
-                      });
-                },
-                child: const Icon(Icons.navigation_outlined),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
+        body: Container(
+            child: SfPdfViewer.network(
+                'https://www.ous.ac.jp/common/files//230/0405_imabari_map_omote_OL_fuchinashi.pdf')),
+        floatingActionButton: Column(
+          verticalDirection: VerticalDirection.up,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Column(
+              children: [
+                FloatingActionButton(
+                  heroTag: "hero1",
                   onPressed: () {
                     // Do something when FAB is pressed
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return const okayama_aed();
-                      }),
-                    );
+                    showModalBottomSheet(
+                        //モーダルの背景の色、透過
+                        backgroundColor: Colors.transparent,
+                        //ドラッグ可能にする（高さもハーフサイズからフルサイズになる様子）
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                              margin: const EdgeInsets.only(top: 450),
+                              decoration: BoxDecoration(
+                                //モーダル自体の色
+                                color: Theme.of(context).brightness ==
+                                        Brightness.light
+                                    ? Colors.white
+                                    : const Color(0xFF424242),
+                                //角丸にする
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              child: Container(
+                                margin: const EdgeInsets.all(15),
+                                child: (Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'キャンパスへのアクセス',
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Center(
+                                      child: Card(
+                                        child: ListTile(
+                                          leading:
+                                              const Icon(Icons.school_outlined),
+                                          trailing:
+                                              const Icon(Icons.chevron_right),
+                                          title: const Text('今治キャンパスに行く'),
+                                          onTap: () {
+                                            _openMaps();
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )),
+                              ));
+                        });
                   },
-                  child: const Icon(Icons.autorenew_outlined),
+                  child: const Icon(Icons.navigation_outlined),
                 ),
-              )
-            ],
-          ),
-        ],
-      )
-    );
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  child: FloatingActionButton(
+                    heroTag: "hero2",
+                    onPressed: () {
+                      // Do something when FAB is pressed
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return const okayama_aed();
+                        }),
+                      );
+                    },
+                    child: const Icon(Icons.autorenew_outlined),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ));
   }
 }
-
 
 class okayama_aed extends StatelessWidget {
   const okayama_aed({Key? key}) : super(key: key);
@@ -404,6 +380,7 @@ class okayama_aed extends StatelessWidget {
           child:
               SfPdfViewer.network('https://www.ous.ac.jp/common/files//7.pdf')),
       floatingActionButton: FloatingActionButton(
+        heroTag: "hero3",
         onPressed: () {
           // Do something when FAB is pressed
           Navigator.pushReplacement(
@@ -433,6 +410,7 @@ class imabari_aed extends StatelessWidget {
           child: SfPdfViewer.network(
               'https://www.ous.ac.jp/common/files//13.pdf')),
       floatingActionButton: FloatingActionButton(
+        heroTag: "hero4",
         onPressed: () {
           // Do something when FAB is pressed
           Navigator.pushReplacement(

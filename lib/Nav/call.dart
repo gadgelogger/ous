@@ -1,47 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:ous/main.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 class Call extends StatelessWidget {
   const Call({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool isBackgroundBright = Theme.of(context).primaryColor == Brightness.light;
+    bool isBackgroundBright =
+        Theme.of(context).primaryColor == Brightness.light;
     Color textColor = isBackgroundBright ? Colors.black : Colors.white;
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) {
-                return const MyHomePage(title: 'home');
-              }),);
-          },
-        ),
         title: const Text('各種連絡先'),
       ),
       body: ListView(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .primary
-            ),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.primary),
             child: ListTile(
               title: Text(
                 "岡山キャンパス",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: textColor),
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: textColor),
               ),
             ),
           ),
           ListTile(
-            title: const Text('健康管理センター(外線)',),
+            title: const Text(
+              '健康管理センター(外線)',
+            ),
             subtitle: const Text('0862568434'),
             trailing: const Icon(Icons.call),
             onTap: () => launch('tel:0862568434'),
@@ -155,16 +148,15 @@ class Call extends StatelessWidget {
             onTap: () => launch('tel:0862568438'),
           ),
           Container(
-            decoration: BoxDecoration(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .primary
-            ),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.primary),
             child: ListTile(
               title: Text(
                 "今治キャンパス",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color:textColor ),
+                style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: textColor),
               ),
             ),
           ),
@@ -205,6 +197,7 @@ class Call extends StatelessWidget {
             onTap: () => launch('tel:0862569814'),
           ),
         ],
-      ),);
+      ),
+    );
   }
 }

@@ -97,6 +97,8 @@ dependencies:
   xml: ^6.3.0
   pull_to_refresh: ^2.0.0
   flutter_riverpod: ^2.4.4
+  firebase_remote_config: ^4.3.1
+  google_mobile_ads: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
