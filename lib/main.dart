@@ -31,8 +31,7 @@ void main() async {
 
   // Firebaseの初期化
   await Firebase.initializeApp();
-  //admob初期化
-  MobileAds.instance.initialize();
+
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
@@ -111,13 +110,17 @@ class _MyHomePageState extends State<MyHomePage> {
 //アップデート通知
   late String _currentVersion;
   late String _latestVersion;
+//クイックショートカット
+  String shortcut = 'no action set';
 
   @override
   void initState() {
     super.initState();
     _checkVersion();
+    //ショートカット関連
   }
 
+//バージョンチェック
   void _checkVersion() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -204,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-//アップデート通知
+//ボトムナビゲーションバー
 
   int _currentindex = 0;
   List<Widget> pages = [

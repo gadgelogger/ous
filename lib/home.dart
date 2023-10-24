@@ -5,7 +5,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:ous/Weather/weatger_top.dart';
-import 'package:ous/adbmob.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,16 +37,6 @@ class _HomeState extends State<Home> {
     getWeatherData();
     getWeatherData1();
     mylogMonitor();
-
-//広告
-    final bannerId = getAdBannerUnitId();
-    _myBanner = BannerAd(
-      adUnitId: bannerId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: const BannerAdListener(),
-    );
-    _myBanner.load();
   }
 
   //天気予報　岡山
@@ -686,6 +675,7 @@ class _HomeState extends State<Home> {
                                   'PC版',
                                   style: TextStyle(
                                     fontSize: 25,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -737,6 +727,7 @@ class _HomeState extends State<Home> {
                                   'スマホ版',
                                   style: TextStyle(
                                     fontSize: 25,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
@@ -765,12 +756,6 @@ class _HomeState extends State<Home> {
                   ]),
                 ])
               ])),
-              Container(
-                width: _myBanner.size.width.toDouble(),
-                height: _myBanner.size.height.toDouble(),
-                alignment: Alignment.center,
-                child: AdWidget(ad: _myBanner),
-              ),
             ],
           ))),
     );

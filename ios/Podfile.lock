@@ -873,6 +873,8 @@ PODS:
     - Flutter
     - FlutterMacOS
   - PromisesObjC (2.3.1)
+  - quick_actions_ios (0.0.1):
+    - Flutter
   - RecaptchaInterop (100.0.0)
   - sensors_plus (0.0.1):
     - Flutter
@@ -913,6 +915,7 @@ DEPENDENCIES:
   - map_launcher (from `.symlinks/plugins/map_launcher/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
   - sensors_plus (from `.symlinks/plugins/sensors_plus/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - share_extend (from `.symlinks/plugins/share_extend/ios`)
@@ -989,6 +992,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  quick_actions_ios:
+    :path: ".symlinks/plugins/quick_actions_ios/ios"
   sensors_plus:
     :path: ".symlinks/plugins/sensors_plus/ios"
   share:
@@ -1053,6 +1058,7 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  quick_actions_ios: 9e80dcfadfbc5d47d9cf8f47bcf428b11cf383d4
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   sensors_plus: 5717760720f7e6acd96fdbd75b7428f5ad755ec2
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410

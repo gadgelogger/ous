@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
-import 'package:ous/adbmob.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Article {
@@ -33,15 +32,6 @@ class _AllState extends State<All> {
   void initState() {
     super.initState();
     _getWebsiteData();
-    // バナー広告をインスタンス化
-    final bannerId = getAdBannerUnitId();
-    _myBanner = BannerAd(
-      adUnitId: bannerId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: const BannerAdListener(),
-    );
-    _myBanner.load();
   }
 
   @override
@@ -140,16 +130,6 @@ class _AllState extends State<All> {
                   final article = _articles[index];
                   return Column(
                     children: [
-                      index % 5 == 0
-                          ? Container(
-                              width: _myBanner.size.width.toDouble(),
-                              height: _myBanner.size.height.toDouble(),
-                              alignment: Alignment.center,
-                              child: _myBanner != null
-                                  ? AdWidget(ad: _myBanner)
-                                  : const SizedBox(),
-                            )
-                          : const SizedBox(),
                       ListTile(
                         title: Text(
                           article.title,
