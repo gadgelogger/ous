@@ -47,4 +47,5 @@ app.*.map.json
 /android/app/release
 /Users/gadgelogger/StudioProjects/ous/lib/apikey.dart
 ios/Runner/GoogleService-Info.plist
-ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+android/app/key.jks
