@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ous/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Call extends StatelessWidget {

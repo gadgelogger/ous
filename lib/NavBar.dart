@@ -40,6 +40,7 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      elevation: 0,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

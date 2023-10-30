@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:ous/Weather/weatger_top.dart';
 import 'package:share/share.dart';
@@ -27,9 +28,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _current = 0;
+  int counter = 0;
+
   var weatherData;
   var weatherData1;
-  late BannerAd _myBanner;
 
   @override
   void initState() {

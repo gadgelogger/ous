@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -87,6 +88,14 @@ class _postState extends State<post> {
   void initState() {
     super.initState();
     getData();
+  }
+
+  //アプリレビュー
+  Future<void> _requestReview() async {
+    final InAppReview inAppReview = InAppReview.instance;
+    if (await inAppReview.isAvailable()) {
+      inAppReview.requestReview();
+    }
   }
 
   @override
@@ -816,11 +825,7 @@ class _postState extends State<post> {
                                           child: const Text("おっけー"),
                                           onPressed: () {
                                             Navigator.pop(context);
-                                            _scrollController.animateTo(
-                                                0, // 移動したい位置を指定
-                                                duration: const Duration(
-                                                    milliseconds: 1), // 1秒かけて戻る
-                                                curve: Curves.linear);
+                                            _requestReview();
                                             slideActionKey.currentState!
                                                 .reset();
                                           }),
