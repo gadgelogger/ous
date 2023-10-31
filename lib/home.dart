@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:ous/Weather/weatger_top.dart';
 import 'package:share/share.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
@@ -39,6 +39,23 @@ class _HomeState extends State<Home> {
     getWeatherData();
     getWeatherData1();
     mylogMonitor();
+    incrementCounterAndRequestReview();
+  }
+
+  //アプリレビュー
+  Future<void> incrementCounterAndRequestReview() async {
+    //カウントアップさせて保存
+    final prefs = await SharedPreferences.getInstance();
+    int counter = (prefs.getInt('counter') ?? 0) + 1;
+    await prefs.setInt('counter', counter);
+    print(counter);
+    //レビュー表示させる処理
+    if (counter % 10 == 0) {
+      final InAppReview inAppReview = InAppReview.instance;
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
   }
 
   //天気予報　岡山
@@ -54,6 +71,8 @@ class _HomeState extends State<Home> {
       setState(() {
         weatherData = jsonData;
       });
+    } else {
+      throw Exception('Error');
     }
     print(url);
   }
@@ -70,6 +89,8 @@ class _HomeState extends State<Home> {
       setState(() {
         weatherData1 = jsonData;
       });
+    } else {
+      throw Exception('Error');
     }
     print(url);
   }
@@ -89,7 +110,7 @@ class _HomeState extends State<Home> {
         return '終了';
       }
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Error');
     }
   }
 
@@ -108,7 +129,7 @@ class _HomeState extends State<Home> {
         return '終了';
       }
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Error');
     }
   }
 
@@ -127,7 +148,7 @@ class _HomeState extends State<Home> {
         return '終了';
       }
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Error');
     }
   }
 
@@ -146,13 +167,14 @@ class _HomeState extends State<Home> {
         return '終了';
       }
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Error');
     }
   }
 
   //Mylogの監視
   String? _title;
   String? _pubDate;
+  String? _error;
 
   Future<void> mylogMonitor() async {
     try {
@@ -189,7 +211,10 @@ class _HomeState extends State<Home> {
         _pubDate = formattedDate;
       });
     } catch (e) {
-      print('Error occurred: $e');
+      setState(() {
+        _title = "error";
+        _pubDate = "error";
+      });
     }
   }
 
@@ -433,8 +458,7 @@ class _HomeState extends State<Home> {
                                             return Text(time);
                                           }
                                         } else if (snapshot.hasError) {
-                                          return Text(
-                                              snapshot.error.toString());
+                                          return const Text("error");
                                         }
                                         return SizedBox(
                                             height: 20.h,
@@ -489,7 +513,7 @@ class _HomeState extends State<Home> {
                                           return Text(time);
                                         }
                                       } else if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
+                                        return const Text("error");
                                       }
                                       return SizedBox(
                                           height: 20.h,
@@ -547,8 +571,7 @@ class _HomeState extends State<Home> {
                                             return Text(time);
                                           }
                                         } else if (snapshot.hasError) {
-                                          return Text(
-                                              snapshot.error.toString());
+                                          return const Text("error");
                                         }
                                         return SizedBox(
                                             height: 20.h,
@@ -601,7 +624,7 @@ class _HomeState extends State<Home> {
                                           return Text(time);
                                         }
                                       } else if (snapshot.hasError) {
-                                        return Text(snapshot.error.toString());
+                                        return const Text("error");
                                       }
                                       return SizedBox(
                                           height: 20.h,

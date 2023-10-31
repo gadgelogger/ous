@@ -16,15 +16,6 @@ import 'package:algolia/algolia.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-//algolia
-class Application {
-  static const Algolia algolia = Algolia.init(
-    applicationId: algoiaid,
-    apiKey: algoliakey,
-  );
-}
-//algolia
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // ここに追加
 

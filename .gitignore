@@ -49,3 +49,4 @@ app.*.map.json
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 android/app/key.jks
+lib/apikey.dart
