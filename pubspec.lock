@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: _flutterfire_internals
-      sha256: "76c15c4167f820b74abcd8c6fc5e393e1ed5e1207a34e9b22953603e03b3ba6a"
+      sha256: "5dadadeecceac19d6a63c9d2e037bb8df58ddd4aedb94e8a056af2f39ee50f9d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.9"
+    version: "1.3.11"
   algolia:
     dependency: "direct main"
     description:
@@ -301,10 +301,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_core
-      sha256: "57bba167105d2315d243a4524939406df688f38a5b6d7a4159382bbbe43cdd00"
+      sha256: "7706f4ade6cc2698c70074083bc262586a185047f6bfdd53938dcc35d35cbb9e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.19.0"
+    version: "2.21.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -325,26 +325,26 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_remote_config
-      sha256: "088af33c7d54755a55e2734c59aa838189afb8fe3406ea0d2f18e6706342e993"
+      sha256: fde4fcadc9f8775d39da5c6b9c05c58eb632f480ab7531c6000242ebe40b0ad2
       url: "https://pub.dev"
     source: hosted
-    version: "4.3.1"
+    version: "4.3.3"
   firebase_remote_config_platform_interface:
     dependency: transitive
     description:
       name: firebase_remote_config_platform_interface
-      sha256: "5b6d0dd9174470a6a681e199291a651ff11f3cf2ffe141e4f12ae831f42afe20"
+      sha256: "247357f32b6293cb43ea950f7e4bc1d65897f056fd6519c9a45a626e7f99ac4b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.9"
+    version: "1.4.11"
   firebase_remote_config_web:
     dependency: transitive
     description:
       name: firebase_remote_config_web
-      sha256: facf4c155318225b459b48891e443055fabe0cdb1654a7a3c36e52d5719bdaf8
+      sha256: "069a8f7265527459080f4b5d509880d323e4fe1436fe49d70ae30f79679d3671"
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.9"
+    version: "1.4.11"
   firebase_storage:
     dependency: "direct main"
     description:

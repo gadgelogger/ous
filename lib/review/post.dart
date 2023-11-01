@@ -19,20 +19,11 @@ class _postState extends State<post> {
   //投稿データ
   String? iscategory = 'rigaku';
   String? isbumon = 'ラク単';
-  String? isnendo = '';
   String? isgakki = '春１';
-  String? iszyugyoumei = '';
-  String? iskousimei = '';
   String? istanni = '1';
   String? iszyugyoukeisiki = 'オンライン(VOD)';
   String? issyusseki = '毎日出席を取る';
   String? iskyoukasyo = 'あり';
-  String? istesutokeisiki = '';
-  String? istesutokeikou = '';
-  String? isname = '';
-
-  String? iskomento = '';
-  String? issenden = '';
 
   //総合評価
   double _hyouka = 0;
@@ -67,7 +58,6 @@ class _postState extends State<post> {
   final DateTime now = DateTime.now();
 
   final TextEditingController _textEditingController0 = TextEditingController();
-
   final TextEditingController _textEditingController1 = TextEditingController();
   final TextEditingController _textEditingController2 = TextEditingController();
   final TextEditingController _textEditingController3 = TextEditingController();
@@ -106,35 +96,11 @@ class _postState extends State<post> {
           title: const Text('投稿ページ'),
           actions: [
             IconButton(
-                icon: const Icon(Icons.computer),
+                icon: const Icon(Icons.error_outline_outlined),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) {
-                      return AlertDialog(
-                        title: const Text(
-                          "スマホで投稿するのが\nめんどくさい人へ",
-                          textAlign: TextAlign.center,
-                        ),
-                        content: const Text(
-                          "下記のボタンを押すとPC用クライアントを開きます。\n\nこれをニアバイシェアやAirdrop等を使いPCに送ってください。\n\nhttps://ous-unoffical-20d2c.web.app/\n手動で入力する場合は↑を入力してください。",
-                          textAlign: TextAlign.center,
-                        ),
-                        actions: <Widget>[
-                          // ボタン領域
-                          TextButton(
-                            child: const Text("俺はスマホを貫くぜ"),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          TextButton(
-                              child: const Text("開く"),
-                              onPressed: () {
-                                launch('https://ous-unoffical-20d2c.web.app/');
-                              }),
-                        ],
-                      );
-                    },
-                  );
+                  final url =
+                      Uri.parse('https://tan-q-bot-unofficial.com/rule/');
+                  launchUrl(url);
                 }),
           ],
         ),
@@ -222,6 +188,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '投稿する授業の部門を選んでください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -259,6 +226,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '年度を記入してください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextField(
                             keyboardType: TextInputType.number,
@@ -275,17 +243,13 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: '例：2023',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                isnendo = value;
-                              });
-                            },
                           ),
                           const SizedBox(
                             height: 32,
                           ),
                           const Text(
                             '開講学期を選んでください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -335,6 +299,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '授業名を入力してください。',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const Text(
                             'マイログに記載されている授業名（正式名称）をコピペして入力してください。。',
@@ -350,14 +315,10 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: 'FBD00100 フレッシュマンセミナー',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                iszyugyoumei = value;
-                              });
-                            },
                           ),
                           const Text(
                             '講師名を入力してください。',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const Text(
                             'マイログに記載されている正式なフルネーム（空白なし）で入力してください。',
@@ -373,17 +334,13 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: '太郎田中',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                iskousimei = value;
-                              });
-                            },
                           ),
                           const SizedBox(
                             height: 32,
                           ),
                           const Text(
                             '単位数を選んでください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -417,6 +374,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '授業形式を選んでください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -458,7 +416,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '総合評価',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Column(
                             children: <Widget>[
@@ -480,7 +438,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '授業の面白さ',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Column(
                             children: <Widget>[
@@ -502,7 +460,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '単位の取りやすさ',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Column(
                             children: <Widget>[
@@ -527,6 +485,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '出席確認の有無',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -565,6 +524,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             '教科書の有無',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(
                             width: 200.sw,
@@ -595,6 +555,7 @@ class _postState extends State<post> {
                           ),
                           const Text(
                             'コメント',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextField(
                             controller: _textEditingController3,
@@ -607,14 +568,10 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: 'この講義は楽で〜...',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                iskomento = value;
-                              });
-                            },
                           ),
                           const Text(
                             'テスト形式（期末）',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           TextField(
                             controller: _textEditingController4,
@@ -627,11 +584,6 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: 'ありorなしorレポートorその他...',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                istesutokeisiki = value;
-                              });
-                            },
                           ),
                           const Text(
                             'テストの傾向',
@@ -651,13 +603,11 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: 'テストは主に教科書から...',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                istesutokeikou = value;
-                              });
-                            },
                           ),
-                          const Text('投稿者名を入力してください'),
+                          const Text(
+                            '投稿者名を入力してください',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                           TextField(
                             controller: _textEditingController7,
                             // この一文を追加
@@ -669,14 +619,10 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: 'ニックネーム',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                isname = value;
-                              });
-                            },
                           ),
                           const Text(
                             '宣伝箇所',
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const Text(
                               '※サークルの宣伝や団体宣伝などが可能です。広報にご活用ください。入力された文字はそのまま反映されますのでご注意ください。'),
@@ -691,18 +637,15 @@ class _postState extends State<post> {
                             decoration: const InputDecoration(
                               labelText: '〇〇サークルに属しています！入部よろしく！',
                             ),
-                            onChanged: (String value) {
-                              setState(() {
-                                issenden = value;
-                              });
-                            },
                           ),
                           const SizedBox(
                             height: 50,
                           ),
                           SlideAction(
-                              outerColor:
-                                  Theme.of(context).colorScheme.secondary,
+                              outerColor: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.5),
                               key: slideActionKey,
                               onSubmit: () async {
                                 showDialog(
@@ -752,23 +695,26 @@ class _postState extends State<post> {
                                     .set({
                                       'bumon': isbumon,
                                       'gakki': isgakki,
-                                      'komento': iskomento,
-                                      'kousimei': iskousimei,
-                                      'nenndo': isnendo,
+                                      'komento': _textEditingController3.text,
+                                      'kousimei': _textEditingController2.text,
+                                      'nenndo': _textEditingController0.text,
                                       'omosirosa': _omosirosa,
-                                      'senden': issenden,
+                                      'senden': _textEditingController6.text,
                                       'sougouhyouka': _hyouka,
                                       'syusseki': issyusseki,
                                       'tannisuu': istanni,
-                                      'tesutokeisiki': istesutokeisiki,
+                                      'tesutokeisiki':
+                                          _textEditingController4.text,
                                       'toriyasusa': _toriyasusa,
                                       'zyugyoukeisiki': iszyugyoukeisiki,
-                                      'zyugyoumei': iszyugyoumei,
-                                      'name': isname,
+                                      'zyugyoumei':
+                                          _textEditingController1.text,
+                                      'name': _textEditingController7.text,
                                       'accountname': name,
                                       'accountemail': email,
                                       'accountuid': uid,
-                                      'tesutokeikou': istesutokeikou,
+                                      'tesutokeikou':
+                                          _textEditingController5.text,
                                       'kyoukasyo': iskyoukasyo,
                                       'date': Timestamp.fromDate(now),
                                       'ID': _randomId,

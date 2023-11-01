@@ -48,7 +48,6 @@ class _HomeState extends State<Home> {
     final prefs = await SharedPreferences.getInstance();
     int counter = (prefs.getInt('counter') ?? 0) + 1;
     await prefs.setInt('counter', counter);
-    print(counter);
     //レビュー表示させる処理
     if (counter % 10 == 0) {
       final InAppReview inAppReview = InAppReview.instance;
@@ -74,7 +73,6 @@ class _HomeState extends State<Home> {
     } else {
       throw Exception('Error');
     }
-    print(url);
   }
 
   void getWeatherData1() async {
@@ -92,7 +90,6 @@ class _HomeState extends State<Home> {
     } else {
       throw Exception('Error');
     }
-    print(url);
   }
 
 //岡山駅
@@ -662,125 +659,128 @@ class _HomeState extends State<Home> {
                 ]),
               )),
               Card(
-                  child: Column(children: [
-                Text(
-                  'マイログ稼働状況',
-                  style: TextStyle(
-                    fontSize: 30.sp,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(children: [
-                  ButtonBar(children: [
-                    SizedBox(
-                      width: 180.w, //横幅
-                      height: 180.h, //高さ
-                      child: FilledButton.tonal(
-                        style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          // Foreground color
-                          // Background color
-                        ),
-                        onPressed: () {
-                          final url = Uri.parse(
-                              'https://stats.uptimerobot.com/4KzW2hJvY6');
-
-                          launchUrl(url);
-                        },
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const FittedBox(
-                                child: Text(
-                                  'PC版',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  '$_title',
-                                  style: const TextStyle(
-                                    fontSize: 19,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Text(
-                                '$_pubDate',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                child: Column(children: [
+                  Text(
+                    'マイログ稼働状況',
+                    style: TextStyle(
+                      fontSize: 30.sp,
                     ),
-                    SizedBox(
-                      width: 180.w, //横幅
-                      height: 180.h, //高さ
-                      child: FilledButton.tonal(
-                        style: FilledButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(children: [
+                    ButtonBar(children: [
+                      SizedBox(
+                        width: 180.w, //横幅
+                        height: 180.h, //高さ
+                        child: FilledButton.tonal(
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            // Foreground color
+                            // Background color
                           ),
-                          // Foreground color
-                          // Background color
-                        ),
-                        onPressed: () {
-                          final url = Uri.parse(
-                              'https://stats.uptimerobot.com/4KzW2hJvY6');
+                          onPressed: () {
+                            final url = Uri.parse(
+                                'https://stats.uptimerobot.com/4KzW2hJvY6');
 
-                          launchUrl(url);
-                        },
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const FittedBox(
-                                child: Text(
-                                  'スマホ版',
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
+                            launchUrl(url);
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const FittedBox(
+                                  child: Text(
+                                    'PC版',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                              FittedBox(
-                                child: Text(
-                                  '$_title',
+                                FittedBox(
+                                  child: Text(
+                                    '$_title',
+                                    style: const TextStyle(
+                                      fontSize: 19,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Text(
+                                  '$_pubDate',
                                   style: const TextStyle(
-                                    fontSize: 19,
+                                    fontSize: 15,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                              ),
-                              Text(
-                                '$_pubDate',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    )
-                  ]),
-                ])
-              ])),
+                      SizedBox(
+                        width: 180.w, //横幅
+                        height: 180.h, //高さ
+                        child: FilledButton.tonal(
+                          style: FilledButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            // Foreground color
+                            // Background color
+                          ),
+                          onPressed: () {
+                            final url = Uri.parse(
+                                'https://stats.uptimerobot.com/4KzW2hJvY6');
+
+                            launchUrl(url);
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const FittedBox(
+                                  child: Text(
+                                    'スマホ版',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                FittedBox(
+                                  child: Text(
+                                    '$_title',
+                                    style: const TextStyle(
+                                      fontSize: 19,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Text(
+                                  '$_pubDate',
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    ]),
+                  ])
+                ]),
+              )),
             ],
           ))),
     );

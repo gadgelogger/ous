@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'apikey.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +11,9 @@ import 'package:ous/review.dart';
 import 'package:ous/info/info.dart';
 import 'account/login.dart';
 import 'package:flutter/services.dart';
-import 'package:algolia/algolia.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // ここに追加
@@ -39,6 +38,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool? isUnderMaintenance;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkMaintenance();
+  }
+
+  _checkMaintenance() async {
+    bool maintenance = await checkIfUnderMaintenance();
+    setState(() {
+      isUnderMaintenance = maintenance;
+    });
+  }
+
+  Future<bool> checkIfUnderMaintenance() async {
+    final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.fetchAndActivate();
+    final isUnderMaintenance = remoteConfig.getBool('isUnderMaintenance');
+    return isUnderMaintenance;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -47,42 +68,57 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: (context, child) {
           return MaterialApp(
-              localizationsDelegates: const [
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('ja'),
-              ],
-              locale: const Locale('ja'),
-              debugShowCheckedModeBanner: false,
-              title: 'ホーム',
-              theme: ThemeData(
-                useMaterial3: true,
-                colorSchemeSeed: Colors.lightGreen,
-                fontFamily: 'NotoSansCJKJp',
-              ),
-              darkTheme: ThemeData(
-                brightness: Brightness.dark,
-                useMaterial3: true,
-                colorSchemeSeed: Colors.lightGreen,
-                fontFamily: 'NotoSansCJKJp',
-              ),
-              home: StreamBuilder<User?>(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // スプラッシュ画面などに書き換えても良い
-                  }
-                  if (snapshot.hasData) {
-                    // User が null でなない、つまりサインイン済みのホーム画面へ
-                    return const MyHomePage(title: 'home');
-                  }
-                  // User が null である、つまり未サインインのサインイン画面へ
-                  return const Login();
-                },
-              ));
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('ja'),
+            ],
+            locale: const Locale('ja'),
+            debugShowCheckedModeBanner: false,
+            title: 'ホーム',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorSchemeSeed: Colors.lightGreen,
+              fontFamily: 'NotoSansCJKJp',
+            ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              useMaterial3: true,
+              colorSchemeSeed: Colors.lightGreen,
+              fontFamily: 'NotoSansCJKJp',
+            ),
+            home: FutureBuilder<bool>(
+              future: checkIfUnderMaintenance(),
+              builder: (context, maintenanceSnapshot) {
+                if (maintenanceSnapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // メンテナンス状態を確認中
+                }
+
+                if (maintenanceSnapshot.hasData &&
+                    maintenanceSnapshot.data == true) {
+                  return MaintenancePage(); // メンテナンス画面を表示
+                }
+
+                return StreamBuilder<User?>(
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (context, authSnapshot) {
+                    if (authSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // 認証状態を確認中
+                    }
+                    if (authSnapshot.hasData) {
+                      return const MyHomePage(title: 'home');
+                    }
+                    return const Login();
+                  },
+                );
+              },
+            ),
+          );
         });
   }
 }
@@ -235,5 +271,23 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ],
         ));
+  }
+}
+
+class MaintenancePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.construction, size: 50, color: Colors.orange),
+            SizedBox(height: 20),
+            Text("メンテナンス中", style: TextStyle(fontSize: 20)),
+          ],
+        ),
+      ),
+    );
   }
 }
