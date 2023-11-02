@@ -170,7 +170,7 @@ flutter:
   - assets/icon/logo.png
   - assets/files/2023_ous_schedule.ics
   - assets/files/2023_ous_schedule_imabari.ics
-
+  - assets/icon/maintenance.gif
   - assets/images/icon2.jpg
 flutter_native_splash:
   color: '#ffffff'

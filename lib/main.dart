@@ -38,28 +38,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool? isUnderMaintenance;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkMaintenance();
-  }
-
-  _checkMaintenance() async {
-    bool maintenance = await checkIfUnderMaintenance();
-    setState(() {
-      isUnderMaintenance = maintenance;
-    });
-  }
-
-  Future<bool> checkIfUnderMaintenance() async {
-    final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
-    await remoteConfig.fetchAndActivate();
-    final isUnderMaintenance = remoteConfig.getBool('isUnderMaintenance');
-    return isUnderMaintenance;
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -68,57 +46,29 @@ class _MyAppState extends State<MyApp> {
         splitScreenMode: true,
         builder: (context, child) {
           return MaterialApp(
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('ja'),
-            ],
-            locale: const Locale('ja'),
-            debugShowCheckedModeBanner: false,
-            title: 'ホーム',
-            theme: ThemeData(
-              useMaterial3: true,
-              colorSchemeSeed: Colors.lightGreen,
-              fontFamily: 'NotoSansCJKJp',
-            ),
-            darkTheme: ThemeData(
-              brightness: Brightness.dark,
-              useMaterial3: true,
-              colorSchemeSeed: Colors.lightGreen,
-              fontFamily: 'NotoSansCJKJp',
-            ),
-            home: FutureBuilder<bool>(
-              future: checkIfUnderMaintenance(),
-              builder: (context, maintenanceSnapshot) {
-                if (maintenanceSnapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // メンテナンス状態を確認中
-                }
-
-                if (maintenanceSnapshot.hasData &&
-                    maintenanceSnapshot.data == true) {
-                  return MaintenancePage(); // メンテナンス画面を表示
-                }
-
-                return StreamBuilder<User?>(
-                  stream: FirebaseAuth.instance.authStateChanges(),
-                  builder: (context, authSnapshot) {
-                    if (authSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // 認証状態を確認中
-                    }
-                    if (authSnapshot.hasData) {
-                      return const MyHomePage(title: 'home');
-                    }
-                    return const Login();
-                  },
-                );
-              },
-            ),
-          );
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('ja'),
+              ],
+              locale: const Locale('ja'),
+              debugShowCheckedModeBanner: false,
+              title: 'ホーム',
+              theme: ThemeData(
+                useMaterial3: true,
+                colorSchemeSeed: Colors.lightGreen,
+                fontFamily: 'NotoSansCJKJp',
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                useMaterial3: true,
+                colorSchemeSeed: Colors.lightGreen,
+                fontFamily: 'NotoSansCJKJp',
+              ),
+              home: SplashScreen());
         });
   }
 }
@@ -274,20 +224,97 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class MaintenancePage extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToNextScreen(context);
+  }
+
+  Future<bool> checkMaintenance() async {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(minutes: 1),
+      minimumFetchInterval: const Duration(minutes: 5),
+    ));
+
+    await remoteConfig.setDefaults(<String, dynamic>{
+      "isUnderMaintenance": false,
+    });
+
+    await remoteConfig.fetchAndActivate();
+    bool isUnderMaintenance = remoteConfig.getBool('isUnderMaintenance');
+
+    return isUnderMaintenance;
+  }
+
+  _navigateToNextScreen(BuildContext context) async {
+    bool isUnderMaintenance = await checkMaintenance();
+    if (isUnderMaintenance) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => MaintenanceScreen()));
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // スプラッシュ画面などに書き換えても良い
+        }
+        if (snapshot.hasData) {
+          // User が null でなない、つまりサインイン済みのホーム画面へ
+          return const MyHomePage(title: 'home');
+        }
+        // User が null である、つまり未サインインのサインイン画面へ
+        return const Login();
+      },
+    );
+  }
+}
+
+class MaintenanceScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.construction, size: 50, color: Colors.orange),
-            SizedBox(height: 20),
-            Text("メンテナンス中", style: TextStyle(fontSize: 20)),
-          ],
-        ),
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+              width: 200,
+              height: 200,
+              child: Image(
+                image: AssetImage('assets/icon/maintenance.gif'),
+                fit: BoxFit.cover,
+              )),
+          SizedBox(
+            height: 50.h,
+          ),
+          Text(
+            'メンテナンス中です！\nメンテナンス終了までお待ち下さい。',
+            style: TextStyle(fontSize: 18.sp),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 50.h,
+          ),
+          ElevatedButton(
+              onPressed: () {
+                final url = Uri.parse('https://twitter.com/TAN_Q_BOT_LOCAL');
+                launchUrl(url);
+              },
+              child: const Text('詳しくは開発者のTwitterをご確認ください。'))
+        ],
+      )),
     );
   }
 }

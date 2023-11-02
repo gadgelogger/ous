@@ -171,7 +171,6 @@ class _HomeState extends State<Home> {
   //Mylogの監視
   String? _title;
   String? _pubDate;
-  String? _error;
 
   Future<void> mylogMonitor() async {
     try {

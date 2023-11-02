@@ -51,10 +51,14 @@ class _SaboriState extends State<Sabori> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: KougiName,
                 decoration: const InputDecoration(
                   labelText: '講義名',
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    KougiName.text = value;
+                  });
+                },
               ),
               const Padding(
                 padding: EdgeInsets.all(8.0),
