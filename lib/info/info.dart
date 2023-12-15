@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
+import 'package:ous/analytics_service.dart';
 import 'package:ous/info/2.dart';
 import 'package:ous/info/3.dart';
 import 'package:ous/info/4.dart';
@@ -19,7 +20,12 @@ class Info extends StatefulWidget {
 
 class _InfoState extends State<Info> {
   @override
-  @override
+  void initState() {
+    super.initState();
+    // Analytics
+    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.info);
+  }
+
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 8,

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
+import 'package:ous/analytics_service.dart';
 import 'package:ous/component/review_top_component.dart';
 
 class Review extends StatefulWidget {
@@ -24,6 +25,8 @@ class _ReviewState extends State<Review> {
     if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
       showFloatingActionButton = true;
     }
+    // Analytics
+    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.review);
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:html/parser.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
 import 'package:ous/Weather/weatger_top.dart';
+import 'package:ous/analytics_service.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,6 +41,7 @@ class _HomeState extends State<Home> {
     getWeatherData1();
     mylogMonitor();
     incrementCounterAndRequestReview();
+    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
   }
 
   //アプリレビュー

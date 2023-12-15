@@ -118,8 +118,6 @@ class _SaboriState extends State<Sabori> {
                           'count': count, //講義の回数
                           'saveCount': saveCount, //サボれる回数
                           'exitCount': exitCount, //サボった回数
-                          'color': Color(Random().nextInt(0xffffffff))
-                              .withOpacity(1.0), //ランダムな背景色
                         });
                       });
                       _saveLectureList();

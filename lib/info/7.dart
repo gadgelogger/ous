@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Business extends StatefulWidget {
@@ -23,6 +25,10 @@ class _BusinessState extends State<Business>
   }
 
   Future<void> getWebsiteData() async {
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    final http = new IOClient(client);
     final response =
         await http.get(Uri.parse('https://career.office.ous.ac.jp/current'));
     final document = parser.parse(response.body);

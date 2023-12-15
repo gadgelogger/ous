@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Article {
@@ -26,7 +27,6 @@ class _AllState extends State<All> {
   List<Article> _articles = [];
   int _page = 1;
   bool _isLoading = false;
-  late BannerAd _myBanner;
 
   @override
   void initState() {
@@ -34,17 +34,17 @@ class _AllState extends State<All> {
     _getWebsiteData();
   }
 
-  @override
-  void dispose() {
-    _myBanner.dispose();
-    super.dispose();
-  }
-
   Future<void> _getWebsiteData() async {
     if (_isLoading) {
       return;
     }
     _isLoading = true;
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    final http = new IOClient(client);
+
     final response =
         await http.get(Uri.parse('https://www.ous.ac.jp/topics/?page=$_page'));
     final document = parser.parse(response.body);

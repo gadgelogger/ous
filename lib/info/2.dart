@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
+import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Article {
@@ -37,6 +39,12 @@ class _ImportantState extends State<Important> {
       return;
     }
     _isLoading = true;
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    final http = new IOClient(client);
+
     final response = await http
         .get(Uri.parse('https://www.ous.ac.jp/topics/?cat=1&page=$_page'));
     final document = parser.parse(response.body);

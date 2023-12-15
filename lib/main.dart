@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:ous/analytics_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/NavBar.dart';
@@ -20,11 +21,33 @@ void main() async {
 
   // Firebaseの初期化
   await Firebase.initializeApp();
+  // Analytics
+  await AnalyticsService().logBeginCheckout(); // 追加
 
   // 画面回転無効化
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
+  //Setting SysemUIOverlay（ナビゲーションバー透過）
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      systemStatusBarContrastEnforced: true,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark));
+
+//Setting SystmeUIMode（ナビゲーションバー透過
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
+  WidgetsFlutterBinding.ensureInitialized();
+
+//ジェスチャーナビゲーションを透明にしていい感じにする。
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: Colors.transparent,
+  ));
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top]);
   runApp(
     const MyApp(),
   );
@@ -87,7 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late String _currentVersion;
   late String _latestVersion;
 //クイックショートカット
-  String shortcut = 'no action set';
 
   @override
   void initState() {
