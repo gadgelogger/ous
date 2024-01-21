@@ -12,9 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:xml/xml.dart';
-import 'Nav/Calendar/calender.dart';
 import 'NavBar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'apikey.dart';
@@ -364,30 +362,6 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                GestureDetector(
-                  onDoubleTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => const CalendarPage(),
-                    ));
-                  },
-                  child: CalendarTimeline(
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2023, 1, 1),
-                    lastDate: DateTime(2023, 12, 31),
-                    onDateSelected: (date) => print(date),
-                    leftMargin: 20,
-                    monthColor: Colors.blueGrey,
-                    dayColor: Theme.of(context).colorScheme.primary,
-                    activeDayColor: Colors.white,
-                    activeBackgroundDayColor:
-                        Theme.of(context).colorScheme.primary,
-                    dotsColor: const Color(0xFF333A47),
-                    // 日本語ロケールを指定する
-                    locale: 'ja',
-                  ),
-                ),
-              ]),
               Card(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
