@@ -919,7 +919,7 @@ packages:
     source: hosted
     version: "2.2.1"
   pedantic_mono:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: pedantic_mono
       sha256: b7ac7d8a9f8824ab053773599918d6c99d643ed63ce20b440a19fed028a80d63

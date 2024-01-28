@@ -99,10 +99,10 @@ dependencies:
   flutter_riverpod: ^2.4.4
   firebase_remote_config: ^4.3.3
   firebase_analytics: ^10.7.4
+  pedantic_mono: ^1.24.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic_mono: any
   dependency_validator: any
 
 
