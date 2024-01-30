@@ -7,11 +7,9 @@
 // weatherData['main']['temp_max'] - 273.15
 // 気温を計算する部分を関数にしてあげる
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:ous/apikey.dart';
 import 'package:ous/component/weather_component.dart';
+import 'package:ous/infrastructure/weather_api_cliant.dart';
 
 class Weather extends StatefulWidget {
   const Weather({
@@ -24,45 +22,15 @@ class Weather extends StatefulWidget {
 }
 
 class _WeatherState extends State<Weather> {
-  dynamic weatherData;
-  List<dynamic> forecast = [];
-
   @override
   void initState() {
     super.initState();
-    getWeatherData();
-    getWeatherForecast();
+    initWeatherData();
   }
 
-  void getWeatherData() async {
-    String city = "Okayama";
-    String apiKey = Weatherkey;
-    String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja";
-
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        weatherData = jsonData;
-      });
-    }
-  }
-
-  void getWeatherForecast() async {
-    String city = "Okayama";
-    String apiKey = Weatherkey;
-    String url =
-        "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey";
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        forecast = jsonData['list'];
-      });
-    }
+  void initWeatherData() async {
+    await WeatherApiClient().getWeatherData(widget.city);
+    await WeatherApiClient().getWeatherForecast(widget.city);
   }
 
   @override
@@ -71,14 +39,30 @@ class _WeatherState extends State<Weather> {
           elevation: 0,
           title: const Text('天気'),
         ),
-        body: weatherData != null
-            ? WeatherWidget(
-                weatherData: weatherData,
-                forecast: forecast,
+        body: FutureBuilder(
+          future: Future.wait([
+            WeatherApiClient().getWeatherData(widget.city),
+            WeatherApiClient().getWeatherForecast(widget.city),
+          ]),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+            if (snapshot.hasError) {
+              // エラーが発生した場合の処理
+              return Center(
+                child: Text('エラーが発生しました: ${snapshot.error}'),
+              );
+            } else if (snapshot.hasData) {
+              return WeatherWidget(
+                weatherData: snapshot.data?[0], // getWeatherDataから取得
                 city: widget.city,
-              )
-            : const Center(
+                forecast: snapshot.data?[1], // getWeatherForecastから取得
+              );
+            } else {
+              return const Center(
                 child: CircularProgressIndicator(),
-              ),
+              );
+            }
+          },
+        ),
       );
 }

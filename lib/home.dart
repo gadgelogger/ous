@@ -269,7 +269,7 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const Weather(
-                                      city: '岡山',
+                                      city: 'Okayama',
                                     ),
                                   ));
                                 },
@@ -321,7 +321,7 @@ class _HomeState extends State<Home> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => const Weather(
-                                      city: '今治',
+                                      city: 'Aichi-ken',
                                     ),
                                   ));
                                 },
