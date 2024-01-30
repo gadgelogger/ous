@@ -7,10 +7,12 @@ class WeatherWidget extends StatelessWidget {
     Key? key,
     required this.weatherData,
     required this.forecast,
+    required this.city,
   }) : super(key: key);
 
-  final weatherData;
+  final dynamic weatherData;
   final List forecast;
+  final String city;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +22,9 @@ class WeatherWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [Icon(Icons.location_on_outlined), Text('今治')],
+              children: [const Icon(Icons.location_on_outlined), Text(city)],
             ),
             SizedBox(
               height: 10.h,
