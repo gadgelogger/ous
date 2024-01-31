@@ -247,3 +247,7 @@ class WeatherWidget extends StatelessWidget {
     );
   }
 }
+
+double convertKelvinToCelsius(double tempInKelvin) {
+  return tempInKelvin - 273.15;
+}
