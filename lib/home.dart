@@ -239,8 +239,8 @@ class _HomeState extends State<Home> {
                 }),
         ],
       ),
-      body: WillPopScope(
-          onWillPop: () async => false,
+      body: PopScope(
+          canPop: false,
           child: SingleChildScrollView(
               child: Column(
             children: [
@@ -268,7 +268,9 @@ class _HomeState extends State<Home> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => const Weather(),
+                                    builder: (_) => const Weather(
+                                      city: 'Okayama',
+                                    ),
                                   ));
                                 },
                                 child: Column(
@@ -318,7 +320,9 @@ class _HomeState extends State<Home> {
                               GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => const Imabari(),
+                                    builder: (_) => const Weather(
+                                      city: 'Aichi-ken',
+                                    ),
                                   ));
                                 },
                                 child: Column(

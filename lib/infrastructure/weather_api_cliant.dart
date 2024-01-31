@@ -1,37 +1,30 @@
-import 'package:http/http.dart' as http; //分ける
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:ous/apikey.dart';
 
 class WeatherApiClient {
-  static const _baseWeatherURL = "http://api.openweathermap.org/data/2.5";
-  static const _apiKey = Weatherkey;
-
-  final http.Client httpClient;
-
-  WeatherApiClient({http.Client? httpClient})
-      : httpClient = httpClient ?? http.Client();
-
-  Future<Map<String, dynamic>> fetchWeatherData(String city) async {
-    final url = '$_baseWeatherURL/weather?q=$city&appid=$_apiKey&lang=ja';
-    final response = await httpClient.get(Uri.parse(url));
-
+  String apiKey = Weatherkey;
+  Future<dynamic> getWeatherData(String city) async {
+    final url =
+        'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja';
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final data = jsonDecode(response.body);
+      return data;
     } else {
       throw Exception('Failed to load weather data');
     }
   }
 
-  Future<List<dynamic>> fetchWeatherForecast(String city) async {
-    final url = '$_baseWeatherURL/forecast?q=$city&appid=$_apiKey';
-    final response = await httpClient.get(Uri.parse(url));
-
+  Future<dynamic> getWeatherForecast(String city) async {
+    final url =
+        "http://api.openweathermap.org/data/2.5/forecast?q=$city&appid=$apiKey";
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
-      return jsonData['list'] as List;
+      final data = jsonDecode(response.body);
+      return data['list'];
     } else {
-      throw Exception('Failed to load weather forecast');
+      throw Exception('Failed to load weather data');
     }
   }
 }

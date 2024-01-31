@@ -90,6 +90,7 @@ dependencies:
   markdown_widget: ^2.2.0
   video_player: ^2.7.0
   weather_animation: ^1.0.0
+  build_runner: ^2.4.6
   showcaseview: ^2.0.3
   salomon_bottom_bar: ^3.3.2
   cupertino_icons: ^1.0.6
@@ -99,10 +100,10 @@ dependencies:
   flutter_riverpod: ^2.4.4
   firebase_remote_config: ^4.3.3
   firebase_analytics: ^10.7.4
-  pedantic_mono: ^1.24.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pedantic_mono: any
   dependency_validator: any
 
 
