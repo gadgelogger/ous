@@ -73,7 +73,7 @@ class _NavBarState extends State<NavBar> {
 
                 _data = snapshot.data!;
 
-                final displayName = _data['displayName'] as String?;
+                final displayName = _data['displayName'] as String? ?? '';
                 final email = _data['email'] as String?;
                 final image = _data['photoURL'] as String?;
 
