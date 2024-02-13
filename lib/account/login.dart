@@ -45,10 +45,6 @@ class LoginState extends State<Login> {
 //Appleサインイン
 
   Future<UserCredential?> appleSignIn() async {
-    final navigator =
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const MyHomePage(title: 'home');
-    }));
     final rawNonce = generateNonce();
 
     final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -80,8 +76,11 @@ class LoginState extends State<Login> {
       // その他のユーザー情報を追加
     }, SetOptions(merge: true));
 
-    // ここに画面遷移をするコードを書く!
-    await navigator;
+    // ログイン処理が終わった後に画面遷移を行う
+    await Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const MyHomePage(title: 'home');
+    }));
+
     Fluttertoast.showToast(msg: "Appleでログインしました");
 
     return authResult;
@@ -113,8 +112,8 @@ class LoginState extends State<Login> {
 
     return ShowCaseWidget(
       builder: Builder(
-          builder: (context) => WillPopScope(
-              onWillPop: willPopCallback,
+          builder: (context) => PopScope(
+              canPop: false,
               child: Scaffold(
                   resizeToAvoidBottomInset: false,
                   body: Scrollbar(
@@ -395,8 +394,8 @@ class LoginState extends State<Login> {
                                   SizedBox(height: 10.0.h),
 
                                   //ログインボタン
-                                  GestureDetector(
-                                    onTap: isChecked
+                                  ElevatedButton(
+                                    onPressed: isChecked
                                         ? () async {
                                             Fluttertoast.showToast(
                                                 msg: "ログイン中です\nちょっと待ってね。");
@@ -515,29 +514,16 @@ class LoginState extends State<Login> {
                                             ShowCaseWidget.of(context)
                                                 .startShowCase([spot]);
                                           },
-                                    child: SizedBox(
-                                      height: 40.0.h,
-                                      child: Material(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        color: Colors.lightGreen[200],
-                                        child: Container(
-                                            child: const Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Center(
-                                                child: Text(
-                                              'サインイン',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Montserrat'),
-                                            ))
-                                          ],
-                                        )),
-                                      ),
-                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        fixedSize: const Size.fromWidth(
+                                            double.maxFinite),
+                                        backgroundColor: Colors.lightGreen,
+                                        splashFactory: InkSplash.splashFactory),
+                                    child: Text('サインイン',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Montserrat')),
                                   ),
 
                                   //ログインボタンここまで
@@ -572,30 +558,48 @@ class LoginState extends State<Login> {
                                             ShowCaseWidget.of(context)
                                                 .startShowCase([spot]);
                                           },
-                                    child: SizedBox(
-                                      height: 40.0.h,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.lightGreen,
-                                                style: BorderStyle.solid,
-                                                width: 1.0.w),
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(20.0)),
-                                        child: const Center(
-                                            child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '大学のアカウントでサインイン',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Montserrat'),
-                                            ),
-                                          ],
-                                        )),
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        fixedSize: const Size.fromWidth(
+                                            double.maxFinite), //横幅に最大限のサイズを
+                                        shape: const StadiumBorder(),
+                                        side: const BorderSide(
+                                            color: Colors.lightGreen),
+                                      ),
+                                      onPressed: isChecked
+                                          ? () async {
+                                              Fluttertoast.showToast(
+                                                  msg: "ログイン中です\nちょっと待ってね。");
+                                              try {
+                                                // メール/パスワードでログイン
+                                                // ignore: unused_local_variable
+                                                final userCredential =
+                                                    await signInWithGoogle();
+                                                // ログインに成功した場合
+                                                // チャット画面に遷移＋ログイン画面を破棄
+                                                await Navigator.of(context)
+                                                    .pushReplacement(
+                                                        MaterialPageRoute(
+                                                            builder: (context) {
+                                                  return const MyHomePage(
+                                                      title: 'home');
+                                                }),
+                                                        result: Fluttertoast
+                                                            .showToast(
+                                                                msg:
+                                                                    "大学のアカウントでログインしました"));
+                                              } on PlatformException {}
+                                            }
+                                          : () {
+                                              ShowCaseWidget.of(context)
+                                                  .startShowCase([spot]);
+                                            },
+                                      child: const Text(
+                                        '大学のアカウントでサインイン',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat',
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -610,96 +614,91 @@ class LoginState extends State<Login> {
                                           right: 0,
                                           bottom: 20,
                                           left: 0),
-                                      child: GestureDetector(
-                                        onTap: isChecked
-                                            ? () async {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (_) {
-                                                    return AlertDialog(
-                                                      title: const Text(
-                                                        "注意",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      content: const Text(
-                                                        "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      actions: <Widget>[
-                                                        // ボタン領域
-                                                        TextButton(
-                                                          child: const Text(
-                                                              "やっぱやめる"),
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  context),
-                                                        ),
-                                                        TextButton(
-                                                            child: const Text(
-                                                                "ええで"),
-                                                            onPressed:
-                                                                () async {
-                                                              Fluttertoast
-                                                                  .showToast(
-                                                                      msg:
-                                                                          "ログイン中です\nちょっと待ってね。");
-                                                              appleSignIn(); // ボタンをタップしたときの処理
-                                                            }),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                            : () {
-                                                ShowCaseWidget.of(context)
-                                                    .startShowCase([
-                                                  spot
-                                                ]); // ボタンが無効なときの処理 // ボタンが無効なときの処理
-                                              },
-                                        child: SizedBox(
-                                          height: 40.0.h,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Theme.of(context)
-                                                                .brightness ==
-                                                            Brightness.dark
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                    style: BorderStyle.solid,
-                                                    width: 1.0.w),
-                                                color: Colors.transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20.0)),
-                                            child: const Center(
-                                                child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.apple, //設定したいアイコンのID
-                                                ),
-                                                Text(
-                                                  'Appleでサインイン',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Montserrat'),
-                                                ),
-                                              ],
-                                            )),
+                                      child: OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            fixedSize: const Size.fromWidth(
+                                                double.maxFinite), //横幅に最大限のサイズを
+                                            shape: const StadiumBorder(),
+                                            side: const BorderSide(
+                                                color: Colors.black),
                                           ),
-                                        ),
-                                      ),
+                                          onPressed: isChecked
+                                              ? () async {
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return AlertDialog(
+                                                        title: const Text(
+                                                          "注意",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        content: const Text(
+                                                          "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        actions: <Widget>[
+                                                          // ボタン領域
+                                                          TextButton(
+                                                            child: const Text(
+                                                                "やっぱやめる"),
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context),
+                                                          ),
+                                                          TextButton(
+                                                              child: const Text(
+                                                                  "ええで"),
+                                                              onPressed:
+                                                                  () async {
+                                                                Fluttertoast
+                                                                    .showToast(
+                                                                        msg:
+                                                                            "ログイン中です\nちょっと待ってね。");
+                                                                appleSignIn(); // ボタンをタップしたときの処理
+                                                              }),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                }
+                                              : () {
+                                                  ShowCaseWidget.of(context)
+                                                      .startShowCase([
+                                                    spot
+                                                  ]); // ボタンが無効なときの処理 // ボタンが無効なときの処理
+                                                },
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.apple,
+                                                color: Colors.black,
+                                              ),
+                                              Text(
+                                                'Appleでサインイン',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.black),
+                                              ),
+                                            ],
+                                          )),
                                     ),
 
                                   if (Platform.isAndroid) SizedBox(height: 0.h),
 
-                                  GestureDetector(
-                                    onTap: () async {
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      fixedSize: const Size.fromWidth(
+                                          double.maxFinite), //横幅に最大限のサイズを
+                                      shape: const StadiumBorder(),
+                                      side: const BorderSide(
+                                          color: Colors.lightGreen),
+                                    ),
+                                    onPressed: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -707,33 +706,61 @@ class LoginState extends State<Login> {
                                                 const Registration()),
                                       );
                                     },
-                                    child: SizedBox(
-                                      height: 40.0.h,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.lightGreen,
-                                                style: BorderStyle.solid,
-                                                width: 1.0.w),
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(20.0)),
-                                        child: const Center(
-                                          child: Text(
-                                            'サインアップ',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Montserrat',
-                                            ),
-                                          ),
-                                        ),
+                                    child: const Text(
+                                      'サインアップ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
                                       ),
                                     ),
                                   ),
-
                                   //Appleでサインイン（ここまで）
-                                  SizedBox(height: 20.0.h),
 
+                                  SizedBox(height: 20.0.h),
+                                  //ゲストモード
+                                  InkWell(
+                                    child: const Text(
+                                      'ゲストモードでログイン',
+                                      style: TextStyle(
+                                          color: Colors.lightGreen,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Montserrat',
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            title: const Text(
+                                              "注意",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: const Text(
+                                              "ゲストモードでログインしようとしています。\n講義評価など一部の機能が使えません\nまた30日後にアカウントが自動的に削除されます",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            actions: <Widget>[
+                                              // ボタン領域
+                                              TextButton(
+                                                child: const Text("やっぱやめる"),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                              TextButton(
+                                                  child: const Text("ええで"),
+                                                  onPressed: () async {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "ログイン中です\nちょっと待ってね。");
+                                                    signInAnonymously();
+                                                  }),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                   SizedBox(height: 50.0.h),
                                 ],
                               )),
@@ -797,5 +824,18 @@ class LoginState extends State<Login> {
     });
 
     return userCredential;
+  }
+
+//匿名ログイン
+  Future<UserCredential?> signInAnonymously() async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInAnonymously();
+      return userCredential;
+    } catch (e) {
+      // Handle any errors that occur during the login process
+      print('Error signing in anonymously: $e');
+      return null;
+    }
   }
 }
