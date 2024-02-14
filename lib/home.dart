@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:intl/intl.dart';
-import 'package:ous/Weather/weatger_top.dart';
 import 'package:ous/analytics_service.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +16,8 @@ import 'NavBar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'apikey.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+import 'ui/weather/weather_page.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
