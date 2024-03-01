@@ -1,6 +1,9 @@
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
@@ -19,11 +22,13 @@ class Article {
 }
 
 class All extends StatefulWidget {
+  const All({Key? key}) : super(key: key);
+
   @override
-  _AllState createState() => _AllState();
+  AllState createState() => AllState();
 }
 
-class _AllState extends State<All> {
+class AllState extends State<All> {
   List<Article> _articles = [];
   int _page = 1;
   bool _isLoading = false;
@@ -40,10 +45,10 @@ class _AllState extends State<All> {
     }
     _isLoading = true;
 
-    HttpClient client = new HttpClient();
+    HttpClient client = HttpClient();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
-    final http = new IOClient(client);
+    final http = IOClient(client);
 
     final response =
         await http.get(Uri.parse('https://www.ous.ac.jp/topics/?page=$_page'));
@@ -96,9 +101,9 @@ class _AllState extends State<All> {
     await _getWebsiteData();
   }
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> launchUrlString(String url) async {
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }

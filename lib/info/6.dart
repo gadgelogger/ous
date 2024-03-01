@@ -1,8 +1,11 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+// Package imports:
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+// Project imports:
+import 'package:ous/apikey.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
-import 'package:ous/apikey.dart';
 
 class Movie extends StatefulWidget {
   const Movie({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class Movie extends StatefulWidget {
 class _MovieState extends State<Movie> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  static String key = info_movie_key;
+  static String key = infoMovieKey;
 
   YoutubeAPI youtube = YoutubeAPI(
     key,

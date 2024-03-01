@@ -1,9 +1,13 @@
+// Dart imports:
 import 'dart:convert';
+
+// Package imports:
 import 'package:http/http.dart' as http;
+// Project imports:
 import 'package:ous/apikey.dart';
 
 class WeatherApiClient {
-  String apiKey = Weatherkey;
+  String apiKey = weatherKey;
   Future<dynamic> getWeatherData(String city) async {
     final url =
         'https://api.openweathermap.org/data/2.5/weather?q=$city&appid=$apiKey&lang=ja';

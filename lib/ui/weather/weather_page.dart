@@ -7,9 +7,12 @@
 // weatherData['main']['temp_max'] - 273.15
 // 気温を計算する部分を関数にしてあげる
 
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:ous/Weather/ui/weather_component.dart';
+
+// Project imports:
 import 'package:ous/Weather/api/weather_api_cliant.dart';
+import 'package:ous/Weather/ui/weather_component.dart';
 
 class Weather extends StatefulWidget {
   const Weather({

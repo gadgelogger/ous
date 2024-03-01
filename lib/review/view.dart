@@ -1,12 +1,16 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+// Project imports:
 import 'package:ous/review/detail_view.dart';
 import 'package:ous/review/post.dart';
-
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ReviewView extends StatefulWidget {
   final String gakubu;

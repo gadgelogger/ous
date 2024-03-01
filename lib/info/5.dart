@@ -1,6 +1,9 @@
+// Dart imports:
 import 'dart:io';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
@@ -19,11 +22,13 @@ class Article {
 }
 
 class Report extends StatefulWidget {
+  const Report({Key? key}) : super(key: key);
+
   @override
-  _ReportState createState() => _ReportState();
+  ReportState createState() => ReportState();
 }
 
-class _ReportState extends State<Report> {
+class ReportState extends State<Report> {
   List<Article> _articles = [];
   int _page = 1;
   bool _isLoading = false;
@@ -40,10 +45,10 @@ class _ReportState extends State<Report> {
     }
     _isLoading = true;
 
-    HttpClient client = new HttpClient();
+    HttpClient client = HttpClient();
     client.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
-    final http = new IOClient(client);
+    final http = IOClient(client);
 
     final response = await http
         .get(Uri.parse('https://www.ous.ac.jp/topics/?cat=6&page=$_page'));
@@ -96,9 +101,9 @@ class _ReportState extends State<Report> {
     await _getWebsiteData();
   }
 
-  Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> launchUrlString(String url) async {
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrlString(url);
     } else {
       throw 'Could not launch $url';
     }
@@ -107,57 +112,61 @@ class _ReportState extends State<Report> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: Center(
-        child: (_articles.isEmpty)
-            ? const CircularProgressIndicator()
-            : ListView.builder(
-                itemCount: _articles.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == _articles.length) {
-                    if (_isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      _onLoadMore();
-                      return const Center(
-                        child: LinearProgressIndicator(),
-                      );
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Center(
+          child: (_articles.isEmpty)
+              ? const CircularProgressIndicator()
+              : ListView.builder(
+                  itemCount: _articles.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == _articles.length) {
+                      if (_isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        _onLoadMore();
+                        return const Center(
+                          child: LinearProgressIndicator(),
+                        );
+                      }
                     }
-                  }
-                  final article = _articles[index];
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          article.title,
-                          style: TextStyle(fontSize: 15.sp),
-                        ),
-                        subtitle: Text(
-                          article.date.substring(0, 10),
-                          style: TextStyle(
+                    final article = _articles[index];
+                    return Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            article.title,
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          subtitle: Text(
+                            article.date.substring(0, 10),
+                            style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 15.sp),
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          onTap: () async {
+                            if (await canLaunchUrl(Uri.parse(article.url))) {
+                              await launchUrl(
+                                Uri.parse(article.url),
+                                mode: LaunchMode.platformDefault,
+                              );
+                            } else {
+                              throw 'Could not launch ${article.url}';
+                            }
+                          },
                         ),
-                        onTap: () async {
-                          if (await canLaunchUrl(Uri.parse(article.url))) {
-                            await launchUrl(Uri.parse(article.url),
-                                mode: LaunchMode.platformDefault);
-                          } else {
-                            throw 'Could not launch ${article.url}';
-                          }
-                        },
-                      ),
-                      const Divider(),
-                      //区切り線
-                    ],
-                  );
-                },
-              ),
+                        const Divider(),
+                        //区切り線
+                      ],
+                    );
+                  },
+                ),
+        ),
       ),
-    ));
+    );
   }
 }

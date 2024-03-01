@@ -1,7 +1,9 @@
+// Dart imports:
 import 'dart:convert';
-import 'dart:math';
 
+// Flutter imports:
 import 'package:flutter/material.dart';
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,8 +42,8 @@ class _SaboriState extends State<Sabori> {
   }
 
   void _showAddLectureDialog() {
-    final TextEditingController KougiName = TextEditingController();
-    int Kougicount = 16;
+    final TextEditingController kougiName = TextEditingController();
+    int kougiCount = 16;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -56,7 +58,7 @@ class _SaboriState extends State<Sabori> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    KougiName.text = value;
+                    kougiName.text = value;
                   });
                 },
               ),
@@ -65,7 +67,7 @@ class _SaboriState extends State<Sabori> {
                 child: Text('講義回数を選択'),
               ),
               DropdownButton<int>(
-                value: Kougicount,
+                value: kougiCount,
                 items: const [
                   DropdownMenuItem(
                     value: 16,
@@ -82,7 +84,7 @@ class _SaboriState extends State<Sabori> {
                 ],
                 onChanged: (value) {
                   setState(() {
-                    Kougicount = value!;
+                    kougiCount = value!;
                   });
                 },
               )
@@ -96,11 +98,11 @@ class _SaboriState extends State<Sabori> {
               child: const Text('キャンセル'),
             ),
             ElevatedButton(
-              onPressed: KougiName.text.isEmpty
+              onPressed: kougiName.text.isEmpty
                   ? null
                   : () {
-                      final name = KougiName.text;
-                      final count = Kougicount ?? 0;
+                      final name = kougiName.text;
+                      final count = kougiCount;
                       var saveCount = 0;
                       const exitCount = 0;
 

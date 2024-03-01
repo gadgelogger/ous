@@ -1,24 +1,24 @@
+// Flutter imports:
+// Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/review.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/streams.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
 
 class MultipleCollectionsPage extends StatefulWidget {
   const MultipleCollectionsPage({Key? key}) : super(key: key);
 
   @override
-  _MultipleCollectionsPageState createState() =>
-      _MultipleCollectionsPageState();
+  MultipleCollectionsPageState createState() => MultipleCollectionsPageState();
 }
 
-class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
+class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -89,8 +89,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                 itemBuilder: (BuildContext context, int index) {
                   DocumentSnapshot<Map<String, dynamic>> document =
                       documents[index];
-                  return Container(
-                      child: GestureDetector(
+                  return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
@@ -169,7 +168,7 @@ class _MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                         ),
                       ),
                     )),
-                  ));
+                  );
                 });
           },
         ));
@@ -216,10 +215,10 @@ class DetailsScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DetailsScreenState createState() => _DetailsScreenState();
+  DetailsScreenState createState() => DetailsScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class DetailsScreenState extends State<DetailsScreen> {
   //新しい講義データ
   String? zyugyoumei = '';
   String? kousimei = '';
@@ -2024,192 +2023,74 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                       ), //テスト形式
                       const Divider(),
-                      Container(
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onLongPress: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      title: const Text("講義の面白さ"),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ValueListenableBuilder<double>(
-                                            valueListenable: omosirosa,
-                                            builder: (BuildContext context,
-                                                double value, Widget? child) {
-                                              return Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    omosirosa.value
-                                                        .toStringAsFixed(0),
-                                                    style: const TextStyle(
-                                                        fontSize: 24),
-                                                  ),
-                                                  Slider(
-                                                    value: omosirosa.value,
-                                                    min: 0,
-                                                    max: 5,
-                                                    onChanged: (double value) {
-                                                      omosirosa.value = value;
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                      actions: <Widget>[
-                                        // ボタン領域
-                                        TextButton(
-                                          child: const Text("やっぱやめる"),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                        TextButton(
-                                            child: const Text("おけ"),
-                                            onPressed: () {
-                                              updateAllDocuments8();
-                                              Navigator.pop(context);
-                                              Fluttertoast.showToast(
-                                                  msg: "完了しました");
-                                            }),
+                      Column(
+                        children: [
+                          GestureDetector(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: const Text("講義の面白さ"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ValueListenableBuilder<double>(
+                                          valueListenable: omosirosa,
+                                          builder: (BuildContext context,
+                                              double value, Widget? child) {
+                                            return Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  omosirosa.value
+                                                      .toStringAsFixed(0),
+                                                  style: const TextStyle(
+                                                      fontSize: 24),
+                                                ),
+                                                Slider(
+                                                  value: omosirosa.value,
+                                                  min: 0,
+                                                  max: 5,
+                                                  onChanged: (double value) {
+                                                    omosirosa.value = value;
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        )
                                       ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '講義の面白さ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.sp,
                                     ),
-                                  ),
-                                  SizedBox(
-                                      height: 200.h,
-                                      child: SfRadialGauge(axes: <RadialAxis>[
-                                        RadialAxis(
-                                            minimum: 0,
-                                            maximum: 5,
-                                            showLabels: false,
-                                            showTicks: false,
-                                            axisLineStyle: const AxisLineStyle(
-                                              thickness: 0.2,
-                                              cornerStyle:
-                                                  CornerStyle.bothCurve,
-                                              color: Color.fromARGB(
-                                                  139, 134, 134, 134),
-                                              thicknessUnit:
-                                                  GaugeSizeUnit.factor,
-                                            ),
-                                            pointers: <GaugePointer>[
-                                              RangePointer(
-                                                value: document['omosirosa']
-                                                    .toDouble(),
-                                                cornerStyle:
-                                                    CornerStyle.bothCurve,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
-                                                width: 0.2,
-                                                sizeUnit: GaugeSizeUnit.factor,
-                                              )
-                                            ],
-                                            annotations: <GaugeAnnotation>[
-                                              GaugeAnnotation(
-                                                  positionFactor: 0.1,
-                                                  angle: 90,
-                                                  widget: Text(
-                                                    document['omosirosa']
-                                                            .toDouble()
-                                                            .toStringAsFixed(
-                                                                0) +
-                                                        ' / 5',
-                                                    style: TextStyle(
-                                                        fontSize: 50.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ))
-                                            ])
-                                      ])),
-                                ],
-                              ),
-                            ), //おもしろさ
-                            GestureDetector(
-                              onLongPress: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      title: const Text("単位の取りやすさ"),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ValueListenableBuilder<double>(
-                                            valueListenable: toriyasusa,
-                                            builder: (BuildContext context,
-                                                double value, Widget? child) {
-                                              return Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    toriyasusa.value
-                                                        .toStringAsFixed(0),
-                                                    style: const TextStyle(
-                                                        fontSize: 24),
-                                                  ),
-                                                  Slider(
-                                                    value: toriyasusa.value,
-                                                    min: 0,
-                                                    max: 5,
-                                                    onChanged: (double value) {
-                                                      toriyasusa.value = value;
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          )
-                                        ],
+                                    actions: <Widget>[
+                                      // ボタン領域
+                                      TextButton(
+                                        child: const Text("やっぱやめる"),
+                                        onPressed: () => Navigator.pop(context),
                                       ),
-                                      actions: <Widget>[
-                                        // ボタン領域
-                                        TextButton(
-                                          child: const Text("やっぱやめる"),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                        TextButton(
-                                            child: const Text("おけ"),
-                                            onPressed: () {
-                                              updateAllDocuments9();
-                                              Navigator.pop(context);
-                                              Fluttertoast.showToast(
-                                                  msg: "完了しました");
-                                            }),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '単位の取りやすさ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.sp,
-                                    ),
+                                      TextButton(
+                                          child: const Text("おけ"),
+                                          onPressed: () {
+                                            updateAllDocuments8();
+                                            Navigator.pop(context);
+                                            Fluttertoast.showToast(
+                                                msg: "完了しました");
+                                          }),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '講義の面白さ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp,
                                   ),
-                                  SizedBox(
+                                ),
+                                SizedBox(
                                     height: 200.h,
                                     child: SfRadialGauge(axes: <RadialAxis>[
                                       RadialAxis(
@@ -2226,7 +2107,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ),
                                           pointers: <GaugePointer>[
                                             RangePointer(
-                                              value: document['toriyasusa']
+                                              value: document['omosirosa']
                                                   .toDouble(),
                                               cornerStyle:
                                                   CornerStyle.bothCurve,
@@ -2242,7 +2123,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                 positionFactor: 0.1,
                                                 angle: 90,
                                                 widget: Text(
-                                                  document['toriyasusa']
+                                                  document['omosirosa']
                                                           .toDouble()
                                                           .toStringAsFixed(0) +
                                                       ' / 5',
@@ -2252,128 +2133,236 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                                           FontWeight.bold),
                                                 ))
                                           ])
-                                    ]),
+                                    ])),
+                              ],
+                            ),
+                          ), //おもしろさ
+                          GestureDetector(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: const Text("単位の取りやすさ"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ValueListenableBuilder<double>(
+                                          valueListenable: toriyasusa,
+                                          builder: (BuildContext context,
+                                              double value, Widget? child) {
+                                            return Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  toriyasusa.value
+                                                      .toStringAsFixed(0),
+                                                  style: const TextStyle(
+                                                      fontSize: 24),
+                                                ),
+                                                Slider(
+                                                  value: toriyasusa.value,
+                                                  min: 0,
+                                                  max: 5,
+                                                  onChanged: (double value) {
+                                                    toriyasusa.value = value;
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      // ボタン領域
+                                      TextButton(
+                                        child: const Text("やっぱやめる"),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                          child: const Text("おけ"),
+                                          onPressed: () {
+                                            updateAllDocuments9();
+                                            Navigator.pop(context);
+                                            Fluttertoast.showToast(
+                                                msg: "完了しました");
+                                          }),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '単位の取りやすさ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp,
                                   ),
-                                ],
-                              ),
-                            ), //取りやすさ
-                            GestureDetector(
-                              onLongPress: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      title: const Text("総合評価"),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          ValueListenableBuilder<double>(
-                                            valueListenable: hyouka,
-                                            builder: (BuildContext context,
-                                                double value, Widget? child) {
-                                              return Column(
-                                                children: <Widget>[
-                                                  Text(
-                                                    hyouka.value
-                                                        .toStringAsFixed(0),
-                                                    style: const TextStyle(
-                                                        fontSize: 24),
-                                                  ),
-                                                  Slider(
-                                                    value: hyouka.value,
-                                                    min: 0,
-                                                    max: 5,
-                                                    onChanged: (double value) {
-                                                      hyouka.value = value;
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
+                                ),
+                                SizedBox(
+                                  height: 200.h,
+                                  child: SfRadialGauge(axes: <RadialAxis>[
+                                    RadialAxis(
+                                        minimum: 0,
+                                        maximum: 5,
+                                        showLabels: false,
+                                        showTicks: false,
+                                        axisLineStyle: const AxisLineStyle(
+                                          thickness: 0.2,
+                                          cornerStyle: CornerStyle.bothCurve,
+                                          color: Color.fromARGB(
+                                              139, 134, 134, 134),
+                                          thicknessUnit: GaugeSizeUnit.factor,
+                                        ),
+                                        pointers: <GaugePointer>[
+                                          RangePointer(
+                                            value: document['toriyasusa']
+                                                .toDouble(),
+                                            cornerStyle: CornerStyle.bothCurve,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            width: 0.2,
+                                            sizeUnit: GaugeSizeUnit.factor,
                                           )
                                         ],
-                                      ),
-                                      actions: <Widget>[
-                                        // ボタン領域
-                                        TextButton(
-                                          child: const Text("やっぱやめる"),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        ),
-                                        TextButton(
-                                            child: const Text("おけ"),
-                                            onPressed: () {
-                                              updateAllDocuments10();
-                                              Navigator.pop(context);
-                                              Fluttertoast.showToast(
-                                                  msg: "完了しました");
-                                            }),
+                                        annotations: <GaugeAnnotation>[
+                                          GaugeAnnotation(
+                                              positionFactor: 0.1,
+                                              angle: 90,
+                                              widget: Text(
+                                                document['toriyasusa']
+                                                        .toDouble()
+                                                        .toStringAsFixed(0) +
+                                                    ' / 5',
+                                                style: TextStyle(
+                                                    fontSize: 50.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ))
+                                        ])
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ), //取りやすさ
+                          GestureDetector(
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title: const Text("総合評価"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        ValueListenableBuilder<double>(
+                                          valueListenable: hyouka,
+                                          builder: (BuildContext context,
+                                              double value, Widget? child) {
+                                            return Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  hyouka.value
+                                                      .toStringAsFixed(0),
+                                                  style: const TextStyle(
+                                                      fontSize: 24),
+                                                ),
+                                                Slider(
+                                                  value: hyouka.value,
+                                                  min: 0,
+                                                  max: 5,
+                                                  onChanged: (double value) {
+                                                    hyouka.value = value;
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        )
                                       ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '総合評価',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.sp,
                                     ),
+                                    actions: <Widget>[
+                                      // ボタン領域
+                                      TextButton(
+                                        child: const Text("やっぱやめる"),
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      TextButton(
+                                          child: const Text("おけ"),
+                                          onPressed: () {
+                                            updateAllDocuments10();
+                                            Navigator.pop(context);
+                                            Fluttertoast.showToast(
+                                                msg: "完了しました");
+                                          }),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '総合評価',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20.sp,
                                   ),
-                                  SizedBox(
-                                    height: 200.h,
-                                    child: SfRadialGauge(axes: <RadialAxis>[
-                                      RadialAxis(
-                                          minimum: 0,
-                                          maximum: 5,
-                                          showLabels: false,
-                                          showTicks: false,
-                                          axisLineStyle: const AxisLineStyle(
-                                            thickness: 0.2,
+                                ),
+                                SizedBox(
+                                  height: 200.h,
+                                  child: SfRadialGauge(axes: <RadialAxis>[
+                                    RadialAxis(
+                                        minimum: 0,
+                                        maximum: 5,
+                                        showLabels: false,
+                                        showTicks: false,
+                                        axisLineStyle: const AxisLineStyle(
+                                          thickness: 0.2,
+                                          cornerStyle: CornerStyle.bothCurve,
+                                          color: Color.fromARGB(
+                                              139, 134, 134, 134),
+                                          thicknessUnit: GaugeSizeUnit.factor,
+                                        ),
+                                        pointers: <GaugePointer>[
+                                          RangePointer(
+                                            value: document['sougouhyouka']
+                                                .toDouble(),
                                             cornerStyle: CornerStyle.bothCurve,
-                                            color: Color.fromARGB(
-                                                139, 134, 134, 134),
-                                            thicknessUnit: GaugeSizeUnit.factor,
-                                          ),
-                                          pointers: <GaugePointer>[
-                                            RangePointer(
-                                              value: document['sougouhyouka']
-                                                  .toDouble(),
-                                              cornerStyle:
-                                                  CornerStyle.bothCurve,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              width: 0.2,
-                                              sizeUnit: GaugeSizeUnit.factor,
-                                            )
-                                          ],
-                                          annotations: <GaugeAnnotation>[
-                                            GaugeAnnotation(
-                                                positionFactor: 0.1,
-                                                angle: 90,
-                                                widget: Text(
-                                                  document['sougouhyouka']
-                                                          .toDouble()
-                                                          .toStringAsFixed(0) +
-                                                      ' / 5',
-                                                  style: TextStyle(
-                                                      fontSize: 50.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ))
-                                          ])
-                                    ]),
-                                  ),
-                                ],
-                              ),
-                            ), //総合評価
-                            const Divider(),
-                          ],
-                        ),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            width: 0.2,
+                                            sizeUnit: GaugeSizeUnit.factor,
+                                          )
+                                        ],
+                                        annotations: <GaugeAnnotation>[
+                                          GaugeAnnotation(
+                                              positionFactor: 0.1,
+                                              angle: 90,
+                                              widget: Text(
+                                                document['sougouhyouka']
+                                                        .toDouble()
+                                                        .toStringAsFixed(0) +
+                                                    ' / 5',
+                                                style: TextStyle(
+                                                    fontSize: 50.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ))
+                                        ])
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ), //総合評価
+                          const Divider(),
+                        ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
