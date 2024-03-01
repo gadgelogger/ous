@@ -7,6 +7,163 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/account/login.dart';
 
 class Tutorial extends StatelessWidget {
+  final pages = [
+    PageModel.withChild(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 0.0),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/mockup.PNG',
+              width: 250.0.w,
+              height: 550.0.h,
+            ),
+            Text(
+              "非公式岡理アプリ",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "入りたてほやほやの新入生と\n単位ギリギリの人が\n単位を取れますように。",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      color: Colors.lightGreen,
+      doAnimateChild: true,
+    ),
+    PageModel.withChild(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 0.0),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/icon/book.png',
+              width: 250.0.w,
+              height: 550.0.h,
+            ),
+            Text(
+              "豊富な講義評価",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "100以上の\n講義評価をどこからでも。",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      color: const Color(0xFF56BCA7),
+      doAnimateChild: true,
+    ),
+    PageModel.withChild(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 0.0),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/icon/news.png',
+              width: 250.0.w,
+              height: 550.0.h,
+            ),
+            Text(
+              "最新ニュース",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "大学サイトよりも\n見やすく、シンプル。",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      color: const Color(0xff4fadf8),
+      doAnimateChild: true,
+    ),
+    PageModel.withChild(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 0.0),
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/icon/book.png',
+              width: 250.0.w,
+              height: 550.0.h,
+            ),
+            Text(
+              "機能は随時追加中",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 32.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "どんどん進化します。",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.sp,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+      color: const Color(0xfffc7f7f),
+      doAnimateChild: true,
+    ),
+    PageModel.withChild(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 25.0),
+        child: Text(
+          "さあ、始めよう！",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 32.sp,
+          ),
+        ),
+      ),
+      color: Colors.lightGreen,
+      doAnimateChild: true,
+    ),
+  ];
+
   Tutorial({Key? key}) : super(key: key);
 
   @override
@@ -38,139 +195,4 @@ class Tutorial extends StatelessWidget {
       ),
     );
   }
-
-  final pages = [
-    PageModel.withChild(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Column(
-              children: [
-                Image.asset('assets/images/mockup.PNG',
-                    width: 250.0.w, height: 550.0.h),
-                Text(
-                  "非公式岡理アプリ",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "入りたてほやほやの新入生と\n単位ギリギリの人が\n単位を取れますように。",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            )),
-        color: Colors.lightGreen,
-        doAnimateChild: true),
-    PageModel.withChild(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Column(
-              children: [
-                Image.asset('assets/icon/book.png',
-                    width: 250.0.w, height: 550.0.h),
-                Text(
-                  "豊富な講義評価",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "100以上の\n講義評価をどこからでも。",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            )),
-        color: const Color(0xFF56BCA7),
-        doAnimateChild: true),
-    PageModel.withChild(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Column(
-              children: [
-                Image.asset('assets/icon/news.png',
-                    width: 250.0.w, height: 550.0.h),
-                Text(
-                  "最新ニュース",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "大学サイトよりも\n見やすく、シンプル。",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            )),
-        color: const Color(0xff4fadf8),
-        doAnimateChild: true),
-    PageModel.withChild(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 0.0),
-            child: Column(
-              children: [
-                Image.asset('assets/icon/book.png',
-                    width: 250.0.w, height: 550.0.h),
-                Text(
-                  "機能は随時追加中",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  "どんどん進化します。",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                )
-              ],
-            )),
-        color: const Color(0xfffc7f7f),
-        doAnimateChild: true),
-    PageModel.withChild(
-        child: Padding(
-            padding: const EdgeInsets.only(bottom: 25.0),
-            child: Text(
-              "さあ、始めよう！",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.sp,
-              ),
-            )),
-        color: Colors.lightGreen,
-        doAnimateChild: true)
-  ];
 }

@@ -1,13 +1,11 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 // Project imports:
 import 'package:ous/review/detail_view.dart';
 import 'package:ous/review/post.dart';
@@ -33,17 +31,6 @@ class ReviewViewState extends State<ReviewView> {
   //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
-
-  @override
-  void initState() {
-    super.initState();
-    auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
-      showFloatingActionButton = true;
-    }
-    state = widget.gakubu;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,78 +125,82 @@ class ReviewViewState extends State<ReviewView> {
                                 );
                               },
                               child: (SizedBox(
-                                  width: 200.w,
-                                  height: 30.h,
-                                  child: Card(
-                                    elevation: 10,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    child: Stack(
-                                      children: <Widget>[
-                                        // 既存のウィジェット
-                                        Padding(
-                                          padding: const EdgeInsets.all(15),
-                                          child: Align(
-                                            alignment:
-                                                const Alignment(-0.8, -0.5),
-                                            child: Text(
-                                              data[index]['zyugyoumei'],
-                                              style: TextStyle(fontSize: 20.sp),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                width: 200.w,
+                                height: 30.h,
+                                child: Card(
+                                  elevation: 10,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Stack(
+                                    children: <Widget>[
+                                      // 既存のウィジェット
+                                      Padding(
+                                        padding: const EdgeInsets.all(15),
+                                        child: Align(
+                                          alignment:
+                                              const Alignment(-0.8, -0.5),
+                                          child: Text(
+                                            data[index]['zyugyoumei'],
+                                            style: TextStyle(fontSize: 20.sp),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
-                                        Align(
-                                          alignment: const Alignment(-0.8, 0.4),
-                                          child: Text(
-                                            data[index]['gakki'],
-                                            style: TextStyle(
-                                                color: Theme.of(context)
+                                      ),
+                                      Align(
+                                        alignment: const Alignment(-0.8, 0.4),
+                                        child: Text(
+                                          data[index]['gakki'],
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 15.sp,
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: const Alignment(-0.8, 0.8),
+                                        child: Text(
+                                          data[index]['kousimei'],
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(fontSize: 15.sp),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 4,
+                                            horizontal: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: data[index]['bumon'] == 'エグ単'
+                                                ? Colors.red
+                                                : Theme.of(context)
                                                     .colorScheme
                                                     .primary,
-                                                fontSize: 15.sp),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8),
+                                            ),
                                           ),
-                                        ),
-                                        Align(
-                                          alignment: const Alignment(-0.8, 0.8),
                                           child: Text(
-                                            data[index]['kousimei'],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 15.sp),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4, horizontal: 6),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  data[index]['bumon'] == 'エグ単'
-                                                      ? Colors.red
-                                                      : Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                topLeft: Radius.circular(8),
-                                                bottomRight: Radius.circular(8),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              data[index]['bumon'],
-                                              style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  color: textColor),
+                                            data[index]['bumon'],
+                                            style: TextStyle(
+                                              fontSize: 15.sp,
+                                              color: textColor,
                                             ),
                                           ),
                                         ),
-                                        // アイコンを追加する Positioned ウィジェット
-                                      ],
-                                    ),
-                                  ))),
+                                      ),
+                                      // アイコンを追加する Positioned ウィジェット
+                                    ],
+                                  ),
+                                ),
+                              )),
                             ),
                           ),
                         ),
@@ -236,12 +227,13 @@ class ReviewViewState extends State<ReviewView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const post()),
+                              builder: (context) => const post(),
+                            ),
                           );
                         },
                         child: const Icon(Icons.upload_outlined),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 FloatingActionButton(
@@ -267,5 +259,16 @@ class ReviewViewState extends State<ReviewView> {
               child: const Icon(Icons.filter_list),
             ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
+      showFloatingActionButton = true;
+    }
+    state = widget.gakubu;
   }
 }

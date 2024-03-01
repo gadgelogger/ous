@@ -1,21 +1,24 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+double convertKelvinToCelsius(double tempInKelvin) {
+  return tempInKelvin - 273.15;
+}
+
 class WeatherWidget extends StatelessWidget {
+  final dynamic weatherData;
+
+  final List forecast;
+  final String city;
   const WeatherWidget({
     Key? key,
     required this.weatherData,
     required this.forecast,
     required this.city,
   }) : super(key: key);
-
-  final dynamic weatherData;
-  final List forecast;
-  final String city;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,10 @@ class WeatherWidget extends StatelessWidget {
             ),
             Text(
               DateFormat('M/d(E)HH:mm').format(
-                  DateTime.fromMillisecondsSinceEpoch(
-                      weatherData['dt'] * 1000)),
+                DateTime.fromMillisecondsSinceEpoch(
+                  weatherData['dt'] * 1000,
+                ),
+              ),
               style: TextStyle(
                 fontSize: 20.sp,
               ),
@@ -47,16 +52,18 @@ class WeatherWidget extends StatelessWidget {
                   height: 130.h,
                   width: 150.w,
                   child: Image.network(
-                      "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@4x.png"),
+                    "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@4x.png",
+                  ),
                 ),
                 Text(
                   (weatherData['main']['temp'] - 273.15).toStringAsFixed(0) +
                       "°",
                   style: TextStyle(
-                      fontSize: 80.sp,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black),
+                    fontSize: 80.sp,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
                 ),
               ],
             ),
@@ -197,12 +204,17 @@ class WeatherWidget extends StatelessWidget {
                         children: <Widget>[
                           if (index == 0 ||
                               date !=
-                                  DateFormat('M/d').format(DateTime.parse(
-                                      forecast[index - 1]['dt_txt'])))
+                                  DateFormat('M/d').format(
+                                    DateTime.parse(
+                                      forecast[index - 1]['dt_txt'],
+                                    ),
+                                  ))
                             Text(
                               date,
                               style: TextStyle(
-                                  fontSize: 20.sp, color: Colors.black),
+                                fontSize: 20.sp,
+                                color: Colors.black,
+                              ),
                             )
                           else
                             SizedBox(
@@ -219,38 +231,42 @@ class WeatherWidget extends StatelessWidget {
                             child: Column(
                               children: [
                                 Text(
-                                  DateFormat('HH:mm').format(DateTime.parse(
-                                      forecast[index]['dt_txt'])),
+                                  DateFormat('HH:mm').format(
+                                    DateTime.parse(
+                                      forecast[index]['dt_txt'],
+                                    ),
+                                  ),
                                   style: TextStyle(
-                                      fontSize: 15.sp, color: Colors.black),
+                                    fontSize: 15.sp,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 Image.network(
                                   Uri.encodeFull(
-                                      "http://openweathermap.org/img/wn/${forecast[index]['weather'][0]['icon']}@2x.png"),
+                                    "http://openweathermap.org/img/wn/${forecast[index]['weather'][0]['icon']}@2x.png",
+                                  ),
                                   width: 80,
                                 ),
                                 Text(
                                   "${(forecast[index]['main']['temp'] - 273.15).toStringAsFixed(0)}°",
                                   style: TextStyle(
-                                      fontSize: 15.sp, color: Colors.black),
+                                    fontSize: 15.sp,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     );
                   },
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-double convertKelvinToCelsius(double tempInKelvin) {
-  return tempInKelvin - 273.15;
 }

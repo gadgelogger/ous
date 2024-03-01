@@ -60,7 +60,9 @@ class CustomCard extends StatelessWidget {
                         top: 0,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 4, horizontal: 6),
+                            vertical: 4,
+                            horizontal: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: const BorderRadius.only(
@@ -191,10 +193,11 @@ class CustomCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ReviewView(
-                      gakubu: collection,
-                      title: title,
-                    )),
+              builder: (context) => ReviewView(
+                gakubu: collection,
+                title: title,
+              ),
+            ),
           );
         },
       );
@@ -208,119 +211,124 @@ class FloatingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SpeedDial(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(
-              18.0)), // adjust this value according to your button's height
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(
+            18.0,
+          ),
+        ), // adjust this value according to your button's height
+      ),
+      icon: Icons.menu,
+      activeIcon: Icons.close,
+      childPadding: const EdgeInsets.all(5),
+      spaceBetweenChildren: 10,
+      children: [
+        SpeedDialChild(
+          child: const Icon(Icons.upload_outlined),
+          label: "投稿",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const post()),
+            );
+          },
         ),
-        icon: Icons.menu,
-        activeIcon: Icons.close,
-        childPadding: const EdgeInsets.all(5),
-        spaceBetweenChildren: 10,
-        children: [
-          SpeedDialChild(
-            child: const Icon(Icons.upload_outlined),
-            label: "投稿",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const post()),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.favorite_border),
-            label: "お気に入り",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const FavoritesPage()),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.person_2_outlined),
-            label: "自分の投稿",
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const MultipleCollectionsPage()),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.info_outline),
-            label: "教務ガイド（履修削除はこちら）",
-            onTap: () async {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("注意"),
-                  content: const Text(
-                    "この先ログイン画面が表示されます\n大学のGoogleアカウントでログインしてください。",
-                    textAlign: TextAlign.center,
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("やめる"),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        final url = Uri.parse(
-                          'https://accounts.google.com/AccountChooser/signinchooser?continue=https%3A%2F%2Fsites.google.com%2Fous.ac.jp%2Facademicaffairs%2F%25E5%2590%2584%25E7%25A8%25AE%25E7%2594%25B3%25E8%25AB%258B%2F%25E5%25B1%25A5%25E4%25BF%25AE%25E9%2596%25A2%25E4%25BF%2582&flowName=GlifWebSignIn&flowEntry=AccountChooser',
-                        );
-                        if (await canLaunchUrl(url)) {
-                          launchUrl(url, mode: LaunchMode.externalApplication);
-                        } else {
-                          // ignore: avoid_print
-                          print("Can't launch $url");
-                        }
-                      },
-                      child: const Text("おっけー"),
-                    )
-                  ],
+        SpeedDialChild(
+          child: const Icon(Icons.favorite_border),
+          label: "お気に入り",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoritesPage()),
+            );
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.person_2_outlined),
+          label: "自分の投稿",
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MultipleCollectionsPage(),
+              ),
+            );
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.info_outline),
+          label: "教務ガイド（履修削除はこちら）",
+          onTap: () async {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("注意"),
+                content: const Text(
+                  "この先ログイン画面が表示されます\n大学のGoogleアカウントでログインしてください。",
+                  textAlign: TextAlign.center,
                 ),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.book_outlined),
-            label: "シラバス",
-            onTap: () async {
-              final url = Uri.parse(
-                'https://mylog.pub.ous.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006',
-              );
-              if (await canLaunchUrl(url)) {
-                launchUrl(url, mode: LaunchMode.externalApplication);
-              } else {
-                // ignore: avoid_print
-                print("Can't launch $url");
-              }
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.calculate_outlined),
-            label: "GPA計算機",
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Gpa()),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.directions_run_outlined),
-            label: "サボりカウンター",
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Sabori()),
-              );
-            },
-          ),
-        ]);
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("やめる"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final url = Uri.parse(
+                        'https://accounts.google.com/AccountChooser/signinchooser?continue=https%3A%2F%2Fsites.google.com%2Fous.ac.jp%2Facademicaffairs%2F%25E5%2590%2584%25E7%25A8%25AE%25E7%2594%25B3%25E8%25AB%258B%2F%25E5%25B1%25A5%25E4%25BF%25AE%25E9%2596%25A2%25E4%25BF%2582&flowName=GlifWebSignIn&flowEntry=AccountChooser',
+                      );
+                      if (await canLaunchUrl(url)) {
+                        launchUrl(url, mode: LaunchMode.externalApplication);
+                      } else {
+                        // ignore: avoid_print
+                        print("Can't launch $url");
+                      }
+                    },
+                    child: const Text("おっけー"),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.book_outlined),
+          label: "シラバス",
+          onTap: () async {
+            final url = Uri.parse(
+              'https://mylog.pub.ous.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006',
+            );
+            if (await canLaunchUrl(url)) {
+              launchUrl(url, mode: LaunchMode.externalApplication);
+            } else {
+              // ignore: avoid_print
+              print("Can't launch $url");
+            }
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.calculate_outlined),
+          label: "GPA計算機",
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Gpa()),
+            );
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.directions_run_outlined),
+          label: "サボりカウンター",
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Sabori()),
+            );
+          },
+        ),
+      ],
+    );
   }
 }

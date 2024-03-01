@@ -11,198 +11,6 @@ import 'package:rxdart/streams.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MultipleCollectionsPage extends StatefulWidget {
-  const MultipleCollectionsPage({Key? key}) : super(key: key);
-
-  @override
-  MultipleCollectionsPageState createState() => MultipleCollectionsPageState();
-}
-
-class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  @override
-  Widget build(BuildContext context) {
-    // 背景の明るさをチェック
-    bool isBackgroundBright =
-        Theme.of(context).primaryColor == Brightness.light;
-
-    // 明るい背景の場合は黒、暗い背景の場合は白
-    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('投稿した評価'),
-        ),
-        body: StreamBuilder<List<QuerySnapshot<Map<String, dynamic>>>>(
-          stream: _getStream(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>>
-                  snapshot) {
-            if (snapshot.hasError) {
-              return const Text('Something went wrong');
-            }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            List<DocumentSnapshot<Map<String, dynamic>>> documents = [];
-
-            if (snapshot.hasData) {
-              for (QuerySnapshot<Map<String, dynamic>> querySnapshot
-                  in snapshot.data!) {
-                documents.addAll(querySnapshot.docs);
-              }
-            }
-
-            if (documents.isEmpty) {
-              return Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: Image(
-                        image: AssetImage('assets/icon/found.gif'),
-                        fit: BoxFit.cover,
-                      )),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    '何も投稿していません',
-                    style: TextStyle(fontSize: 18.sp),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ));
-            }
-
-            return GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                itemCount: documents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  DocumentSnapshot<Map<String, dynamic>> document =
-                      documents[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsScreen(
-                            ID: document['ID'],
-                            userid: _auth.currentUser!.uid,
-                          ),
-                        ),
-                      );
-                    },
-                    child: (SizedBox(
-                      width: 200.w,
-                      height: 30.h,
-                      child: Card(
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        child: Stack(
-                          children: <Widget>[
-                            Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: Align(
-                                    alignment: const Alignment(
-                                      -0.8,
-                                      -0.5,
-                                    ),
-                                    child: Text(
-                                      document['zyugyoumei'],
-                                      style: TextStyle(fontSize: 20.sp),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ))),
-                            Align(
-                              alignment: const Alignment(-0.8, 0.4),
-                              child: Text(
-                                document['gakki'],
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 15.sp),
-                              ),
-                            ),
-                            Align(
-                              alignment: const Alignment(-0.8, 0.8),
-                              child: Text(
-                                document['kousimei'],
-                                overflow: TextOverflow.ellipsis, //ここ！！
-                                style: TextStyle(fontSize: 15.sp),
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 4, horizontal: 6),
-                                  decoration: BoxDecoration(
-                                      color: document['bumon'] == 'エグ単'
-                                          ? Colors.red
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(8),
-                                      ) // green shaped
-                                      ),
-                                  child: Text(
-                                    document['bumon'],
-                                    style: TextStyle(
-                                        fontSize: 15.sp, color: textColor),
-                                    // Your text
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-                  );
-                });
-          },
-        ));
-  }
-
-  Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    List<Stream<QuerySnapshot<Map<String, dynamic>>>> streams = collections
-        .map((collection) => FirebaseFirestore.instance
-            .collection(collection)
-            .where('accountuid', isEqualTo: uid)
-            .snapshots())
-        .toList();
-
-    yield* CombineLatestStream.list(streams);
-  }
-}
-
 class DetailsScreen extends StatefulWidget {
   //現在の講義データ
   final ID;
@@ -237,814 +45,20 @@ class DetailsScreenState extends State<DetailsScreen> {
   final ValueNotifier<String> gakki = ValueNotifier<String>('春１');
   final ValueNotifier<String> bumon = ValueNotifier<String>('ラク単');
 
-  //取得
-  Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    List<Stream<QuerySnapshot<Map<String, dynamic>>>> streams = collections
-        .map((collection) => FirebaseFirestore.instance
-            .collection(collection)
-            .where('accountuid', isEqualTo: uid)
-            .where('ID', isEqualTo: widget.ID)
-            .snapshots())
-        .toList();
-
-    yield* CombineLatestStream.list(streams);
-  }
-
-//更新-授業名
-  Future<void> updateAllDocuments() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'zyugyoumei': zyugyoumei});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //更新-講師名
-  Future<void> updateAllDocuments1() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'kousimei': kousimei});
-      }
-    }
-
-    await batch.commit();
-  }
-
-//更新-年度
-  Future<void> updateAllDocuments2() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'nenndo': nenndo});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //単位数
-  Future<void> updateAllDocuments3() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'tannisuu': tanni.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //授業形式
-  Future<void> updateAllDocuments4() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'zyugyoukeisiki': zyugyoukeisiki.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //出席確認の有無
-  Future<void> updateAllDocuments5() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'syusseki': syusseki.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //教科書の有無
-  Future<void> updateAllDocuments6() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'kyoukasyo': kyoukasyo.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //テスト形式
-  Future<void> updateAllDocuments7() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'tesutokeisiki': tesutokeisiki});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //講義の面白さ
-  Future<void> updateAllDocuments8() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'omosirosa': omosirosa.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //単位の取りやすさ
-  Future<void> updateAllDocuments9() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'toriyasusa': toriyasusa.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //総合評価
-  Future<void> updateAllDocuments10() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(document.reference,
-            {'date': DateTime.now(), 'sougouhyouka': hyouka.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //コメント
-  Future<void> updateAllDocuments11() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'komento': komento});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //ニックネーム
-  Future<void> updateAllDocuments12() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch
-            .update(document.reference, {'date': DateTime.now(), 'name': name});
-      }
-    }
-
-    await batch.commit();
-  }
-
-  //宣伝
-  Future<void> updateAllDocuments13() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'senden': senden});
-      }
-    }
-
-    await batch.commit();
-  }
-
-//学期
-  Future<void> updateAllDocuments14() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'gakki': gakki.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-//部門
-  Future<void> updateAllDocuments15() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.update(
-            document.reference, {'date': DateTime.now(), 'bumon': bumon.value});
-      }
-    }
-
-    await batch.commit();
-  }
-
-//削除
-  Future<void> deleteAllDocuments() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    String? uid = user?.uid;
-
-    List<String> collections = [
-      'rigaku',
-      'kougakubu',
-      'zyouhou',
-      'seibutu',
-      'kyouiku',
-      'keiei',
-      'zyuui',
-      'seimei',
-      'kiban',
-      'kyousyoku'
-    ];
-
-    final WriteBatch batch = FirebaseFirestore.instance.batch();
-
-    for (String collection in collections) {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await FirebaseFirestore.instance
-              .collection(collection)
-              .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
-              .get();
-
-      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
-          querySnapshot.docs;
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
-        batch.delete(document.reference);
-      }
-    }
-
-    await batch.commit();
-  }
-
   //テキストフォーム関連
   final TextEditingController _controller = TextEditingController();
+
   final TextEditingController _controller1 = TextEditingController();
+
   final TextEditingController _controller2 = TextEditingController();
+
   final TextEditingController _controller3 = TextEditingController();
+
   final TextEditingController _controller4 = TextEditingController();
+
   final TextEditingController _controller5 = TextEditingController();
+
   final TextEditingController _controller6 = TextEditingController();
-
-  // テキストの編集が完了したときに呼び出されるコールバック
-  void _onTextEditingComplete() {
-    _controller.clear();
-    _controller1.clear();
-    _controller2.clear();
-    _controller3.clear();
-    _controller4.clear();
-    _controller5.clear();
-    _controller6.clear();
-  }
-
-  void textview() {
-    String text = _controller.text;
-    setState(() {
-      zyugyoumei = text;
-    });
-  }
-
-  void textview1() {
-    String text = _controller1.text;
-    setState(() {
-      kousimei = text;
-    });
-  }
-
-  void textview2() {
-    String text = _controller2.text;
-    setState(() {
-      nenndo = text;
-    });
-  }
-
-  void textview3() {
-    String text = _controller3.text;
-    setState(() {
-      tesutokeisiki = text;
-    });
-  }
-
-  void textview4() {
-    String text = _controller4.text;
-    setState(() {
-      komento = text;
-    });
-  }
-
-  void textview5() {
-    String text = _controller5.text;
-    setState(() {
-      name = text;
-    });
-  }
-
-  void textview6() {
-    String text = _controller6.text;
-    setState(() {
-      senden = text;
-    });
-  }
-
-  @override
-  void dispose() {
-    tanni.dispose();
-    zyugyoukeisiki.dispose();
-    syusseki.dispose();
-    kyoukasyo.dispose();
-    omosirosa.dispose();
-    hyouka.dispose();
-    toriyasusa.dispose();
-    gakki.dispose();
-    bumon.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -1052,9 +66,10 @@ class DetailsScreenState extends State<DetailsScreen> {
       appBar: AppBar(
         title: StreamBuilder(
           stream: _getStream(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>>
-                  snapshot) {
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>> snapshot,
+          ) {
             if (snapshot.hasData && snapshot.data != null) {
               List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
                   snapshot.data!
@@ -1073,35 +88,38 @@ class DetailsScreenState extends State<DetailsScreen> {
         ),
         actions: [
           IconButton(
-              icon: const Icon(Icons.mode_edit_outlined),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (_) {
-                    return AlertDialog(
-                      title: const Text("編集モード"),
-                      content: const Text(
-                        "編集モードです\n各項目上で長押しをすると\n編集できます\nまた各項目でダブルタップをするとクリップボードにコピーできます。",
-                        textAlign: TextAlign.center,
+            icon: const Icon(Icons.mode_edit_outlined),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) {
+                  return AlertDialog(
+                    title: const Text("編集モード"),
+                    content: const Text(
+                      "編集モードです\n各項目上で長押しをすると\n編集できます\nまた各項目でダブルタップをするとクリップボードにコピーできます。",
+                      textAlign: TextAlign.center,
+                    ),
+                    actions: <Widget>[
+                      // ボタン領域
+                      TextButton(
+                        child: const Text("おけ"),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                      actions: <Widget>[
-                        // ボタン領域
-                        TextButton(
-                          child: const Text("おけ"),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                      ],
-                    );
-                  },
-                );
-                updateAllDocuments();
-              }),
+                    ],
+                  );
+                },
+              );
+              updateAllDocuments();
+            },
+          ),
         ],
       ),
       body: StreamBuilder<List<QuerySnapshot<Map<String, dynamic>>>>(
         stream: _getStream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>> snapshot) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>> snapshot,
+        ) {
           if (snapshot.hasError) {
             return const Text('Something went wrong');
           }
@@ -1123,26 +141,28 @@ class DetailsScreenState extends State<DetailsScreen> {
 
           if (documents.isEmpty) {
             return Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
                     width: 200,
                     height: 200,
                     child: Image(
                       image: AssetImage('assets/icon/found.gif'),
                       fit: BoxFit.cover,
-                    )),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  '何も投稿していません',
-                  style: TextStyle(fontSize: 18.sp),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ));
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    '何も投稿していません',
+                    style: TextStyle(fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
           }
 
           return ListView.builder(
@@ -1159,9 +179,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['zyugyoumei']));
+                            ClipboardData(text: document['zyugyoumei']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1175,17 +197,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     TextField(
                                       controller: _controller,
                                       decoration: InputDecoration(
-                                          hintText: 'ここに入力してね',
-                                          labelStyle: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                          focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
+                                        hintText: 'ここに入力してね',
+                                        labelStyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                          ))),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1196,15 +221,16 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () async {
-                                        textview();
-                                        _onTextEditingComplete();
+                                    child: const Text("おけ"),
+                                    onPressed: () async {
+                                      textview();
+                                      _onTextEditingComplete();
 
-                                        updateAllDocuments();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                      updateAllDocuments();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1239,9 +265,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['gakki']));
+                            ClipboardData(text: document['gakki']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1254,8 +282,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: gakki,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1300,12 +331,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments14();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments14();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1340,9 +372,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['bumon']));
+                            ClipboardData(text: document['bumon']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1355,8 +389,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: bumon,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1389,12 +426,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments15();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments15();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1429,9 +467,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['kousimei']));
+                            ClipboardData(text: document['kousimei']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1445,17 +485,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     TextField(
                                       controller: _controller1,
                                       decoration: InputDecoration(
-                                          hintText: 'ここに入力してね',
-                                          labelStyle: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                          focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
+                                        hintText: 'ここに入力してね',
+                                        labelStyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                          ))),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1466,15 +509,16 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () async {
-                                        textview1();
-                                        _onTextEditingComplete();
+                                    child: const Text("おけ"),
+                                    onPressed: () async {
+                                      textview1();
+                                      _onTextEditingComplete();
 
-                                        updateAllDocuments1();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                      updateAllDocuments1();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1509,9 +553,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['nenndo']));
+                            ClipboardData(text: document['nenndo']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1525,17 +571,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     TextField(
                                       controller: _controller2,
                                       decoration: InputDecoration(
-                                          hintText: '例：2023',
-                                          labelStyle: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                          focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
+                                        hintText: '例：2023',
+                                        labelStyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                          ))),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1546,15 +595,16 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () async {
-                                        textview2();
-                                        _onTextEditingComplete();
+                                    child: const Text("おけ"),
+                                    onPressed: () async {
+                                      textview2();
+                                      _onTextEditingComplete();
 
-                                        updateAllDocuments2();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                      updateAllDocuments2();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1587,9 +637,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['tannisuu']));
+                            ClipboardData(text: document['tannisuu']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1602,8 +654,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: tanni,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1635,12 +690,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments3();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments3();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1673,9 +729,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['zyugyoukeisiki']));
+                            ClipboardData(text: document['zyugyoukeisiki']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1688,8 +746,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: zyugyoukeisiki,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1726,13 +787,14 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments4();
-                                        Navigator.pop(context);
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments4();
+                                      Navigator.pop(context);
 
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1767,9 +829,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['syusseki']));
+                            ClipboardData(text: document['syusseki']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1782,8 +846,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: syusseki,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1820,12 +887,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments5();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments5();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1860,9 +928,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['kyoukasyo']));
+                            ClipboardData(text: document['kyoukasyo']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1875,8 +945,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   children: [
                                     ValueListenableBuilder<String>(
                                       valueListenable: kyoukasyo,
-                                      builder: (BuildContext context,
-                                          String value, Widget? child) {
+                                      builder: (
+                                        BuildContext context,
+                                        String value,
+                                        Widget? child,
+                                      ) {
                                         return DropdownButton<String>(
                                           value: value,
                                           onChanged: (String? newValue) {
@@ -1905,12 +978,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () {
-                                        updateAllDocuments6();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                    child: const Text("おけ"),
+                                    onPressed: () {
+                                      updateAllDocuments6();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -1945,9 +1019,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                       GestureDetector(
                         onDoubleTap: () {
                           Clipboard.setData(
-                              ClipboardData(text: document['tesutokeisiki']));
+                            ClipboardData(text: document['tesutokeisiki']),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('クリップボードにコピーしました')));
+                            const SnackBar(content: Text('クリップボードにコピーしました')),
+                          );
                         },
                         onLongPress: () {
                           showDialog(
@@ -1961,17 +1037,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     TextField(
                                       controller: _controller3,
                                       decoration: InputDecoration(
-                                          labelText: 'ありorなしorレポートorその他...',
-                                          labelStyle: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                          focusedBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
+                                        labelText: 'ありorなしorレポートorその他...',
+                                        labelStyle: const TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                          ))),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1982,15 +1061,16 @@ class DetailsScreenState extends State<DetailsScreen> {
                                     onPressed: () => Navigator.pop(context),
                                   ),
                                   TextButton(
-                                      child: const Text("おけ"),
-                                      onPressed: () async {
-                                        textview3();
-                                        _onTextEditingComplete();
+                                    child: const Text("おけ"),
+                                    onPressed: () async {
+                                      textview3();
+                                      _onTextEditingComplete();
 
-                                        updateAllDocuments7();
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(msg: "完了しました");
-                                      }),
+                                      updateAllDocuments7();
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(msg: "完了しました");
+                                    },
+                                  ),
                                 ],
                               );
                             },
@@ -2037,15 +1117,19 @@ class DetailsScreenState extends State<DetailsScreen> {
                                       children: [
                                         ValueListenableBuilder<double>(
                                           valueListenable: omosirosa,
-                                          builder: (BuildContext context,
-                                              double value, Widget? child) {
+                                          builder: (
+                                            BuildContext context,
+                                            double value,
+                                            Widget? child,
+                                          ) {
                                             return Column(
                                               children: <Widget>[
                                                 Text(
                                                   omosirosa.value
                                                       .toStringAsFixed(0),
                                                   style: const TextStyle(
-                                                      fontSize: 24),
+                                                    fontSize: 24,
+                                                  ),
                                                 ),
                                                 Slider(
                                                   value: omosirosa.value,
@@ -2058,7 +1142,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ],
                                             );
                                           },
-                                        )
+                                        ),
                                       ],
                                     ),
                                     actions: <Widget>[
@@ -2068,13 +1152,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () {
-                                            updateAllDocuments8();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                        child: const Text("おけ"),
+                                        onPressed: () {
+                                          updateAllDocuments8();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2091,49 +1177,57 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                    height: 200.h,
-                                    child: SfRadialGauge(axes: <RadialAxis>[
+                                  height: 200.h,
+                                  child: SfRadialGauge(
+                                    axes: <RadialAxis>[
                                       RadialAxis(
-                                          minimum: 0,
-                                          maximum: 5,
-                                          showLabels: false,
-                                          showTicks: false,
-                                          axisLineStyle: const AxisLineStyle(
-                                            thickness: 0.2,
-                                            cornerStyle: CornerStyle.bothCurve,
-                                            color: Color.fromARGB(
-                                                139, 134, 134, 134),
-                                            thicknessUnit: GaugeSizeUnit.factor,
+                                        minimum: 0,
+                                        maximum: 5,
+                                        showLabels: false,
+                                        showTicks: false,
+                                        axisLineStyle: const AxisLineStyle(
+                                          thickness: 0.2,
+                                          cornerStyle: CornerStyle.bothCurve,
+                                          color: Color.fromARGB(
+                                            139,
+                                            134,
+                                            134,
+                                            134,
                                           ),
-                                          pointers: <GaugePointer>[
-                                            RangePointer(
-                                              value: document['omosirosa']
-                                                  .toDouble(),
-                                              cornerStyle:
-                                                  CornerStyle.bothCurve,
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              width: 0.2,
-                                              sizeUnit: GaugeSizeUnit.factor,
-                                            )
-                                          ],
-                                          annotations: <GaugeAnnotation>[
-                                            GaugeAnnotation(
-                                                positionFactor: 0.1,
-                                                angle: 90,
-                                                widget: Text(
-                                                  document['omosirosa']
-                                                          .toDouble()
-                                                          .toStringAsFixed(0) +
-                                                      ' / 5',
-                                                  style: TextStyle(
-                                                      fontSize: 50.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ))
-                                          ])
-                                    ])),
+                                          thicknessUnit: GaugeSizeUnit.factor,
+                                        ),
+                                        pointers: <GaugePointer>[
+                                          RangePointer(
+                                            value: document['omosirosa']
+                                                .toDouble(),
+                                            cornerStyle: CornerStyle.bothCurve,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            width: 0.2,
+                                            sizeUnit: GaugeSizeUnit.factor,
+                                          ),
+                                        ],
+                                        annotations: <GaugeAnnotation>[
+                                          GaugeAnnotation(
+                                            positionFactor: 0.1,
+                                            angle: 90,
+                                            widget: Text(
+                                              document['omosirosa']
+                                                      .toDouble()
+                                                      .toStringAsFixed(0) +
+                                                  ' / 5',
+                                              style: TextStyle(
+                                                fontSize: 50.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ), //おもしろさ
@@ -2149,15 +1243,19 @@ class DetailsScreenState extends State<DetailsScreen> {
                                       children: [
                                         ValueListenableBuilder<double>(
                                           valueListenable: toriyasusa,
-                                          builder: (BuildContext context,
-                                              double value, Widget? child) {
+                                          builder: (
+                                            BuildContext context,
+                                            double value,
+                                            Widget? child,
+                                          ) {
                                             return Column(
                                               children: <Widget>[
                                                 Text(
                                                   toriyasusa.value
                                                       .toStringAsFixed(0),
                                                   style: const TextStyle(
-                                                      fontSize: 24),
+                                                    fontSize: 24,
+                                                  ),
                                                 ),
                                                 Slider(
                                                   value: toriyasusa.value,
@@ -2170,7 +1268,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ],
                                             );
                                           },
-                                        )
+                                        ),
                                       ],
                                     ),
                                     actions: <Widget>[
@@ -2180,13 +1278,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () {
-                                            updateAllDocuments9();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                        child: const Text("おけ"),
+                                        onPressed: () {
+                                          updateAllDocuments9();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2204,8 +1304,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                 ),
                                 SizedBox(
                                   height: 200.h,
-                                  child: SfRadialGauge(axes: <RadialAxis>[
-                                    RadialAxis(
+                                  child: SfRadialGauge(
+                                    axes: <RadialAxis>[
+                                      RadialAxis(
                                         minimum: 0,
                                         maximum: 5,
                                         showLabels: false,
@@ -2214,7 +1315,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           thickness: 0.2,
                                           cornerStyle: CornerStyle.bothCurve,
                                           color: Color.fromARGB(
-                                              139, 134, 134, 134),
+                                            139,
+                                            134,
+                                            134,
+                                            134,
+                                          ),
                                           thicknessUnit: GaugeSizeUnit.factor,
                                         ),
                                         pointers: <GaugePointer>[
@@ -2227,24 +1332,27 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                 .primary,
                                             width: 0.2,
                                             sizeUnit: GaugeSizeUnit.factor,
-                                          )
+                                          ),
                                         ],
                                         annotations: <GaugeAnnotation>[
                                           GaugeAnnotation(
-                                              positionFactor: 0.1,
-                                              angle: 90,
-                                              widget: Text(
-                                                document['toriyasusa']
-                                                        .toDouble()
-                                                        .toStringAsFixed(0) +
-                                                    ' / 5',
-                                                style: TextStyle(
-                                                    fontSize: 50.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ))
-                                        ])
-                                  ]),
+                                            positionFactor: 0.1,
+                                            angle: 90,
+                                            widget: Text(
+                                              document['toriyasusa']
+                                                      .toDouble()
+                                                      .toStringAsFixed(0) +
+                                                  ' / 5',
+                                              style: TextStyle(
+                                                fontSize: 50.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -2261,15 +1369,19 @@ class DetailsScreenState extends State<DetailsScreen> {
                                       children: [
                                         ValueListenableBuilder<double>(
                                           valueListenable: hyouka,
-                                          builder: (BuildContext context,
-                                              double value, Widget? child) {
+                                          builder: (
+                                            BuildContext context,
+                                            double value,
+                                            Widget? child,
+                                          ) {
                                             return Column(
                                               children: <Widget>[
                                                 Text(
                                                   hyouka.value
                                                       .toStringAsFixed(0),
                                                   style: const TextStyle(
-                                                      fontSize: 24),
+                                                    fontSize: 24,
+                                                  ),
                                                 ),
                                                 Slider(
                                                   value: hyouka.value,
@@ -2282,7 +1394,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                               ],
                                             );
                                           },
-                                        )
+                                        ),
                                       ],
                                     ),
                                     actions: <Widget>[
@@ -2292,13 +1404,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () {
-                                            updateAllDocuments10();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                        child: const Text("おけ"),
+                                        onPressed: () {
+                                          updateAllDocuments10();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2316,8 +1430,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                 ),
                                 SizedBox(
                                   height: 200.h,
-                                  child: SfRadialGauge(axes: <RadialAxis>[
-                                    RadialAxis(
+                                  child: SfRadialGauge(
+                                    axes: <RadialAxis>[
+                                      RadialAxis(
                                         minimum: 0,
                                         maximum: 5,
                                         showLabels: false,
@@ -2326,7 +1441,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           thickness: 0.2,
                                           cornerStyle: CornerStyle.bothCurve,
                                           color: Color.fromARGB(
-                                              139, 134, 134, 134),
+                                            139,
+                                            134,
+                                            134,
+                                            134,
+                                          ),
                                           thicknessUnit: GaugeSizeUnit.factor,
                                         ),
                                         pointers: <GaugePointer>[
@@ -2339,24 +1458,27 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                 .primary,
                                             width: 0.2,
                                             sizeUnit: GaugeSizeUnit.factor,
-                                          )
+                                          ),
                                         ],
                                         annotations: <GaugeAnnotation>[
                                           GaugeAnnotation(
-                                              positionFactor: 0.1,
-                                              angle: 90,
-                                              widget: Text(
-                                                document['sougouhyouka']
-                                                        .toDouble()
-                                                        .toStringAsFixed(0) +
-                                                    ' / 5',
-                                                style: TextStyle(
-                                                    fontSize: 50.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ))
-                                        ])
-                                  ]),
+                                            positionFactor: 0.1,
+                                            angle: 90,
+                                            widget: Text(
+                                              document['sougouhyouka']
+                                                      .toDouble()
+                                                      .toStringAsFixed(0) +
+                                                  ' / 5',
+                                              style: TextStyle(
+                                                fontSize: 50.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -2370,10 +1492,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                           GestureDetector(
                             onDoubleTap: () {
                               Clipboard.setData(
-                                  ClipboardData(text: document['komento']));
+                                ClipboardData(text: document['komento']),
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('クリップボードにコピーしました')));
+                                const SnackBar(
+                                  content: Text('クリップボードにコピーしました'),
+                                ),
+                              );
                             },
                             onLongPress: () {
                               showDialog(
@@ -2394,7 +1519,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           maxLines: null,
                                           decoration: const InputDecoration(
                                             icon: Icon(
-                                                Icons.rate_review_outlined),
+                                              Icons.rate_review_outlined,
+                                            ),
                                             labelText: 'この講義は楽で〜...',
                                           ),
                                         ),
@@ -2407,16 +1533,18 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () async {
-                                            textview4();
-                                            _onTextEditingComplete();
+                                        child: const Text("おけ"),
+                                        onPressed: () async {
+                                          textview4();
+                                          _onTextEditingComplete();
 
-                                            updateAllDocuments11();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                          updateAllDocuments11();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2448,10 +1576,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                           GestureDetector(
                             onDoubleTap: () {
                               Clipboard.setData(
-                                  ClipboardData(text: document['name']));
+                                ClipboardData(text: document['name']),
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('クリップボードにコピーしました')));
+                                const SnackBar(
+                                  content: Text('クリップボードにコピーしました'),
+                                ),
+                              );
                             },
                             onLongPress: () {
                               showDialog(
@@ -2472,7 +1603,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           maxLines: null,
                                           decoration: const InputDecoration(
                                             icon: Icon(
-                                                Icons.rate_review_outlined),
+                                              Icons.rate_review_outlined,
+                                            ),
                                             labelText: 'この講義は楽で〜...',
                                           ),
                                         ),
@@ -2485,16 +1617,18 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () async {
-                                            textview5();
-                                            _onTextEditingComplete();
+                                        child: const Text("おけ"),
+                                        onPressed: () async {
+                                          textview5();
+                                          _onTextEditingComplete();
 
-                                            updateAllDocuments12();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                          updateAllDocuments12();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2551,10 +1685,13 @@ class DetailsScreenState extends State<DetailsScreen> {
                           GestureDetector(
                             onDoubleTap: () {
                               Clipboard.setData(
-                                  ClipboardData(text: document['senden']));
+                                ClipboardData(text: document['senden']),
+                              );
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('クリップボードにコピーしました')));
+                                const SnackBar(
+                                  content: Text('クリップボードにコピーしました'),
+                                ),
+                              );
                             },
                             onLongPress: () {
                               showDialog(
@@ -2575,10 +1712,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                                           maxLines: null,
                                           decoration: const InputDecoration(
                                             icon: Icon(
-                                                Icons.rate_review_outlined),
+                                              Icons.rate_review_outlined,
+                                            ),
                                             labelText: 'ここに入力してね',
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                     actions: <Widget>[
@@ -2588,16 +1726,18 @@ class DetailsScreenState extends State<DetailsScreen> {
                                         onPressed: () => Navigator.pop(context),
                                       ),
                                       TextButton(
-                                          child: const Text("おけ"),
-                                          onPressed: () async {
-                                            textview6();
-                                            _onTextEditingComplete();
+                                        child: const Text("おけ"),
+                                        onPressed: () async {
+                                          textview6();
+                                          _onTextEditingComplete();
 
-                                            updateAllDocuments13();
-                                            Navigator.pop(context);
-                                            Fluttertoast.showToast(
-                                                msg: "完了しました");
-                                          }),
+                                          updateAllDocuments13();
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                            msg: "完了しました",
+                                          );
+                                        },
+                                      ),
                                     ],
                                   );
                                 },
@@ -2689,18 +1829,20 @@ class DetailsScreenState extends State<DetailsScreen> {
                             height: 40.0.h,
                             child: Container(
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      style: BorderStyle.solid,
-                                      width: 1.0.w),
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(20.0)),
+                                border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  style: BorderStyle.solid,
+                                  width: 1.0.w,
+                                ),
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
                               child: GestureDetector(
                                 onTap: () async {
                                   //ここにブロック関数
                                   launch(
-                                      'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform');
+                                    'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform',
+                                  );
                                 },
                                 child: const Center(
                                   child: Text(
@@ -2716,7 +1858,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                           ),
                           SizedBox(height: 20.0.h),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -2748,13 +1890,14 @@ class DetailsScreenState extends State<DetailsScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   TextButton(
-                      child: const Text("ええで"),
-                      onPressed: () {
-                        deleteAllDocuments();
-                        Fluttertoast.showToast(msg: "削除しました");
-                        int count = 0;
-                        Navigator.popUntil(context, (_) => count++ >= 2);
-                      }),
+                    child: const Text("ええで"),
+                    onPressed: () {
+                      deleteAllDocuments();
+                      Fluttertoast.showToast(msg: "削除しました");
+                      int count = 0;
+                      Navigator.popUntil(context, (_) => count++ >= 2);
+                    },
+                  ),
                 ],
               );
             },
@@ -2762,5 +1905,1042 @@ class DetailsScreenState extends State<DetailsScreen> {
         },
       ),
     );
+  }
+
+  //削除
+  Future<void> deleteAllDocuments() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.delete(document.reference);
+      }
+    }
+
+    await batch.commit();
+  }
+
+  @override
+  void dispose() {
+    tanni.dispose();
+    zyugyoukeisiki.dispose();
+    syusseki.dispose();
+    kyoukasyo.dispose();
+    omosirosa.dispose();
+    hyouka.dispose();
+    toriyasusa.dispose();
+    gakki.dispose();
+    bumon.dispose();
+    super.dispose();
+  }
+
+  void textview() {
+    String text = _controller.text;
+    setState(() {
+      zyugyoumei = text;
+    });
+  }
+
+  void textview1() {
+    String text = _controller1.text;
+    setState(() {
+      kousimei = text;
+    });
+  }
+
+  void textview2() {
+    String text = _controller2.text;
+    setState(() {
+      nenndo = text;
+    });
+  }
+
+  void textview3() {
+    String text = _controller3.text;
+    setState(() {
+      tesutokeisiki = text;
+    });
+  }
+
+  void textview4() {
+    String text = _controller4.text;
+    setState(() {
+      komento = text;
+    });
+  }
+
+  void textview5() {
+    String text = _controller5.text;
+    setState(() {
+      name = text;
+    });
+  }
+
+  void textview6() {
+    String text = _controller6.text;
+    setState(() {
+      senden = text;
+    });
+  }
+
+//更新-授業名
+  Future<void> updateAllDocuments() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'zyugyoumei': zyugyoumei},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //更新-講師名
+  Future<void> updateAllDocuments1() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'kousimei': kousimei},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //総合評価
+  Future<void> updateAllDocuments10() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'sougouhyouka': hyouka.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //コメント
+  Future<void> updateAllDocuments11() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'komento': komento},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //ニックネーム
+  Future<void> updateAllDocuments12() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch
+            .update(document.reference, {'date': DateTime.now(), 'name': name});
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //宣伝
+  Future<void> updateAllDocuments13() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'senden': senden},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //学期
+  Future<void> updateAllDocuments14() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'gakki': gakki.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //部門
+  Future<void> updateAllDocuments15() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'bumon': bumon.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //更新-年度
+  Future<void> updateAllDocuments2() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'nenndo': nenndo},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //単位数
+  Future<void> updateAllDocuments3() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'tannisuu': tanni.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //授業形式
+  Future<void> updateAllDocuments4() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'zyugyoukeisiki': zyugyoukeisiki.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //出席確認の有無
+  Future<void> updateAllDocuments5() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'syusseki': syusseki.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //教科書の有無
+  Future<void> updateAllDocuments6() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'kyoukasyo': kyoukasyo.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //テスト形式
+  Future<void> updateAllDocuments7() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'tesutokeisiki': tesutokeisiki},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //講義の面白さ
+  Future<void> updateAllDocuments8() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'omosirosa': omosirosa.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //単位の取りやすさ
+  Future<void> updateAllDocuments9() async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    final WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (String collection in collections) {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .get();
+
+      List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
+          querySnapshot.docs;
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in documents) {
+        batch.update(
+          document.reference,
+          {'date': DateTime.now(), 'toriyasusa': toriyasusa.value},
+        );
+      }
+    }
+
+    await batch.commit();
+  }
+
+  //取得
+  Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    List<Stream<QuerySnapshot<Map<String, dynamic>>>> streams = collections
+        .map(
+          (collection) => FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .where('ID', isEqualTo: widget.ID)
+              .snapshots(),
+        )
+        .toList();
+
+    yield* CombineLatestStream.list(streams);
+  }
+
+  // テキストの編集が完了したときに呼び出されるコールバック
+  void _onTextEditingComplete() {
+    _controller.clear();
+    _controller1.clear();
+    _controller2.clear();
+    _controller3.clear();
+    _controller4.clear();
+    _controller5.clear();
+    _controller6.clear();
+  }
+}
+
+class MultipleCollectionsPage extends StatefulWidget {
+  const MultipleCollectionsPage({Key? key}) : super(key: key);
+
+  @override
+  MultipleCollectionsPageState createState() => MultipleCollectionsPageState();
+}
+
+class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    // 背景の明るさをチェック
+    bool isBackgroundBright =
+        Theme.of(context).primaryColor == Brightness.light;
+
+    // 明るい背景の場合は黒、暗い背景の場合は白
+    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('投稿した評価'),
+      ),
+      body: StreamBuilder<List<QuerySnapshot<Map<String, dynamic>>>>(
+        stream: _getStream(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<QuerySnapshot<Map<String, dynamic>>>> snapshot,
+        ) {
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          List<DocumentSnapshot<Map<String, dynamic>>> documents = [];
+
+          if (snapshot.hasData) {
+            for (QuerySnapshot<Map<String, dynamic>> querySnapshot
+                in snapshot.data!) {
+              documents.addAll(querySnapshot.docs);
+            }
+          }
+
+          if (documents.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage('assets/icon/found.gif'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    '何も投稿していません',
+                    style: TextStyle(fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemCount: documents.length,
+            itemBuilder: (BuildContext context, int index) {
+              DocumentSnapshot<Map<String, dynamic>> document =
+                  documents[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailsScreen(
+                        ID: document['ID'],
+                        userid: _auth.currentUser!.uid,
+                      ),
+                    ),
+                  );
+                },
+                child: (SizedBox(
+                  width: 200.w,
+                  height: 30.h,
+                  child: Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Align(
+                            alignment: const Alignment(
+                              -0.8,
+                              -0.5,
+                            ),
+                            child: Text(
+                              document['zyugyoumei'],
+                              style: TextStyle(fontSize: 20.sp),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: const Alignment(-0.8, 0.4),
+                          child: Text(
+                            document['gakki'],
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: const Alignment(-0.8, 0.8),
+                          child: Text(
+                            document['kousimei'],
+                            overflow: TextOverflow.ellipsis, //ここ！！
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 4,
+                              horizontal: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: document['bumon'] == 'エグ単'
+                                  ? Colors.red
+                                  : Theme.of(context).colorScheme.primary,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ), // green shaped
+                            ),
+                            child: Text(
+                              document['bumon'],
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                color: textColor,
+                              ),
+                              // Your text
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Stream<List<QuerySnapshot<Map<String, dynamic>>>> _getStream() async* {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    String? uid = user?.uid;
+
+    List<String> collections = [
+      'rigaku',
+      'kougakubu',
+      'zyouhou',
+      'seibutu',
+      'kyouiku',
+      'keiei',
+      'zyuui',
+      'seimei',
+      'kiban',
+      'kyousyoku',
+    ];
+
+    List<Stream<QuerySnapshot<Map<String, dynamic>>>> streams = collections
+        .map(
+          (collection) => FirebaseFirestore.instance
+              .collection(collection)
+              .where('accountuid', isEqualTo: uid)
+              .snapshots(),
+        )
+        .toList();
+
+    yield* CombineLatestStream.list(streams);
   }
 }

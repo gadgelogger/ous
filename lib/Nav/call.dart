@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,9 +26,10 @@ class Call extends StatelessWidget {
               title: Text(
                 "岡山キャンパス",
                 style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: textColor),
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ),
@@ -156,9 +156,10 @@ class Call extends StatelessWidget {
               title: Text(
                 "今治キャンパス",
                 style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                    color: textColor),
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                ),
               ),
             ),
           ),

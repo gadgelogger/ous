@@ -9,18 +9,6 @@ import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Article {
-  final String title;
-  final String date;
-  final String url;
-
-  Article({
-    required this.title,
-    required this.date,
-    required this.url,
-  });
-}
-
 class All extends StatefulWidget {
   const All({Key? key}) : super(key: key);
 
@@ -34,9 +22,78 @@ class AllState extends State<All> {
   bool _isLoading = false;
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: Center(
+          child: (_articles.isEmpty)
+              ? const CircularProgressIndicator()
+              : ListView.builder(
+                  itemCount: _articles.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == _articles.length) {
+                      if (_isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        _onLoadMore();
+                        return const Center(
+                          child: LinearProgressIndicator(),
+                        );
+                      }
+                    }
+                    final article = _articles[index];
+                    return Column(
+                      children: [
+                        ListTile(
+                          title: Text(
+                            article.title,
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                          subtitle: Text(
+                            article.date.substring(0, 10),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                          onTap: () async {
+                            if (await canLaunchUrl(Uri.parse(article.url))) {
+                              await launchUrl(
+                                Uri.parse(article.url),
+                                mode: LaunchMode.platformDefault,
+                              );
+                            } else {
+                              throw 'Could not launch ${article.url}';
+                            }
+                          },
+                        ),
+                        const Divider(),
+                        //区切り線
+                      ],
+                    );
+                  },
+                ),
+        ),
+      ),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _getWebsiteData();
+  }
+
+  Future<void> launchUrlString(String url) async {
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   Future<void> _getWebsiteData() async {
@@ -90,79 +147,26 @@ class AllState extends State<All> {
     });
   }
 
-  Future<void> _onRefresh() async {
-    _page = 1;
-    _articles.clear();
-    await _getWebsiteData();
-  }
-
   Future<void> _onLoadMore() async {
     _page++;
     await _getWebsiteData();
   }
 
-  Future<void> launchUrlString(String url) async {
-    if (await canLaunchUrl(url as Uri)) {
-      await launchUrlString(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+  Future<void> _onRefresh() async {
+    _page = 1;
+    _articles.clear();
+    await _getWebsiteData();
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: Center(
-        child: (_articles.isEmpty)
-            ? const CircularProgressIndicator()
-            : ListView.builder(
-                itemCount: _articles.length + 1,
-                itemBuilder: (context, index) {
-                  if (index == _articles.length) {
-                    if (_isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      _onLoadMore();
-                      return const Center(
-                        child: LinearProgressIndicator(),
-                      );
-                    }
-                  }
-                  final article = _articles[index];
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          article.title,
-                          style: TextStyle(fontSize: 15.sp),
-                        ),
-                        subtitle: Text(
-                          article.date.substring(0, 10),
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15.sp),
-                        ),
-                        onTap: () async {
-                          if (await canLaunchUrl(Uri.parse(article.url))) {
-                            await launchUrl(Uri.parse(article.url),
-                                mode: LaunchMode.platformDefault);
-                          } else {
-                            throw 'Could not launch ${article.url}';
-                          }
-                        },
-                      ),
-                      const Divider(),
-                      //区切り線
-                    ],
-                  );
-                },
-              ),
-      ),
-    ));
-  }
+class Article {
+  final String title;
+  final String date;
+  final String url;
+
+  Article({
+    required this.title,
+    required this.date,
+    required this.url,
+  });
 }

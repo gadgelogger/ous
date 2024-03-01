@@ -1,11 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:flutter/material.dart';
 // Project imports:
 import 'package:ous/Nav/Calendar/calender.dart';
 import 'package:ous/Nav/call.dart';
@@ -14,6 +11,7 @@ import 'package:ous/Nav/map.dart';
 import 'package:ous/Nav/tcp.dart';
 import 'package:ous/account/account.dart';
 import 'package:ous/setting/setting.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({
@@ -29,15 +27,7 @@ class _NavBarState extends State<NavBar> {
   Stream<DocumentSnapshot>? _stream;
   late DocumentSnapshot _data;
 
-  @override
-  void initState() {
-    super.initState();
-
-    _stream =
-        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
-  }
-
-//UIDをFirebaseAythから取得
+  //UIDをFirebaseAythから取得
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -53,15 +43,19 @@ class _NavBarState extends State<NavBar> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) {
-                  return const Account();
-                }),
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const Account();
+                  },
+                ),
               );
             },
             child: StreamBuilder<DocumentSnapshot>(
               stream: _stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot,
+              ) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -84,8 +78,10 @@ class _NavBarState extends State<NavBar> {
 
                 return UserAccountsDrawerHeader(
                   accountName: Text(displayName),
-                  accountEmail: Text(email ?? '',
-                      style: const TextStyle(color: Colors.white)),
+                  accountEmail: Text(
+                    email ?? '',
+                    style: const TextStyle(color: Colors.white),
+                  ),
                   currentAccountPicture: CircleAvatar(
                     child: ClipOval(
                       child: Image.network(
@@ -119,9 +115,12 @@ class _NavBarState extends State<NavBar> {
             title: const Text('マイログ'),
             onTap: () {
               launchUrl(
-                  Uri.https('mylog.pub.ous.ac.jp',
-                      '/uprx/up/pk/pky501/Pky50101.xhtml'),
-                  mode: LaunchMode.externalApplication);
+                Uri.https(
+                  'mylog.pub.ous.ac.jp',
+                  '/uprx/up/pk/pky501/Pky50101.xhtml',
+                ),
+                mode: LaunchMode.externalApplication,
+              );
             },
           ),
           ListTile(
@@ -186,5 +185,13 @@ class _NavBarState extends State<NavBar> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _stream =
+        FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
   }
 }

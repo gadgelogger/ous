@@ -18,6 +18,111 @@ class _SaboriState extends State<Sabori> {
   final List<Map<String, dynamic>> _lectureList = [];
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('サボリカウンター'),
+      ),
+      body: _lectureList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage('assets/icon/found.gif'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    'サボった講義がありません',
+                    style: TextStyle(fontSize: 18.sp),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            )
+          : GestureDetector(
+              child: ListView.builder(
+                itemCount: _lectureList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final lecture = _lectureList[index];
+                  return Dismissible(
+                    key: Key(lecture['name']),
+                    onDismissed: (direction) {
+                      setState(() {
+                        _lectureList.removeAt(index);
+                      });
+                      _saveLectureList();
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        '${lecture['name']}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: lecture['saveCount'] > 0
+                          ? Text(
+                              'あと${lecture['saveCount']}回サボれます。\nサボった回数は${lecture['exitCount']}回です。',
+                            )
+                          : const Text("もうサボれないよ！"),
+                      trailing: Wrap(
+                        spacing: 8, // アイコンの間の幅を調整
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              if (lecture['exitCount'] != null &&
+                                  lecture['exitCount'] > 0) {
+                                setState(() {
+                                  lecture['saveCount']++;
+                                  lecture['exitCount']--;
+                                });
+                                _saveLectureList();
+                              }
+                            },
+                            icon: const Icon(Icons.remove_circle_outline),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (lecture['saveCount'] != null &&
+                                  lecture['saveCount'] > 0) {
+                                setState(() {
+                                  lecture['saveCount']--;
+                                  lecture['exitCount']++;
+                                });
+                                _saveLectureList();
+                              }
+                            },
+                            icon: const Icon(Icons.directions_run_outlined),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddLectureDialog,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _loadLectureList();
@@ -87,7 +192,7 @@ class _SaboriState extends State<Sabori> {
                     kougiCount = value!;
                   });
                 },
-              )
+              ),
             ],
           ),
           actions: [
@@ -130,107 +235,6 @@ class _SaboriState extends State<Sabori> {
           ],
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('サボリカウンター'),
-      ),
-      body: _lectureList.isEmpty
-          ? Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: Image(
-                      image: AssetImage('assets/icon/found.gif'),
-                      fit: BoxFit.cover,
-                    )),
-                const SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'サボった講義がありません',
-                  style: TextStyle(fontSize: 18.sp),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ))
-          : GestureDetector(
-              child: ListView.builder(
-                itemCount: _lectureList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final lecture = _lectureList[index];
-                  return Dismissible(
-                    key: Key(lecture['name']),
-                    onDismissed: (direction) {
-                      setState(() {
-                        _lectureList.removeAt(index);
-                      });
-                      _saveLectureList();
-                    },
-                    background: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                    child: ListTile(
-                        title: Text(
-                          '${lecture['name']}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: lecture['saveCount'] > 0
-                            ? Text(
-                                'あと${lecture['saveCount']}回サボれます。\nサボった回数は${lecture['exitCount']}回です。')
-                            : const Text("もうサボれないよ！"),
-                        trailing: Wrap(
-                          spacing: 8, // アイコンの間の幅を調整
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                if (lecture['exitCount'] != null &&
-                                    lecture['exitCount'] > 0) {
-                                  setState(() {
-                                    lecture['saveCount']++;
-                                    lecture['exitCount']--;
-                                  });
-                                  _saveLectureList();
-                                }
-                              },
-                              icon: const Icon(Icons.remove_circle_outline),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                if (lecture['saveCount'] != null &&
-                                    lecture['saveCount'] > 0) {
-                                  setState(() {
-                                    lecture['saveCount']--;
-                                    lecture['exitCount']++;
-                                  });
-                                  _saveLectureList();
-                                }
-                              },
-                              icon: const Icon(Icons.directions_run_outlined),
-                            )
-                          ],
-                        )),
-                  );
-                },
-              ),
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddLectureDialog,
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
