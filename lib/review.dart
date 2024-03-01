@@ -1,6 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Project imports:
 import 'package:ous/NavBar.dart';
 import 'package:ous/analytics_service.dart';
 import 'package:ous/component/review_top_component.dart';

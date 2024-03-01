@@ -32,3 +32,4 @@ class WeatherApiClient {
     }
   }
 }
+//todo:dynamicはあまり使わないようにする。型を指定することでエラーを防げる

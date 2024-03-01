@@ -11,8 +11,8 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:ous/component/weather_component.dart';
-import 'package:ous/infrastructure/weather_api_cliant.dart';
+import 'package:ous/Weather/api/weather_api_cliant.dart';
+import 'package:ous/Weather/ui/weather_component.dart';
 
 class Weather extends StatefulWidget {
   const Weather({

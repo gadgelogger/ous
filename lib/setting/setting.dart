@@ -1,17 +1,20 @@
+// Dart imports:
 import 'dart:io';
 
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:in_app_review/in_app_review.dart';
+// Project imports:
 import 'package:ous/account/login.dart';
 import 'package:ous/setting/music.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:in_app_review/in_app_review.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:slide_to_act/slide_to_act.dart';
-import '../main.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);
@@ -40,7 +43,7 @@ class _SettingState extends State<Setting> {
     // ユーザーを削除
     await user?.delete();
     await FirebaseAuth.instance.signOut();
-    print('ユーザーを削除しました!');
+    debugPrint('ユーザーを削除しました!');
     Fluttertoast.showToast(msg: "アカウントを削除しました\nご利用ありがとうございました。");
   }
 
@@ -110,21 +113,22 @@ class _SettingState extends State<Setting> {
               leading: const Icon(Icons.description),
               title: const Text('利用規約について'),
               onPressed: (context) {
-                launch('https://tan-q-bot-unofficial.com/terms_of_service/');
+                launchUrlString(
+                    'https://tan-q-bot-unofficial.com/terms_of_service/');
               },
             ),
             SettingsTile.navigation(
               leading: const Icon(Icons.reply),
               title: const Text('記事の掲載元'),
               onPressed: (context) {
-                launch('https://www.ous.ac.jp/topics/');
+                launchUrlString('https://www.ous.ac.jp/topics/');
               },
             ),
             SettingsTile.navigation(
               leading: const Icon(Icons.email),
               title: const Text('お問合わせ'),
               onPressed: (context) {
-                launch('https://twitter.com/notifications');
+                launchUrlString('https://twitter.com/notifications');
               },
             ),
             SettingsTile.navigation(
@@ -137,7 +141,7 @@ class _SettingState extends State<Setting> {
               leading: const Icon(Icons.description),
               title: const Text('開発ロードマップ'),
               onPressed: (context) {
-                launch(
+                launchUrlString(
                     'https://laced-egret-3b6.notion.site/7f9bc72309ab4fa2a5dcb1dc7aa256ea');
               },
             ),
@@ -174,7 +178,7 @@ class _SettingState extends State<Setting> {
                 leading: const Icon(Icons.public_outlined),
                 title: const Text('アプリの公式サイト'),
                 onPressed: (context) {
-                  launch('https://ous-unoffical-app.studio.site');
+                  launchUrlString('https://ous-unoffical-app.studio.site');
                 },
               ),
           ],
@@ -226,7 +230,7 @@ class _SettingState extends State<Setting> {
                           onPressed: () async {
                             // ログアウト処理
                             // 内部で保持しているログイン情報等が初期化される
-                            await FirebaseAuth.instance.signOut();
+                            FirebaseAuth.instance.signOut();
                             // ログイン画面に遷移＋チャット画面を破棄
                             await Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (context) {
@@ -300,7 +304,7 @@ class _SettingState extends State<Setting> {
                                         onSubmit: () async {
                                           //退会処理
                                           deleteUser();
-                                          print('ユーザーを削除しました!');
+                                          debugPrint('ユーザーを削除しました!');
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(

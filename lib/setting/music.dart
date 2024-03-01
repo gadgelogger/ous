@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:provider/provider.dart';
+import 'package:shake/shake.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
-import 'package:shake/shake.dart';
-import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:ous/test.dart';
 
 class Music extends StatefulWidget {

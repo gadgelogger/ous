@@ -1,20 +1,27 @@
+// Dart imports:
 import 'dart:io';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:ous/analytics_service.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ous/NavBar.dart';
-import 'package:flutter/material.dart';
-import 'package:ous/home.dart';
-import 'package:ous/review.dart';
-import 'package:ous/info/info.dart';
-import 'account/login.dart';
-import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Project imports:
+import 'package:ous/NavBar.dart';
+import 'package:ous/analytics_service.dart';
+import 'package:ous/home.dart';
+import 'package:ous/info/info.dart';
+import 'package:ous/review.dart';
+import 'account/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // ここに追加

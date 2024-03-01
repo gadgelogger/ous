@@ -1,10 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+// Package imports:
 import 'package:flutter_overboard/flutter_overboard.dart';
-import 'package:ous/account/login.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// Project imports:
+import 'package:ous/account/login.dart';
 
-class tutorial extends StatelessWidget {
-  tutorial({Key? key}) : super(key: key);
+class Tutorial extends StatelessWidget {
+  Tutorial({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

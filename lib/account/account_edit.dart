@@ -1,8 +1,11 @@
+// Dart imports:
 import 'dart:io';
 
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,14 +13,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
-class account_edit extends StatefulWidget {
-  const account_edit({Key? key}) : super(key: key);
+class AccountEdit extends StatefulWidget {
+  const AccountEdit({Key? key}) : super(key: key);
 
   @override
-  State<account_edit> createState() => _account_editState();
+  State<AccountEdit> createState() => AccountEditState();
 }
 
-class _account_editState extends State<account_edit> {
+class AccountEditState extends State<AccountEdit> {
   //firestoreキャッシュ
 
   Stream<DocumentSnapshot>? _stream;
@@ -46,7 +49,7 @@ class _account_editState extends State<account_edit> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final pickedFile = await ImagePicker().getImage(source: source);
+    final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _isUploading = true; // 読み込みマークを表示
@@ -77,7 +80,7 @@ class _account_editState extends State<account_edit> {
         child: CircularProgressIndicator(),
       );
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -111,8 +114,8 @@ class _account_editState extends State<account_edit> {
         .collection("users")
         .doc(uid)
         .update({"displayName": text})
-        .then((value) => print("Document updated successfully."))
-        .catchError((error) => print("Failed to update document: $error"));
+        .then((value) => debugPrint("Document updated successfully."))
+        .catchError((error) => debugPrint("Failed to update document: $error"));
     // Firestore にデータを書き込むなどの処理を行う
   }
 
@@ -134,92 +137,92 @@ class _account_editState extends State<account_edit> {
       ),
       body: SafeArea(
         child: StreamBuilder<DocumentSnapshot>(
-            stream: _stream,
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                // データ読み込み中の場合の処理
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (!snapshot.hasData || snapshot.data == null) {
-                // データが取得できなかった場合の処理
-                return const Text('データが見つかりませんでした。');
-              }
-              // データが正常に取得できた場合の処理
-              _data = snapshot.data!;
-              final email = _data['email'] as String;
-              final name = _data['displayName'] as String;
-              final image = _data['photoURL'] as String;
+          stream: _stream,
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<DocumentSnapshot> snapshot,
+          ) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // データ読み込み中の場合の処理
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (!snapshot.hasData || snapshot.data == null) {
+              // データが取得できなかった場合の処理
+              return const Text('データが見つかりませんでした。');
+            }
+            // データが正常に取得できた場合の処理
+            _data = snapshot.data!;
+            final email = _data['email'] as String;
+            final name = _data['displayName'] as String;
+            final image = _data['photoURL'] as String;
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Center(
-                        child: GestureDetector(
-                      onTap: () {
-                        _pickImage(ImageSource.gallery);
-                        Fluttertoast.showToast(
-                            msg: "アカウント画像を変更しています反映されるまでちょっと待ってね。");
-                      },
-                      child: SizedBox(
-                          height: 150,
-                          width: 150,
-                          child: Stack(
-                            alignment: Alignment.center,
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      _pickImage(ImageSource.gallery);
+                      Fluttertoast.showToast(
+                        msg: "アカウント画像を変更しています反映されるまでちょっと待ってね。",
+                      );
+                    },
+                    child: SizedBox(
+                      height: 150,
+                      width: 150,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Stack(
+                            clipBehavior: Clip.none,
+                            fit: StackFit.expand,
                             children: [
-                              Stack(
-                                clipBehavior: Clip.none,
-                                fit: StackFit.expand,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage: NetworkImage(image),
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: -25,
-                                    child: RawMaterialButton(
-                                      onPressed: () {
-                                        _pickImage(ImageSource.gallery);
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                "アカウント画像を変更しています反映されるまでちょっと待ってね。");
-                                      },
-                                      elevation: 2.0,
-                                      fillColor: const Color(0xFFF5F6F9),
-                                      padding: const EdgeInsets.all(7.0),
-                                      shape: const CircleBorder(),
-                                      child: Icon(Icons.photo_camera_outlined,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                  ),
-                                ],
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(image),
                               ),
                               Positioned(
-                                  child: _isUploading
-                                      ? Container(
-                                          child: const Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              CircularProgressIndicator()
-                                            ],
-                                          ),
-                                        )
-                                      : const SizedBox()),
+                                bottom: 0,
+                                right: -25,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    _pickImage(ImageSource.gallery);
+                                    Fluttertoast.showToast(
+                                      msg: "アカウント画像を変更しています反映されるまでちょっと待ってね。",
+                                    );
+                                  },
+                                  elevation: 2.0,
+                                  fillColor: const Color(0xFFF5F6F9),
+                                  padding: const EdgeInsets.all(7.0),
+                                  shape: const CircleBorder(),
+                                  child: Icon(
+                                    Icons.photo_camera_outlined,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
                             ],
-                          )),
-                    )),
+                          ),
+                          Positioned(
+                            child: _isUploading
+                                ? const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [CircularProgressIndicator()],
+                                  )
+                                : const SizedBox(),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Center(
-                      child: Text(
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                Center(
+                  child: Text(
                     'ユーザー名',
                     style: GoogleFonts.notoSans(
                       // フォントをnotoSansに指定(
@@ -229,48 +232,49 @@ class _account_editState extends State<account_edit> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )),
-                  TextField(
-                    controller: _controller,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp('ゲストユーザー'))
-                    ],
-                    decoration: InputDecoration(
-                      hintText: name,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          textview();
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return AlertDialog(
-                                title: const Text("注意"),
-                                content: Text("アカウント情報を$nameから$_textに変更しますか？"),
-                                actions: <Widget>[
-                                  // ボタン領域
-                                  ElevatedButton(
-                                    child: const Text("やっぱやめる"),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                  ElevatedButton(
-                                    child: const Text("いいよ"),
-                                    onPressed: () {
-                                      _onTextEditingComplete();
+                  ),
+                ),
+                TextField(
+                  controller: _controller,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.deny(RegExp('ゲストユーザー')),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: name,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        textview();
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return AlertDialog(
+                              title: const Text("注意"),
+                              content: Text("アカウント情報を$nameから$_textに変更しますか？"),
+                              actions: <Widget>[
+                                // ボタン領域
+                                ElevatedButton(
+                                  child: const Text("やっぱやめる"),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                ElevatedButton(
+                                  child: const Text("いいよ"),
+                                  onPressed: () {
+                                    _onTextEditingComplete();
 
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        icon: const Icon(Icons.arrow_circle_right),
-                      ),
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.arrow_circle_right),
                     ),
                   ),
-                  Center(
-                      child: Text(
+                ),
+                Center(
+                  child: Text(
                     '登録アカウント',
                     style: GoogleFonts.notoSans(
                       // フォントをnotoSansに指定(
@@ -280,18 +284,21 @@ class _account_editState extends State<account_edit> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )),
-                  const SizedBox(
-                    height: 20,
                   ),
-                  Center(
-                      child: Text(
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Center(
+                  child: Text(
                     email,
                     style: const TextStyle(fontSize: 20),
-                  )),
-                ],
-              );
-            }),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

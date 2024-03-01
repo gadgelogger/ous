@@ -1,9 +1,12 @@
+// Flutter imports:
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/main.dart';
 import 'package:intl/intl.dart';
+// Project imports:
+import 'package:ous/main.dart';
 
 class Emailcheck extends StatefulWidget {
   // 呼び出し元Widgetから受け取った後、変更をしないためfinalを宣言。
@@ -48,75 +51,38 @@ class _Emailcheck extends State<Emailcheck> {
       }
     }
 
-    return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-          // メイン画面
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // 確認メール未完了時のメッセージ
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
-                  child: Text(
-                    _nocheckText,
-                    style: const TextStyle(color: Colors.red),
-                  ),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        // メイン画面
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 確認メール未完了時のメッセージ
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 0, 20.0, 20.0),
+                child: Text(
+                  _nocheckText,
+                  style: const TextStyle(color: Colors.red),
                 ),
+              ),
 
-                // 確認メール送信時のメッセージ
-                Text(_sentEmailText),
-                Text(_sentEmailText2),
+              // 確認メール送信時のメッセージ
+              Text(_sentEmailText),
+              Text(_sentEmailText2),
 
-                // 確認メールの再送信ボタン
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
-                  child: ButtonTheme(
-                    minWidth: 200.0,
-                    // height: 100.0,
-                    child: ElevatedButton(
-                      // ボタンの形状や背景色など
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.grey, //text-color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-
-                      // ボタン内の文字や書式
-                      child: const Text(
-                        '確認メールを再送信',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-
-                      onPressed: () async {
-                        UserCredential result =
-                            await _auth.signInWithEmailAndPassword(
-                          email: _email,
-                          password: _pswd,
-                        );
-
-                        result.user!.sendEmailVerification();
-                        setState(() {
-                          _btnClickNum++;
-                          _sentEmailText = '${widget.email}\nに確認メールを送信しました。';
-                        });
-                      },
-                    ),
-                  ),
-                ),
-
-                // メール確認完了のボタン配置（Home画面に遷移）
-                SizedBox(
-                  width: 350.0,
+              // 確認メールの再送信ボタン
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 30.0),
+                child: ButtonTheme(
+                  minWidth: 200.0,
                   // height: 100.0,
                   child: ElevatedButton(
                     // ボタンの形状や背景色など
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: Colors.lightGreen, //text-color
+                      backgroundColor: Colors.grey, //text-color
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -124,7 +90,7 @@ class _Emailcheck extends State<Emailcheck> {
 
                     // ボタン内の文字や書式
                     child: const Text(
-                      'メール確認が完了したで',
+                      '確認メールを再送信',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
 
@@ -135,43 +101,84 @@ class _Emailcheck extends State<Emailcheck> {
                         password: _pswd,
                       );
 
-                      User user = result.user!; // ログインユーザーのIDを取得
-
-                      // Email確認が済んでいる場合は、Home画面へ遷移
-                      if (result.user!.emailVerified) {
-                        Fluttertoast.showToast(msg: "ログインしました");
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const MyHomePage(title: 'home');
-                        }));
-
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.uid)
-                            .set({
-                          'email': _email,
-                          'uid': user.uid,
-                          'displayName': '名前未設定',
-                          'day':
-                              DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now),
-                          'photoURL':
-                              'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
-                        });
-                        print("Created");
-                      } else {
-                        // print('NG');
-                        setState(() {
-                          _btnClickNum++;
-                          _nocheckText =
-                              "まだメール確認が完了していません。\n確認メール内のリンクをクリックしてください。";
-                        });
-                      }
+                      result.user!.sendEmailVerification();
+                      setState(() {
+                        _btnClickNum++;
+                        _sentEmailText = '${widget.email}\nに確認メールを送信しました。';
+                      });
                     },
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // メール確認完了のボタン配置（Home画面に遷移）
+              SizedBox(
+                width: 350.0,
+                // height: 100.0,
+                child: ElevatedButton(
+                  // ボタンの形状や背景色など
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.lightGreen, //text-color
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+
+                  // ボタン内の文字や書式
+                  child: const Text(
+                    'メール確認が完了したで',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+
+                  onPressed: () async {
+                    UserCredential result =
+                        await _auth.signInWithEmailAndPassword(
+                      email: _email,
+                      password: _pswd,
+                    );
+
+                    User user = result.user!; // ログインユーザーのIDを取得
+
+                    // Email確認が済んでいる場合は、Home画面へ遷移
+                    if (result.user!.emailVerified) {
+                      Fluttertoast.showToast(msg: "ログインしました");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const MyHomePage(title: 'home');
+                          },
+                        ),
+                      );
+
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(user.uid)
+                          .set({
+                        'email': _email,
+                        'uid': user.uid,
+                        'displayName': '名前未設定',
+                        'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now),
+                        'photoURL':
+                            'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+                      });
+                      debugPrint("Created");
+                    } else {
+                      // print('NG');
+                      setState(() {
+                        _btnClickNum++;
+                        _nocheckText =
+                            "まだメール確認が完了していません。\n確認メール内のリンクをクリックしてください。";
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

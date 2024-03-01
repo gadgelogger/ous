@@ -1,10 +1,13 @@
+// Flutter imports:
+// Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:ous/apikey.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+// Project imports:
+import 'package:ous/apikey.dart';
 import 'package:uuid/uuid.dart';
 
 class DevInfo extends StatefulWidget {
@@ -29,7 +32,7 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
     User? user = auth.currentUser;
     if (user != null &&
         user.email != null &&
-        (user.email == dev_email || user.email == dev_email2)) {
+        (user.email == devEmail || user.email == devEmail2)) {
       showFloatingActionButton = true;
     }
     setState(() {});
@@ -75,9 +78,10 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
                       subtitle: Text(
                         DateFormat('yyyy/MM/dd').format(data['day'].toDate()),
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.sp),
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.sp,
+                        ),
                       ),
                       onTap: () {
                         Navigator.push(
@@ -118,12 +122,15 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
 }
 
 class ViewPost extends StatefulWidget {
-  final text;
-  final day;
-  final title;
-  const ViewPost(
-      {Key? key, required this.text, required this.day, required this.title})
-      : super(key: key);
+  final dynamic text;
+  final dynamic day;
+  final dynamic title;
+  const ViewPost({
+    Key? key,
+    required this.text,
+    required this.day,
+    required this.title,
+  }) : super(key: key);
 
   @override
   State<ViewPost> createState() => _ViewPostState();
@@ -133,45 +140,47 @@ class _ViewPostState extends State<ViewPost> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('開発者からのお知らせ'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-                textAlign: TextAlign.left,
+      appBar: AppBar(
+        title: const Text('開発者からのお知らせ'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+              textAlign: TextAlign.left,
+            ),
+            Text(
+              DateFormat('yyyy/MM/dd').format(widget.day.toDate()),
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 15.sp,
               ),
-              Text(
-                DateFormat('yyyy/MM/dd').format(widget.day.toDate()),
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.sp),
-              ),
-              const Divider(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    height: 600.h,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: MarkdownWidget(
-                        data: widget.text,
-                      ),
+            ),
+            const Divider(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: 600.h,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MarkdownWidget(
+                      data: widget.text,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -236,10 +245,11 @@ class _DevPostState extends State<DevPost> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Center(
-                    child: Text(
-                  'この画面は開発者のアカウントでのみ表示されます。\nThis screen is only visible for developer accounts.',
-                  textAlign: TextAlign.center,
-                )),
+                  child: Text(
+                    'この画面は開発者のアカウントでのみ表示されます。\nThis screen is only visible for developer accounts.',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 TextFormField(
                   controller: _titleController,
                   decoration: const InputDecoration(

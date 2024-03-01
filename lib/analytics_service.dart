@@ -1,5 +1,8 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 enum AnalyticsServiceScreenName {
   home,

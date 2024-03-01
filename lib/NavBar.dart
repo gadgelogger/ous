@@ -1,14 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+// Project imports:
 import 'package:ous/Nav/Calendar/calender.dart';
+import 'package:ous/Nav/call.dart';
+import 'package:ous/Nav/link.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/Nav/tcp.dart';
 import 'package:ous/account/account.dart';
-import 'package:ous/Nav/link.dart';
 import 'package:ous/setting/setting.dart';
-import 'package:ous/Nav/call.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({
@@ -49,7 +54,7 @@ class _NavBarState extends State<NavBar> {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) {
-                  return const account();
+                  return const Account();
                 }),
               );
             },
@@ -78,7 +83,7 @@ class _NavBarState extends State<NavBar> {
                 final image = _data['photoURL'] as String?;
 
                 return UserAccountsDrawerHeader(
-                  accountName: Text(displayName ?? 'ゲストユーザー'),
+                  accountName: Text(displayName),
                   accountEmail: Text(email ?? '',
                       style: const TextStyle(color: Colors.white)),
                   currentAccountPicture: CircleAvatar(

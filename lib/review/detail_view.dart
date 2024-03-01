@@ -1,18 +1,22 @@
+// Dart imports:
+import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'dart:ui' as ui;
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 
 class DetailsScreen extends StatefulWidget {
   final zyugyoumei;

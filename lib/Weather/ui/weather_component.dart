@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+//todohttps://udemy.benesse.co.jp/design/web-design/atomic-design.html;
+//このサイトの５１２くらいはできているとNICE
 class WeatherWidget extends StatelessWidget {
   const WeatherWidget({
     Key? key,
