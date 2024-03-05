@@ -9,7 +9,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:in_app_review/in_app_review.dart';
 // Project imports:
 import 'package:ous/account/login.dart';
-import 'package:ous/setting/music.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
@@ -50,17 +49,6 @@ class _SettingState extends State<Setting> {
               ),
             ),
             tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.music_note),
-                title: const Text('校歌'),
-                onPressed: (context) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => const Music(),
-                    ),
-                  );
-                },
-              ),
               SettingsTile.navigation(
                 leading: const Icon(Icons.description),
                 title: const Text('利用規約について'),

@@ -39,200 +39,10 @@ class _HomeState extends State<Home> {
   dynamic weatherData;
   dynamic weatherData1;
 
-  @override
-  void initState() {
-    super.initState();
-    getWeatherData();
-    getWeatherData1();
-    mylogMonitor();
-    incrementCounterAndRequestReview();
-    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
-  }
-
-  //アプリレビュー
-  Future<void> incrementCounterAndRequestReview() async {
-    //カウントアップさせて保存
-    final prefs = await SharedPreferences.getInstance();
-    int counter = (prefs.getInt('counter') ?? 0) + 1;
-    await prefs.setInt('counter', counter);
-    //レビュー表示させる処理
-    if (counter % 10 == 0) {
-      final InAppReview inAppReview = InAppReview.instance;
-      if (await inAppReview.isAvailable()) {
-        inAppReview.requestReview();
-      }
-    }
-  }
-
-  //天気予報　岡山
-  void getWeatherData() async {
-    String city = "Okayama";
-    String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
-
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        weatherData = jsonData;
-      });
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-  void getWeatherData1() async {
-    String city = "Aichi-ken";
-    String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
-
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        weatherData1 = jsonData;
-      });
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-//岡山駅
-  Future<String> fetchApproachCaption() async {
-    final response = await http.get(
-      Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
-
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
-      } else {
-        return '終了';
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-//理大
-  Future<String> fetchApproachCaption1() async {
-    final response = await http.get(
-      Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
-
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
-      } else {
-        return '終了';
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-//天満屋→岡山理科大学
-  Future<String> fetchApproachCaption2() async {
-    final response = await http.get(
-      Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=27&stopCdTo=768&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
-
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
-      } else {
-        return '終了';
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-//岡山理科大学→天満屋
-  Future<String> fetchApproachCaption3() async {
-    final response = await http.get(
-      Uri.parse(
-        'https://loc.bus-vision.jp/ryobi/view/approach.html?returnCdFrom=768&returnCdTo=27&returnHour=&returnMinute=&returnAD=-1&returnVehicleTypeCd=&returnCorpCd=&lang=0',
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      var document = parse(response.body);
-      var approachCaption = document.getElementsByClassName('approachCaption');
-
-      if (approachCaption.isNotEmpty) {
-        return approachCaption[0].text.trim();
-      } else {
-        return '終了';
-      }
-    } else {
-      throw Exception('Error');
-    }
-  }
-
   //Mylogの監視
   String? _title;
+
   String? _pubDate;
-
-  Future<void> mylogMonitor() async {
-    try {
-      var dio = Dio();
-      dio.options.headers['Authorization'] =
-          'Bearer glsa_gPHPHakicrtftk0xZ4iiDHOlD3kzYivC_478e8cde';
-
-      Response response = await dio.get(
-        'https://rss.uptimerobot.com/u1289833-0ef9796d57788bd318da8c890c598a93',
-      );
-
-      var document = XmlDocument.parse(response.data);
-      var firstItem = document.findAllElements('item').first;
-
-      var title = firstItem.findElements('title').single.innerText;
-      var pubDate = firstItem.findElements('pubDate').single.innerText;
-
-      // 日付の整形
-      DateFormat originalFormat = DateFormat('E, d MMM yyyy HH:mm:ss Z');
-      DateTime dateTime = originalFormat.parse(pubDate);
-      String formattedDate = DateFormat('yyyy/MM/dd HH:mm:ss').format(dateTime);
-
-      // ステータスメッセージの設定
-      String statusMessage;
-      if (title.contains('is UP')) {
-        statusMessage = '正常に稼働中';
-      } else if (title.contains('is DOWN')) {
-        statusMessage = '障害発生中';
-      } else {
-        statusMessage = '不明なステータス';
-      }
-
-      setState(() {
-        _title = statusMessage;
-        _pubDate = formattedDate;
-      });
-    } catch (e) {
-      setState(() {
-        _title = "error";
-        _pubDate = "error";
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -869,5 +679,196 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  //岡山駅
+  Future<String> fetchApproachCaption() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return '終了';
+      }
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+//理大
+  Future<String> fetchApproachCaption1() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return '終了';
+      }
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+//天満屋→岡山理科大学
+  Future<String> fetchApproachCaption2() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=27&stopCdTo=768&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return '終了';
+      }
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+//岡山理科大学→天満屋
+  Future<String> fetchApproachCaption3() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://loc.bus-vision.jp/ryobi/view/approach.html?returnCdFrom=768&returnCdTo=27&returnHour=&returnMinute=&returnAD=-1&returnVehicleTypeCd=&returnCorpCd=&lang=0',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      var document = parse(response.body);
+      var approachCaption = document.getElementsByClassName('approachCaption');
+
+      if (approachCaption.isNotEmpty) {
+        return approachCaption[0].text.trim();
+      } else {
+        return '終了';
+      }
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+//天気予報　岡山
+  void getWeatherData() async {
+    String city = "Okayama";
+    String url =
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
+
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      setState(() {
+        weatherData = jsonData;
+      });
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  void getWeatherData1() async {
+    String city = "Aichi-ken";
+    String url =
+        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
+
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body);
+      setState(() {
+        weatherData1 = jsonData;
+      });
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  //アプリレビュー
+  Future<void> incrementCounterAndRequestReview() async {
+    //カウントアップさせて保存
+    final prefs = await SharedPreferences.getInstance();
+    int counter = (prefs.getInt('counter') ?? 0) + 1;
+    await prefs.setInt('counter', counter);
+    //レビュー表示させる処理
+    if (counter % 10 == 0) {
+      final InAppReview inAppReview = InAppReview.instance;
+      if (await inAppReview.isAvailable()) {
+        inAppReview.requestReview();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getWeatherData();
+    getWeatherData1();
+    mylogMonitor();
+    incrementCounterAndRequestReview();
+    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
+  }
+
+  Future<void> mylogMonitor() async {
+    try {
+      var dio = Dio();
+      dio.options.headers['Authorization'] =
+          'Bearer glsa_gPHPHakicrtftk0xZ4iiDHOlD3kzYivC_478e8cde';
+
+      Response response = await dio.get(
+        'https://rss.uptimerobot.com/u1289833-0ef9796d57788bd318da8c890c598a93',
+      );
+
+      var document = XmlDocument.parse(response.data);
+      var firstItem = document.findAllElements('item').first;
+
+      var title = firstItem.findElements('title').single.innerText;
+      var pubDate = firstItem.findElements('pubDate').single.innerText;
+
+      // 日付の整形
+      DateFormat originalFormat = DateFormat('E, d MMM yyyy HH:mm:ss Z');
+      DateTime dateTime = originalFormat.parse(pubDate);
+      String formattedDate = DateFormat('yyyy/MM/dd HH:mm:ss').format(dateTime);
+
+      // ステータスメッセージの設定
+      String statusMessage;
+      if (title.contains('is UP')) {
+        statusMessage = '正常に稼働中';
+      } else if (title.contains('is DOWN')) {
+        statusMessage = '障害発生中';
+      } else {
+        statusMessage = '不明なステータス';
+      }
+
+      setState(() {
+        _title = statusMessage;
+        _pubDate = formattedDate;
+      });
+    } catch (e) {
+      setState(() {
+        _title = "error";
+        _pubDate = "error";
+      });
+    }
   }
 }

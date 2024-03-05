@@ -119,60 +119,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
   assets:
-  - assets/images/home.jpg
-  - assets/images/homedark.jpeg
-  - assets/images/icon.png
-  - assets/icon/icon_dark.png
-  - assets/images/icon.jpeg
-  - assets/images/bus-stop-vector.jpg
-  - assets/kouka.mp3
-  - assets/welcome.mp3
-  - assets/images/理学部.jpg
-  - assets/images/green neutrals desktop.jpeg
-  - assets/images/工学部.jpg
-  - assets/images/情報理工学部.jpg
-  - assets/images/生物地球学部.jpg
-  - assets/images/教育学部.jpg
-  - assets/images/経営学部.jpg
-  - assets/images/獣医学部.jpg
-  - assets/images/生命科学部.jpg
-  - assets/images/mockup.PNG
-  - assets/images/are.jpg
-  - assets/images/食堂/うどん.jpg
-  - assets/images/食堂/たんぽぽ.jpg
-  - assets/images/食堂/るるぱ.jpg
-  - assets/images/食堂/ゼロイチ.jpg
-  - assets/images/食堂/ハラール.jpg
-  - assets/images/食堂/697kitchen.jpg
-  - assets/icon/password.gif
-  - assets/icon/rocket.gif
-  - assets/icon/error.gif
-  - assets/icon/found.gif
-  - assets/icon/book.png
-  - assets/icon/news.png
-  - assets/icon/update.png
-  - assets/icon/drink.gif
-  - assets/icon/lunch.gif
-  - assets/icon/cofee.gif
-  - assets/icon/logo.png
-  - assets/files/2023_ous_schedule.ics
-  - assets/files/2023_ous_schedule_imabari.ics
-  - assets/icon/maintenance.gif
-  - assets/images/icon2.jpg
+  - assets/images/
+  - assets/icon/
+  - assets/files/
 flutter_native_splash:
   color: '#ffffff'
   image: 'assets/images/icon.png'

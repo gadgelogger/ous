@@ -1,36 +1,26 @@
-// Flutter imports:
-// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// Project imports:
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/Nav/Calendar/calender.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/Nav/tcp.dart';
-import 'package:ous/account/account.dart';
 import 'package:ous/setting/setting.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NavBar extends StatefulWidget {
-  const NavBar({
-    Key? key,
-  }) : super(key: key);
+  const NavBar({Key? key}) : super(key: key);
 
   @override
   State<NavBar> createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-//firestoreキャッシュ
   Stream<DocumentSnapshot>? _stream;
-  late DocumentSnapshot _data;
-
-  //UIDをFirebaseAythから取得
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  final uid = FirebaseAuth.instance.currentUser?.uid;
+  final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
 
   @override
   Widget build(BuildContext context) {
@@ -39,148 +29,46 @@ class _NavBarState extends State<NavBar> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const Account();
-                  },
-                ),
-              );
-            },
-            child: StreamBuilder<DocumentSnapshot>(
-              stream: _stream,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot,
-              ) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  return const Text('エラーが発生しました。');
-                }
-
-                if (!snapshot.hasData || snapshot.data == null) {
-                  return const Text('データが見つかりませんでした。');
-                }
-
-                _data = snapshot.data!;
-
-                final displayName = _data['displayName'] as String? ?? '';
-                final email = _data['email'] as String?;
-                final image = _data['photoURL'] as String?;
-
-                return UserAccountsDrawerHeader(
-                  accountName: Text(displayName),
-                  accountEmail: Text(
-                    email ?? '',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  currentAccountPicture: CircleAvatar(
-                    child: ClipOval(
-                      child: Image.network(
-                        image ??
-                            'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
-                        width: 90,
-                        height: 90,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                );
-              },
-            ),
+          // Account information
+          _buildUserAccountHeader(),
+          // Menu items
+          _buildMenuItem(
+            Icons.event_available_outlined,
+            '行事予定',
+            () => _navigateToPage(context, const CalendarPage()),
           ),
-          ListTile(
-            leading: const Icon(Icons.event_available_outlined),
-            title: const Text('行事予定'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CalendarPage()),
-              );
-            },
+          _buildMenuItem(Icons.public_outlined, 'マイログ', () => _launchMyLog()),
+          _buildMenuItem(
+            Icons.public_outlined,
+            'TCP',
+            () => _navigateToPage(context, const Tcp()),
           ),
-          ListTile(
-            leading: const Icon(Icons.public_outlined),
-            title: const Text('マイログ'),
-            onTap: () {
-              launchUrl(
-                Uri.https(
-                  'mylog.pub.ous.ac.jp',
-                  '/uprx/up/pk/pky501/Pky50101.xhtml',
-                ),
-                mode: LaunchMode.externalApplication,
-              );
-            },
+          _buildMenuItem(
+            Icons.book_outlined,
+            '学生便覧',
+            () => _launchStudentHandbook(),
           ),
-          ListTile(
-            leading: const Icon(Icons.public_outlined),
-            title: const Text('TCP'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Tcp()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.book_outlined),
-            title: const Text('学生便覧'),
-            onTap: () {
-              launch('https://www.ous.ac.jp/outline/disclosure/handbook/');
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.location_on_outlined),
-            title: const Text('学内マップ'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Map()),
-              );
-            },
+          _buildMenuItem(
+            Icons.location_on_outlined,
+            '学内マップ',
+            () => _navigateToPage(context, const Map()),
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.link_outlined),
-            title: const Text('各種リンク集'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Link()),
-              );
-            },
+          _buildMenuItem(
+            Icons.link_outlined,
+            '各種リンク集',
+            () => _navigateToPage(context, const Link()),
           ),
-          ListTile(
-            leading: const Icon(Icons.call_outlined),
-            title: const Text('各種連絡先'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Call()),
-              );
-            },
+          _buildMenuItem(
+            Icons.call_outlined,
+            '各種連絡先',
+            () => _navigateToPage(context, const Call()),
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('設定/その他'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Setting()),
-              );
-            },
+          _buildMenuItem(
+            Icons.settings_outlined,
+            '設定/その他',
+            () => _navigateToPage(context, const Setting()),
           ),
         ],
       ),
@@ -190,8 +78,94 @@ class _NavBarState extends State<NavBar> {
   @override
   void initState() {
     super.initState();
-
     _stream =
         FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+  }
+
+  ListTile _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildUserAccountHeader() {
+    return StreamBuilder<DocumentSnapshot>(
+      stream: _stream,
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData ||
+            snapshot.data == null ||
+            !snapshot.data!.exists) {
+          return _guestUserHeader(context);
+        }
+
+        final DocumentSnapshot doc = snapshot.data!;
+        return _userHeader(context, doc);
+      },
+    );
+  }
+
+  Widget _guestUserHeader(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          Fluttertoast.showToast(
+            msg: "ゲストモードでは利用できません。",
+          ) as SnackBar,
+        );
+      },
+      child: UserAccountsDrawerHeader(
+        accountName: const Text('ゲストモード'),
+        accountEmail: const Text('guest_user@example.com'),
+        currentAccountPicture: const CircleAvatar(
+          child: ClipOval(
+            child: Icon(Icons.person, color: Colors.white),
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+    );
+  }
+
+  void _launchMyLog() {
+    launchUrl(
+      Uri.https('mylog.pub.ous.ac.jp', '/uprx/up/pk/pky501/Pky50101.xhtml'),
+      mode: LaunchMode.externalApplication,
+    );
+  }
+
+  void _launchStudentHandbook() {
+    launchUrlString('https://www.ous.ac.jp/outline/disclosure/handbook/');
+  }
+
+  void _navigateToPage(BuildContext context, Widget page) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  Widget _userHeader(BuildContext context, DocumentSnapshot doc) {
+    final String displayName = doc.get('displayName') as String;
+    final String email = doc.get('email') as String;
+    final String image = doc.get('photoURL') as String;
+
+    return UserAccountsDrawerHeader(
+      accountName: Text(displayName),
+      accountEmail: Text(email, style: const TextStyle(color: Colors.white)),
+      currentAccountPicture: CircleAvatar(
+        child: ClipOval(
+          child: Image.network(image, width: 90, height: 90, fit: BoxFit.cover),
+        ),
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+      ),
+    );
   }
 }
