@@ -8,6 +8,23 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
+class AccountNameUpdater {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  void updateDisplayName(String newName, BuildContext context) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
+    try {
+      await firestore
+          .collection("users")
+          .doc(uid)
+          .update({"displayName": newName});
+      Fluttertoast.showToast(msg: "アカウント名が更新されました。");
+    } catch (e) {
+      Fluttertoast.showToast(msg: "アカウント名の更新に失敗しました: $e");
+    }
+  }
+}
+
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
 
@@ -29,6 +46,7 @@ class ImageUploader {
 
       final File imageFile = File(pickedFile.path);
       Fluttertoast.showToast(msg: "アップロードを開始します...");
+      const CircularProgressIndicator();
 
       String fileName = path.basename(imageFile.path);
       Reference storageRef =
@@ -57,8 +75,9 @@ class UserHeader extends StatelessWidget {
   final String image;
   final String email;
   final String uid;
+  final TextEditingController _nameController = TextEditingController();
 
-  const UserHeader({
+  UserHeader({
     Key? key,
     required this.name,
     required this.status,
@@ -66,7 +85,6 @@ class UserHeader extends StatelessWidget {
     required this.email,
     required this.uid,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     // ユーザー情報のヘッダーUIに集中
@@ -115,17 +133,46 @@ class UserHeader extends StatelessWidget {
                   ),
           ),
         ),
-        const Divider(),
-        const SizedBox(height: 16),
+        const SizedBox(height: 30),
         const Text(
           'アカウント名',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         TextField(
+          controller: _nameController, // テキストフィールドを制御するためのTextEditingController
           decoration: InputDecoration(
             hintText: name,
             border: const OutlineInputBorder(),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () async {
+                // 名前の変更処理
+                final newName = _nameController.text;
+                final result = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('確認'),
+                    content: Text('アカウント名を「$newName」に変更しますか？'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('キャンセル'),
+                        onPressed: () => Navigator.of(context).pop(false),
+                      ),
+                      TextButton(
+                        child: const Text('OK'),
+                        onPressed: () => Navigator.of(context).pop(true),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (result == true) {
+                  // OKが押されたら名前を変更
+                  AccountNameUpdater().updateDisplayName(newName, context);
+                }
+              },
+            ),
           ),
         ),
         const SizedBox(height: 16),

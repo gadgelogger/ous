@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:convert';
 import 'dart:io';
 
 // Package imports:
@@ -22,8 +21,6 @@ import 'package:url_launcher/url_launcher_string.dart';
 import 'package:xml/xml.dart';
 
 import 'NavBar.dart';
-import 'apikey.dart';
-import 'ui/weather/weather_page.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -78,138 +75,19 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: 500.0.w,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      child: Image.asset(
-                        Theme.of(context).brightness == Brightness.dark
-                            ? 'assets/images/homedark.jpeg'
-                            : 'assets/images/home.jpg',
-                      ),
-                    ),
+              SizedBox(
+                width: 500.0.w,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 20,
-                    child: weatherData != null
-                        ? Column(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const Weather(
-                                        city: 'Okayama',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '岡山',
-                                          style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 50.h,
-                                          width: 50.w,
-                                          child: Image.network(
-                                            "http://openweathermap.org/img/wn/${weatherData['weather'][0]['icon']}@2x.png",
-                                          ),
-                                        ),
-                                        Text(
-                                          (weatherData['main']['temp'] - 273.15)
-                                                  .toStringAsFixed(0) +
-                                              "°C",
-                                          style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                  child: Image.asset(
+                    Theme.of(context).brightness == Brightness.dark
+                        ? 'assets/images/homedark.jpeg'
+                        : 'assets/images/home.jpg',
                   ),
-                  Positioned(
-                    top: 60,
-                    right: 20,
-                    child: weatherData1 != null
-                        ? Column(
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const Weather(
-                                        city: 'Aichi-ken',
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          '今治',
-                                          style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 50.h,
-                                          width: 50.w,
-                                          child: Image.network(
-                                            "http://openweathermap.org/img/wn/${weatherData1['weather'][0]['icon']}@2x.png",
-                                          ),
-                                        ),
-                                        Text(
-                                          (weatherData1['main']['temp'] -
-                                                      273.15)
-                                                  .toStringAsFixed(0) +
-                                              "°C",
-                                          style: TextStyle(
-                                            fontSize: 15.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                  ),
-                ],
+                ),
               ),
               Card(
                 child: Padding(
@@ -769,41 +647,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-//天気予報　岡山
-  void getWeatherData() async {
-    String city = "Okayama";
-    String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
-
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        weatherData = jsonData;
-      });
-    } else {
-      throw Exception('Error');
-    }
-  }
-
-  void getWeatherData1() async {
-    String city = "Aichi-ken";
-    String url =
-        "http://api.openweathermap.org/data/2.5/weather?q=$city&appid=$weatherKey&lang=ja";
-
-    var response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body);
-      setState(() {
-        weatherData1 = jsonData;
-      });
-    } else {
-      throw Exception('Error');
-    }
-  }
-
   //アプリレビュー
   Future<void> incrementCounterAndRequestReview() async {
     //カウントアップさせて保存
@@ -822,8 +665,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    getWeatherData();
-    getWeatherData1();
     mylogMonitor();
     incrementCounterAndRequestReview();
     AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);

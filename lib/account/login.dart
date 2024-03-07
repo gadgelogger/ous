@@ -13,7 +13,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 // Project imports:
 import 'package:ous/account/tutorial.dart';
-import 'package:ous/home.dart';
 import 'package:ous/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -64,8 +63,7 @@ class LoginState extends State<Login> {
         'uid': firebaseUser?.uid ?? '未設定',
         'email': firebaseUser?.email ?? '未設定',
         'displayName': firebaseUser?.displayName ?? '名前未設定',
-        'photoURL': firebaseUser?.photoURL ??
-            'https://pbs.twimg.com/profile_images/1439164154502287361/1dyVrzQO_400x400.jpg',
+        'photoURL': firebaseUser?.photoURL ?? '',
         'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now),
 
         // その他のユーザー情報を追加
@@ -377,7 +375,10 @@ class LoginState extends State<Login> {
       // Navigate to the next screen after successful login
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(
+            builder: (context) => const MyHomePage(
+                  title: 'home',
+                )),
       );
 
       return userCredential;

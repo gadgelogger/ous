@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:ous/Nav/Calendar/calender.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/Nav/map.dart';
 import 'package:ous/Nav/tcp.dart';
+import 'package:ous/account/account_page.dart';
 import 'package:ous/setting/setting.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -35,8 +35,9 @@ class _NavBarState extends State<NavBar> {
           _buildMenuItem(
             Icons.event_available_outlined,
             '行事予定',
-            () => _navigateToPage(context, const CalendarPage()),
+            () => _launchCalender(),
           ),
+
           _buildMenuItem(Icons.public_outlined, 'マイログ', () => _launchMyLog()),
           _buildMenuItem(
             Icons.public_outlined,
@@ -135,6 +136,10 @@ class _NavBarState extends State<NavBar> {
     );
   }
 
+  void _launchCalender() {
+    launchUrlString('https://www.ous.ac.jp/campuslife/academic_calenda/');
+  }
+
   void _launchMyLog() {
     launchUrl(
       Uri.https('mylog.pub.ous.ac.jp', '/uprx/up/pk/pky501/Pky50101.xhtml'),
@@ -155,16 +160,25 @@ class _NavBarState extends State<NavBar> {
     final String email = doc.get('email') as String;
     final String image = doc.get('photoURL') as String;
 
-    return UserAccountsDrawerHeader(
-      accountName: Text(displayName),
-      accountEmail: Text(email, style: const TextStyle(color: Colors.white)),
-      currentAccountPicture: CircleAvatar(
-        child: ClipOval(
-          child: Image.network(image, width: 90, height: 90, fit: BoxFit.cover),
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AccountPage(),
         ),
       ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
+      child: UserAccountsDrawerHeader(
+        accountName: Text(displayName),
+        accountEmail: Text(email, style: const TextStyle(color: Colors.white)),
+        currentAccountPicture: CircleAvatar(
+          child: ClipOval(
+            child:
+                Image.network(image, width: 90, height: 90, fit: BoxFit.cover),
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }
