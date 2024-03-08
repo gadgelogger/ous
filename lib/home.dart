@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
                               ButtonBar(
                                 children: [
                                   SizedBox(
-                                    width: 180.w, //横幅
+                                    width: 178.w, //横幅
                                     height: 50.h, //高さ
                                     child: FilledButton.tonal(
                                       style: FilledButton.styleFrom(
@@ -182,7 +182,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 180.w, //横幅
+                                    width: 178.w, //横幅
                                     height: 50.h, //高さ
                                     child: FilledButton.tonal(
                                       style: FilledButton.styleFrom(
@@ -259,7 +259,7 @@ class _HomeState extends State<Home> {
                               ButtonBar(
                                 children: [
                                   SizedBox(
-                                    width: 180.w, //横幅
+                                    width: 178.w, //横幅
                                     height: 50.h, //高さ
                                     child: FilledButton.tonal(
                                       style: FilledButton.styleFrom(
@@ -319,7 +319,7 @@ class _HomeState extends State<Home> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 180.w, //横幅
+                                    width: 178.w, //横幅
                                     height: 50.h, //高さ
                                     child: FilledButton.tonal(
                                       style: FilledButton.styleFrom(
@@ -443,7 +443,7 @@ class _HomeState extends State<Home> {
                           ButtonBar(
                             children: [
                               SizedBox(
-                                width: 180.w, //横幅
+                                width: 178.w, //横幅
                                 height: 180.h, //高さ
                                 child: FilledButton.tonal(
                                   style: FilledButton.styleFrom(
@@ -494,7 +494,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               SizedBox(
-                                width: 180.w, //横幅
+                                width: 178.w, //横幅
                                 height: 180.h, //高さ
                                 child: FilledButton.tonal(
                                   style: FilledButton.styleFrom(

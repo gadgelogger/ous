@@ -15,8 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:ous/account/tutorial.dart';
 import 'package:ous/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:showcaseview/showcaseview.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -90,274 +90,220 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _showTutorial(context));
 
-    return ShowCaseWidget(
-      builder: Builder(
-        builder: (context) => PopScope(
-          canPop: false,
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Scrollbar(
-              thumbVisibility: true,
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(15),
-                            top: ScreenUtil().setWidth(110),
-                          ),
-                          child: Text(
-                            'Hello',
-                            style: TextStyle(
-                              fontSize: 80.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/login_background.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Scrollbar(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(15),
+                          top: ScreenUtil().setWidth(110),
+                        ),
+                        child: Text(
+                          'Hello',
+                          style: TextStyle(
+                            fontSize: 80.0.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: ScreenUtil().setWidth(13),
-                            top: ScreenUtil().setWidth(180),
-                          ),
-                          child: Text(
-                            'OUS',
-                            style: TextStyle(
-                              fontSize: 80.0.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(
-                        top: 35.0,
-                        left: 20.0,
-                        right: 20.0,
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(height: 20.0.h),
-                          //大学のアカウントでログイン
-                          GestureDetector(
-                            onTap: () async {
-                              Fluttertoast.showToast(
-                                msg: "ログイン中です\nちょっと待ってね。",
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(13),
+                          top: ScreenUtil().setWidth(180),
+                        ),
+                        child: Text(
+                          'OUS',
+                          style: TextStyle(
+                            fontSize: 80.0.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: 200.0,
+                      left: 20.0,
+                      right: 20.0,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(height: 20.0.h),
+                        //大学のアカウントでログイン
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.lightGreen[300],
+                            fixedSize: const Size.fromWidth(
+                              double.maxFinite,
+                            ), //横幅に最大限のサイズを
+                            shape: const StadiumBorder(),
+                          ),
+                          onPressed: () async {
+                            Fluttertoast.showToast(
+                              msg: "ログイン中です\nちょっと待ってね。",
+                            );
+                            try {
+                              // ignore: unused_local_variable
+                              final userCredential = await signInWithGoogle();
+                              // ログインに成功した場合
+                              // チャット画面に遷移＋ログイン画面を破棄
+                              await Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return const MyHomePage(
+                                      title: 'home',
+                                    );
+                                  },
+                                ),
+                                result: Fluttertoast.showToast(
+                                  msg: "大学のアカウントでログインしました",
+                                ),
                               );
-                              try {
-                                // メール/パスワードでログイン
-                                // ignore: unused_local_variable
-                                final userCredential = await signInWithGoogle();
-                                // ログインに成功した場合
-                                // チャット画面に遷移＋ログイン画面を破棄
-                                await Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return const MyHomePage(
-                                        title: 'home',
-                                      );
-                                    },
-                                  ),
-                                  result: Fluttertoast.showToast(
-                                    msg: "大学のアカウントでログインしました",
-                                  ),
-                                );
-                              } on PlatformException {
-                                Fluttertoast.showToast(
-                                  msg: "ログインに失敗しました",
-                                );
-                              }
-                            },
+                            } on PlatformException {
+                              Fluttertoast.showToast(
+                                msg: "ログインに失敗しました",
+                              );
+                            }
+                          },
+                          child: const Text(
+                            '大学のアカウントでサインイン',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 46, 96, 47),
+                            ),
+                          ),
+                        ),
+                        //大学のアカウントでログイン（ここまで）
+                        SizedBox(height: 20.0.h),
+                        //Appleでサインイン
+
+                        if (Platform.isIOS)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20.0.h,
+                            ),
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                fixedSize: const Size.fromWidth(
-                                  double.maxFinite,
-                                ), //横幅に最大限のサイズを
-                                shape: const StadiumBorder(),
                                 side: const BorderSide(
-                                  color: Colors.lightGreen,
+                                  color: Colors.black,
                                 ),
                               ),
                               onPressed: () async {
-                                Fluttertoast.showToast(
-                                  msg: "ログイン中です\nちょっと待ってね。",
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        "注意",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: const Text(
+                                        "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      actions: <Widget>[
+                                        // ボタン領域
+                                        TextButton(
+                                          child: const Text(
+                                            "やっぱやめる",
+                                          ),
+                                          onPressed: () => Navigator.pop(
+                                            context,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          child: const Text(
+                                            "ええで",
+                                          ),
+                                          onPressed: () async {
+                                            Fluttertoast.showToast(
+                                              msg: "ログイン中です\nちょっと待ってね。",
+                                            );
+                                            appleSignIn(); // ボタンをタップしたときの処理
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                                try {
-                                  // メール/パスワードでログイン
-                                  // ignore: unused_local_variable
-                                  final userCredential =
-                                      await signInWithGoogle();
-                                  // ログインに成功した場合
-                                  // チャット画面に遷移＋ログイン画面を破棄
-                                  await Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return const MyHomePage(
-                                          title: 'home',
-                                        );
-                                      },
-                                    ),
-                                    result: Fluttertoast.showToast(
-                                      msg: "大学のアカウントでログインしました",
-                                    ),
-                                  );
-                                } on PlatformException {
-                                  Fluttertoast.showToast(
-                                    msg: "ログインに失敗しました",
-                                  );
-                                }
                               },
-                              child: const Text(
-                                '大学のアカウントでサインイン',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Montserrat',
-                                ),
-                              ),
-                            ),
-                          ),
-                          //大学のアカウントでログイン（ここまで）
-                          SizedBox(height: 20.0.h),
-                          //Appleでサインイン
-
-                          if (Platform.isIOS)
-                            Padding(
-                              padding: EdgeInsets.only(
-                                bottom: 20.0.h,
-                              ),
-                              child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : Colors.black,
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.apple,
+                                    color: Colors.black,
                                   ),
-                                ),
-                                onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          "注意",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        content: const Text(
-                                          "大学のアカウント以外でログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        actions: <Widget>[
-                                          // ボタン領域
-                                          TextButton(
-                                            child: const Text(
-                                              "やっぱやめる",
-                                            ),
-                                            onPressed: () => Navigator.pop(
-                                              context,
-                                            ),
-                                          ),
-                                          TextButton(
-                                            child: const Text(
-                                              "ええで",
-                                            ),
-                                            onPressed: () async {
-                                              Fluttertoast.showToast(
-                                                msg: "ログイン中です\nちょっと待ってね。",
-                                              );
-                                              appleSignIn(); // ボタンをタップしたときの処理
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.apple,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : Colors.black,
+                                  Text(
+                                    'Appleでサインイン',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
                                     ),
-                                    Text(
-                                      'Appleでサインイン',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat',
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-
-                          if (Platform.isAndroid) SizedBox(height: 0.h),
-                          const SizedBox(height: 0),
-                          //Appleでサインイン（ここまで）
-
-                          SizedBox(height: 20.0.h),
-                          //ゲストモード
-                          InkWell(
-                            child: const Text(
-                              'ゲストモードでログイン',
-                              style: TextStyle(
-                                color: Colors.lightGreen,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Montserrat',
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (_) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                      "注意",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: const Text(
-                                      "ゲストモードでログインしようとしています。\n講義評価など一部の機能が使えません\nまた30日後にアカウントが自動的に削除されます",
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    actions: <Widget>[
-                                      // ボタン領域
-                                      TextButton(
-                                        child: const Text("やっぱやめる"),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      TextButton(
-                                        child: const Text("ええで"),
-                                        onPressed: () async {
-                                          Fluttertoast.showToast(
-                                            msg: "ログイン中です\nちょっと待ってね。",
-                                          );
-                                          signInAnonymously();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
                           ),
-                          SizedBox(height: 50.0.h),
-                        ],
-                      ),
+
+                        if (Platform.isAndroid) SizedBox(height: 0.h),
+                        const SizedBox(height: 0),
+                        //Appleでサインイン（ここまで）
+
+                        SizedBox(height: 20.0.h),
+                        //ゲストモード
+                        GestureDetector(
+                          onTap: () async {
+                            Fluttertoast.showToast(
+                              msg: "ゲストモードでログインしました",
+                            );
+                            await signInAnonymously();
+                          },
+                          child: const Text(
+                            '会員登録せずに使う（ゲストモード）',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20.0.h),
+                        GestureDetector(
+                          onTap: () => launchUrlString(
+                            'https://tan-q-bot-unofficial.com/terms_of_service/',
+                          ),
+                          child: const Text(
+                            '利用規約はこちら',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 50.0.h),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -369,19 +315,49 @@ class LoginState extends State<Login> {
   // 匿名ログイン
   Future<UserCredential?> signInAnonymously() async {
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInAnonymously();
-
-      // Navigate to the next screen after successful login
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const MyHomePage(
-                  title: 'home',
-                )),
+      bool confirmed = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              '確認',
+              textAlign: TextAlign.center,
+            ),
+            content: const Text(
+              '匿名ログインを実行しますか？',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('やっぱやめる'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('ええで'),
+              ),
+            ],
+          );
+        },
       );
 
-      return userCredential;
+      if (confirmed == true) {
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInAnonymously();
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyHomePage(
+              title: 'home',
+            ),
+          ),
+        );
+
+        return userCredential;
+      } else {
+        return null;
+      }
     } catch (e) {
       // Handle any errors that occur during the login process
       debugPrint('Error signing in anonymously: $e');
