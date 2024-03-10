@@ -2,7 +2,6 @@
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 // Project imports:
@@ -40,8 +39,8 @@ class CustomCard extends StatelessWidget {
         child: Card(
           clipBehavior: Clip.antiAlias,
           child: SizedBox(
-            height: 176.h,
-            width: 180.w,
+            height: 176,
+            width: 180,
             child: Column(
               children: [
                 Container(
@@ -52,8 +51,8 @@ class CustomCard extends StatelessWidget {
                     children: <Widget>[
                       Image.asset(
                         imagePath,
-                        height: 110.h,
-                        width: 200.w,
+                        height: 110,
+                        width: 200,
                         fit: BoxFit.contain,
                       ),
                       Positioned(
@@ -80,7 +79,7 @@ class CustomCard extends StatelessWidget {
                                 return Text(
                                   '$count',
                                   style: TextStyle(
-                                    fontSize: 16.0.sp,
+                                    fontSize: 16.0,
                                     color: textColor,
                                   ),
                                 );
@@ -102,8 +101,8 @@ class CustomCard extends StatelessWidget {
                   title: Text(
                     title,
                     style: GoogleFonts.notoSans(
-                      textStyle: TextStyle(
-                        fontSize: 20.sp,
+                      textStyle: const TextStyle(
+                        fontSize: 20,
                         overflow: TextOverflow.ellipsis,
                         fontWeight: FontWeight.bold,
                       ),
@@ -133,8 +132,8 @@ class CustomCard extends StatelessWidget {
             Card(
               clipBehavior: Clip.antiAlias,
               child: SizedBox(
-                height: 100.h,
-                width: 180.w,
+                height: 100,
+                width: 180,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -142,8 +141,8 @@ class CustomCard extends StatelessWidget {
                       title: Text(
                         title,
                         style: GoogleFonts.notoSans(
-                          textStyle: TextStyle(
-                            fontSize: 20.sp,
+                          textStyle: const TextStyle(
+                            fontSize: 20,
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.bold,
                           ),
@@ -174,7 +173,7 @@ class CustomCard extends StatelessWidget {
                       final count = snapshot.data!.size;
                       return Text(
                         '$count',
-                        style: TextStyle(fontSize: 16.0.sp, color: textColor),
+                        style: TextStyle(fontSize: 16.0, color: textColor),
                       );
                     } else {
                       return const SizedBox(

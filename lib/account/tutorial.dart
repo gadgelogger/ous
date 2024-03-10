@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_overboard/flutter_overboard.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
 import 'package:ous/account/login.dart';
 
@@ -15,25 +14,25 @@ class Tutorial extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/mockup.PNG',
-              width: 250.0.w,
-              height: 550.0.h,
+              width: 250.0,
+              height: 550.0,
             ),
-            Text(
+            const Text(
               "非公式岡理アプリ",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.sp,
+                fontSize: 32,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "入りたてほやほやの新入生と\n単位ギリギリの人が\n単位を取れますように。",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16.sp,
+                fontSize: 16,
               ),
               textAlign: TextAlign.center,
             ),
@@ -50,25 +49,25 @@ class Tutorial extends StatelessWidget {
           children: [
             Image.asset(
               'assets/icon/book.png',
-              width: 250.0.w,
-              height: 550.0.h,
+              width: 250.0,
+              height: 550.0,
             ),
-            Text(
+            const Text(
               "豊富な講義評価",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.sp,
+                fontSize: 32,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "100以上の\n講義評価をどこからでも。",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16.sp,
+                fontSize: 16,
               ),
               textAlign: TextAlign.center,
             ),
@@ -85,25 +84,25 @@ class Tutorial extends StatelessWidget {
           children: [
             Image.asset(
               'assets/icon/news.png',
-              width: 250.0.w,
-              height: 550.0.h,
+              width: 250.0,
+              height: 550.0,
             ),
-            Text(
+            const Text(
               "最新ニュース",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.sp,
+                fontSize: 32,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "大学サイトよりも\n見やすく、シンプル。",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16.sp,
+                fontSize: 16,
               ),
               textAlign: TextAlign.center,
             ),
@@ -120,25 +119,25 @@ class Tutorial extends StatelessWidget {
           children: [
             Image.asset(
               'assets/icon/book.png',
-              width: 250.0.w,
-              height: 550.0.h,
+              width: 250.0,
+              height: 550.0,
             ),
-            Text(
+            const Text(
               "機能は随時追加中",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 32.sp,
+                fontSize: 32,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               "どんどん進化します。",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 16.sp,
+                fontSize: 16,
               ),
               textAlign: TextAlign.center,
             ),
@@ -149,13 +148,13 @@ class Tutorial extends StatelessWidget {
       doAnimateChild: true,
     ),
     PageModel.withChild(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 25.0),
+      child: const Padding(
+        padding: EdgeInsets.only(bottom: 25.0),
         child: Text(
           "さあ、始めよう！",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 32.sp,
+            fontSize: 32,
           ),
         ),
       ),

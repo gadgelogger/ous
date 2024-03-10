@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MaintenanceScreen extends StatelessWidget {
@@ -20,16 +19,16 @@ class MaintenanceScreen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(
-              height: 50.h,
+            const SizedBox(
+              height: 50,
             ),
-            Text(
+            const Text(
               'メンテナンス中です！\nメンテナンス終了までお待ち下さい。',
-              style: TextStyle(fontSize: 18.sp),
+              style: TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            SizedBox(
-              height: 50.h,
+            const SizedBox(
+              height: 50,
             ),
             ElevatedButton(
               onPressed: () {

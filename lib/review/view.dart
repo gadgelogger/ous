@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 // Project imports:
@@ -125,8 +124,8 @@ class ReviewViewState extends State<ReviewView> {
                                 );
                               },
                               child: (SizedBox(
-                                width: 200.w,
-                                height: 30.h,
+                                width: 200,
+                                height: 30,
                                 child: Card(
                                   elevation: 10,
                                   shape: RoundedRectangleBorder(
@@ -142,7 +141,8 @@ class ReviewViewState extends State<ReviewView> {
                                               const Alignment(-0.8, -0.5),
                                           child: Text(
                                             data[index]['zyugyoumei'],
-                                            style: TextStyle(fontSize: 20.sp),
+                                            style:
+                                                const TextStyle(fontSize: 20),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -156,7 +156,7 @@ class ReviewViewState extends State<ReviewView> {
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .primary,
-                                            fontSize: 15.sp,
+                                            fontSize: 15,
                                           ),
                                         ),
                                       ),
@@ -165,7 +165,7 @@ class ReviewViewState extends State<ReviewView> {
                                         child: Text(
                                           data[index]['kousimei'],
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(fontSize: 15.sp),
+                                          style: const TextStyle(fontSize: 15),
                                         ),
                                       ),
                                       Positioned(
@@ -190,7 +190,7 @@ class ReviewViewState extends State<ReviewView> {
                                           child: Text(
                                             data[index]['bumon'],
                                             style: TextStyle(
-                                              fontSize: 15.sp,
+                                              fontSize: 15,
                                               color: textColor,
                                             ),
                                           ),

@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 // Project imports:
@@ -93,14 +92,14 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
                     ListTile(
                       title: Text(
                         data['title'],
-                        style: TextStyle(fontSize: 15.sp),
+                        style: const TextStyle(fontSize: 15),
                       ),
                       subtitle: Text(
                         DateFormat('yyyy/MM/dd').format(data['day'].toDate()),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15.sp,
+                          fontSize: 15,
                         ),
                       ),
                       onTap: () {
@@ -446,7 +445,7 @@ class _ViewPostState extends State<ViewPost> {
           children: [
             Text(
               widget.title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               textAlign: TextAlign.left,
             ),
             Text(
@@ -455,14 +454,14 @@ class _ViewPostState extends State<ViewPost> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
-                fontSize: 15.sp,
+                fontSize: 15,
               ),
             ),
             const Divider(),
             Expanded(
               child: SingleChildScrollView(
                 child: SizedBox(
-                  height: 600.h,
+                  height: 600,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MarkdownWidget(

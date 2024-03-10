@@ -1,16 +1,7 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-// Package imports:
-// Project imports:
-import 'package:ous/NavBar.dart';
 import 'package:ous/analytics_service.dart';
-import 'package:ous/info/2.dart';
-import 'package:ous/info/3.dart';
-import 'package:ous/info/4.dart';
-import 'package:ous/info/5.dart';
-import 'package:ous/info/7.dart';
-import 'package:ous/info/all.dart';
 import 'package:ous/info/dev_info.dart';
+import 'package:ous/info/news_page.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
@@ -19,82 +10,67 @@ class Info extends StatefulWidget {
   State<Info> createState() => _InfoState();
 }
 
+class TabInfo {
+  final String title;
+  final Widget widget;
+
+  TabInfo({
+    required this.title,
+    required this.widget,
+  });
+}
+
 class _InfoState extends State<Info> {
+  final List<TabInfo> _tabs = [
+    TabInfo(
+      title: '全て',
+      widget:
+          const NewsPage(categoryUrl: 'https://www.ous.ac.jp/topics/?page='),
+    ),
+    TabInfo(
+      title: '開発者からお知らせ',
+      widget: const DevInfo(),
+    ),
+    TabInfo(
+      title: '重要',
+      widget: const NewsPage(
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=1&page=',
+      ),
+    ),
+    TabInfo(
+      title: 'お知らせ',
+      widget: const NewsPage(
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=2&page=',
+      ),
+    ),
+    TabInfo(
+      title: '学科レポート',
+      widget: const NewsPage(
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=7&page=',
+      ),
+    ),
+    TabInfo(
+      title: '理大レポート',
+      widget: const NewsPage(
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=6&page=',
+      ),
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: _tabs.length,
       child: Scaffold(
-        drawer: const NavBar(),
         appBar: AppBar(
-          elevation: 0,
           title: const Text('ニュース'),
           bottom: TabBar(
-            labelColor: Theme.of(context).colorScheme.primary,
-            unselectedLabelColor: Colors.grey,
             isScrollable: true,
-            indicatorColor: Theme.of(context).colorScheme.primary,
-            labelPadding:
-                const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            tabs: const [
-              Text(
-                '全て',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                '重要',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                '開発者から',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                'お知らせ',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                '学科レポート',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                '理大レポート',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-              Text(
-                'キャリア支援センター',
-                style: TextStyle(
-                  fontSize: 15.0,
-                ),
-              ),
-            ],
+            tabs: _tabs.map((tab) => Tab(text: tab.title)).toList(),
           ),
         ),
-        body: const PopScope(
-          canPop: false,
-          child: TabBarView(
-            children: [
-              All(),
-              Important(),
-              DevInfo(),
-              News(),
-              Departmentreport(),
-              Report(),
-              Business(),
-            ],
-          ),
+        body: TabBarView(
+          children: _tabs.map((tab) => tab.widget).toList(),
         ),
       ),
     );
@@ -103,7 +79,6 @@ class _InfoState extends State<Info> {
   @override
   void initState() {
     super.initState();
-    // Analytics
     AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.info);
   }
 }

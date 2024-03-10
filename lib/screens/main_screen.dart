@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/info/info.dart';
-import 'package:ous/review.dart';
 import 'package:ous/screens/home_screen.dart';
+import 'package:ous/screens/review.dart';
 
 final baseTabViewProvider = StateProvider<ViewType>((ref) => ViewType.home);
 
@@ -45,4 +45,4 @@ class MainScreen extends ConsumerWidget {
   }
 }
 
-enum ViewType { home, setting }
+enum ViewType { home, info, review }

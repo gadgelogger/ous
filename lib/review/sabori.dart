@@ -3,8 +3,6 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-// Package imports:
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Sabori extends StatefulWidget {
@@ -24,11 +22,11 @@ class _SaboriState extends State<Sabori> {
         title: const Text('サボリカウンター'),
       ),
       body: _lectureList.isEmpty
-          ? Center(
+          ? const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 200,
                     height: 200,
                     child: Image(
@@ -36,12 +34,12 @@ class _SaboriState extends State<Sabori> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 50,
                   ),
                   Text(
                     'サボった講義がありません',
-                    style: TextStyle(fontSize: 18.sp),
+                    style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
                 ],

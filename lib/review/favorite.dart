@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 // Project imports:
@@ -100,11 +99,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     '講義名',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -114,17 +113,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.zyugyoumei ?? '不明',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '講師名',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -134,51 +133,51 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.kousimei ?? '不明',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '年度',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: SelectableText(
                       widget.nenndo ?? '不明'.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '単位数',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: SelectableText(
                       widget.tannisuu.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '授業形式',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -188,17 +187,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.zyugyoukeisiki,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '出席確認の有無',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -208,17 +207,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.syusseki,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     '教科書の有無',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -228,17 +227,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.kyoukasyo,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'テスト形式',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20.sp,
+                      fontSize: 20,
                     ),
                   ),
                   Padding(
@@ -248,9 +247,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     child: SelectableText(
                       widget.tesutokeisiki ?? '不明',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 15.sp,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -258,15 +257,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Container(
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           '講義の面白さ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
+                            fontSize: 20,
                           ),
                         ),
                         SizedBox(
-                          height: 200.h,
+                          height: 200,
                           child: SfRadialGauge(
                             axes: <RadialAxis>[
                               RadialAxis(
@@ -299,8 +298,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               .toDouble()
                                               .toStringAsFixed(0) +
                                           ' / 5',
-                                      style: TextStyle(
-                                        fontSize: 50.sp,
+                                      style: const TextStyle(
+                                        fontSize: 50,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -310,15 +309,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ],
                           ),
                         ),
-                        Text(
+                        const Text(
                           '単位の取りやすさ',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
+                            fontSize: 20,
                           ),
                         ),
                         SizedBox(
-                          height: 200.h,
+                          height: 200,
                           child: SfRadialGauge(
                             axes: <RadialAxis>[
                               RadialAxis(
@@ -351,8 +350,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               .toDouble()
                                               .toStringAsFixed(0) +
                                           ' / 5',
-                                      style: TextStyle(
-                                        fontSize: 50.sp,
+                                      style: const TextStyle(
+                                        fontSize: 50,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -362,15 +361,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ],
                           ),
                         ),
-                        Text(
+                        const Text(
                           '総合評価',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 20.sp,
+                            fontSize: 20,
                           ),
                         ),
                         SizedBox(
-                          height: 200.h,
+                          height: 200,
                           child: SfRadialGauge(
                             axes: <RadialAxis>[
                               RadialAxis(
@@ -403,8 +402,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               .toDouble()
                                               .toStringAsFixed(0) +
                                           ' / 5',
-                                      style: TextStyle(
-                                        fontSize: 50.sp,
+                                      style: const TextStyle(
+                                        fontSize: 50,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -421,25 +420,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '講義に関するコメント',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
+                          fontSize: 20,
                         ),
                       ),
                       SelectableText(
                         widget.komento ?? '不明',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.normal,
-                          fontSize: 16.sp,
+                          fontSize: 16,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'テスト傾向',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
+                          fontSize: 20,
                         ),
                       ),
                       Padding(
@@ -449,11 +448,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         child: Text(widget.tesutokeikou),
                       ),
-                      Text(
+                      const Text(
                         'ニックネーム',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
+                          fontSize: 20,
                         ),
                       ),
                       Padding(
@@ -463,17 +462,17 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         child: SelectableText(
                           widget.name ?? '不明',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.normal,
-                            fontSize: 15.sp,
+                            fontSize: 15,
                           ),
                         ),
                       ),
-                      Text(
+                      const Text(
                         '投稿日・更新日',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
+                          fontSize: 20,
                         ),
                       ),
                       Padding(
@@ -483,15 +482,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         child: Text(
                           DateFormat('yyyy年MM月dd日 HH:mm').format(widget.date),
-                          style: TextStyle(fontSize: 15.sp),
+                          style: const TextStyle(fontSize: 15),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Text(
+                      const Text(
                         '宣伝',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20.sp,
+                          fontSize: 20,
                         ),
                       ),
                       Padding(
@@ -501,18 +500,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         child: SelectableText(
                           widget.senden?.toString() ?? '不明',
-                          style: TextStyle(fontSize: 15.sp),
+                          style: const TextStyle(fontSize: 15),
                         ),
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       SizedBox(
-                        height: 40.0.h,
+                        height: 40.0,
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Theme.of(context).colorScheme.primary,
                               style: BorderStyle.solid,
-                              width: 1.0.w,
+                              width: 1.0,
                             ),
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(20.0),
@@ -536,7 +535,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                     ],
                   ),
                 ],
@@ -678,11 +677,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
               final originalDocs = originalDocSnapshot.data!;
 
               if (originalDocs.isEmpty) {
-                return Center(
+                return const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         width: 200,
                         height: 200,
                         child: Image(
@@ -690,12 +689,12 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         height: 50,
                       ),
                       Text(
                         '何もお気に入りに登録していません',
-                        style: TextStyle(fontSize: 18.sp),
+                        style: TextStyle(fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -740,8 +739,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           );
                         },
                         child: (SizedBox(
-                          width: 200.w,
-                          height: 30.h,
+                          width: 200,
+                          height: 30,
                           child: Card(
                             elevation: 10,
                             shape: RoundedRectangleBorder(
@@ -758,7 +757,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                     ),
                                     child: Text(
                                       originalDoc['zyugyoumei'],
-                                      style: TextStyle(fontSize: 20.sp),
+                                      style: const TextStyle(fontSize: 20),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -771,7 +770,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.primary,
-                                      fontSize: 15.sp,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
@@ -780,7 +779,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                   child: Text(
                                     originalDoc['kousimei'],
                                     overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: TextStyle(fontSize: 15.sp),
+                                    style: const TextStyle(fontSize: 15),
                                   ),
                                 ),
                                 Positioned(
@@ -804,7 +803,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                     child: Text(
                                       originalDoc['bumon'],
                                       style: TextStyle(
-                                        fontSize: 15.sp,
+                                        fontSize: 15,
                                         color: textColor,
                                       ),
                                       // Your text

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/streams.dart';
@@ -140,11 +139,11 @@ class DetailsScreenState extends State<DetailsScreen> {
           }
 
           if (documents.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 200,
                     height: 200,
                     child: Image(
@@ -152,12 +151,12 @@ class DetailsScreenState extends State<DetailsScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 50,
                   ),
                   Text(
                     '何も投稿していません',
-                    style: TextStyle(fontSize: 18.sp),
+                    style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -239,11 +238,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '授業名',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -253,9 +252,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['zyugyoumei'] ?? '不明',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -346,11 +345,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '開講学期',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -360,9 +359,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['gakki'] ?? '不明',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -441,11 +440,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '部門',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -455,9 +454,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['bumon'] ?? '不明',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -527,11 +526,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '講師名',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -541,9 +540,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['kousimei'] ?? '不明',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -613,11 +612,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '年度',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -625,9 +624,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   const EdgeInsets.only(top: 10, bottom: 10),
                               child: Text(
                                 document['nenndo'] ?? '不明'.toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -705,11 +704,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '単位数',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -717,9 +716,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   const EdgeInsets.only(top: 10, bottom: 10),
                               child: Text(
                                 document['tannisuu'].toString(),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -803,11 +802,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '授業形式',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -817,9 +816,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['zyugyoukeisiki'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -902,11 +901,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '出席確認の有無',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -916,9 +915,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['syusseki'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -993,11 +992,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '教科書の有無',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -1007,9 +1006,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['kyoukasyo'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -1079,11 +1078,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'テスト形式',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20.sp,
+                                fontSize: 20,
                               ),
                             ),
                             Padding(
@@ -1093,9 +1092,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                               child: Text(
                                 document['tesutokeisiki'] ?? '不明',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 15.sp,
+                                  fontSize: 15,
                                 ),
                               ),
                             ),
@@ -1169,15 +1168,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '講義の面白さ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 200.h,
+                                  height: 200,
                                   child: SfRadialGauge(
                                     axes: <RadialAxis>[
                                       RadialAxis(
@@ -1217,8 +1216,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       .toDouble()
                                                       .toStringAsFixed(0) +
                                                   ' / 5',
-                                              style: TextStyle(
-                                                fontSize: 50.sp,
+                                              style: const TextStyle(
+                                                fontSize: 50,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -1295,15 +1294,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '単位の取りやすさ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 200.h,
+                                  height: 200,
                                   child: SfRadialGauge(
                                     axes: <RadialAxis>[
                                       RadialAxis(
@@ -1343,8 +1342,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       .toDouble()
                                                       .toStringAsFixed(0) +
                                                   ' / 5',
-                                              style: TextStyle(
-                                                fontSize: 50.sp,
+                                              style: const TextStyle(
+                                                fontSize: 50,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -1421,15 +1420,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   '総合評価',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 200.h,
+                                  height: 200,
                                   child: SfRadialGauge(
                                     axes: <RadialAxis>[
                                       RadialAxis(
@@ -1469,8 +1468,8 @@ class DetailsScreenState extends State<DetailsScreen> {
                                                       .toDouble()
                                                       .toStringAsFixed(0) +
                                                   ' / 5',
-                                              style: TextStyle(
-                                                fontSize: 50.sp,
+                                              style: const TextStyle(
+                                                fontSize: 50,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -1553,18 +1552,18 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   '講義に関するコメント',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 Text(
                                   document['komento'] ?? '不明',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.normal,
-                                    fontSize: 16.sp,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ],
@@ -1637,11 +1636,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'ニックネーム',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 Padding(
@@ -1650,9 +1649,9 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   child: Text(
                                     document['name'] ?? '不明',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 15.sp,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
@@ -1662,11 +1661,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 '投稿日・更新日',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20.sp,
+                                  fontSize: 20,
                                 ),
                               ),
                               Padding(
@@ -1676,7 +1675,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                                 child: Text(
                                   DateFormat('yyyy年M月d日 H:mm')
                                       .format(document['date'].toDate()),
-                                  style: TextStyle(fontSize: 15.sp),
+                                  style: const TextStyle(fontSize: 15),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -1746,11 +1745,11 @@ class DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   '宣伝',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 20.sp,
+                                    fontSize: 20,
                                   ),
                                 ),
                                 Padding(
@@ -1759,24 +1758,24 @@ class DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   child: Text(
                                     document['senden'] ?? '不明',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.normal,
-                                      fontSize: 15.sp,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                           ), //宣伝
-                          SizedBox(height: 20.0.h),
+                          const SizedBox(height: 20.0),
                           /*  Container(
-                    height: 40.0.h,
+                    height: 40.0,
                     child: Container(
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Colors.lightGreen,
                               style: BorderStyle.solid,
-                              width: 1.0.w),
+                              width: 1.0),
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(20.0)),
                       child: GestureDetector(
@@ -1824,15 +1823,15 @@ class DetailsScreenState extends State<DetailsScreen> {
                       ),
                     ),
                   ),*/
-                          SizedBox(height: 20.0.h),
+                          const SizedBox(height: 20.0),
                           SizedBox(
-                            height: 40.0.h,
+                            height: 40.0,
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Theme.of(context).colorScheme.primary,
                                   style: BorderStyle.solid,
-                                  width: 1.0.w,
+                                  width: 1.0,
                                 ),
                                 color: Colors.transparent,
                                 borderRadius: BorderRadius.circular(20.0),
@@ -1856,7 +1855,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20.0.h),
+                          const SizedBox(height: 20.0),
                         ],
                       ),
                     ],
@@ -2788,11 +2787,11 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
           }
 
           if (documents.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 200,
                     height: 200,
                     child: Image(
@@ -2800,12 +2799,12 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 50,
                   ),
                   Text(
                     '何も投稿していません',
-                    style: TextStyle(fontSize: 18.sp),
+                    style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -2834,8 +2833,8 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                   );
                 },
                 child: (SizedBox(
-                  width: 200.w,
-                  height: 30.h,
+                  width: 200,
+                  height: 30,
                   child: Card(
                     elevation: 10,
                     shape: RoundedRectangleBorder(
@@ -2852,7 +2851,7 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                             ),
                             child: Text(
                               document['zyugyoumei'],
-                              style: TextStyle(fontSize: 20.sp),
+                              style: const TextStyle(fontSize: 20),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -2864,7 +2863,7 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                             document['gakki'],
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
-                              fontSize: 15.sp,
+                              fontSize: 15,
                             ),
                           ),
                         ),
@@ -2873,7 +2872,7 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                           child: Text(
                             document['kousimei'],
                             overflow: TextOverflow.ellipsis, //ここ！！
-                            style: TextStyle(fontSize: 15.sp),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ),
                         Positioned(
@@ -2895,7 +2894,7 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                             child: Text(
                               document['bumon'],
                               style: TextStyle(
-                                fontSize: 15.sp,
+                                fontSize: 15,
                                 color: textColor,
                               ),
                               // Your text

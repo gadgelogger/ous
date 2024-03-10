@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -94,30 +93,31 @@ class LoginState extends State<Login> {
 
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/login_background.jpg'),
-              fit: BoxFit.cover,
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/login_background.jpg'),
+            fit: BoxFit.cover,
           ),
-          child: Scrollbar(
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Scrollbar(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Stack(
+                  const Stack(
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                          left: ScreenUtil().setWidth(15),
-                          top: ScreenUtil().setWidth(110),
+                          left: 15,
+                          top: 110,
                         ),
                         child: Text(
                           'Hello',
                           style: TextStyle(
-                            fontSize: 80.0.sp,
+                            fontSize: 80.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -125,13 +125,13 @@ class LoginState extends State<Login> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: ScreenUtil().setWidth(13),
-                          top: ScreenUtil().setWidth(180),
+                          left: 13,
+                          top: 180,
                         ),
                         child: Text(
                           'OUS',
                           style: TextStyle(
-                            fontSize: 80.0.sp,
+                            fontSize: 80.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -147,7 +147,7 @@ class LoginState extends State<Login> {
                     ),
                     child: Column(
                       children: <Widget>[
-                        SizedBox(height: 20.0.h),
+                        const SizedBox(height: 20.0),
                         //大学のアカウントでログイン
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -191,13 +191,13 @@ class LoginState extends State<Login> {
                           ),
                         ),
                         //大学のアカウントでログイン（ここまで）
-                        SizedBox(height: 20.0.h),
+                        const SizedBox(height: 20.0),
                         //Appleでサインイン
 
                         if (!kIsWeb && Platform.isIOS)
                           Padding(
-                            padding: EdgeInsets.only(
-                              bottom: 20.0.h,
+                            padding: const EdgeInsets.only(
+                              bottom: 20.0,
                             ),
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
@@ -264,11 +264,11 @@ class LoginState extends State<Login> {
                           ),
 
                         if (!kIsWeb && Platform.isAndroid)
-                          SizedBox(height: 0.h),
+                          const SizedBox(height: 0),
                         const SizedBox(height: 0),
                         //Appleでサインイン（ここまで）
 
-                        SizedBox(height: 20.0.h),
+                        const SizedBox(height: 20.0),
                         //ゲストモード
                         GestureDetector(
                           onTap: () async {
@@ -286,7 +286,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20.0.h),
+                        const SizedBox(height: 20.0),
                         GestureDetector(
                           onTap: () => launchUrlString(
                             'https://tan-q-bot-unofficial.com/terms_of_service/',
@@ -300,7 +300,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 50.0.h),
+                        const SizedBox(height: 50.0),
                       ],
                     ),
                   ),
