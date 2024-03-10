@@ -4,6 +4,7 @@ import 'dart:io';
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -194,7 +195,7 @@ class LoginState extends State<Login> {
                         SizedBox(height: 20.0.h),
                         //Appleでサインイン
 
-                        if (Platform.isIOS)
+                        if (!kIsWeb && Platform.isIOS)
                           Padding(
                             padding: EdgeInsets.only(
                               bottom: 20.0.h,
@@ -263,7 +264,8 @@ class LoginState extends State<Login> {
                             ),
                           ),
 
-                        if (Platform.isAndroid) SizedBox(height: 0.h),
+                        if (!kIsWeb && Platform.isAndroid)
+                          SizedBox(height: 0.h),
                         const SizedBox(height: 0),
                         //Appleでサインイン（ここまで）
 

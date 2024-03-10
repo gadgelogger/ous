@@ -1,14 +1,12 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 // Project imports:
 import 'package:ous/NavBar.dart';
 import 'package:ous/analytics_service.dart';
-import 'package:ous/component/review_top_component.dart';
+import 'package:ous/widgets/review/review_top_component.dart';
 
 class Review extends StatefulWidget {
   const Review({Key? key}) : super(key: key);
@@ -21,18 +19,6 @@ class _ReviewState extends State<Review> {
 //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
-
-  @override
-  void initState() {
-    super.initState();
-    auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
-      showFloatingActionButton = true;
-    }
-    // Analytics
-    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.review);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +124,20 @@ class _ReviewState extends State<Review> {
           ),
         ),
       ),
-      floatingActionButton: showFloatingActionButton ? FloatingButton() : null,
+      floatingActionButton:
+          showFloatingActionButton ? const FloatingButton() : null,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null && user.email != null && user.email!.endsWith('ous.jp')) {
+      showFloatingActionButton = true;
+    }
+    // Analytics
+    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.review);
   }
 }

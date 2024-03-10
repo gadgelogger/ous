@@ -23,12 +23,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'account/login.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // ここに追加
+  WidgetsFlutterBinding.ensureInitialized();
 
   // Firebaseの初期化
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // Analytics
   await AnalyticsService().logBeginCheckout(); // 追加
 
@@ -298,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.pop(context);
                           },
                         ),
-                        if (Platform.isIOS)
+                        if (!kIsWeb && Platform.isIOS)
                           ElevatedButton(
                             child: const Text("おっけー"),
                             onPressed: () {
@@ -307,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               );
                             },
                           ),
-                        if (Platform.isAndroid)
+                        if (!kIsWeb && Platform.isAndroid)
                           ElevatedButton(
                             child: const Text("おっけー"),
                             onPressed: () {
