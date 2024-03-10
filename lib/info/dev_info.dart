@@ -17,26 +17,46 @@ class DevInfo extends StatefulWidget {
   State<DevInfo> createState() => _DevInfoState();
 }
 
-class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class DevPost extends StatefulWidget {
+  const DevPost({Key? key}) : super(key: key);
 
+  @override
+  State<DevPost> createState() => _DevPostState();
+}
+
+class EditPost extends StatefulWidget {
+  final String? id;
+  final String? title;
+  final String? text;
+
+  const EditPost({Key? key, this.id, this.title, this.text}) : super(key: key);
+
+  @override
+  State<EditPost> createState() => _EditPostState();
+}
+
+class ViewPost extends StatefulWidget {
+  final dynamic text;
+  final dynamic day;
+  final dynamic title;
+  const ViewPost({
+    Key? key,
+    required this.text,
+    required this.day,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  State<ViewPost> createState() => _ViewPostState();
+}
+
+class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
   //大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
-  bool showFloatingActionButton = false;
 
+  bool showFloatingActionButton = false;
   @override
-  void initState() {
-    super.initState();
-    auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    if (user != null &&
-        user.email != null &&
-        (user.email == devEmail || user.email == devEmail2)) {
-      showFloatingActionButton = true;
-    }
-    setState(() {});
-  }
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -119,76 +139,19 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
           : null,
     );
   }
-}
-
-class ViewPost extends StatefulWidget {
-  final dynamic text;
-  final dynamic day;
-  final dynamic title;
-  const ViewPost({
-    Key? key,
-    required this.text,
-    required this.day,
-    required this.title,
-  }) : super(key: key);
 
   @override
-  State<ViewPost> createState() => _ViewPostState();
-}
-
-class _ViewPostState extends State<ViewPost> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('開発者からのお知らせ'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-              textAlign: TextAlign.left,
-            ),
-            Text(
-              DateFormat('yyyy/MM/dd').format(widget.day.toDate()),
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 15.sp,
-              ),
-            ),
-            const Divider(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  height: 600.h,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MarkdownWidget(
-                      data: widget.text,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user != null &&
+        user.email != null &&
+        (user.email == devEmail || user.email == devEmail2)) {
+      showFloatingActionButton = true;
+    }
+    setState(() {});
   }
-}
-
-class DevPost extends StatefulWidget {
-  const DevPost({Key? key}) : super(key: key);
-
-  @override
-  State<DevPost> createState() => _DevPostState();
 }
 
 class _DevPostState extends State<DevPost> {
@@ -196,39 +159,6 @@ class _DevPostState extends State<DevPost> {
   final _titleController = TextEditingController();
   final _textController = TextEditingController();
   final DateTime _selectedDate = DateTime.now();
-
-  Future<void> _addPost() async {
-    try {
-      await FirebaseFirestore.instance.collection('dev_info').add({
-        'title': _titleController.text,
-        'text': _textController.text,
-        'day': _selectedDate,
-        'uuid': const Uuid().v4(),
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿しました')),
-      );
-      _titleController.clear();
-      _textController.clear();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿に失敗しました')),
-      );
-    }
-  }
-
-  Future<void> _deletePost(String id) async {
-    try {
-      await FirebaseFirestore.instance.collection('dev_info').doc(id).delete();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿を削除しました')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('投稿の削除に失敗しました')),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -377,30 +307,46 @@ class _DevPostState extends State<DevPost> {
       ),
     );
   }
-}
 
-class EditPost extends StatefulWidget {
-  final String? id;
-  final String? title;
-  final String? text;
+  Future<void> _addPost() async {
+    try {
+      await FirebaseFirestore.instance.collection('dev_info').add({
+        'title': _titleController.text,
+        'text': _textController.text,
+        'day': _selectedDate,
+        'uuid': const Uuid().v4(),
+      });
 
-  const EditPost({Key? key, this.id, this.title, this.text}) : super(key: key);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('投稿しました')),
+      );
+      _titleController.clear();
+      _textController.clear();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('投稿に失敗しました')),
+      );
+    }
+  }
 
-  @override
-  State<EditPost> createState() => _EditPostState();
+  Future<void> _deletePost(String id) async {
+    try {
+      await FirebaseFirestore.instance.collection('dev_info').doc(id).delete();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('投稿を削除しました')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('投稿の削除に失敗しました')),
+      );
+    }
+  }
 }
 
 class _EditPostState extends State<EditPost> {
   final _formKey = GlobalKey<FormState>();
   late String _title;
   late String _text;
-
-  @override
-  void initState() {
-    super.initState();
-    _title = widget.title ?? '';
-    _text = widget.text ?? '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -472,6 +418,61 @@ class _EditPostState extends State<EditPost> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _title = widget.title ?? '';
+    _text = widget.text ?? '';
+  }
+}
+
+class _ViewPostState extends State<ViewPost> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('開発者からのお知らせ'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+              textAlign: TextAlign.left,
+            ),
+            Text(
+              DateFormat('yyyy/MM/dd').format(widget.day.toDate()),
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 15.sp,
+              ),
+            ),
+            const Divider(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: 600.h,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MarkdownWidget(
+                      data: widget.text,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -14,7 +14,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 // Project imports:
 import 'package:ous/account/tutorial.dart';
-import 'package:ous/main.dart';
+import 'package:ous/screens/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -73,11 +73,12 @@ class LoginState extends State<Login> {
     );
 
     // ログイン処理が終わった後に画面遷移を行う
+
     await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return const MyHomePage(title: 'home');
+          return MainScreen();
         },
       ),
     );
@@ -168,9 +169,7 @@ class LoginState extends State<Login> {
                               await Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return const MyHomePage(
-                                      title: 'home',
-                                    );
+                                    return MainScreen();
                                   },
                                 ),
                                 result: Fluttertoast.showToast(
@@ -350,9 +349,7 @@ class LoginState extends State<Login> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const MyHomePage(
-              title: 'home',
-            ),
+            builder: (context) => MainScreen(),
           ),
         );
 

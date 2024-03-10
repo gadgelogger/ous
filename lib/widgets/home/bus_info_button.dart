@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ous/api/cliant/home/bus_api.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class BusInfoButton extends StatelessWidget {
   final String label;
   final String url;
-  final Future<String> Function() fetchCaption;
 
   const BusInfoButton({
     Key? key,
     required this.label,
     required this.url,
-    required this.fetchCaption,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final busService = BusService();
+
     return SizedBox(
-      width: 178.w, //横幅
-      height: 50.h, //高さ
+      width: 178, //横幅
+      height: 50, //高さ
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -36,14 +36,14 @@ class BusInfoButton extends StatelessWidget {
               ),
             ),
             FutureBuilder<String>(
-              future: fetchCaption(),
+              future: busService.fetchBusApproachCaption(url),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Text(snapshot.data!);
                 } else if (snapshot.hasError) {
                   return const Text("エラー");
                 }
-                return const CircularProgressIndicator();
+                return const LinearProgressIndicator();
               },
             ),
           ],

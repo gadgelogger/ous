@@ -169,6 +169,8 @@ class UserHeader extends StatelessWidget {
 
                 if (result == true) {
                   // OKが押されたら名前を変更
+                  if (!context.mounted) return;
+
                   AccountNameUpdater().updateDisplayName(newName, context);
                 }
               },

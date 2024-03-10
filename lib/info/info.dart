@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 // Package imports:
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
 import 'package:ous/NavBar.dart';
 import 'package:ous/analytics_service.dart';
@@ -37,47 +36,47 @@ class _InfoState extends State<Info> {
             indicatorColor: Theme.of(context).colorScheme.primary,
             labelPadding:
                 const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-            tabs: [
+            tabs: const [
               Text(
                 '全て',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 '重要',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 '開発者から',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 'お知らせ',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 '学科レポート',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 '理大レポート',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
               Text(
                 'キャリア支援センター',
                 style: TextStyle(
-                  fontSize: 15.0.sp,
+                  fontSize: 15.0,
                 ),
               ),
             ],
