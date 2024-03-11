@@ -10,14 +10,14 @@ import 'package:slide_to_act/slide_to_act.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-class post extends StatefulWidget {
-  const post({Key? key}) : super(key: key);
+class Post extends StatefulWidget {
+  const Post({Key? key}) : super(key: key);
 
   @override
-  State<post> createState() => _postState();
+  State<Post> createState() => PostState();
 }
 
-class _postState extends State<post> {
+class PostState extends State<Post> {
   //投稿データ
   String? iscategory = 'rigaku';
   String? isbumon = 'ラク単';
@@ -697,9 +697,9 @@ class _postState extends State<post> {
                           'date': Timestamp.fromDate(now),
                           'ID': _randomId,
                         })
-                        .then((value) => print("新規登録に成功"))
+                        .then((value) => debugPrint("新規登録に成功"))
                         .catchError(
-                          (error) => print("新規登録に失敗しました!: $error"),
+                          (error) => debugPrint("新規登録に失敗しました!: $error"),
                         );
                     _textEditingController0.clear();
                     _textEditingController1.clear();

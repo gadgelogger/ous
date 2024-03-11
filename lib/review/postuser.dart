@@ -2751,12 +2751,6 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 背景の明るさをチェック
-    bool isBackgroundBright =
-        Theme.of(context).primaryColor == Brightness.light;
-
-    // 明るい背景の場合は黒、暗い背景の場合は白
-    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
     return Scaffold(
       appBar: AppBar(
         title: const Text('投稿した評価'),
@@ -2893,9 +2887,8 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                             ),
                             child: Text(
                               document['bumon'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 15,
-                                color: textColor,
                               ),
                               // Your text
                             ),

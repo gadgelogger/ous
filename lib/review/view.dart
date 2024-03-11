@@ -227,7 +227,7 @@ class ReviewViewState extends State<ReviewView> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const post(),
+                              builder: (context) => const Post(),
                             ),
                           );
                         },

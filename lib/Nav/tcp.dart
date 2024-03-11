@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -15,11 +14,6 @@ class _TcpState extends State<Tcp> {
   bool _isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('TCP')),
@@ -27,7 +21,8 @@ class _TcpState extends State<Tcp> {
         children: [
           InAppWebView(
             initialUrlRequest: URLRequest(
-                url: WebUri('https://app.tcpapp.net/tcpapp/login.html')),
+              url: WebUri('https://app.tcpapp.net/tcpapp/login.html'),
+            ),
             onLoadStop: (controller, url) async {
               setState(() {
                 _isLoading = false;
@@ -37,9 +32,14 @@ class _TcpState extends State<Tcp> {
           if (_isLoading)
             const Center(
               child: CircularProgressIndicator(),
-            )
+            ),
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

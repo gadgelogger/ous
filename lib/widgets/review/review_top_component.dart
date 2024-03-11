@@ -148,7 +148,7 @@ class FloatingButton extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const post()),
+              MaterialPageRoute(builder: (context) => const Post()),
             );
           },
         ),
