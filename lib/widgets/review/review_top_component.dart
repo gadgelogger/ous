@@ -1,8 +1,8 @@
 // Flutter imports:
 // Package imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:google_fonts/google_fonts.dart';
 // Project imports:
 import 'package:ous/review/favorite.dart';
 import 'package:ous/review/gpa.dart';
@@ -31,8 +31,8 @@ class CustomCard extends StatelessWidget {
         child: Card(
           clipBehavior: Clip.antiAlias,
           child: SizedBox(
-            height: 176,
-            width: 180,
+            height: 170.h,
+            width: 170.w,
             child: Column(
               children: [
                 Container(
@@ -43,8 +43,8 @@ class CustomCard extends StatelessWidget {
                     children: <Widget>[
                       Image.asset(
                         imagePath,
-                        height: 110,
-                        width: 200,
+                        height: 110.h,
+                        width: 200.w,
                         fit: BoxFit.contain,
                       ),
                     ],
@@ -53,12 +53,8 @@ class CustomCard extends StatelessWidget {
                 ListTile(
                   title: Text(
                     title,
-                    style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
-                        fontSize: 20,
-                        overflow: TextOverflow.ellipsis,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    style: TextStyle(
+                      fontSize: 20.sp,
                     ),
                   ),
                 ),
@@ -85,21 +81,18 @@ class CustomCard extends StatelessWidget {
             Card(
               clipBehavior: Clip.antiAlias,
               child: SizedBox(
-                height: 100,
-                width: 180,
+                height: 100.h,
+                width: 170.w,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ListTile(
                       title: Text(
                         title,
-                        style: GoogleFonts.notoSans(
-                          textStyle: const TextStyle(
-                            fontSize: 20,
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        style: TextStyle(
+                          fontSize: 20.sp,
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],

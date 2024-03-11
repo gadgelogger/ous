@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/api/cliant/home/mylog_monitor_api.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -17,8 +18,8 @@ class _MyLogStatusButtonState extends State<MyLogStatusButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 500,
-      height: 200,
+      width: 500.w,
+      height: 200.h,
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(

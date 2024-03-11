@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
 import 'package:ous/analytics_service.dart';
 import 'package:ous/api/cliant/home/bus_api.dart';
@@ -66,7 +67,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               SizedBox(
-                width: 500.0,
+                width: 500.w,
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
@@ -79,18 +80,21 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              const Card(
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    bottom: 10,
+                  ),
                   child: Column(
                     children: [
                       Text(
                         'バス運行情報',
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 30.sp,
                         ),
                       ),
-                      Row(
+                      const Row(
                         children: [
                           ButtonBar(
                             children: [
@@ -106,7 +110,7 @@ class _HomeState extends State<Home> {
                           ),
                         ],
                       ),
-                      Row(
+                      const Row(
                         children: [
                           ButtonBar(
                             children: [
@@ -126,14 +130,14 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              const Card(
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Column(
                     children: [
-                      Text('マイログ稼働状況', style: TextStyle(fontSize: 30)),
-                      SizedBox(height: 10),
-                      MyLogStatusButton(),
+                      Text('マイログ稼働状況', style: TextStyle(fontSize: 30.sp)),
+                      SizedBox(height: 10.h),
+                      const MyLogStatusButton(),
                     ],
                   ),
                 ),

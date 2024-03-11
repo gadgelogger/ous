@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,14 +64,14 @@ class NewsPageState extends State<NewsPage> {
                         ListTile(
                           title: Text(
                             article.title,
-                            style: const TextStyle(fontSize: 15),
+                            style: TextStyle(fontSize: 15.sp),
                           ),
                           subtitle: Text(
                             article.date.substring(0, 10),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                              fontSize: 15.sp,
                             ),
                           ),
                           onTap: () async {

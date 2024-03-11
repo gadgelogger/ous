@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 // Project imports:
@@ -92,14 +93,14 @@ class _DevInfoState extends State<DevInfo> with AutomaticKeepAliveClientMixin {
                     ListTile(
                       title: Text(
                         data['title'],
-                        style: const TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 15.sp),
                       ),
                       subtitle: Text(
                         DateFormat('yyyy/MM/dd').format(data['day'].toDate()),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                          fontSize: 15.sp,
                         ),
                       ),
                       onTap: () {

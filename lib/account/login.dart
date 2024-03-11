@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
@@ -107,33 +108,31 @@ class LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  const Stack(
+                  Stack(
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                          left: 15,
-                          top: 110,
+                          left: ScreenUtil().setWidth(15),
+                          top: ScreenUtil().setWidth(110),
                         ),
                         child: Text(
                           'Hello',
                           style: TextStyle(
-                            fontSize: 80.0,
+                            fontSize: 80.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
                           ),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: 13,
-                          top: 180,
+                          left: ScreenUtil().setWidth(13),
+                          top: ScreenUtil().setWidth(180),
                         ),
                         child: Text(
                           'OUS',
                           style: TextStyle(
-                            fontSize: 80.0,
+                            fontSize: 80.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -141,13 +140,13 @@ class LoginState extends State<Login> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(
-                      top: 200.0,
-                      left: 20.0,
-                      right: 20.0,
+                      top: 200,
+                      left: 20,
+                      right: 20,
                     ),
                     child: Column(
                       children: <Widget>[
-                        const SizedBox(height: 20.0),
+                        SizedBox(height: 20.h),
                         //大学のアカウントでログイン
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -191,13 +190,13 @@ class LoginState extends State<Login> {
                           ),
                         ),
                         //大学のアカウントでログイン（ここまで）
-                        const SizedBox(height: 20.0),
+                        SizedBox(height: 20.h),
                         //Appleでサインイン
 
                         if (!kIsWeb && Platform.isIOS)
                           Padding(
                             padding: const EdgeInsets.only(
-                              bottom: 20.0,
+                              bottom: 20,
                             ),
                             child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
@@ -286,7 +285,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20.0),
+                        SizedBox(height: 20.h),
                         GestureDetector(
                           onTap: () => launchUrlString(
                             'https://tan-q-bot-unofficial.com/terms_of_service/',
@@ -300,7 +299,7 @@ class LoginState extends State<Login> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 50.0),
+                        SizedBox(height: 50.h),
                       ],
                     ),
                   ),

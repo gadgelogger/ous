@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/api/cliant/home/bus_api.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -17,8 +18,8 @@ class BusInfoButton extends StatelessWidget {
     final busService = BusService();
 
     return SizedBox(
-      width: 178, //横幅
-      height: 50, //高さ
+      width: 164.w, //横幅
+      height: 50.h, //高さ
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(
