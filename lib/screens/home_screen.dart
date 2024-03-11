@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:ous/analytics_service.dart';
 import 'package:ous/api/cliant/home/bus_api.dart';
 import 'package:ous/api/cliant/home/mylog_monitor_api.dart';
+import 'package:ous/constant/urls.dart';
 import 'package:ous/widgets/home/bus_info_button.dart';
 import 'package:ous/widgets/home/mylog_status_button.dart';
 import 'package:share/share.dart';
 
-import '../widgets/NavBar.dart';
+import '../widgets/nav_bar.dart';
 
 @override
 void initState() {
@@ -29,6 +30,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final BusService busService = BusService();
   final MylogMonitorApi mylogMonitorApi = MylogMonitorApi();
+  final storeUrls = StoreUrls();
+  final busUrls = BusUrls();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +45,7 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.ios_share),
               onPressed: () {
                 Share.share(
-                  'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931',
+                  StoreUrls.ios,
                 );
               },
             ),
@@ -51,7 +54,7 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.ios_share),
               onPressed: () {
                 Share.share(
-                  'https://play.google.com/store/apps/details?id=com.ous.unoffical.app',
+                  StoreUrls.android,
                 );
               },
             ),
@@ -93,13 +96,11 @@ class _HomeState extends State<Home> {
                             children: [
                               BusInfoButton(
                                 label: '岡山駅西口発',
-                                url:
-                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=224&stopCdTo=763&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+                                url: BusUrls.okayamaStation,
                               ),
                               BusInfoButton(
                                 label: '岡山理科大学正門発',
-                                url:
-                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=763&stopCdTo=224&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+                                url: BusUrls.okayamaRikaUniversity,
                               ),
                             ],
                           ),
@@ -111,13 +112,11 @@ class _HomeState extends State<Home> {
                             children: [
                               BusInfoButton(
                                 label: '岡山天満屋発',
-                                url:
-                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?stopCdFrom=27&stopCdTo=768&addSearchDetail=false&addSearchDetail=false&searchHour=null&searchMinute=null&searchAD=-1&searchVehicleTypeCd=null&searchCorpCd=null&lang=0',
+                                url: BusUrls.okayamaTenmaya,
                               ),
                               BusInfoButton(
                                 label: '岡山理科大学東門発',
-                                url:
-                                    'https://loc.bus-vision.jp/ryobi/view/approach.html?returnCdFrom=768&returnCdTo=27&returnHour=&returnMinute=&returnAD=-1&returnVehicleTypeCd=&returnCorpCd=&lang=0',
+                                url: BusUrls.okayamaRikaUniversityEastGate,
                               ),
                             ],
                           ),

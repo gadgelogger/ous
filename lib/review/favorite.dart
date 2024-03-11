@@ -17,26 +17,26 @@ import 'package:ous/setting/setting.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_extend/share_extend.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailsScreen extends StatefulWidget {
-  final zyugyoumei;
-  final kousimei;
-  final tannisuu;
-  final zyugyoukeisiki;
-  final syusseki;
-  final kyoukasyo;
-  final tesutokeisiki;
-  final omosirosa;
-  final toriyasusa;
-  final sougouhyouka;
-  final komento;
-  final name;
-  final senden;
-  final nenndo;
-  final date;
-  final tesutokeikou;
-  final id;
+  final dynamic zyugyoumei;
+  final dynamic kousimei;
+  final dynamic tannisuu;
+  final dynamic zyugyoukeisiki;
+  final dynamic syusseki;
+  final dynamic kyoukasyo;
+  final dynamic tesutokeisiki;
+  final dynamic omosirosa;
+  final dynamic toriyasusa;
+  final dynamic sougouhyouka;
+  final dynamic komento;
+  final dynamic name;
+  final dynamic senden;
+  final dynamic nenndo;
+  final dynamic date;
+  final dynamic tesutokeikou;
+  final dynamic id;
 
   const DetailsScreen({
     Key? key,
@@ -60,17 +60,10 @@ class DetailsScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DetailsScreenState createState() => _DetailsScreenState();
+  DetailsScreenState createState() => DetailsScreenState();
 }
 
-class FavoritesPage extends StatefulWidget {
-  const FavoritesPage({Key? key}) : super(key: key);
-
-  @override
-  _FavoritesPageState createState() => _FavoritesPageState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
+class DetailsScreenState extends State<DetailsScreen> {
   final GlobalKey shareKey = GlobalKey(); //追加
 
   @override
@@ -254,168 +247,154 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                   const Divider(),
-                  Container(
-                    child: Column(
-                      children: [
-                        const Text(
-                          '講義の面白さ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
+                  Column(
+                    children: [
+                      const Text(
+                        '講義の面白さ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
-                        SizedBox(
-                          height: 200,
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                minimum: 0,
-                                maximum: 5,
-                                showLabels: false,
-                                showTicks: false,
-                                axisLineStyle: const AxisLineStyle(
-                                  thickness: 0.2,
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                              minimum: 0,
+                              maximum: 5,
+                              showLabels: false,
+                              showTicks: false,
+                              axisLineStyle: const AxisLineStyle(
+                                thickness: 0.2,
+                                cornerStyle: CornerStyle.bothCurve,
+                                color: Color.fromARGB(139, 134, 134, 134),
+                                thicknessUnit: GaugeSizeUnit.factor,
+                              ),
+                              pointers: <GaugePointer>[
+                                RangePointer(
+                                  value: widget.omosirosa.toDouble(),
                                   cornerStyle: CornerStyle.bothCurve,
-                                  color: Color.fromARGB(139, 134, 134, 134),
-                                  thicknessUnit: GaugeSizeUnit.factor,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 0.2,
+                                  sizeUnit: GaugeSizeUnit.factor,
                                 ),
-                                pointers: <GaugePointer>[
-                                  RangePointer(
-                                    value: widget.omosirosa.toDouble(),
-                                    cornerStyle: CornerStyle.bothCurve,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 0.2,
-                                    sizeUnit: GaugeSizeUnit.factor,
-                                  ),
-                                ],
-                                annotations: <GaugeAnnotation>[
-                                  GaugeAnnotation(
-                                    positionFactor: 0.1,
-                                    angle: 90,
-                                    widget: Text(
-                                      widget.omosirosa
-                                              .toDouble()
-                                              .toStringAsFixed(0) +
-                                          ' / 5',
-                                      style: const TextStyle(
-                                        fontSize: 50,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                  positionFactor: 0.1,
+                                  angle: 90,
+                                  widget: Text(
+                                    '${widget.omosirosa.toDouble().toStringAsFixed(0)} / 5',
+                                    style: const TextStyle(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Text(
-                          '単位の取りやすさ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 200,
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                minimum: 0,
-                                maximum: 5,
-                                showLabels: false,
-                                showTicks: false,
-                                axisLineStyle: const AxisLineStyle(
-                                  thickness: 0.2,
-                                  cornerStyle: CornerStyle.bothCurve,
-                                  color: Color.fromARGB(139, 134, 134, 134),
-                                  thicknessUnit: GaugeSizeUnit.factor,
                                 ),
-                                pointers: <GaugePointer>[
-                                  RangePointer(
-                                    value: widget.toriyasusa.toDouble(),
-                                    cornerStyle: CornerStyle.bothCurve,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 0.2,
-                                    sizeUnit: GaugeSizeUnit.factor,
-                                  ),
-                                ],
-                                annotations: <GaugeAnnotation>[
-                                  GaugeAnnotation(
-                                    positionFactor: 0.1,
-                                    angle: 90,
-                                    widget: Text(
-                                      widget.toriyasusa
-                                              .toDouble()
-                                              .toStringAsFixed(0) +
-                                          ' / 5',
-                                      style: const TextStyle(
-                                        fontSize: 50,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Text(
+                        '単位の取りやすさ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                              minimum: 0,
+                              maximum: 5,
+                              showLabels: false,
+                              showTicks: false,
+                              axisLineStyle: const AxisLineStyle(
+                                thickness: 0.2,
+                                cornerStyle: CornerStyle.bothCurve,
+                                color: Color.fromARGB(139, 134, 134, 134),
+                                thicknessUnit: GaugeSizeUnit.factor,
+                              ),
+                              pointers: <GaugePointer>[
+                                RangePointer(
+                                  value: widget.toriyasusa.toDouble(),
+                                  cornerStyle: CornerStyle.bothCurve,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 0.2,
+                                  sizeUnit: GaugeSizeUnit.factor,
+                                ),
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                  positionFactor: 0.1,
+                                  angle: 90,
+                                  widget: Text(
+                                    '${widget.toriyasusa.toDouble().toStringAsFixed(0)} / 5',
+                                    style: const TextStyle(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Text(
-                          '総合評価',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 200,
-                          child: SfRadialGauge(
-                            axes: <RadialAxis>[
-                              RadialAxis(
-                                minimum: 0,
-                                maximum: 5,
-                                showLabels: false,
-                                showTicks: false,
-                                axisLineStyle: const AxisLineStyle(
-                                  thickness: 0.2,
-                                  cornerStyle: CornerStyle.bothCurve,
-                                  color: Color.fromARGB(139, 134, 134, 134),
-                                  thicknessUnit: GaugeSizeUnit.factor,
                                 ),
-                                pointers: <GaugePointer>[
-                                  RangePointer(
-                                    value: widget.sougouhyouka.toDouble(),
-                                    cornerStyle: CornerStyle.bothCurve,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 0.2,
-                                    sizeUnit: GaugeSizeUnit.factor,
-                                  ),
-                                ],
-                                annotations: <GaugeAnnotation>[
-                                  GaugeAnnotation(
-                                    positionFactor: 0.1,
-                                    angle: 90,
-                                    widget: Text(
-                                      widget.sougouhyouka
-                                              .toDouble()
-                                              .toStringAsFixed(0) +
-                                          ' / 5',
-                                      style: const TextStyle(
-                                        fontSize: 50,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Text(
+                        '総合評価',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 200,
+                        child: SfRadialGauge(
+                          axes: <RadialAxis>[
+                            RadialAxis(
+                              minimum: 0,
+                              maximum: 5,
+                              showLabels: false,
+                              showTicks: false,
+                              axisLineStyle: const AxisLineStyle(
+                                thickness: 0.2,
+                                cornerStyle: CornerStyle.bothCurve,
+                                color: Color.fromARGB(139, 134, 134, 134),
+                                thicknessUnit: GaugeSizeUnit.factor,
+                              ),
+                              pointers: <GaugePointer>[
+                                RangePointer(
+                                  value: widget.sougouhyouka.toDouble(),
+                                  cornerStyle: CornerStyle.bothCurve,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 0.2,
+                                  sizeUnit: GaugeSizeUnit.factor,
+                                ),
+                              ],
+                              annotations: <GaugeAnnotation>[
+                                GaugeAnnotation(
+                                  positionFactor: 0.1,
+                                  angle: 90,
+                                  widget: Text(
+                                    '${widget.sougouhyouka.toDouble().toStringAsFixed(0)} / 5',
+                                    style: const TextStyle(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        const Divider(),
-                      ],
-                    ),
+                      ),
+                      const Divider(),
+                    ],
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -499,7 +478,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           top: 10,
                         ),
                         child: SelectableText(
-                          widget.senden?.toString() ?? '不明',
+                          widget.senden.toString(),
                           style: const TextStyle(fontSize: 15),
                         ),
                       ),
@@ -519,7 +498,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           child: GestureDetector(
                             onTap: () async {
                               //ここにブロック関数
-                              launch(
+                              launchUrlString(
                                 'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform',
                               );
                             },
@@ -609,13 +588,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
       final path = applicationDocumentsFile.path;
       await ShareExtend.share(path, "image");
       applicationDocumentsFile.delete();
-    } catch (error) {
-      print(error);
+    } catch (er) {
+      debugPrint(er.toString());
     }
   }
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({Key? key}) : super(key: key);
+
+  @override
+  FavoritesPageState createState() => FavoritesPageState();
+}
+
+class FavoritesPageState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
     // 背景の明るさをチェック
@@ -710,111 +696,107 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     final originalDoc = originalDocs[index];
                     final documentId = originalDoc.id;
 
-                    return Container(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                zyugyoumei: originalDoc['zyugyoumei'],
-                                kousimei: originalDoc['kousimei'],
-                                tannisuu: originalDoc['tannisuu'],
-                                zyugyoukeisiki: originalDoc['zyugyoukeisiki'],
-                                syusseki: originalDoc['syusseki'],
-                                kyoukasyo: originalDoc['kyoukasyo'],
-                                tesutokeisiki: originalDoc['tesutokeisiki'],
-                                omosirosa: originalDoc['omosirosa'],
-                                toriyasusa: originalDoc['toriyasusa'],
-                                sougouhyouka: originalDoc['sougouhyouka'],
-                                komento: originalDoc['komento'],
-                                name: originalDoc['name'],
-                                senden: originalDoc['senden'],
-                                nenndo: originalDoc['nenndo'],
-                                date: originalDoc['date'].toDate(),
-                                tesutokeikou: originalDoc['tesutokeikou'],
-                                id: documentId,
-                              ),
-                            ),
-                          );
-                        },
-                        child: (SizedBox(
-                          width: 200,
-                          height: 30,
-                          child: Card(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: Align(
-                                    alignment: const Alignment(
-                                      -0.8,
-                                      -0.5,
-                                    ),
-                                    child: Text(
-                                      originalDoc['zyugyoumei'],
-                                      style: const TextStyle(fontSize: 20),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.4),
-                                  child: Text(
-                                    originalDoc['gakki'],
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: const Alignment(-0.8, 0.8),
-                                  child: Text(
-                                    originalDoc['kousimei'],
-                                    overflow: TextOverflow.ellipsis, //ここ！！
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 4,
-                                      horizontal: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: originalDoc['bumon'] == 'エグ単'
-                                          ? Colors.red
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(8),
-                                        bottomRight: Radius.circular(8),
-                                      ), // green shaped
-                                    ),
-                                    child: Text(
-                                      originalDoc['bumon'],
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: textColor,
-                                      ),
-                                      // Your text
-                                    ),
-                                  ),
-                                ),
-                              ],
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailsScreen(
+                              zyugyoumei: originalDoc['zyugyoumei'],
+                              kousimei: originalDoc['kousimei'],
+                              tannisuu: originalDoc['tannisuu'],
+                              zyugyoukeisiki: originalDoc['zyugyoukeisiki'],
+                              syusseki: originalDoc['syusseki'],
+                              kyoukasyo: originalDoc['kyoukasyo'],
+                              tesutokeisiki: originalDoc['tesutokeisiki'],
+                              omosirosa: originalDoc['omosirosa'],
+                              toriyasusa: originalDoc['toriyasusa'],
+                              sougouhyouka: originalDoc['sougouhyouka'],
+                              komento: originalDoc['komento'],
+                              name: originalDoc['name'],
+                              senden: originalDoc['senden'],
+                              nenndo: originalDoc['nenndo'],
+                              date: originalDoc['date'].toDate(),
+                              tesutokeikou: originalDoc['tesutokeikou'],
+                              id: documentId,
                             ),
                           ),
-                        )),
-                      ),
+                        );
+                      },
+                      child: (SizedBox(
+                        width: 200,
+                        height: 30,
+                        child: Card(
+                          elevation: 10,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Stack(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Align(
+                                  alignment: const Alignment(
+                                    -0.8,
+                                    -0.5,
+                                  ),
+                                  child: Text(
+                                    originalDoc['zyugyoumei'],
+                                    style: const TextStyle(fontSize: 20),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: const Alignment(-0.8, 0.4),
+                                child: Text(
+                                  originalDoc['gakki'],
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: const Alignment(-0.8, 0.8),
+                                child: Text(
+                                  originalDoc['kousimei'],
+                                  overflow: TextOverflow.ellipsis, //ここ！！
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: originalDoc['bumon'] == 'エグ単'
+                                        ? Colors.red
+                                        : Theme.of(context).colorScheme.primary,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ), // green shaped
+                                  ),
+                                  child: Text(
+                                    originalDoc['bumon'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: textColor,
+                                    ),
+                                    // Your text
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
                     );
                   },
                 );

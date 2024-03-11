@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-// Package imports:
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Link extends StatelessWidget {
   const Link({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://mylog.pub.ous.ac.jp/uprx/up/pk/pky501/Pky50101.xhtml',
               ),
             ),
@@ -30,7 +29,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('https://www.ous.ac.jp/students/weather/'),
+              onTap: () =>
+                  launchUrlString('https://www.ous.ac.jp/students/weather/'),
             ),
             ListTile(
               title: const Text(
@@ -38,7 +38,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('https://www.ous.ac.jp/campuslife/class/'),
+              onTap: () =>
+                  launchUrlString('https://www.ous.ac.jp/campuslife/class/'),
             ),
             ListTile(
               title: const Text(
@@ -46,7 +47,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://mylog.pub.ous.ac.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006',
               ),
             ),
@@ -56,7 +57,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/outline/disclosure/handbook/',
               ),
             ),
@@ -66,7 +67,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('https://www.ous.ac.jp/campuslife/services/'),
+              onTap: () =>
+                  launchUrlString('https://www.ous.ac.jp/campuslife/services/'),
             ),
             ListTile(
               title: const Text(
@@ -74,7 +76,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.ous.ac.jp/students/counseling/'),
+              onTap: () =>
+                  launchUrlString('http://www.ous.ac.jp/students/counseling/'),
             ),
             ListTile(
               title: const Text(
@@ -82,8 +85,9 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () =>
-                  launch('https://www.ous.ac.jp/students/certificate/'),
+              onTap: () => launchUrlString(
+                'https://www.ous.ac.jp/students/certificate/',
+              ),
             ),
             ListTile(
               title: const Text(
@@ -91,8 +95,9 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () =>
-                  launch('https://www.ous.ac.jp/outline/disclosure/model/'),
+              onTap: () => launchUrlString(
+                'https://www.ous.ac.jp/outline/disclosure/model/',
+              ),
             ),
             ListTile(
               title: const Text(
@@ -100,7 +105,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/outline/disclosure/kyouiku/',
               ),
             ),
@@ -110,8 +115,9 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () =>
-                  launch('https://www.ous.ac.jp/campuslife/officehour/'),
+              onTap: () => launchUrlString(
+                'https://www.ous.ac.jp/campuslife/officehour/',
+              ),
             ),
             ListTile(
               title: const Text(
@@ -119,8 +125,9 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () =>
-                  launch('https://www.ous.ac.jp/admissions/credittransfer/'),
+              onTap: () => launchUrlString(
+                'https://www.ous.ac.jp/admissions/credittransfer/',
+              ),
             ),
             ListTile(
               title: const Text(
@@ -128,7 +135,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.consortium-okayama.jp/'),
+              onTap: () => launchUrlString('http://www.consortium-okayama.jp/'),
             ),
             ListTile(
               title: const Text(
@@ -136,7 +143,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('講義・シラバス'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('https://www.ouj.ac.jp/'),
+              onTap: () => launchUrlString('https://www.ouj.ac.jp/'),
             ),
             ListTile(
               title: const Text(
@@ -144,7 +151,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('各種相談窓口・各種証明書・申請書発行'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/common/files//128/202105251644200483109.pdf',
               ),
             ),
@@ -154,7 +161,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('授業料・各種制度'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.ous.ac.jp/students/fee01/'),
+              onTap: () =>
+                  launchUrlString('http://www.ous.ac.jp/students/fee01/'),
             ),
             ListTile(
               title: const Text(
@@ -162,7 +170,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('授業料・各種制度'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/common/files/128/kitei2018.pdf',
               ),
             ),
@@ -172,8 +180,9 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('授業料・各種制度'),
               trailing: const Icon(Icons.link),
-              onTap: () =>
-                  launch('https://www.ous.ac.jp/students/schorlarship/'),
+              onTap: () => launchUrlString(
+                'https://www.ous.ac.jp/students/schorlarship/',
+              ),
             ),
             ListTile(
               title: const Text(
@@ -181,7 +190,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('授業料・各種制度'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('https://www.ous.ac.jp/students/insurance/'),
+              onTap: () =>
+                  launchUrlString('https://www.ous.ac.jp/students/insurance/'),
             ),
             ListTile(
               title: const Text(
@@ -189,7 +199,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://career.office.ous.ac.jp/'),
+              onTap: () => launchUrlString('http://career.office.ous.ac.jp/'),
             ),
             ListTile(
               title: const Text(
@@ -197,7 +207,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://career.office.ous.ac.jp/kyousyoku/'),
+              onTap: () =>
+                  launchUrlString('http://career.office.ous.ac.jp/kyousyoku/'),
             ),
             ListTile(
               title: const Text(
@@ -205,7 +216,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.center.ous.ac.jp/'),
+              onTap: () => launchUrlString('http://www.center.ous.ac.jp/'),
             ),
             ListTile(
               title: const Text(
@@ -213,7 +224,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://ridai-svc.org/'),
+              onTap: () => launchUrlString('http://ridai-svc.org/'),
             ),
             ListTile(
               title: const Text(
@@ -221,7 +232,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/common/files//128/202202031316400965765.pdf',
               ),
             ),
@@ -231,7 +242,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.lib.ous.ac.jp/'),
+              onTap: () => launchUrlString('http://www.lib.ous.ac.jp/'),
             ),
             ListTile(
               title: const Text(
@@ -239,7 +250,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www1.ous.ac.jp/kenkan/'),
+              onTap: () => launchUrlString('http://www1.ous.ac.jp/kenkan/'),
             ),
             ListTile(
               title: const Text(
@@ -247,7 +258,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('サポート・学生支援・施設'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/common/files//128/20191213shougai_kitei.pdf',
               ),
             ),
@@ -257,7 +268,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://www.ous.ac.jp/common/files//128/202002200918550267479.pdf',
               ),
             ),
@@ -267,7 +278,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.ous.ac.jp/students/kyousyoku/'),
+              onTap: () =>
+                  launchUrlString('http://www.ous.ac.jp/students/kyousyoku/'),
             ),
             ListTile(
               title: const Text(
@@ -275,7 +287,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://www.donation.fm/ous/'),
+              onTap: () => launchUrlString('http://www.donation.fm/ous/'),
             ),
             ListTile(
               title: const Text(
@@ -283,7 +295,7 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch(
+              onTap: () => launchUrlString(
                 'https://mylog.pub.ous.ac.jp/gyoseki/japanese/index.html',
               ),
             ),
@@ -293,7 +305,8 @@ class Link extends StatelessWidget {
               ),
               subtitle: const Text('学生がよくみるもの'),
               trailing: const Icon(Icons.link),
-              onTap: () => launch('http://renkei.office.ous.ac.jp/ousresnavi/'),
+              onTap: () =>
+                  launchUrlString('http://renkei.office.ous.ac.jp/ousresnavi/'),
             ),
             const Divider(
               height: 1.0,

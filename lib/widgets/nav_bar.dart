@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/link.dart';
-import 'package:ous/Nav/map.dart';
 import 'package:ous/Nav/tcp.dart';
 import 'package:ous/account/account_page.dart';
 import 'package:ous/setting/setting.dart';
@@ -48,11 +47,6 @@ class _NavBarState extends State<NavBar> {
             Icons.book_outlined,
             '学生便覧',
             () => _launchStudentHandbook(),
-          ),
-          _buildMenuItem(
-            Icons.location_on_outlined,
-            '学内マップ',
-            () => _navigateToPage(context, const Map()),
           ),
           const Divider(),
           _buildMenuItem(

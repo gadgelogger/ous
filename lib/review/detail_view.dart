@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailsScreen extends StatefulWidget {
   final zyugyoumei;
@@ -526,7 +526,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       child: GestureDetector(
                         onTap: () async {
                           //ここにブロック関数
-                          launch(
+                          launchUrlString(
                             'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform',
                           );
                         },

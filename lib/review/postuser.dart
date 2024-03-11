@@ -8,16 +8,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/streams.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailsScreen extends StatefulWidget {
   //現在の講義データ
-  final ID;
-  final userid;
+  final dynamic id;
+  final dynamic userid;
 
   const DetailsScreen({
     Key? key,
-    required this.ID,
+    required this.id,
     required this.userid,
   }) : super(key: key);
 
@@ -1839,7 +1839,7 @@ class DetailsScreenState extends State<DetailsScreen> {
                               child: GestureDetector(
                                 onTap: () async {
                                   //ここにブロック関数
-                                  launch(
+                                  launchUrlString(
                                     'https://docs.google.com/forms/d/e/1FAIpQLSepC82BWAoARJVh4WeGCFOuIpWLyaPfqqXn524SqxyBSA9LwQ/viewform',
                                   );
                                 },
@@ -1932,7 +1932,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2035,7 +2035,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2078,7 +2078,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2121,7 +2121,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2164,7 +2164,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2207,7 +2207,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2248,7 +2248,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2291,7 +2291,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2334,7 +2334,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2377,7 +2377,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2420,7 +2420,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2463,7 +2463,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2506,7 +2506,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2549,7 +2549,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2592,7 +2592,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2635,7 +2635,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2678,7 +2678,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           await FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .get();
 
       List<QueryDocumentSnapshot<Map<String, dynamic>>> documents =
@@ -2719,7 +2719,7 @@ class DetailsScreenState extends State<DetailsScreen> {
           (collection) => FirebaseFirestore.instance
               .collection(collection)
               .where('accountuid', isEqualTo: uid)
-              .where('ID', isEqualTo: widget.ID)
+              .where('ID', isEqualTo: widget.id)
               .snapshots(),
         )
         .toList();
@@ -2826,7 +2826,7 @@ class MultipleCollectionsPageState extends State<MultipleCollectionsPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailsScreen(
-                        ID: document['ID'],
+                        id: document['ID'],
                         userid: _auth.currentUser!.uid,
                       ),
                     ),
