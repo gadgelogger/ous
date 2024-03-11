@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_overboard/flutter_overboard.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
-import 'package:ous/account/login.dart';
+import 'package:ous/screens/account/login_screen.dart';
 
 class Tutorial extends StatelessWidget {
   final pages = [

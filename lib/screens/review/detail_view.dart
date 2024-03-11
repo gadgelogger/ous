@@ -1,10 +1,8 @@
 // Dart imports:
 // Package imports:
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -54,46 +52,16 @@ class DetailsScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DetailsScreenState createState() => _DetailsScreenState();
+  DetailsScreenState createState() => DetailsScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class DetailsScreenState extends State<DetailsScreen> {
   final userId = FirebaseAuth.instance.currentUser?.uid;
-
-  //いいね機能のボタン
-  bool _isFavorite = false;
 
   final GlobalKey shareKey = GlobalKey(); //追加
 
-  Future<void> addToFavorites(String documentId, String userId) async {
-    final userRef = FirebaseFirestore.instance.collection('users');
-    final favoriteRef = userRef.doc(userId).collection('favorite');
-    final originalDocRef =
-        FirebaseFirestore.instance.collection('rigaku').doc(documentId);
-
-    final favoriteDoc = await favoriteRef.doc(documentId).get();
-
-    if (favoriteDoc.exists) {
-      await favoriteRef.doc(documentId).delete();
-      setState(() {
-        _isFavorite = false;
-      });
-    } else {
-      await favoriteRef.doc(documentId).set({
-        'userId': userId,
-        'timestamp': FieldValue.serverTimestamp(),
-        'originalDocRef': originalDocRef,
-      });
-      setState(() {
-        _isFavorite = true;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.zyugyoumei),
@@ -259,170 +227,166 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
               const Divider(),
-              Container(
-                child: Column(
-                  children: [
-                    const Text(
-                      '講義の面白さ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
+              Column(
+                children: [
+                  const Text(
+                    '講義の面白さ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                    SizedBox(
-                      height: 200,
-                      child: SfRadialGauge(
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 5,
-                            showLabels: false,
-                            showTicks: false,
-                            axisLineStyle: const AxisLineStyle(
-                              thickness: 0.2,
-                              cornerStyle: CornerStyle.bothCurve,
-                              color: Color.fromARGB(
-                                139,
-                                134,
-                                134,
-                                134,
-                              ),
-                              thicknessUnit: GaugeSizeUnit.factor,
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: 5,
+                          showLabels: false,
+                          showTicks: false,
+                          axisLineStyle: const AxisLineStyle(
+                            thickness: 0.2,
+                            cornerStyle: CornerStyle.bothCurve,
+                            color: Color.fromARGB(
+                              139,
+                              134,
+                              134,
+                              134,
                             ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: widget.omosirosa.toDouble(),
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 0.2,
-                                sizeUnit: GaugeSizeUnit.factor,
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                positionFactor: 0.1,
-                                angle: 90,
-                                widget: Text(
-                                  widget.omosirosa
-                                          .toDouble()
-                                          .toStringAsFixed(0) +
-                                      ' / 5',
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            thicknessUnit: GaugeSizeUnit.factor,
+                          ),
+                          pointers: <GaugePointer>[
+                            RangePointer(
+                              value: widget.omosirosa.toDouble(),
+                              cornerStyle: CornerStyle.bothCurve,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 0.2,
+                              sizeUnit: GaugeSizeUnit.factor,
+                            ),
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              positionFactor: 0.1,
+                              angle: 90,
+                              widget: Text(
+                                widget.omosirosa.toDouble().toStringAsFixed(0) +
+                                    ' / 5',
+                                style: const TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Text(
-                      '単位の取りやすさ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: SfRadialGauge(
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 5,
-                            showLabels: false,
-                            showTicks: false,
-                            axisLineStyle: const AxisLineStyle(
-                              thickness: 0.2,
-                              cornerStyle: CornerStyle.bothCurve,
-                              color: Color.fromARGB(139, 134, 134, 134),
-                              thicknessUnit: GaugeSizeUnit.factor,
                             ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: widget.toriyasusa.toDouble(),
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 0.2,
-                                sizeUnit: GaugeSizeUnit.factor,
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                positionFactor: 0.1,
-                                angle: 90,
-                                widget: Text(
-                                  widget.toriyasusa
-                                          .toDouble()
-                                          .toStringAsFixed(0) +
-                                      ' / 5',
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Text(
+                    '単位の取りやすさ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: 5,
+                          showLabels: false,
+                          showTicks: false,
+                          axisLineStyle: const AxisLineStyle(
+                            thickness: 0.2,
+                            cornerStyle: CornerStyle.bothCurve,
+                            color: Color.fromARGB(139, 134, 134, 134),
+                            thicknessUnit: GaugeSizeUnit.factor,
+                          ),
+                          pointers: <GaugePointer>[
+                            RangePointer(
+                              value: widget.toriyasusa.toDouble(),
+                              cornerStyle: CornerStyle.bothCurve,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 0.2,
+                              sizeUnit: GaugeSizeUnit.factor,
+                            ),
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              positionFactor: 0.1,
+                              angle: 90,
+                              widget: Text(
+                                widget.toriyasusa
+                                        .toDouble()
+                                        .toStringAsFixed(0) +
+                                    ' / 5',
+                                style: const TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Text(
-                      '総合評価',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 200,
-                      child: SfRadialGauge(
-                        axes: <RadialAxis>[
-                          RadialAxis(
-                            minimum: 0,
-                            maximum: 5,
-                            showLabels: false,
-                            showTicks: false,
-                            axisLineStyle: const AxisLineStyle(
-                              thickness: 0.2,
-                              cornerStyle: CornerStyle.bothCurve,
-                              color: Color.fromARGB(139, 134, 134, 134),
-                              thicknessUnit: GaugeSizeUnit.factor,
                             ),
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: widget.sougouhyouka.toDouble(),
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 0.2,
-                                sizeUnit: GaugeSizeUnit.factor,
-                              ),
-                            ],
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                positionFactor: 0.1,
-                                angle: 90,
-                                widget: Text(
-                                  widget.sougouhyouka
-                                          .toDouble()
-                                          .toStringAsFixed(0) +
-                                      ' / 5',
-                                  style: const TextStyle(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Text(
+                    '総合評価',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 200,
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: 5,
+                          showLabels: false,
+                          showTicks: false,
+                          axisLineStyle: const AxisLineStyle(
+                            thickness: 0.2,
+                            cornerStyle: CornerStyle.bothCurve,
+                            color: Color.fromARGB(139, 134, 134, 134),
+                            thicknessUnit: GaugeSizeUnit.factor,
+                          ),
+                          pointers: <GaugePointer>[
+                            RangePointer(
+                              value: widget.sougouhyouka.toDouble(),
+                              cornerStyle: CornerStyle.bothCurve,
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 0.2,
+                              sizeUnit: GaugeSizeUnit.factor,
+                            ),
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              positionFactor: 0.1,
+                              angle: 90,
+                              widget: Text(
+                                widget.sougouhyouka
+                                        .toDouble()
+                                        .toStringAsFixed(0) +
+                                    ' / 5',
+                                style: const TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    const Divider(),
-                  ],
-                ),
+                  ),
+                  const Divider(),
+                ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -549,59 +513,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
         ),
       ),
-      floatingActionButton: Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
-                  onPressed: () async {
-                    if (userId != null) {
-                      addToFavorites(widget.id, userId);
-                    }
-                    HapticFeedback.heavyImpact(); // ライトインパクトの振動フィードバック
-                  },
-                  child: Icon(
-                    _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: _isFavorite ? Colors.pink : null,
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 16),
-                child: FloatingActionButton(
-                  onPressed: () async {},
-                  child: const Icon(Icons.ios_share),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _checkFavoriteStatus();
-  }
-
-  // いいね状態のチェック
-  Future<void> _checkFavoriteStatus() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    final userRef = FirebaseFirestore.instance.collection('users');
-    final favoriteRef = userRef.doc(userId).collection('favorite');
-
-    final favoriteDoc = await favoriteRef.doc(widget.id).get();
-
-    if (favoriteDoc.exists) {
-      setState(() {
-        _isFavorite = true;
-      });
-    }
   }
 }

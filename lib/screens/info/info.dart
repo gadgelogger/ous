@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ous/analytics_service.dart';
-import 'package:ous/info/dev_info.dart';
-import 'package:ous/info/news_page.dart';
+import 'package:ous/screens/info/dev_info.dart';
+import 'package:ous/screens/info/news_page.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);

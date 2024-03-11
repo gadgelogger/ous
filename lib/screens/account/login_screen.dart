@@ -12,9 +12,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
-// Project imports:
-import 'package:ous/account/tutorial.dart';
 import 'package:ous/screens/main_screen.dart';
+// Project imports:
+import 'package:ous/screens/tutorial_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher_string.dart';

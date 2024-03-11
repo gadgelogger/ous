@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ous/account/login.dart';
 import 'package:ous/api/service/remote_config_service.dart';
+import 'package:ous/screens/account/login_screen.dart';
 import 'package:ous/screens/main_screen.dart';
 import 'package:ous/screens/maintenance_screen.dart';
 

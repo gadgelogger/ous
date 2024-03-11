@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 // Project imports:
-import 'package:ous/review/favorite.dart';
-import 'package:ous/review/gpa.dart';
-import 'package:ous/review/post.dart';
-import 'package:ous/review/postuser.dart';
-import 'package:ous/review/sabori.dart';
-import 'package:ous/review/view.dart';
+import 'package:ous/screens/review/gpa.dart';
+import 'package:ous/screens/review/post.dart';
+import 'package:ous/screens/review/sabori.dart';
+import 'package:ous/screens/review/view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomCard extends StatelessWidget {
@@ -142,28 +140,6 @@ class FloatingButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Post()),
-            );
-          },
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.favorite_border),
-          label: "お気に入り",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const FavoritesPage()),
-            );
-          },
-        ),
-        SpeedDialChild(
-          child: const Icon(Icons.person_2_outlined),
-          label: "自分の投稿",
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MultipleCollectionsPage(),
-              ),
             );
           },
         ),
