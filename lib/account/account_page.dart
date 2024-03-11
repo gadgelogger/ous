@@ -11,16 +11,16 @@ import 'package:path/path.dart' as path;
 class AccountNameUpdater {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void updateDisplayName(String newName, BuildContext context) async {
+  Future<void> updateDisplayName(String newName, BuildContext context) async {
     final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
     try {
       await firestore
-          .collection("users")
+          .collection('users')
           .doc(uid)
-          .update({"displayName": newName});
-      Fluttertoast.showToast(msg: "アカウント名が更新されました。");
+          .update({'displayName': newName});
+      Fluttertoast.showToast(msg: 'アカウント名が更新されました。');
     } catch (e) {
-      Fluttertoast.showToast(msg: "アカウント名の更新に失敗しました: $e");
+      Fluttertoast.showToast(msg: 'アカウント名の更新に失敗しました: $e');
     }
   }
 }
@@ -44,27 +44,27 @@ class ImageUploader {
           await ImagePicker().pickImage(source: ImageSource.gallery);
       if (pickedFile == null) return;
 
-      final File imageFile = File(pickedFile.path);
-      Fluttertoast.showToast(msg: "アップロードを開始します...");
+      final imageFile = File(pickedFile.path);
+      Fluttertoast.showToast(msg: 'アップロードを開始します...');
       const CircularProgressIndicator();
 
-      String fileName = path.basename(imageFile.path);
-      Reference storageRef =
+      final fileName = path.basename(imageFile.path);
+      final storageRef =
           FirebaseStorage.instance.ref('userImages/$uid/$fileName');
-      UploadTask uploadTask = storageRef.putFile(imageFile);
+      final uploadTask = storageRef.putFile(imageFile);
 
       // アップロード完了を待つ
       await uploadTask.whenComplete(() => null);
-      String downloadURL = await storageRef.getDownloadURL();
+      final downloadURL = await storageRef.getDownloadURL();
 
       // Firestoreに画像URLを保存
       await firestore
-          .collection("users")
+          .collection('users')
           .doc(uid)
-          .update({"photoURL": downloadURL});
-      Fluttertoast.showToast(msg: "アップロードが完了しました");
+          .update({'photoURL': downloadURL});
+      Fluttertoast.showToast(msg: 'アップロードが完了しました');
     } catch (e) {
-      Fluttertoast.showToast(msg: "アップロードに失敗しました: $e");
+      Fluttertoast.showToast(msg: 'アップロードに失敗しました: $e');
     }
   }
 }
@@ -76,7 +76,6 @@ class UserHeader extends StatelessWidget {
   final String email;
   final String uid;
   final TextEditingController _nameController = TextEditingController();
-
   UserHeader({
     Key? key,
     required this.name,
@@ -116,9 +115,8 @@ class UserHeader extends StatelessWidget {
                               right: -25,
                               child: RawMaterialButton(
                                 onPressed: () {},
-                                elevation: 2.0,
                                 fillColor: const Color(0xFFF5F6F9),
-                                padding: const EdgeInsets.all(7.0),
+                                padding: const EdgeInsets.all(7),
                                 shape: const CircleBorder(),
                                 child: Icon(
                                   Icons.photo_camera_outlined,
@@ -224,7 +222,6 @@ class UserHeader extends StatelessWidget {
 
 class UserInfo extends StatelessWidget {
   final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-
   UserInfo({Key? key}) : super(key: key);
 
   @override
@@ -237,7 +234,7 @@ class UserInfo extends StatelessWidget {
         if (!snapshot.hasData || snapshot.data?.data() == null) {
           return const Text('データが見つかりませんでした。');
         }
-        final data = snapshot.data!.data() as Map<String, dynamic>;
+        final data = snapshot.data!.data()! as Map<String, dynamic>;
         // ユーザーヘッダーにデータを渡す
         return UserHeader(
           name: data['displayName'] ?? '名前なし',
@@ -262,7 +259,7 @@ class _AccountPageState extends State<AccountPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: UserInfo(),
         ),
       ),
