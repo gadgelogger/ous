@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -218,7 +219,7 @@ class PostState extends State<Post> {
                   obscureText: false,
                   maxLines: null,
                   decoration: const InputDecoration(
-                    labelText: '例：2023',
+                    labelText: '例:2023',
                   ),
                 ),
                 const SizedBox(
@@ -229,7 +230,7 @@ class PostState extends State<Post> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 200.w,
                   child: DropdownButton(
                     //4
                     isExpanded: true,
@@ -271,16 +272,16 @@ class PostState extends State<Post> {
                     value: isgakki,
                   ),
                 ),
-                const SizedBox(
-                  height: 32,
+                SizedBox(
+                  height: 32.h,
                 ),
                 const Text(
                   '授業名を入力してください。',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const Text(
+                Text(
                   'マイログに記載されている授業名（正式名称）をコピペして入力してください。。',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15.sp),
                 ),
                 TextField(
                   controller: _textEditingController1,
@@ -297,9 +298,9 @@ class PostState extends State<Post> {
                   '講師名を入力してください。',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const Text(
+                Text(
                   'マイログに記載されている正式なフルネーム（空白なし）で入力してください。',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15.sp),
                 ),
                 TextField(
                   controller: _textEditingController2,
@@ -320,7 +321,7 @@ class PostState extends State<Post> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 200.w,
                   child: DropdownButton(
                     //4
                     isExpanded: true,
@@ -346,15 +347,15 @@ class PostState extends State<Post> {
                     value: istanni,
                   ),
                 ),
-                const SizedBox(
-                  height: 32,
+                SizedBox(
+                  height: 32.h,
                 ),
                 const Text(
                   '授業形式を選んでください',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 200.w,
                   child: DropdownButton(
                     //4
                     isExpanded: true,
@@ -388,8 +389,8 @@ class PostState extends State<Post> {
                     value: iszyugyoukeisiki,
                   ),
                 ),
-                const SizedBox(
-                  height: 32,
+                SizedBox(
+                  height: 32.h,
                 ),
                 const Text(
                   '総合評価',
@@ -399,7 +400,7 @@ class PostState extends State<Post> {
                   children: <Widget>[
                     Text(
                       _hyouka.toStringAsFixed(0),
-                      style: const TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24.sp),
                     ),
                     Slider(
                       value: _hyouka,
@@ -421,7 +422,7 @@ class PostState extends State<Post> {
                   children: <Widget>[
                     Text(
                       _omosirosa.toStringAsFixed(0),
-                      style: const TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24.sp),
                     ),
                     Slider(
                       value: _omosirosa,
@@ -443,7 +444,7 @@ class PostState extends State<Post> {
                   children: <Widget>[
                     Text(
                       _toriyasusa.toStringAsFixed(0),
-                      style: const TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24.sp),
                     ),
                     Slider(
                       value: _toriyasusa,
@@ -457,15 +458,15 @@ class PostState extends State<Post> {
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 32,
+                SizedBox(
+                  height: 32.h,
                 ),
                 const Text(
                   '出席確認の有無',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 200.w,
                   child: DropdownButton(
                     //4
                     isExpanded: true,
@@ -504,7 +505,7 @@ class PostState extends State<Post> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  width: 200,
+                  width: 200.w,
                   child: DropdownButton(
                     //4
                     isExpanded: true,
@@ -616,8 +617,8 @@ class PostState extends State<Post> {
                     labelText: '〇〇サークルに属しています！入部よろしく！',
                   ),
                 ),
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: 50.h,
                 ),
                 SlideAction(
                   outerColor:
@@ -628,28 +629,28 @@ class PostState extends State<Post> {
                       context: context,
                       builder: (_) {
                         return AlertDialog(
-                          title: const Text(
+                          title: Text(
                             "投稿ありがとうございます！",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 17.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          content: const Column(
+                          content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               SizedBox(
-                                width: 100,
-                                height: 100,
-                                child: Image(
+                                width: 100.w,
+                                height: 100.h,
+                                child: const Image(
                                   image: AssetImage(
                                     'assets/icon/rocket.gif',
                                   ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              Text(
+                              const Text(
                                 'クッソ長いアンケートに答えていただきありがとうございます！\n頂いたアンケートはアプリ内で共有されすぐに反映されます。',
                                 textAlign: TextAlign.center,
                               ),
