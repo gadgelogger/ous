@@ -1,22 +1,16 @@
 // Dart imports:
 import 'dart:io';
 
-// Package imports:
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
+import 'package:ous/api/service/login_auth_service.dart';
 import 'package:ous/screens/main_screen.dart';
 // Project imports:
 import 'package:ous/screens/tutorial_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Login extends StatefulWidget {
@@ -27,66 +21,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  // Firebase 認証
-  final auth = FirebaseAuth.instance;
-
-  String infoText = ""; // ログインに関する情報を表示
-
-  final DateTime now = DateTime.now();
-  //ユーザー情報保存
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-//Appleサインイン
-
-  Future<UserCredential?> appleSignIn() async {
-    final rawNonce = generateNonce();
-
-    final appleCredential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-    final oauthCredential = OAuthProvider("apple.com").credential(
-      idToken: appleCredential.identityToken,
-      rawNonce: rawNonce,
-    );
-
-    final authResult =
-        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
-    final firebaseUser = authResult.user;
-
-    final userRef =
-        FirebaseFirestore.instance.collection('users').doc(firebaseUser?.uid);
-
-    userRef.set(
-      {
-        'uid': firebaseUser?.uid ?? '未設定',
-        'email': firebaseUser?.email ?? '未設定',
-        'displayName': firebaseUser?.displayName ?? '名前未設定',
-        'photoURL': firebaseUser?.photoURL ?? '',
-        'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now),
-
-        // その他のユーザー情報を追加
-      },
-      SetOptions(merge: true),
-    );
-
-    // ログイン処理が終わった後に画面遷移を行う
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return MainScreen();
-        },
-      ),
-    );
-
-    Fluttertoast.showToast(msg: "Appleでログインしました");
-
-    return authResult;
-  }
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -94,17 +29,19 @@ class LoginState extends State<Login> {
 
     return PopScope(
       canPop: false,
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/login_background.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Scrollbar(
-            child: SingleChildScrollView(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/login_background.jpg'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
+            SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -120,6 +57,7 @@ class LoginState extends State<Login> {
                           style: TextStyle(
                             fontSize: 80.sp,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -133,6 +71,7 @@ class LoginState extends State<Login> {
                           style: TextStyle(
                             fontSize: 80.sp,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
                       ),
@@ -157,29 +96,19 @@ class LoginState extends State<Login> {
                             shape: const StadiumBorder(),
                           ),
                           onPressed: () async {
-                            Fluttertoast.showToast(
-                              msg: "ログイン中です\nちょっと待ってね。",
-                            );
-                            try {
-                              // ignore: unused_local_variable
-                              final userCredential = await signInWithGoogle();
-                              // ログインに成功した場合
-                              // チャット画面に遷移＋ログイン画面を破棄
-                              await Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MainScreen();
-                                  },
-                                ),
-                                result: Fluttertoast.showToast(
-                                  msg: "大学のアカウントでログインしました",
-                                ),
-                              );
-                            } on PlatformException {
-                              Fluttertoast.showToast(
-                                msg: "ログインに失敗しました",
-                              );
+                            Fluttertoast.showToast(msg: "ログイン中です\nちょっと待ってね。");
+                            final userCredential =
+                                await _authService.signInWithGoogle();
+                            if (userCredential == null || !context.mounted) {
+                              return;
                             }
+
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => MainScreen(),
+                              ),
+                            );
+                            Fluttertoast.showToast(msg: "大学のアカウントでログインしました");
                           },
                           child: const Text(
                             '大学のアカウントでサインイン',
@@ -235,7 +164,23 @@ class LoginState extends State<Login> {
                                             Fluttertoast.showToast(
                                               msg: "ログイン中です\nちょっと待ってね。",
                                             );
-                                            appleSignIn(); // ボタンをタップしたときの処理
+                                            final result = await _authService
+                                                .signInWithApple();
+                                            if (!context.mounted ||
+                                                result == null) {
+                                              return; // ユーザーがサインインをキャンセルした場合はここで処理を終了
+                                            }
+
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MainScreen(),
+                                              ),
+                                            );
+                                            Fluttertoast.showToast(
+                                              msg: "Appleでログインしました",
+                                            );
                                           },
                                         ),
                                       ],
@@ -271,10 +216,47 @@ class LoginState extends State<Login> {
                         //ゲストモード
                         GestureDetector(
                           onTap: () async {
-                            Fluttertoast.showToast(
-                              msg: "ゲストモードでログインしました",
+                            showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    "注意",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  content: const Text(
+                                    "ゲストモードでログインしようとしています。\n講義評価など一部の機能が使えないですがよろしいですか？\n\n※新入生の人は大学のアカウントが発行されるまで待ってね。",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  actions: <Widget>[
+                                    // ボタン領域
+                                    TextButton(
+                                      child: const Text("やっぱやめる"),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                    TextButton(
+                                      child: const Text("ええで"),
+                                      onPressed: () async {
+                                        Navigator.pop(context); // ダイアログを閉じる
+                                        Fluttertoast.showToast(
+                                          msg: "ログイン中です\nちょっと待ってね。",
+                                        );
+                                        final result = await _authService
+                                            .signInAnonymously();
+                                        if (result != null && context.mounted) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MainScreen(),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                            await signInAnonymously();
                           },
                           child: const Text(
                             '会員登録せずに使う（ゲストモード）',
@@ -306,120 +288,10 @@ class LoginState extends State<Login> {
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
-  }
-
-  // 匿名ログイン
-  Future<UserCredential?> signInAnonymously() async {
-    try {
-      bool confirmed = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text(
-              '確認',
-              textAlign: TextAlign.center,
-            ),
-            content: const Text(
-              '匿名ログインを実行しますか？',
-              textAlign: TextAlign.center,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('やっぱやめる'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('ええで'),
-              ),
-            ],
-          );
-        },
-      );
-
-      if (confirmed == true) {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInAnonymously();
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainScreen(),
-          ),
-        );
-
-        return userCredential;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      // Handle any errors that occur during the login process
-      debugPrint('Error signing in anonymously: $e');
-      return null;
-    }
-  }
-
-  Future<UserCredential> signInWithGoogle() async {
-    // GoogleSignInインスタンスを作成
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      // 制限したいドメインを指定
-      hostedDomain: 'ous.jp',
-    );
-
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-    if (googleUser == null) {
-      throw FirebaseAuthException(
-        code: 'ERROR_ABORTED_BY_USER',
-        message: 'ユーザーによって操作が中止されました',
-      );
-    }
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-
-    final OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-      accessToken: googleAuth.accessToken,
-    );
-
-    // Sign in with the credential and return the UserCredential
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithCredential(
-      GoogleAuthProvider.credential(
-        idToken: credential.idToken,
-        accessToken: credential.accessToken,
-      ),
-    );
-
-    // Firestoreにユーザー情報が存在しない場合、ユーザー情報を書き込む
-    final User? user = userCredential.user;
-    final firestoreInstance = FirebaseFirestore.instance;
-    DocumentReference userDoc =
-        firestoreInstance.collection('users').doc(user!.uid);
-
-    userDoc.get().then((docSnapshot) async {
-      if (!docSnapshot.exists) {
-        await userDoc.set({
-          'displayName': user.displayName,
-          'uid': user.uid,
-          'email': user.email,
-          'photoURL': user.photoURL,
-          'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(now),
-        });
-        debugPrint("Created");
-      } else {
-        debugPrint("User already exists");
-      }
-    });
-
-    return userCredential;
   }
 
 //初回チュートリアル表示
@@ -427,6 +299,8 @@ class LoginState extends State<Login> {
     final pref = await SharedPreferences.getInstance();
 
     if (pref.getBool('isAlreadyFirstLaunch') != true) {
+      if (!context.mounted) return;
+
       Navigator.push(
         context,
         MaterialPageRoute(

@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Package imports:
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -283,8 +284,9 @@ class _SettingState extends State<Setting> {
 //退会処理
   void deleteUser() async {
     final user = FirebaseAuth.instance.currentUser;
+    final uid = user?.uid;
 
-    // ユーザーを削除
+    await FirebaseFirestore.instance.collection('users').doc(uid).delete();
     await user?.delete();
     await FirebaseAuth.instance.signOut();
     debugPrint('ユーザーを削除しました!');
