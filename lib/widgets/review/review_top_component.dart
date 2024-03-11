@@ -1,6 +1,5 @@
 // Flutter imports:
 // Package imports:
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,13 +26,6 @@ class CustomCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 背景の明るさをチェック
-    bool isBackgroundBright =
-        Theme.of(context).primaryColor == Brightness.light;
-
-    // 明るい背景の場合は黒、暗い背景の場合は白
-    Color textColor = isBackgroundBright ? Colors.black : Colors.white;
-
     if (imagePath.isNotEmpty) {
       return GestureDetector(
         child: Card(
@@ -54,45 +46,6 @@ class CustomCard extends StatelessWidget {
                         height: 110,
                         width: 200,
                         fit: BoxFit.contain,
-                      ),
-                      Positioned(
-                        top: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomRight: Radius.circular(8),
-                            ),
-                          ),
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection(collection)
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final count = snapshot.data!.size;
-                                return Text(
-                                  '$count',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: textColor,
-                                  ),
-                                );
-                              } else {
-                                return const SizedBox(
-                                  height: 3,
-                                  width: 3,
-                                  child: Text('0'),
-                                );
-                              }
-                            },
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -150,39 +103,6 @@ class CustomCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomRight: Radius.circular(8),
-                  ),
-                ),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection(collection)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      final count = snapshot.data!.size;
-                      return Text(
-                        '$count',
-                        style: TextStyle(fontSize: 16.0, color: textColor),
-                      );
-                    } else {
-                      return const SizedBox(
-                        height: 3,
-                        width: 3,
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
                 ),
               ),
             ),

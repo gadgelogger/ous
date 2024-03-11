@@ -137,10 +137,12 @@ class _NavBarState extends State<NavBar> {
   }
 
   void _launchCalender() {
+    Navigator.of(context).pop();
     launchUrlString('https://www.ous.ac.jp/campuslife/academic_calenda/');
   }
 
   void _launchMyLog() {
+    Navigator.of(context).pop();
     launchUrl(
       Uri.https('mylog.pub.ous.ac.jp', '/uprx/up/pk/pky501/Pky50101.xhtml'),
       mode: LaunchMode.externalApplication,
@@ -148,10 +150,12 @@ class _NavBarState extends State<NavBar> {
   }
 
   void _launchStudentHandbook() {
+    Navigator.of(context).pop();
     launchUrlString('https://www.ous.ac.jp/outline/disclosure/handbook/');
   }
 
   void _navigateToPage(BuildContext context, Widget page) {
+    Navigator.of(context).pop();
     Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
@@ -161,12 +165,15 @@ class _NavBarState extends State<NavBar> {
     final String image = doc.get('photoURL') as String;
 
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const AccountPage(),
-        ),
-      ),
+      onTap: () {
+        Navigator.of(context).pop();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AccountPage(),
+          ),
+        );
+      },
       child: UserAccountsDrawerHeader(
         accountName: Text(displayName),
         accountEmail: Text(email, style: const TextStyle(color: Colors.white)),

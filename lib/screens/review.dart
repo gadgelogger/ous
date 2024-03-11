@@ -2,9 +2,9 @@
 // Package imports:
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// Project imports:
-import 'package:ous/NavBar.dart';
 import 'package:ous/analytics_service.dart';
+// Project imports:
+import 'package:ous/widgets/NavBar.dart';
 import 'package:ous/widgets/review/review_top_component.dart';
 
 class Review extends StatefulWidget {

@@ -12,7 +12,7 @@ import 'package:ous/widgets/home/bus_info_button.dart';
 import 'package:ous/widgets/home/mylog_status_button.dart';
 import 'package:share/share.dart';
 
-import '../NavBar.dart';
+import '../widgets/NavBar.dart';
 
 @override
 void initState() {
