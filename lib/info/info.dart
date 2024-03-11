@@ -24,8 +24,7 @@ class _InfoState extends State<Info> {
   final List<TabInfo> _tabs = [
     TabInfo(
       title: '全て',
-      widget:
-          const NewsPage(categoryUrl: 'https://www.ous.ac.jp/topics/?page='),
+      widget: const NewsPage(categoryUrl: 'https://www.ous.ac.jp/topics/?page'),
     ),
     TabInfo(
       title: '開発者からお知らせ',
@@ -34,25 +33,25 @@ class _InfoState extends State<Info> {
     TabInfo(
       title: '重要',
       widget: const NewsPage(
-        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=1&page=',
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=1&page',
       ),
     ),
     TabInfo(
       title: 'お知らせ',
       widget: const NewsPage(
-        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=2&page=',
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=2&page',
       ),
     ),
     TabInfo(
       title: '学科レポート',
       widget: const NewsPage(
-        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=7&page=',
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=7&page',
       ),
     ),
     TabInfo(
       title: '理大レポート',
       widget: const NewsPage(
-        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=6&page=',
+        categoryUrl: 'https://www.ous.ac.jp/topics/?cat=6&page',
       ),
     ),
   ];
