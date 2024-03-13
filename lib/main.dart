@@ -1,7 +1,5 @@
 // Dart imports:
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,11 +14,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initApp();
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const ProviderScope(
-        child: MyApp(),
-      ),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
