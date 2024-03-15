@@ -4,20 +4,16 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:ous/api/service/setting_service.dart';
 import 'package:ous/constant/urls.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class Setting extends StatefulWidget {
+class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);
 
-  @override
-  State<Setting> createState() => _SettingState();
-}
-
-class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,7 +154,7 @@ class _SettingState extends State<Setting> {
                       style: TextStyle(color: Colors.red),
                     ),
                     onPressed: (BuildContext context) async {
-                      logoutDialog(context);
+                      SettingService.logoutDialog(context);
                     },
                   ),
                   SettingsTile.navigation(
@@ -168,7 +164,7 @@ class _SettingState extends State<Setting> {
                       style: TextStyle(color: Colors.red),
                     ),
                     onPressed: (BuildContext context) async {
-                      deleteAccountDialog(context);
+                      SettingService.deleteAccountDialog(context);
                     },
                   ),
                 ],

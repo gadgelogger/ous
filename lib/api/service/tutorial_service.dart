@@ -11,6 +11,8 @@ class TutorialService {
 
     if (!isAlreadyFirstLaunch) {
       // 初回起動時にチュートリアル画面を表示
+      if (!context.mounted) return;
+
       await Navigator.push(
         context,
         MaterialPageRoute(

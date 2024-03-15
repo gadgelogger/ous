@@ -7,7 +7,23 @@ import 'package:ous/screens/account/login_screen.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 class SettingService {
-  Future<dynamic> deleteAccountDialog(BuildContext context) {
+  static Future<void> deleteAccount(BuildContext context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final uid = user?.uid;
+
+    await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+    await user?.delete();
+    await FirebaseAuth.instance.signOut();
+    debugPrint('ユーザーを削除しました!');
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const Login()),
+    );
+    Fluttertoast.showToast(msg: "アカウントを削除しました\nご利用ありがとうございました。");
+  }
+
+  static Future<dynamic> deleteAccountDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -73,7 +89,17 @@ class SettingService {
     );
   }
 
-  Future<dynamic> logoutDialog(BuildContext context) {
+  static Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    if (!context.mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const Login()),
+    );
+    Fluttertoast.showToast(msg: "ログアウトしました");
+  }
+
+  static Future<dynamic> logoutDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (_) {
@@ -96,31 +122,5 @@ class SettingService {
         );
       },
     );
-  }
-
-  static Future<void> deleteAccount(BuildContext context) async {
-    final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
-
-    await FirebaseFirestore.instance.collection('users').doc(uid).delete();
-    await user?.delete();
-    await FirebaseAuth.instance.signOut();
-    debugPrint('ユーザーを削除しました!');
-    if (!context.mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const Login()),
-    );
-    Fluttertoast.showToast(msg: "アカウントを削除しました\nご利用ありがとうございました。");
-  }
-
-  static Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    if (!context.mounted) return;
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const Login()),
-    );
-    Fluttertoast.showToast(msg: "ログアウトしました");
   }
 }
