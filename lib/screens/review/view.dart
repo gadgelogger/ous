@@ -223,6 +223,7 @@ class ReviewViewState extends State<ReviewView> {
                     Container(
                       margin: const EdgeInsets.only(top: 16),
                       child: FloatingActionButton(
+                        heroTag: "hero1",
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -237,6 +238,7 @@ class ReviewViewState extends State<ReviewView> {
                   ],
                 ),
                 FloatingActionButton(
+                  heroTag: "hero2",
                   onPressed: () {
                     setState(
                       () {
@@ -249,6 +251,7 @@ class ReviewViewState extends State<ReviewView> {
               ],
             )
           : FloatingActionButton(
+              heroTag: "hero3",
               onPressed: () {
                 setState(
                   () {
