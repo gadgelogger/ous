@@ -2,7 +2,6 @@
 import 'package:firebase_core/firebase_core.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/analytics_service.dart';
@@ -23,13 +22,6 @@ void main() async {
 Future<void> initApp() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await AnalyticsService().logBeginCheckout();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle.dark.copyWith(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-    ),
-  );
 }
 
 class MyApp extends StatelessWidget {
