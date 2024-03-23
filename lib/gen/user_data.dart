@@ -1,0 +1,21 @@
+//ユーザーデータのモデル
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:ous/exceptions/date_time_timestamp_converter.dart';
+
+part 'user_data.freezed.dart';
+part 'user_data.g.dart';
+
+@freezed
+class UserData with _$UserData {
+  const factory UserData({
+    required String displayName,
+    required String email,
+    required String uid,
+    String? photoURL,
+    @DateTimeTimestampConverter() required DateTime createdAt,
+    @DateTimeTimestampConverter() required DateTime updatedAt,
+  }) = _UserData;
+
+  factory UserData.fromJson(Map<String, dynamic> json) =>
+      _$UserDataFromJson(json);
+}

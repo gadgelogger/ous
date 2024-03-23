@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 2.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=3.3.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   firebase_core: ^2.27.0
   url_launcher: ^6.1.10
-  flutter_launcher_icons: ^0.11.0
   http: ^0.13.5
   html: ^0.15.2
   flutter_screenutil: ^5.7.0
@@ -76,7 +75,6 @@ dependencies:
   carousel_slider: ^4.2.1
   slide_to_act: ^2.0.1
   markdown_widget: ^2.2.0
-  build_runner: ^2.4.6
   dio: ^5.3.3
   xml: ^6.3.0
   firebase_remote_config: ^4.3.3
@@ -85,10 +83,18 @@ dependencies:
   uni_links: ^0.5.1
   flutter_riverpod: ^2.4.10
   cupertino_icons: ^1.0.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   dependency_validator: any
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.8
+  custom_lint: ^0.6.2
+  riverpod_lint: ^2.3.10
+  freezed: ^2.4.7
+  json_serializable: ^6.7.1
+  slang_build_runner: ^3.29.0
   import_sorter: ^4.6.0
   pedantic_mono: any
 
