@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Project imports:
-import 'package:ous/presentation/pages/home_screen.dart';
+import 'package:ous/presentation/pages/home/home_screen.dart';
 import 'package:ous/presentation/pages/info/info.dart';
-import 'package:ous/presentation/pages/review_screen.dart';
+import 'package:ous/presentation/pages/review/review_screen.dart';
 
 final baseTabViewProvider = StateProvider<ViewType>((ref) => ViewType.home);
 

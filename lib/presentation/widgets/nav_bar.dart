@@ -31,15 +31,12 @@ class _NavBarState extends State<NavBar> {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          // Account information
           _buildUserAccountHeader(),
-          // Menu items
           _buildMenuItem(
             Icons.event_available_outlined,
             '行事予定',
             () => _launchCalender(),
           ),
-
           _buildMenuItem(Icons.public_outlined, 'マイログ', () => _launchMyLog()),
           _buildMenuItem(
             Icons.public_outlined,
