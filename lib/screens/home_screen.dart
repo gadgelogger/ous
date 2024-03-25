@@ -1,10 +1,14 @@
 // Dart imports:
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share/share.dart';
+
 // Project imports:
 import 'package:ous/analytics_service.dart';
 import 'package:ous/api/cliant/home/bus_api.dart';
@@ -12,8 +16,6 @@ import 'package:ous/api/cliant/home/mylog_monitor_api.dart';
 import 'package:ous/constant/urls.dart';
 import 'package:ous/widgets/home/bus_info_button.dart';
 import 'package:ous/widgets/home/mylog_status_button.dart';
-import 'package:share/share.dart';
-
 import '../widgets/nav_bar.dart';
 
 @override

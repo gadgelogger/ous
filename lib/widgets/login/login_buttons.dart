@@ -1,8 +1,13 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
 import 'package:ous/api/service/login_auth_service.dart';
 import 'package:ous/screens/main_screen.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class AppleSignInButton extends StatelessWidget {
   final AuthService _authService;

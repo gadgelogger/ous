@@ -1,14 +1,19 @@
+// Flutter imports:
+import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
 import 'package:ous/Nav/call.dart';
 import 'package:ous/Nav/link.dart';
 import 'package:ous/Nav/tcp.dart';
 import 'package:ous/screens/account/account_screen.dart';
 import 'package:ous/screens/setting/setting.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key}) : super(key: key);

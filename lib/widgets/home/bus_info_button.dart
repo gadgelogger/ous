@@ -1,7 +1,12 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:ous/api/cliant/home/bus_api.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
+import 'package:ous/api/cliant/home/bus_api.dart';
 
 class BusInfoButton extends StatelessWidget {
   final String label;

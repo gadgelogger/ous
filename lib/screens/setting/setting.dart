@@ -3,13 +3,17 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:in_app_review/in_app_review.dart';
-import 'package:ous/api/service/setting_service.dart';
-import 'package:ous/constant/urls.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
+import 'package:ous/api/service/setting_service.dart';
+import 'package:ous/constant/urls.dart';
 
 class Setting extends StatelessWidget {
   const Setting({Key? key}) : super(key: key);

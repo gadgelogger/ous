@@ -95,9 +95,10 @@ dev_dependencies:
   freezed: ^2.4.7  
   json_serializable: ^6.7.1
   slang_build_runner: ^3.29.0
-  import_sorter: ^4.6.0
   pedantic_mono: any
   flutter_gen_runner: ^5.4.0
+  import_sorter: ^4.6.0
+
 
 
 

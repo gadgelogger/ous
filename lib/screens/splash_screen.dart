@@ -1,5 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
+
+// Project imports:
 import 'package:ous/screens/account/login_screen.dart';
 import 'package:ous/screens/main_screen.dart';
 

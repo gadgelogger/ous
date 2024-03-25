@@ -1,8 +1,10 @@
 // Dart imports:
-// Package imports:
-import 'package:firebase_auth/firebase_auth.dart';
+
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher_string.dart';

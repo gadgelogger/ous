@@ -1,9 +1,12 @@
 // Flutter imports:
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:slide_to_act/slide_to_act.dart';

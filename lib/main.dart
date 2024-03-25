@@ -1,12 +1,14 @@
-// Dart imports:
-import 'package:firebase_core/firebase_core.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Project imports:
 import 'package:ous/analytics_service.dart';
 import 'package:ous/screens/splash_screen.dart';
-
 import 'firebase_options.dart';
 
 void main() async {

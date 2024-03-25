@@ -1,14 +1,18 @@
 // Flutter imports:
+
+// Flutter imports:
+import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_widget/markdown_widget.dart';
+import 'package:uuid/uuid.dart';
+
 // Project imports:
 import 'package:ous/apikey.dart';
-import 'package:uuid/uuid.dart';
 
 class DevInfo extends StatefulWidget {
   const DevInfo({Key? key}) : super(key: key);

@@ -1,10 +1,14 @@
 // Dart imports:
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 // Flutter imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Project imports:
 import 'package:ous/api/service/login_auth_service.dart';
 import 'package:ous/api/service/tutorial_service.dart';
 import 'package:ous/widgets/login/login_background.dart';
