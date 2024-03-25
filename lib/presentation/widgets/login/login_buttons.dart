@@ -20,8 +20,10 @@ class AppleSignInButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(
-          color: Colors.black,
+        side: BorderSide(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white
+              : Colors.black,
         ),
       ),
       onPressed: () async {
@@ -57,7 +59,7 @@ class AppleSignInButton extends StatelessWidget {
                     );
                     final result = await _authService.signInWithApple();
                     if (!context.mounted || result == null) {
-                      return; // ユーザーがサインインをキャンセルした場合はここで処理を終了
+                      return;
                     }
 
                     Navigator.of(context).pushReplacement(
@@ -75,18 +77,22 @@ class AppleSignInButton extends StatelessWidget {
           },
         );
       },
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.apple,
-            color: Colors.black,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
           ),
           Text(
             'Appleでサインイン',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black,
             ),
           ),
         ],
@@ -197,7 +203,6 @@ class GuestSignInButton extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           decoration: TextDecoration.underline,
-          color: Colors.black,
         ),
       ),
     );
@@ -220,7 +225,6 @@ class PrivacyPolicyButton extends StatelessWidget {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           decoration: TextDecoration.underline,
-          color: Colors.black,
         ),
       ),
     );

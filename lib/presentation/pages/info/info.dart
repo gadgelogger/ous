@@ -1,9 +1,10 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 // Project imports:
-import 'package:ous/analytics_service.dart';
+import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/presentation/pages/info/dev_info.dart';
 import 'package:ous/presentation/widgets/info/news_page.dart';
+import 'package:ous/presentation/widgets/nav_bar.dart';
 
 class Info extends StatefulWidget {
   const Info({Key? key}) : super(key: key);
@@ -63,6 +64,7 @@ class _InfoState extends State<Info> {
     return DefaultTabController(
       length: _tabs.length,
       child: Scaffold(
+        drawer: const NavBar(),
         appBar: AppBar(
           title: const Text('ニュース'),
           bottom: TabBar(

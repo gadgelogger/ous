@@ -6,10 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// Project imports:
-import 'package:ous/analytics_service.dart';
 import 'package:ous/constant/urls.dart';
+import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/bus_api.dart';
+// Project imports:
+import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/infrastructure/mylog_monitor_api.dart';
 import 'package:ous/presentation/widgets/home/bus_info_button.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
@@ -76,8 +77,8 @@ class _HomeState extends State<Home> {
                   ),
                   child: Image.asset(
                     Theme.of(context).brightness == Brightness.dark
-                        ? 'assets/images/homedark.jpeg'
-                        : 'assets/images/home.jpg',
+                        ? Assets.images.homedark.path
+                        : Assets.images.home.path,
                   ),
                 ),
               ),

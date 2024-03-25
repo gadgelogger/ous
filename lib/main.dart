@@ -2,27 +2,27 @@
 // Package imports:
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// Project imports:
-import 'package:ous/analytics_service.dart';
 import 'package:ous/presentation/pages/splash_screen.dart';
 
-import 'firebase_options.dart';
+import 'infrastructure/config/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     const ProviderScope(
       child: MyApp(),
     ),
   );
-}
-
-Future<void> initApp() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await AnalyticsService().logBeginCheckout();
 }
 
 class MyApp extends StatelessWidget {

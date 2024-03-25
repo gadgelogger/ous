@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 // Project imports:
-import 'package:ous/analytics_service.dart';
+import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/presentation/widgets/nav_bar.dart';
 import 'package:ous/presentation/widgets/review/review_top_component.dart';
 
@@ -17,7 +17,6 @@ class Review extends StatefulWidget {
 }
 
 class _ReviewState extends State<Review> {
-//大学のアカウント以外は非表示にする
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
 
@@ -26,9 +25,7 @@ class _ReviewState extends State<Review> {
     return Scaffold(
       drawer: const NavBar(),
       appBar: AppBar(
-        actions: const [
-          //ここにアイコン設置
-        ],
+        actions: const [],
         elevation: 0,
         title: const Text('講義評価'),
       ),

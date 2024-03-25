@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -23,7 +22,6 @@ class HelloOus extends StatelessWidget {
             style: TextStyle(
               fontSize: 80.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
             ),
           ),
         ),
@@ -37,7 +35,6 @@ class HelloOus extends StatelessWidget {
             style: TextStyle(
               fontSize: 80.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
             ),
           ),
         ),
