@@ -1,12 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
@@ -20,7 +16,6 @@ class AuthService {
       _updateUserProfile(userCredential.user);
       return userCredential;
     } catch (e) {
-      _handleAuthError(e);
       return null;
     }
   }
@@ -46,7 +41,6 @@ class AuthService {
       _updateUserProfile(authResult.user);
       return authResult;
     } catch (e) {
-      _handleAuthError(e);
       return null;
     }
   }
@@ -66,15 +60,8 @@ class AuthService {
       _updateUserProfile(authResult.user);
       return authResult;
     } catch (e) {
-      _handleAuthError(e);
       return null;
     }
-  }
-
-  // エラーハンドリング
-  void _handleAuthError(Object e) {
-    debugPrint('AuthService Error: $e');
-    Fluttertoast.showToast(msg: "エラーかキャンセル処理がされました。");
   }
 
   // ユーザープロファイルの更新
@@ -88,7 +75,7 @@ class AuthService {
           'email': user.email ?? '未設定',
           'displayName': user.displayName ?? '名前未設定',
           'photoURL': user.photoURL ?? '',
-          'day': DateFormat('yyyy/MM/dd(E) HH:mm:ss').format(_now),
+          'createdAt': DateTime.now(),
         },
         SetOptions(merge: true),
       );

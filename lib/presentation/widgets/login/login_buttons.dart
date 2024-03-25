@@ -54,9 +54,6 @@ class AppleSignInButton extends StatelessWidget {
                     "ええで",
                   ),
                   onPressed: () async {
-                    Fluttertoast.showToast(
-                      msg: "ログイン中です\nちょっと待ってね。",
-                    );
                     final result = await _authService.signInWithApple();
                     if (!context.mounted || result == null) {
                       return;
@@ -117,11 +114,10 @@ class GoogleSignInButton extends StatelessWidget {
         backgroundColor: Colors.lightGreen[300],
         fixedSize: const Size.fromWidth(
           double.maxFinite,
-        ), //横幅に最大限のサイズを
+        ),
         shape: const StadiumBorder(),
       ),
       onPressed: () async {
-        Fluttertoast.showToast(msg: "ログイン中です\nちょっと待ってね。");
         final userCredential = await _authService.signInWithGoogle();
         if (userCredential == null || !context.mounted) {
           return;
@@ -180,9 +176,7 @@ class GuestSignInButton extends StatelessWidget {
                   child: const Text("ええで"),
                   onPressed: () async {
                     Navigator.pop(context); // ダイアログを閉じる
-                    Fluttertoast.showToast(
-                      msg: "ログイン中です\nちょっと待ってね。",
-                    );
+
                     final result = await _authService.signInAnonymously();
                     if (result != null && context.mounted) {
                       Navigator.of(context).pushReplacement(

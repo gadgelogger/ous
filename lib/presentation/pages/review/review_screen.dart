@@ -4,6 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:ous/gen/assets.gen.dart';
 // Project imports:
 import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/presentation/widgets/nav_bar.dart';
@@ -29,7 +30,7 @@ class _ReviewState extends State<Review> {
         elevation: 0,
         title: const Text('講義評価'),
       ),
-      body: const PopScope(
+      body: PopScope(
         canPop: false,
         child: SingleChildScrollView(
           child: Column(
@@ -38,12 +39,12 @@ class _ReviewState extends State<Review> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(
-                    imagePath: 'assets/images/理学部.jpg',
+                    imagePath: Assets.images.facultyOfScience.path,
                     title: '理学部',
                     collection: 'rigaku',
                   ),
                   CustomCard(
-                    imagePath: 'assets/images/工学部.jpg',
+                    imagePath: Assets.images.facultyOfEngineering.path,
                     title: '工学部',
                     collection: 'kougakubu',
                   ),
@@ -53,12 +54,14 @@ class _ReviewState extends State<Review> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(
-                    imagePath: 'assets/images/情報理工学部.jpg',
+                    imagePath: Assets
+                        .images.facultyOfInformationScienceAndTechnology.path,
                     title: '情報理工学部',
                     collection: 'zyouhou',
                   ),
                   CustomCard(
-                    imagePath: 'assets/images/生物地球学部.jpg',
+                    imagePath:
+                        Assets.images.facultyOfBiologyAndEarthScience.path,
                     title: '生物地球学部',
                     collection: 'seibutu',
                   ),
@@ -68,12 +71,14 @@ class _ReviewState extends State<Review> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(
-                    imagePath: 'assets/images/教育学部.jpg',
+                    imagePath: Assets
+                        .images.facultyOfInformationScienceAndTechnology.path,
                     title: '教育学部',
                     collection: 'kyouiku',
                   ),
                   CustomCard(
-                    imagePath: 'assets/images/経営学部.jpg',
+                    imagePath:
+                        Assets.images.schoolOfBusinessAdministration.path,
                     title: '経営学部',
                     collection: 'keiei',
                   ),
@@ -83,19 +88,19 @@ class _ReviewState extends State<Review> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(
-                    imagePath: 'assets/images/獣医学部.jpg',
+                    imagePath: Assets.images.facultyOfVeterinaryMedicine.path,
                     title: '獣医学部',
                     collection: 'zyuui',
                   ),
                   CustomCard(
-                    imagePath: 'assets/images/生命科学部.jpg',
+                    imagePath: Assets.images.schoolOfLifeSciences.path,
                     title: '生命科学部',
                     collection: 'seimei',
                   ),
                 ],
               ),
-              Divider(), //区切り線
-              Text(
+              const Divider(), //区切り線
+              const Text(
                 '共通科目はこちら',
                 style: TextStyle(
                   fontSize: 30,
@@ -103,7 +108,7 @@ class _ReviewState extends State<Review> {
                 ),
               ),
 
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(

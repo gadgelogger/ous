@@ -62,17 +62,21 @@ class _MyLogStatusButtonState extends State<MyLogStatusButton> {
   Future<void> _loadMyLogStatus() async {
     try {
       var data = await MylogMonitorApi().mylogMonitor();
-      setState(() {
-        statusMessage = data['statusMessage']!;
-        formattedDate = data['formattedDate']!;
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          statusMessage = data['statusMessage']!;
+          formattedDate = data['formattedDate']!;
+          isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        statusMessage = "エラー";
-        formattedDate = "";
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          statusMessage = "エラー";
+          formattedDate = "";
+          isLoading = false;
+        });
+      }
     }
   }
 }
