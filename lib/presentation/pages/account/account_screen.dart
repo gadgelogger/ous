@@ -21,7 +21,7 @@ class _AccountPageState extends State<AccountPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: UserData(),
+          child: UserHeaderData(),
         ),
       ),
     );

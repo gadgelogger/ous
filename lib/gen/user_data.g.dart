@@ -14,8 +14,6 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
       photoURL: json['photoURL'] as String?,
       createdAt: const DateTimeTimestampConverter()
           .fromJson(json['createdAt'] as Timestamp),
-      updatedAt: const DateTimeTimestampConverter()
-          .fromJson(json['updatedAt'] as Timestamp),
     );
 
 Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
@@ -26,6 +24,4 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
       'photoURL': instance.photoURL,
       'createdAt':
           const DateTimeTimestampConverter().toJson(instance.createdAt),
-      'updatedAt':
-          const DateTimeTimestampConverter().toJson(instance.updatedAt),
     };

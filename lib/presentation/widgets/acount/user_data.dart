@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:ous/presentation/widgets/acount/user_header.dart';
 
-class UserData extends StatelessWidget {
+class UserHeaderData extends StatelessWidget {
   final String uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-  UserData({Key? key}) : super(key: key);
+  UserHeaderData({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

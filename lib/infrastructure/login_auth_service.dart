@@ -7,7 +7,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DateTime _now = DateTime.now();
 
   // 匿名ログイン
   Future<UserCredential?> signInAnonymously() async {
@@ -64,7 +63,7 @@ class AuthService {
     }
   }
 
-  // ユーザープロファイルの更新
+  // ユーザープロファイルをFireStoreに保存
   void _updateUserProfile(User? user) {
     if (user != null) {
       final userRef =
