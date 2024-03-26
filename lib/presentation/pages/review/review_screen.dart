@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:ous/gen/assets.gen.dart';
 // Project imports:
 import 'package:ous/infrastructure/config/analytics_service.dart';
-import 'package:ous/presentation/widgets/nav_bar.dart';
+import 'package:ous/presentation/widgets/drawer/drawer.dart';
 import 'package:ous/presentation/widgets/review/review_top_component.dart';
 
 class Review extends StatefulWidget {

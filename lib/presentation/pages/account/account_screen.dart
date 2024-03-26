@@ -1,27 +1,61 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-// Project imports:
-import 'package:ous/presentation/widgets/acount/user_data.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ous/domain/user_providers.dart';
+import 'package:ous/gen/assets.gen.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+class AccountScreen extends ConsumerWidget {
+  const AccountScreen({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
-}
-
-class _AccountPageState extends State<AccountPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('アカウント'),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userDataAsyncValue = ref.watch(userStreamProvider);
+    return userDataAsyncValue.when(
+      data: (userData) => Scaffold(
+        appBar: AppBar(
+          title: const Text('マイページ'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 100,
+                backgroundImage: userData?.photoURL != ''
+                    ? NetworkImage(userData?.photoURL ?? '')
+                    : null,
+                child: userData?.photoURL == ''
+                    ? const Icon(Icons.person, size: 100)
+                    : null,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                userData?.displayName ?? 'Null',
+                style: const TextStyle(fontSize: 20),
+              ),
+              const SizedBox(height: 20),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Edit',
+                  style: TextStyle(fontSize: 20, color: Colors.green),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: UserHeaderData(),
+      loading: () => const CircularProgressIndicator(),
+      error: (error, _) => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              Assets.icon.error.path,
+              width: 150.0,
+            ),
+            Text('エラー: $error'),
+          ],
         ),
       ),
     );

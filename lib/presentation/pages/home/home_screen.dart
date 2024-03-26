@@ -16,7 +16,7 @@ import 'package:ous/presentation/widgets/home/bus_info_button.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
 import 'package:share/share.dart';
 
-import '../../widgets/nav_bar.dart';
+import '../../widgets/drawer/drawer.dart';
 
 @override
 void initState() {
