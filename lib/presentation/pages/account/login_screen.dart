@@ -1,3 +1,5 @@
+// login_screen.dart
+
 // Dart imports:
 import 'dart:io';
 
@@ -47,7 +49,6 @@ class LoginState extends State<Login> {
                     SizedBox(height: 20.h),
                     GuestSignInButton(authService: _authService),
                     SizedBox(height: 20.h),
-                    const PrivacyPolicyButton(),
                   ],
                 ),
               ),

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/gen/user_data.dart';
 
-final userStreamProvider = StreamProvider.autoDispose<UserData?>((ref) {
+final userStreamProvider = StreamProvider<UserData?>((ref) {
   return FirebaseAuth.instance.authStateChanges().asyncMap((user) async {
     if (user == null) {
       return null;

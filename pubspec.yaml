@@ -56,6 +56,7 @@ dependencies:
   uni_links: ^0.5.1
   flutter_riverpod: ^2.4.10
   cupertino_icons: ^1.0.6
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

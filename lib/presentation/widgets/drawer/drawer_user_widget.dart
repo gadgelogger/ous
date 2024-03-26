@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/domain/user_providers.dart';
 import 'package:ous/gen/assets.gen.dart';
+import 'package:ous/presentation/pages/account/account_screen.dart';
 
 class DrawerUserHeader extends ConsumerWidget {
   const DrawerUserHeader({super.key});
@@ -13,16 +14,22 @@ class DrawerUserHeader extends ConsumerWidget {
       data: (userData) => _UserAccountsDrawerHeader(
         displayName: userData?.displayName ?? 'Guest',
         email: userData?.email ?? 'guest@example.com',
-        photoUrl: userData?.photoURL ?? '',
-        onTap: () => _navigateToAccountScreen(context),
+        photoUrl: userData?.photoURL,
+        onTap: () => _navigateToAccountScreen(context), // 追加
       ),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => _LoadingView(),
       error: (error, _) => _ErrorView(error: error.toString()),
     );
   }
 
   void _navigateToAccountScreen(BuildContext context) {
-    Navigator.of(context).pushNamed('/account');
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AccountScreen(),
+      ),
+    );
   }
 }
 
@@ -48,16 +55,25 @@ class _ErrorView extends StatelessWidget {
   }
 }
 
+class _LoadingView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
 class _UserAccountsDrawerHeader extends StatelessWidget {
   final String displayName;
   final String email;
-  final String photoUrl;
+  final String? photoUrl;
   final VoidCallback onTap;
 
   const _UserAccountsDrawerHeader({
     required this.displayName,
     required this.email,
-    required this.photoUrl,
+    this.photoUrl,
     required this.onTap,
   });
 
@@ -72,7 +88,12 @@ class _UserAccountsDrawerHeader extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         currentAccountPicture: CircleAvatar(
-          backgroundImage: NetworkImage(photoUrl),
+          backgroundImage: photoUrl != '' ? NetworkImage(photoUrl ?? '') : null,
+          child: photoUrl == ''
+              ? const Icon(
+                  Icons.person,
+                )
+              : null,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,

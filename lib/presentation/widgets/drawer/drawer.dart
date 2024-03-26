@@ -87,7 +87,7 @@ class NavBar extends StatelessWidget {
 
   void _navigateToPage(BuildContext context, Widget page) {
     Navigator.of(context).pop();
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => page),
     );
