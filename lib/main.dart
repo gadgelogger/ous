@@ -30,29 +30,27 @@ void main() async {
   );
 }
 
-ThemeData _buildTheme(Brightness brightness) {
-  return ThemeData(
-    colorSchemeSeed: Colors.lightGreen,
-    useMaterial3: true,
-    brightness: brightness,
-  );
-}
-
 class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateChangeProvider);
+    final theme = ref.watch(themeProvider);
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, widget) => MaterialApp(
-        theme: _buildTheme(Brightness.light),
-        darkTheme: _buildTheme(Brightness.dark),
-        themeMode: ref.watch(themeModeProvider),
+        theme: ThemeData(
+          colorSchemeSeed: theme.primarySwatch,
+        ),
+        darkTheme: ThemeData(
+          colorSchemeSeed: theme.primarySwatch,
+          brightness: Brightness.dark,
+        ),
+        themeMode: theme.mode,
         home: authState.when(
           data: (user) {
             if (user == null) {

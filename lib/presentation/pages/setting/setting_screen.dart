@@ -19,6 +19,8 @@ class SettingPage extends ConsumerWidget {
   const SettingPage({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -33,13 +35,70 @@ class SettingPage extends ConsumerWidget {
                 title: const Text('テーマ設定'),
                 tiles: <SettingsTile>[
                   SettingsTile.navigation(
-                    title: const Text('テーマの変更'),
+                    title: const Text('テーマモード'),
                     leading: const Icon(Icons.color_lens),
-                    trailing: Text(
-                      ref.watch(themeModeProvider).toString(),
+                    trailing: Text(theme.mode.name),
+                    onPressed: (_) async {
+                      final selectedMode = await showDialog<ThemeMode>(
+                        context: context,
+                        builder: (context) => SimpleDialog(
+                          title: const Text('テーマモードを選択'),
+                          children: ThemeMode.values
+                              .map(
+                                (mode) => SimpleDialogOption(
+                                  onPressed: () => Navigator.pop(context, mode),
+                                  child: Text(mode.name),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      );
+                      if (selectedMode != null) {
+                        ref.read(themeProvider.notifier).updateTheme(
+                              AppTheme(
+                                mode: selectedMode,
+                                primarySwatch: theme.primarySwatch,
+                              ),
+                            );
+                      }
+                    },
+                  ),
+                  SettingsTile.navigation(
+                    title: const Text('テーマカラー'),
+                    leading: const Icon(Icons.color_lens),
+                    trailing: Container(
+                      width: 24,
+                      height: 24,
+                      color: theme.primarySwatch,
                     ),
                     onPressed: (_) async {
-                      await ref.read(themeModeProvider.notifier).toggle();
+                      final selectedColor = await showDialog<MaterialColor>(
+                        context: context,
+                        builder: (context) => SimpleDialog(
+                          title: const Text('テーマカラーを選択'),
+                          children: Colors.primaries
+                              .map(
+                                (color) => SimpleDialogOption(
+                                  onPressed: () =>
+                                      Navigator.pop(context, color),
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    color: color,
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      );
+                      if (selectedColor != null) {
+                        ref.read(themeProvider.notifier).updateTheme(
+                              AppTheme(
+                                mode: theme.mode,
+                                primarySwatch: selectedColor,
+                              ),
+                            );
+                      }
                     },
                   ),
                 ],

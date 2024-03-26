@@ -1,38 +1,51 @@
-//テーマモードの状態を管理するProvider
+// theme_provider.dart
+
 // Flutter imports:
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>(
-  (ref) => ThemeModeNotifier(),
+final themeProvider = StateNotifierProvider<ThemeNotifier, AppTheme>(
+  (ref) => ThemeNotifier(),
 );
 
-// Project imports:
+class AppTheme {
+  final ThemeMode mode;
+  final MaterialColor primarySwatch;
 
-class ThemeModeNotifier extends StateNotifier<ThemeMode> {
+  AppTheme({required this.mode, required this.primarySwatch});
+}
+
+class ThemeNotifier extends StateNotifier<AppTheme> {
   static const String keyThemeMode = 'theme_mode';
+  static const String keyPrimarySwatch = 'primary_swatch';
   final _prefs = SharedPreferencesInstance().prefs;
-  ThemeModeNotifier() : super(ThemeMode.system) {
-    state = _loadThemeMode() ?? ThemeMode.system;
+
+  ThemeNotifier()
+      : super(
+          AppTheme(
+            mode: ThemeMode.system,
+            primarySwatch: Colors.blue,
+          ),
+        ) {
+    final themeMode = _loadThemeMode() ?? ThemeMode.system;
+    final primarySwatch = _loadPrimarySwatch() ?? Colors.blue;
+    state = AppTheme(mode: themeMode, primarySwatch: primarySwatch);
   }
 
-  Future<void> toggle() async {
-    ThemeMode themeMode;
-    switch (state) {
-      case ThemeMode.light:
-        themeMode = ThemeMode.dark;
-      case ThemeMode.dark:
-        themeMode = ThemeMode.system;
-      case ThemeMode.system:
-        themeMode = ThemeMode.light;
+  Future<void> updateTheme(AppTheme theme) async {
+    await _saveThemeMode(theme.mode);
+    await _savePrimarySwatch(theme.primarySwatch);
+    state = theme;
+  }
+
+  MaterialColor? _loadPrimarySwatch() {
+    final loaded = _prefs.getInt(keyPrimarySwatch);
+    if (loaded == null) {
+      return null;
     }
-    await _saveThemeMode(themeMode).then((value) {
-      if (value) {
-        state = themeMode;
-      }
-    });
+    return Colors.primaries[loaded];
   }
 
   ThemeMode? _loadThemeMode() {
@@ -42,6 +55,9 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
     }
     return ThemeMode.values.byName(loaded);
   }
+
+  Future<bool> _savePrimarySwatch(MaterialColor primarySwatch) =>
+      _prefs.setInt(keyPrimarySwatch, Colors.primaries.indexOf(primarySwatch));
 
   Future<bool> _saveThemeMode(ThemeMode themeMode) =>
       _prefs.setString(keyThemeMode, themeMode.name);
