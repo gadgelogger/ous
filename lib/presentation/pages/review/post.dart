@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -237,7 +238,12 @@ class PostModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> submit() async {
+  Future<bool> submit() async {
+    final errorMessages = validateForm();
+    if (errorMessages.isNotEmpty) {
+      return false;
+    }
+
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid;
     final postId = const Uuid().v4();
@@ -263,6 +269,43 @@ class PostModel extends ChangeNotifier {
       'senden': sendenController.text,
       'date': DateTime.now(),
     });
+    zyugyoumeiController.clear();
+    kousimeiController.clear();
+    komentoController.clear();
+    tesutokeisikiController.clear();
+    tesutokeikouController.clear();
+    nameController.clear();
+    sendenController.clear();
+
+    return true;
+  }
+
+  List<String> validateForm() {
+    final List<String> errorMessages = [];
+
+    if (zyugyoumeiController.text.isEmpty) {
+      errorMessages.add('授業名が未入力です。');
+    }
+    if (kousimeiController.text.isEmpty) {
+      errorMessages.add('講師名が未入力です。');
+    }
+    if (tesutokeisikiController.text.isEmpty) {
+      errorMessages.add('テスト形式が未入力です。');
+    }
+    if (tesutokeikouController.text.isEmpty) {
+      errorMessages.add('テストの傾向が未入力です。');
+    }
+    if (nameController.text.isEmpty) {
+      errorMessages.add('投稿者名が未入力です。');
+    }
+    if (nenndo.isEmpty) {
+      errorMessages.add('年度が未選択です。');
+    }
+    if (komentoController.text.isEmpty) {
+      errorMessages.add('レビューが未入力です。');
+    }
+
+    return errorMessages;
   }
 }
 
@@ -453,11 +496,72 @@ class PostPage extends ConsumerWidget {
               sliderButtonIcon: const Icon(Icons.send),
               text: 'スワイプして送信',
               textStyle: const TextStyle(fontSize: 18),
-              onSubmit: () => postModel.submit(),
+              onSubmit: () => _submitForm(context, ref),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _resetForm(WidgetRef ref) {
+    ref.read(postProvider).setBumon('ラク単');
+    ref.read(postProvider).setCategory('rigaku');
+    ref.read(postProvider).setGakki('春１');
+    ref.read(postProvider).setHyouka(3);
+    ref.read(postProvider).setKyoukasyo('あり');
+    ref.read(postProvider).setNendo('');
+    ref.read(postProvider).setOmosirosa(3);
+    ref.read(postProvider).setSyusseki('毎日出席を取る');
+    ref.read(postProvider).setTanni('1');
+    ref.read(postProvider).setToriyasusa(3);
+    ref.read(postProvider).setZyugyoukeisiki('オンライン(VOD)');
+  }
+
+  void _showErrorMessages(BuildContext context, List<String> errorMessages) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('エラー'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: errorMessages.map((message) => Text(message)).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+
+  Future<void> _submitForm(BuildContext context, WidgetRef ref) async {
+    final errorMessages = ref.read(postProvider).validateForm();
+    if (errorMessages.isNotEmpty) {
+      _showErrorMessages(context, errorMessages);
+      return;
+    }
+
+    final result = await ref.read(postProvider).submit();
+    if (result) {
+      _showSnackBar(context, '投稿が完了しました。');
+      _resetForm(ref);
+      HapticFeedback.vibrate();
+    } else {
+      _showSnackBar(context, '投稿に失敗しました。');
+    }
   }
 }
