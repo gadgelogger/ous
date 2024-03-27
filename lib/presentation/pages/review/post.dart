@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/domain/post_provider.dart';
-import 'package:ous/presentation/widgets/review/custom_dropdown.dart';
-import 'package:ous/presentation/widgets/review/custom_slider.dart';
-import 'package:ous/presentation/widgets/review/custom_text_field.dart';
-import 'package:ous/presentation/widgets/review/custom_year_picker.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_dropdown.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_slider.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_text_field.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_year_picker.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 import 'package:url_launcher/url_launcher.dart';
 

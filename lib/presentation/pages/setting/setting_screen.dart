@@ -66,10 +66,9 @@ class SettingPage extends ConsumerWidget {
                   SettingsTile.navigation(
                     title: const Text('テーマカラー'),
                     leading: const Icon(Icons.color_lens),
-                    trailing: Container(
-                      width: 24,
-                      height: 24,
-                      color: theme.primarySwatch,
+                    trailing: CircleAvatar(
+                      radius: 12,
+                      backgroundColor: theme.primarySwatch,
                     ),
                     onPressed: (_) async {
                       final selectedColor = await showDialog<MaterialColor>(
