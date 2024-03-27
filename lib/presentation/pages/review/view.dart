@@ -92,7 +92,7 @@ class ReviewCard extends StatelessWidget {
   }
 }
 
-class ReviewView extends ConsumerWidget {
+class ReviewView extends ConsumerStatefulWidget {
   final String gakubu;
   final String title;
 
@@ -100,12 +100,20 @@ class ReviewView extends ConsumerWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final reviewsAsync = ref.watch(reviewsProvider(gakubu));
+  ConsumerState<ReviewView> createState() => _ReviewViewState();
+}
+
+class _ReviewViewState extends ConsumerState<ReviewView> {
+  String _selectedBumon = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final reviewsAsync =
+        ref.watch(reviewsProvider((widget.gakubu, _selectedBumon)));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
       ),
       body: Center(
         child: reviewsAsync.when(
@@ -150,15 +158,103 @@ class ReviewView extends ConsumerWidget {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PostPage()),
-          );
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () => _showFilterModal(context),
+            heroTag: 'filter',
+            child: const Icon(Icons.filter_list),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PostPage()),
+              );
+            },
+            heroTag: 'add',
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
+    );
+  }
+
+  void _showFilterModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    '絞り込み条件',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  RadioListTile<String>(
+                    title: const Text('全て'),
+                    value: '',
+                    groupValue: _selectedBumon,
+                    onChanged: (value) {
+                      setModalState(() {
+                        _selectedBumon = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('ラク単'),
+                    value: 'ラク単',
+                    groupValue: _selectedBumon,
+                    onChanged: (value) {
+                      setModalState(() {
+                        _selectedBumon = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('エグ単'),
+                    value: 'エグ単',
+                    groupValue: _selectedBumon,
+                    onChanged: (value) {
+                      setModalState(() {
+                        _selectedBumon = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text('普通'),
+                    value: '普通',
+                    groupValue: _selectedBumon,
+                    onChanged: (value) {
+                      setModalState(() {
+                        _selectedBumon = value!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('適用'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
