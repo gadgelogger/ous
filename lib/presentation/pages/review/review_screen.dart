@@ -15,6 +15,8 @@ class Review extends StatefulWidget {
 
   @override
   State<Review> createState() => _ReviewState();
+
+  static fromJson(Map<String, dynamic> data) {}
 }
 
 class _ReviewState extends State<Review> {

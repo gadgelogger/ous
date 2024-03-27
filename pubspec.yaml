@@ -57,6 +57,8 @@ dependencies:
   flutter_riverpod: ^2.4.10
   cupertino_icons: ^1.0.6
   shimmer: ^3.0.0
+  expandable: ^5.0.1
+  fl_chart: ^0.66.2
 
 dev_dependencies:
   flutter_test:
