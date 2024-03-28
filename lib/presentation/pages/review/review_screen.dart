@@ -33,11 +33,6 @@ class _ReviewState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavBar(),
-      appBar: AppBar(
-        actions: const [],
-        elevation: 0,
-        title: const Text('講義評価'),
-      ),
       body: PopScope(
         canPop: false,
         child: SingleChildScrollView(
@@ -157,6 +152,10 @@ class _ReviewTopScreenState extends State<ReviewTopScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('講義評価'),
+      ),
+      drawer: const NavBar(),
       body: PageView(
         controller: PageController(initialPage: 0),
         children: const [

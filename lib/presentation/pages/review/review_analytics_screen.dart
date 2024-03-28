@@ -8,9 +8,6 @@ class AnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('講義評価データ分析'),
-      ),
       body: FutureBuilder<Map<String, int>>(
         future: getPostCounts(),
         builder: (context, snapshot) {

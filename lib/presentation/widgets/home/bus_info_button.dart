@@ -21,7 +21,7 @@ class BusInfoButton extends StatelessWidget {
     final busService = BusService();
 
     return SizedBox(
-      width: 164.w, //横幅
+      width: 170.w, //横幅
       height: 50.h, //高さ
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
