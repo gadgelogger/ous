@@ -13,7 +13,7 @@ class MainScreen extends ConsumerWidget {
   final widgets = [
     const Home(),
     const Info(),
-    const Review(),
+    const ReviewTopScreen(),
   ];
   MainScreen({Key? key}) : super(key: key);
 

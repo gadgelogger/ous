@@ -1,25 +1,31 @@
 // Flutter imports:
 
-// Package imports:
-import 'package:firebase_auth/firebase_auth.dart';
 // Flutter imports:
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ous/gen/assets.gen.dart';
-// Project imports:
 import 'package:ous/infrastructure/config/analytics_service.dart';
+import 'package:ous/presentation/pages/review/review_analytics_screen.dart';
 import 'package:ous/presentation/widgets/drawer/drawer.dart';
 import 'package:ous/presentation/widgets/review/review_top_component.dart';
 
-class Review extends StatefulWidget {
-  const Review({Key? key}) : super(key: key);
+class ReviewScreen extends StatefulWidget {
+  const ReviewScreen({Key? key}) : super(key: key);
 
   @override
-  State<Review> createState() => _ReviewState();
+  State<ReviewScreen> createState() => _ReviewState();
 
   static fromJson(Map<String, dynamic> data) {}
 }
 
-class _ReviewState extends State<Review> {
+class ReviewTopScreen extends StatefulWidget {
+  const ReviewTopScreen({super.key});
+
+  @override
+  State<ReviewTopScreen> createState() => _ReviewTopScreenState();
+}
+
+class _ReviewState extends State<ReviewScreen> {
   late FirebaseAuth auth;
   bool showFloatingActionButton = false;
 
@@ -144,5 +150,20 @@ class _ReviewState extends State<Review> {
     }
     // Analytics
     AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.review);
+  }
+}
+
+class _ReviewTopScreenState extends State<ReviewTopScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: PageController(initialPage: 0),
+        children: const [
+          ReviewScreen(),
+          AnalyticsScreen(),
+        ],
+      ),
+    );
   }
 }
