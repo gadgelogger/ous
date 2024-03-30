@@ -1,17 +1,21 @@
 // Flutter imports:
-// Package imports:
-import 'package:firebase_core/firebase_core.dart';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// Project imports:
 import 'package:ous/controller/firebase_provider.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
-
 import 'infrastructure/config/firebase_options.dart';
 
 void main() async {

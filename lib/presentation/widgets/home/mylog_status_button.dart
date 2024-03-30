@@ -1,10 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 // Project imports:
 import 'package:ous/infrastructure/mylog_monitor_api.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class MyLogStatusButton extends StatefulWidget {
   const MyLogStatusButton({Key? key}) : super(key: key);

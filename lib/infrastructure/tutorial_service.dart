@@ -2,10 +2,12 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-// Project imports:
-import 'package:ous/presentation/pages/tutorial_screen.dart';
+
 // Package imports:
 import 'package:shared_preferences/shared_preferences.dart';
+
+// Project imports:
+import 'package:ous/presentation/pages/tutorial_screen.dart';
 
 class TutorialService {
   static Future<void> showTutorialIfNeeded(BuildContext context) async {

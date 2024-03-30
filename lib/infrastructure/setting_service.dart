@@ -1,14 +1,16 @@
 // services/setting_service.dart
 
+// Flutter imports:
+import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// Flutter imports:
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:slide_to_act/slide_to_act.dart';
+
 // Project imports:
 import 'package:ous/presentation/pages/account/login_screen.dart';
-import 'package:slide_to_act/slide_to_act.dart';
 
 class SettingService {
   static Future<void> deleteAccount(BuildContext context) async {

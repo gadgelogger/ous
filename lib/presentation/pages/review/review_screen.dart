@@ -1,8 +1,12 @@
 // Flutter imports:
 
 // Flutter imports:
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:firebase_auth/firebase_auth.dart';
+
+// Project imports:
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/presentation/pages/review/review_analytics_screen.dart';

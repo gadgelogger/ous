@@ -4,18 +4,19 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share/share.dart';
+
+// Project imports:
 import 'package:ous/constant/urls.dart';
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/bus_api.dart';
-// Project imports:
 import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/infrastructure/mylog_monitor_api.dart';
 import 'package:ous/presentation/widgets/home/bus_info_button.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
-import 'package:share/share.dart';
-
 import '../../widgets/drawer/drawer.dart';
 
 @override

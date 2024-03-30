@@ -3,17 +3,19 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 // Package imports:
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:ous/constant/urls.dart';
-import 'package:ous/domain/theme_mode_provider.dart';
-// Project imports:
-import 'package:ous/infrastructure/setting_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+// Project imports:
+import 'package:ous/constant/urls.dart';
+import 'package:ous/domain/theme_mode_provider.dart';
+import 'package:ous/infrastructure/setting_service.dart';
 
 class SettingPage extends ConsumerWidget {
   const SettingPage({super.key});

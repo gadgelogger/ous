@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 // Project imports:
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 

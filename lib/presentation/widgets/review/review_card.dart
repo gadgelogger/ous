@@ -1,4 +1,7 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Project imports:
 import 'package:ous/gen/review_data.dart';
 
 class ReviewCard extends StatelessWidget {
