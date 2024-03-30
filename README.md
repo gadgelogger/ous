@@ -5,169 +5,216 @@ FlutterとFirebaseを用いて制作した楽な講義を検索できる機能�
 
 
 ## このアプリは何？
+### 制作背景
 
-### アプリの概要
-**動画**
-@[tweet](https://twitter.com/i/status/1495295998759153666)
+https://qiita.com/gadgelogger/items/34c69f554a70e2beadc6
 
-**紹介サイト**
-https://ous-unoffical-app.studio.site/
+### 技術について（技術をどう使ったのか？）
 
-
-
-詳細はこちらのサイトに掲載しておりまますが主な機能は以下の2つとなっております。<br>
-- 大学の便利な情報を掲載しております(大学の学生課などの連絡先や地図・掲示板など)
-- 楽に単位が取りやすい講義・取りにくい講義を学生同士が投稿し共有できるSNSのような機能
-
-推したい機能は後者となっております。
+https://qiita.com/gadgelogger/items/17261a796b7f1d09a50f
 
 
-## 制作背景
+## スクリーンショット
 
-制作しようと思った理由は２つあり<br>
-１つ目（比較的真面目な理由）は
-・「大学のポータルサイトがUNIPA(使いにくくて有名)なので、それに代替になるようなor併用して使ってもらうことが出来るようなアプリを作りたかったから」です。
-​
-
-２つ目は（不真面目な理由）はこちらが原因となります。
-![](https://storage.googleapis.com/zenn-user-upload/9ac79c057d37-20231203.png)
-​
-​
-
-開発者が１年の前期に大学をサボりすぎて留年しかけた為、単位を検索出来るようなアプリを作りたかったからですね（最悪な理由ですが）
-
-
-## 使っている技術
-
-投稿者自信はプログラミング経験は皆無であり<br>
-自分「プログラミング何もわかんねぇ・・・・・」<br>
-自分「スマホアプリ作るならSwiftとKotlinってやつがあるんやな。」ぐらいのスキルです。<br><br>
-正直言って、自分には一緒に開発してくれる友達なんか居なかったので、以下の技術を選定しました。
-
-・Flutter（フロントエンド側で使用）<br>
-・Firebase（バックエンド側で使用）
-
-なぜこの技術を選んだかと言うと<br>
-・とりあえず早くリリースに漕ぎ着きたかったから<br>
-が理由となります。
-投稿者には一緒に開発してくれる友達もいないので、1人でSwiftとKotlinを学習するには結構キツい&なるべく早く完成させたかったという理由があってこちらにした感じです。
-
-あとクロスプラットフォームの分野で「情報が多そう・積極的にバグ等の修正が行われてそう」な理由から選んだというのもあります。
-
-
-## アピールしたい機能
-
-ニュース機能|講義検索機能|詳細画面
---|--|--
-![](https://storage.googleapis.com/zenn-user-upload/502703fa5eca-20231203.png)|![](https://storage.googleapis.com/zenn-user-upload/e843f863d007-20231203.png)|![](https://storage.googleapis.com/zenn-user-upload/3ad00f994b2b-20231203.png)
-
-​
-アピールしたい機能は上の３つとなります！<br>
-​
-## ニュース
-![](https://storage.googleapis.com/zenn-user-upload/502703fa5eca-20231203.png)
-
-
-**開発背景**<br>
-
-最初にどの機能を作ろうか・・・・・と思っていた際に取り掛かったのがこの機能です。
-Webページからスクレイピングしてくるだけなので、比較的簡単に実装できるしそんなに難易度は高くなかったです<br>
-​
-
-**使用技術**
-
-主なパッケージはこちらとなります。
-
-https://pub.dev/packages/http
-
-
-**参考にさせて頂いた記事**
-
-https://zenn.dev/maguroburger/articles/flutter_scraping
-​
-## 講義評価投稿機能
-このアプリで１番の目玉機能はこちらです。<br>
-**講義評価投稿**<br>
-なぜこれを作ろうかと思った理由がいくつかあり<br>
-
-１つ目の理由は
-​
-### 開発者が留年しかけたから
-
-が理由となります（先程の画像の通りです）<br><br>
-​
-2つ目の理由は<br>
-
-### 下級生が気軽に情報を得れるようにしたかったから<br>
-です。<br>
-
-大学の情報ってどうしても先輩とかに聞かないと得ることが出来なかったりするのではないのでしょうか。<br>
-そうなると必然的にサークルに入ったり何らかの組織に属さないといけないことが多いと思います。<br>
-ただ世の中にはサークルに入りたくない・友達を作るハードルが高い
-みたいな人も多いと思うので、そういう人や下級生がこのような情報を得ることができれば良いなと思い作りました。
-​
-### そもそも講義の評価って開示するべきでは？
-
-これは開発者の個人的な考えとなりますので申し訳ありません。<br>
-しかしどのような大学にも講義評価アンケートがあると思うのですが、このアンケートの内容を他の人にも見れるようにするべきじゃないのか？と思ってしまったからです。
-​
-​
-### 普通のアプリだと誰も使わないのでインパクトある機能が必要では？
-「大学のポータルサイトの代替になるようなアプリを作りました！」<br>。。。。。と言っても使ってくれる人は少なさそうな感じがしたのも理由1つでもあります。<br>
-***自分「なんか・・・・パンチの聞いた機能入れたいな・・・・・せや！楽単検索できるアプリ需要あるんじゃね？？？？」***<br>
-と思ったのが始まりです。
+#### demo
 
 
 
-**使用技術**
-
-ユーザーが講義評価を投稿するためにアカウント機能を用いるので
-Firebase Authを使用
-データの保管に
-FireStoreを使用しました。
-
-**参考にさせていただいた記事**
-
-まずはFirebaseとは何？のようなレベルだったので<br>
-いくつかの記事を参考にさせていただき、機能を作成していきました。
-
-- https://zenn.dev/kazutxt/books/flutter_practice_introduction/viewer/29_chapter4_overview
 
 
-- https://www.flutter-study.dev/firebase/about-firebase
+# 環境
+-  IDE:Visual Studio Code 1.86.1
+-  Flutter: 3.19.1
+-  Dart: 3.3.0
+-  サポートするプラットフォーム: iOS/Android
+
+# 使用技術とパッケージ
+```
+name: ous
+description: 岡山理科大学の非公式アプリ
+publish_to: 'none' 
+version: 2.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_core: ^2.27.0
+  url_launcher: ^6.1.10
+  http: ^0.13.5
+  html: ^0.15.2
+  flutter_screenutil: ^5.7.0
+  settings_ui: ^2.0.2
+  firebase_auth: ^4.17.8
+  firebase_storage: ^11.1.0
+  image_picker: ^0.8.7+3
+  in_app_review: ^2.0.6
+  google_sign_in: ^6.1.0
+  path: ^1.8.2
+  syncfusion_flutter_pdfviewer: ^20.4.54
+  flutter_inappwebview: 
+    git:
+      url: https://github.com/Estrelio/flutter_inappwebview.git
+      ref: fix-xcode-17  
+  cloud_firestore: ^4.15.8
+  shared_preferences: ^2.1.0
+  syncfusion_flutter_gauges: ^20.4.54
+  package_info_plus: ^3.1.0
+  fluttertoast: ^8.2.1
+  google_fonts: ^4.0.4
+  sign_in_with_apple: ^4.3.0
+  flutter_native_splash: ^2.2.0+1
+  flutter_overboard: ^3.1.1
+  uuid: ^3.0.7
+  share: ^2.0.4
+  map_launcher: ^2.5.0+1
+  rxdart: ^0.27.7
+  share_extend: ^2.0.0
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.0
+  flutter_staggered_animations: ^1.1.1
+  flutter_speed_dial: ^7.0.0
+  carousel_slider: ^4.2.1
+  slide_to_act: ^2.0.1
+  markdown_widget: ^2.2.0
+  dio: ^5.3.3
+  xml: ^6.3.0
+  firebase_remote_config: ^4.3.3
+  firebase_analytics: ^10.7.4
+  device_preview: ^1.1.0
+  uni_links: ^0.5.1
+  flutter_riverpod: ^2.4.10
+  cupertino_icons: ^1.0.6
+  shimmer: ^3.0.0
+  expandable: ^5.0.1
+  fl_chart: ^0.66.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  dependency_validator: any
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.8
+  custom_lint: ^0.6.2
+  riverpod_lint: ^2.3.10
+  freezed: ^2.4.7  
+  json_serializable: ^6.7.1
+  slang_build_runner: ^3.29.0
+  pedantic_mono: any
+  flutter_gen_runner: ^5.4.0
+  import_sorter: ^4.6.0
+  flutter_lints: ^2.0.1
+  
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/images/
+  - assets/icon/
+
+flutter_native_splash:
+  color: '#ffffff'
+  image: 'assets/images/icon.png'
+  color_dark: '#202124'
+  image_dark: 'assets/icon/icon_dark.png'
+  fullscreen: true
+  android_12:
+    icon_background_color: '#ffffff'
+    image: 'assets/icon/icon.png'
+    icon_background_color_dark: '#202124'
+    image_dark: 'assets/icon/icon_dark.png'
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+
+
+```
 
 
 
-## 開発してみて
+# フォルダ構成
+```
+├── lib
+│   ├── constant
+│   │   └── urls.dart
+│   ├── controller
+│   │   ├── firebase_provider.dart
+│   │   └── firebase_provider.g.dart
+│   ├── domain
+│   │   ├── converters
+│   │   ├── post_provider.dart
+│   │   ├── review_provider.dart
+│   │   ├── share_preferences_instance.dart
+│   │   ├── theme_mode_provider.dart
+│   │   └── user_providers.dart
+│   ├── gen
+│   │   ├── assets.gen.dart
+│   │   ├── review_data.dart
+│   │   ├── review_data.freezed.dart
+│   │   ├── review_data.g.dart
+│   │   ├── user_data.dart
+│   │   ├── user_data.freezed.dart
+│   │   └── user_data.g.dart
+│   ├── infrastructure
+│   │   ├── account_image_uploader_service.dart
+│   │   ├── account_name_updater_service.dart
+│   │   ├── bus_api.dart
+│   │   ├── config
+│   │   ├── login_auth_service.dart
+│   │   ├── mylog_monitor_api.dart
+│   │   ├── setting_service.dart
+│   │   ├── tutorial_service.dart
+│   │   └── version_check_service.dart
+│   ├── main.dart
+│   ├── presentation
+│   │   ├── pages
+│   │   ├── res
+│   │   └── widgets
+│   └── utils
+│       └── extensions
 
-![](https://storage.googleapis.com/zenn-user-upload/0cb9b0628c27-20231203.png)
+```
+# ビルド手順（※メモ）
 
-予想以上に学生からのウケが良くて驚いています。
-自分はコミュニケーション力があまり無く、最初はX（旧Twitter））からガンガン宣伝していったり・自分の所属しているサークルなどで広めたりしていました。<br>
-そして現在は約1000人の方から利用して頂いており、本当に感謝しかありません<br><br>
-​
-そして何より1番感動するのは、実際に開発者が学内を歩いていて<br>
-***他の学生「履修登録どうする？どの科目が楽だろ？」***<br>
-と自分のアプリを使ってくれていた現場を目撃しました。<br>
-​
-***自分「自分が作ったアプリがこのような形で使われているのか。。。すごいな。。。」***<br>
-と
+※APIKeyなどの設定が必要なため現在ビルドできません。
 
-## 今後やりたいこと（今後の目標）
-
-
-様々な方々のお陰でリリースまで行うことができましたが自分自身、作ってそのまま終わりのような感じなのは嫌いなので、Xやアプリのレビュー等で機能リクエストを受けています。
-その中で最も需要が高い機能を今後実装しようと考えています。
+- リポジトリのクローン
+```
+$ git clone https://github.com/gadgelogger/ous.git
+```
+- Dartのインストール
+```
+$ brew tap dart-lang/dart
+$ brew install dart
+```
 
 
-またユーザー数が最初の目標の1000人を突破したので、次は2000人を目指したい所です。
-現在3年生であり、卒業まであと1年あるので自分のやりたい・ユーザーが求めている機能を全力で実装していければと思っています。
+- ディレクトリへ移動
+```
+$ cd ous
+```
 
-## 技術的に改善したいところ
-以下のようなことを今後していきたいなと思っております。
-- コードが肥大化しているのでコンポーネント分けなどをしたい
-- 使用しているパッケージが多すぎるので整理整頓を行う
-- 状態管理がStateなのでFlutterでよく使用されているRiverpodなどを導入していきたい
-- もっとUIとUXを良くしていきたい
-- 現在Swift等ネイティブの分野も勉強しているので、iOSのWidgetKitなどの対応をしてみたい
+- 依存関係を読み込む
+```
+$ flutter pub get
+```
+
+- freezedなどのコード生成
+```
+$ dart run build_runner build -d
+```
+
+- ビルドラン
+```
+$ flutter run
+```
+
+
+
+# 帰属表示
+アプリのアイコンには[Lordicon](https://lordicon.com/)を使用しました。
 
