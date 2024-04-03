@@ -146,6 +146,11 @@ class FloatingButton extends StatelessWidget {
           },
         ),
         SpeedDialChild(
+          child: const Icon(Icons.people),
+          label: "自分の投稿",
+          onTap: () {},
+        ),
+        SpeedDialChild(
           child: const Icon(Icons.info_outline),
           label: "教務ガイド（履修削除はこちら）",
           onTap: () async {

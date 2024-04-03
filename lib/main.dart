@@ -1,22 +1,20 @@
 // Flutter imports:
-
-// Flutter imports:
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 // Project imports:
 import 'package:ous/controller/firebase_provider.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
+
 import 'infrastructure/config/firebase_options.dart';
+import 'infrastructure/version_check_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +26,18 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
   runApp(
-    const ProviderScope(
+    ProviderScope(
       child: MainApp(),
     ),
   );
 }
 
 class MainApp extends ConsumerWidget {
-  const MainApp({super.key});
+  final VersionCheckService _versionCheckService = VersionCheckService();
+
+  MainApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,26 +65,61 @@ class MainApp extends ConsumerWidget {
           brightness: Brightness.dark,
         ),
         themeMode: theme.mode,
-        home: authState.when(
-          data: (user) {
-            if (user == null) {
-              return const Login();
-            } else {
-              return MainScreen();
-            }
-          },
-          loading: () => const Scaffold(
-            body: Center(
+        home: Scaffold(
+          body: authState.when(
+            data: (user) {
+              if (user == null) {
+                return const Login();
+              } else {
+                return VersionCheckScreen(
+                  child: MainScreen(),
+                );
+              }
+            },
+            loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-          ),
-          error: (error, stackTrace) => const Scaffold(
-            body: Center(
+            error: (error, stackTrace) => const Center(
               child: Text('Error'),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
+
+class VersionCheckScreen extends StatelessWidget {
+  final Widget child;
+
+  final VersionCheckService _versionCheckService = VersionCheckService();
+
+  VersionCheckScreen({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _versionCheckService.checkVersion(context),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SplashScreen();
+        } else {
+          return child;
+        }
+      },
     );
   }
 }
