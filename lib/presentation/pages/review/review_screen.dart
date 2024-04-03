@@ -1,11 +1,9 @@
 // Flutter imports:
 
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:firebase_auth/firebase_auth.dart';
-
+// Flutter imports:
+import 'package:flutter/material.dart';
 // Project imports:
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/config/analytics_service.dart';
@@ -111,7 +109,6 @@ class _ReviewState extends State<ReviewScreen> {
                 '共通科目はこちら',
                 style: TextStyle(
                   fontSize: 30,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
 

@@ -2,14 +2,12 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-
 // Project imports:
 import 'package:ous/gen/review_data.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 // ... import statements ...
 
@@ -30,6 +28,7 @@ class DetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _outdatedPostInfo(),
               _buildTextSection(context, '講義名', review.zyugyoumei),
               _buildTextSection(context, '講師名', review.kousimei),
               _buildTextSection(context, '年度', review.nenndo),
@@ -208,5 +207,36 @@ class DetailScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _outdatedPostInfo() {
+    final postDate = review.date;
+    final currentDate = DateTime.now();
+    final difference = currentDate.difference(postDate!);
+    final years = difference.inDays ~/ 365;
+
+    if (years >= 1) {
+      return Container(
+        height: 70,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.red[100],
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              const Icon(Icons.info_outline),
+              Text(
+                'この投稿は投稿日から$years年以上経過しています。\n情報が古い可能性があります。',
+              ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }

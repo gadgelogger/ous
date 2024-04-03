@@ -2,17 +2,15 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 // Project imports:
 import 'package:ous/presentation/pages/review/gpa.dart';
 import 'package:ous/presentation/pages/review/post.dart';
 import 'package:ous/presentation/pages/review/sabori.dart';
 import 'package:ous/presentation/pages/review/view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
