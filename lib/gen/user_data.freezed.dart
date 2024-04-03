@@ -24,8 +24,11 @@ mixin _$UserData {
   String get email => throw _privateConstructorUsedError;
   String get uid => throw _privateConstructorUsedError;
   String? get photoURL => throw _privateConstructorUsedError;
+  int get reviewCount => throw _privateConstructorUsedError;
   @DateTimeTimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @DateTimeTimestampConverter()
+  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +46,9 @@ abstract class $UserDataCopyWith<$Res> {
       String email,
       String uid,
       String? photoURL,
-      @DateTimeTimestampConverter() DateTime createdAt});
+      int reviewCount,
+      @DateTimeTimestampConverter() DateTime createdAt,
+      @DateTimeTimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -63,7 +68,9 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? email = null,
     Object? uid = null,
     Object? photoURL = freezed,
+    Object? reviewCount = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       displayName: null == displayName
@@ -82,9 +89,17 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.photoURL
           : photoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      reviewCount: null == reviewCount
+          ? _value.reviewCount
+          : reviewCount // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ) as $Val);
   }
@@ -103,7 +118,9 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String email,
       String uid,
       String? photoURL,
-      @DateTimeTimestampConverter() DateTime createdAt});
+      int reviewCount,
+      @DateTimeTimestampConverter() DateTime createdAt,
+      @DateTimeTimestampConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -121,7 +138,9 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? email = null,
     Object? uid = null,
     Object? photoURL = freezed,
+    Object? reviewCount = null,
     Object? createdAt = null,
+    Object? updatedAt = null,
   }) {
     return _then(_$UserDataImpl(
       displayName: null == displayName
@@ -140,9 +159,17 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.photoURL
           : photoURL // ignore: cast_nullable_to_non_nullable
               as String?,
+      reviewCount: null == reviewCount
+          ? _value.reviewCount
+          : reviewCount // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      updatedAt: null == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
   }
@@ -156,7 +183,9 @@ class _$UserDataImpl implements _UserData {
       required this.email,
       required this.uid,
       this.photoURL,
-      @DateTimeTimestampConverter() required this.createdAt});
+      this.reviewCount = 0,
+      @DateTimeTimestampConverter() required this.createdAt,
+      @DateTimeTimestampConverter() required this.updatedAt});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
@@ -170,12 +199,18 @@ class _$UserDataImpl implements _UserData {
   @override
   final String? photoURL;
   @override
+  @JsonKey()
+  final int reviewCount;
+  @override
   @DateTimeTimestampConverter()
   final DateTime createdAt;
+  @override
+  @DateTimeTimestampConverter()
+  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'UserData(displayName: $displayName, email: $email, uid: $uid, photoURL: $photoURL, createdAt: $createdAt)';
+    return 'UserData(displayName: $displayName, email: $email, uid: $uid, photoURL: $photoURL, reviewCount: $reviewCount, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -189,14 +224,18 @@ class _$UserDataImpl implements _UserData {
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.photoURL, photoURL) ||
                 other.photoURL == photoURL) &&
+            (identical(other.reviewCount, reviewCount) ||
+                other.reviewCount == reviewCount) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, displayName, email, uid, photoURL, createdAt);
+  int get hashCode => Object.hash(runtimeType, displayName, email, uid,
+      photoURL, reviewCount, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -218,7 +257,9 @@ abstract class _UserData implements UserData {
           required final String email,
           required final String uid,
           final String? photoURL,
-          @DateTimeTimestampConverter() required final DateTime createdAt}) =
+          final int reviewCount,
+          @DateTimeTimestampConverter() required final DateTime createdAt,
+          @DateTimeTimestampConverter() required final DateTime updatedAt}) =
       _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
@@ -233,8 +274,13 @@ abstract class _UserData implements UserData {
   @override
   String? get photoURL;
   @override
+  int get reviewCount;
+  @override
   @DateTimeTimestampConverter()
   DateTime get createdAt;
+  @override
+  @DateTimeTimestampConverter()
+  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>

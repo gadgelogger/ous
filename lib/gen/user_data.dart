@@ -2,7 +2,6 @@
 
 // Package imports:
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 // Project imports:
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 
@@ -16,7 +15,9 @@ class UserData with _$UserData {
     required String email,
     required String uid,
     String? photoURL,
+    @Default(0) int reviewCount,
     @DateTimeTimestampConverter() required DateTime createdAt,
+    @DateTimeTimestampConverter() required DateTime updatedAt,
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) =>
