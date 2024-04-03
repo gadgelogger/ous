@@ -1,10 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_overboard/flutter_overboard.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 // Project imports:
 import 'package:ous/presentation/pages/account/login_screen.dart';
 
@@ -30,7 +28,7 @@ class Tutorial extends StatelessWidget {
             height: 10.h,
           ),
           Text(
-            "入りたてほやほやの新入生と\n単位ギリギリの人が\n単位を取れますように。",
+            "入りたてほやほやの新入生と\n進級判定ギリギリの人が\n単位を取れますように。",
             style: TextStyle(
               color: Colors.white,
               fontSize: 16.sp,

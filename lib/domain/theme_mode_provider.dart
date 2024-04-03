@@ -2,10 +2,8 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:ous/domain/share_preferences_instance.dart';
 
@@ -29,11 +27,11 @@ class ThemeNotifier extends StateNotifier<AppTheme> {
       : super(
           AppTheme(
             mode: ThemeMode.system,
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.lightGreen,
           ),
         ) {
     final themeMode = _loadThemeMode() ?? ThemeMode.system;
-    final primarySwatch = _loadPrimarySwatch() ?? Colors.blue;
+    final primarySwatch = _loadPrimarySwatch() ?? Colors.lightGreen;
     state = AppTheme(mode: themeMode, primarySwatch: primarySwatch);
   }
 
