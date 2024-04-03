@@ -1,9 +1,8 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -96,7 +95,10 @@ class PostModel extends ChangeNotifier {
     final postId = const Uuid().v4();
 
     await FirebaseFirestore.instance.collection(category).doc(postId).set({
-      'userId': uid,
+      'ID': postId,
+      'accountemail': user?.email,
+      'accountname': user?.displayName,
+      'accountuid': uid,
       'bumon': bumon,
       'gakki': gakki,
       'tannisuu': tanni,

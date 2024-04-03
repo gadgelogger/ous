@@ -1,15 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:url_launcher/url_launcher.dart';
-
 // Project imports:
 import 'package:ous/presentation/pages/Nav/call_screen.dart';
 import 'package:ous/presentation/pages/Nav/link_screen.dart';
-import 'package:ous/presentation/pages/Nav/tcp_screen.dart';
 import 'package:ous/presentation/pages/setting/setting_screen.dart';
 import 'package:ous/presentation/widgets/drawer/drawer_user_widget.dart';
+// Package imports:
+import 'package:url_launcher/url_launcher.dart';
 
 // URL Constants
 const String calendarUrl = 'https://www.ous.ac.jp/campuslife/academic_calenda/';
@@ -41,11 +38,6 @@ class NavBar extends StatelessWidget {
               mylogUrl,
               mode: LaunchMode.externalApplication,
             ),
-          ),
-          _buildMenuItem(
-            Icons.public_outlined,
-            'TCP',
-            () => _navigateToPage(context, const Tcp()),
           ),
           _buildMenuItem(
             Icons.book_outlined,

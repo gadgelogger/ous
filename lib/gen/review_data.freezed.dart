@@ -20,7 +20,7 @@ Review _$ReviewFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Review {
-  String? get id => throw _privateConstructorUsedError;
+  String? get ID => throw _privateConstructorUsedError;
   String? get accountemail => throw _privateConstructorUsedError;
   String? get accountname => throw _privateConstructorUsedError;
   String? get accountuid => throw _privateConstructorUsedError;
@@ -55,7 +55,7 @@ abstract class $ReviewCopyWith<$Res> {
       _$ReviewCopyWithImpl<$Res, Review>;
   @useResult
   $Res call(
-      {String? id,
+      {String? ID,
       String? accountemail,
       String? accountname,
       String? accountuid,
@@ -92,7 +92,7 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? ID = freezed,
     Object? accountemail = freezed,
     Object? accountname = freezed,
     Object? accountuid = freezed,
@@ -116,9 +116,9 @@ class _$ReviewCopyWithImpl<$Res, $Val extends Review>
     Object? zyugyoumei = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      ID: freezed == ID
+          ? _value.ID
+          : ID // ignore: cast_nullable_to_non_nullable
               as String?,
       accountemail: freezed == accountemail
           ? _value.accountemail
@@ -216,7 +216,7 @@ abstract class _$$ReviewImplCopyWith<$Res> implements $ReviewCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String? ID,
       String? accountemail,
       String? accountname,
       String? accountuid,
@@ -251,7 +251,7 @@ class __$$ReviewImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? ID = freezed,
     Object? accountemail = freezed,
     Object? accountname = freezed,
     Object? accountuid = freezed,
@@ -275,9 +275,9 @@ class __$$ReviewImplCopyWithImpl<$Res>
     Object? zyugyoumei = freezed,
   }) {
     return _then(_$ReviewImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      ID: freezed == ID
+          ? _value.ID
+          : ID // ignore: cast_nullable_to_non_nullable
               as String?,
       accountemail: freezed == accountemail
           ? _value.accountemail
@@ -371,7 +371,7 @@ class __$$ReviewImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ReviewImpl implements _Review {
   const _$ReviewImpl(
-      {required this.id,
+      {required this.ID,
       required this.accountemail,
       required this.accountname,
       required this.accountuid,
@@ -398,7 +398,7 @@ class _$ReviewImpl implements _Review {
       _$$ReviewImplFromJson(json);
 
   @override
-  final String? id;
+  final String? ID;
   @override
   final String? accountemail;
   @override
@@ -445,7 +445,7 @@ class _$ReviewImpl implements _Review {
 
   @override
   String toString() {
-    return 'Review(id: $id, accountemail: $accountemail, accountname: $accountname, accountuid: $accountuid, bumon: $bumon, date: $date, gakki: $gakki, komento: $komento, kousimei: $kousimei, kyoukasyo: $kyoukasyo, name: $name, nenndo: $nenndo, omosirosa: $omosirosa, senden: $senden, sougouhyouka: $sougouhyouka, syusseki: $syusseki, tannisuu: $tannisuu, tesutokeikou: $tesutokeikou, tesutokeisiki: $tesutokeisiki, toriyasusa: $toriyasusa, zyugyoukeisiki: $zyugyoukeisiki, zyugyoumei: $zyugyoumei)';
+    return 'Review(ID: $ID, accountemail: $accountemail, accountname: $accountname, accountuid: $accountuid, bumon: $bumon, date: $date, gakki: $gakki, komento: $komento, kousimei: $kousimei, kyoukasyo: $kyoukasyo, name: $name, nenndo: $nenndo, omosirosa: $omosirosa, senden: $senden, sougouhyouka: $sougouhyouka, syusseki: $syusseki, tannisuu: $tannisuu, tesutokeikou: $tesutokeikou, tesutokeisiki: $tesutokeisiki, toriyasusa: $toriyasusa, zyugyoukeisiki: $zyugyoukeisiki, zyugyoumei: $zyugyoumei)';
   }
 
   @override
@@ -453,7 +453,7 @@ class _$ReviewImpl implements _Review {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReviewImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.ID, ID) || other.ID == ID) &&
             (identical(other.accountemail, accountemail) ||
                 other.accountemail == accountemail) &&
             (identical(other.accountname, accountname) ||
@@ -493,7 +493,7 @@ class _$ReviewImpl implements _Review {
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
-        id,
+        ID,
         accountemail,
         accountname,
         accountuid,
@@ -533,7 +533,7 @@ class _$ReviewImpl implements _Review {
 
 abstract class _Review implements Review {
   const factory _Review(
-      {required final String? id,
+      {required final String? ID,
       required final String? accountemail,
       required final String? accountname,
       required final String? accountuid,
@@ -559,7 +559,7 @@ abstract class _Review implements Review {
   factory _Review.fromJson(Map<String, dynamic> json) = _$ReviewImpl.fromJson;
 
   @override
-  String? get id;
+  String? get ID;
   @override
   String? get accountemail;
   @override

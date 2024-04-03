@@ -1,6 +1,5 @@
 // Package imports:
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 // Project imports:
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 
@@ -10,7 +9,7 @@ part 'review_data.g.dart';
 @freezed
 class Review with _$Review {
   const factory Review({
-    required String? id,
+    required String? ID,
     required String? accountemail,
     required String? accountname,
     required String? accountuid,

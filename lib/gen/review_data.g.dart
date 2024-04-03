@@ -7,7 +7,7 @@ part of 'review_data.dart';
 // **************************************************************************
 
 _$ReviewImpl _$$ReviewImplFromJson(Map<String, dynamic> json) => _$ReviewImpl(
-      id: json['id'] as String?,
+      ID: json['ID'] as String?,
       accountemail: json['accountemail'] as String?,
       accountname: json['accountname'] as String?,
       accountuid: json['accountuid'] as String?,
@@ -34,7 +34,7 @@ _$ReviewImpl _$$ReviewImplFromJson(Map<String, dynamic> json) => _$ReviewImpl(
 
 Map<String, dynamic> _$$ReviewImplToJson(_$ReviewImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'ID': instance.ID,
       'accountemail': instance.accountemail,
       'accountname': instance.accountname,
       'accountuid': instance.accountuid,

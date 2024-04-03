@@ -9,18 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.27.0
+  firebase_core: ^2.28.0
   url_launcher: ^6.1.10
   http: ^0.13.5
   flutter_screenutil: ^5.7.0
   settings_ui: ^2.0.2
-  firebase_auth: ^4.17.8
-  firebase_storage: ^11.1.0
+  firebase_auth: ^4.19.0
+  firebase_storage: ^11.7.0
   image_picker: ^0.8.7+3
   in_app_review: ^2.0.6
   google_sign_in: ^6.1.0
   path: ^1.8.2
-  cloud_firestore: ^4.15.8
+  cloud_firestore: ^4.16.0
   shared_preferences: ^2.1.0
   syncfusion_flutter_gauges: ^20.4.54
   package_info_plus: ^3.1.0
@@ -38,13 +38,13 @@ dependencies:
   slide_to_act: ^2.0.1
   markdown_widget: ^2.2.0
   dio: ^5.3.3
-  firebase_remote_config: ^4.3.3
+  firebase_remote_config: ^4.4.0
   firebase_analytics: ^10.7.4
   flutter_riverpod: ^2.4.10
   cupertino_icons: ^1.0.6
   shimmer: ^3.0.0
   fl_chart: ^0.66.2
-  flutter_inappwebview: ^6.0.0
+  share_plus: ^8.0.2
 
 dev_dependencies:
   flutter_test:

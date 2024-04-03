@@ -8,16 +8,20 @@ import 'package:intl/intl.dart';
 import 'package:ous/gen/review_data.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 // ... import statements ...
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final Review review;
-
-  const DetailScreen({Key? key, required this.review}) : super(key: key);
+  const DetailScreen({super.key, required this.review});
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  @override
   Widget build(BuildContext context) {
+    final review = widget.review;
     return Scaffold(
       appBar: AppBar(
         title: Text(review.zyugyoumei ?? '不明'),
@@ -210,6 +214,7 @@ class DetailScreen extends StatelessWidget {
   }
 
   Widget _outdatedPostInfo() {
+    final review = widget.review;
     final postDate = review.date;
     final currentDate = DateTime.now();
     final difference = currentDate.difference(postDate!);
