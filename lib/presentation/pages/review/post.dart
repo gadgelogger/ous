@@ -1,18 +1,16 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:slide_to_act/slide_to_act.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 // Project imports:
 import 'package:ous/domain/post_provider.dart';
 import 'package:ous/presentation/widgets/review/Post/custom_dropdown.dart';
 import 'package:ous/presentation/widgets/review/Post/custom_slider.dart';
 import 'package:ous/presentation/widgets/review/Post/custom_text_field.dart';
 import 'package:ous/presentation/widgets/review/Post/custom_year_picker.dart';
+import 'package:slide_to_act/slide_to_act.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // 投稿ページ
 class PostPage extends ConsumerWidget {
@@ -108,6 +106,7 @@ class PostPage extends ConsumerWidget {
               items: const [
                 MapEntry('1', '1'),
                 MapEntry('2', '2'),
+                MapEntry('3', '3'),
               ],
               onChanged: (value) => postModel.setTanni(value!),
             ),

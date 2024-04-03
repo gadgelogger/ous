@@ -71,6 +71,7 @@ void showFilterModal(
                     DropdownMenuItem(value: '', child: Text('単位数')),
                     DropdownMenuItem(value: '1', child: Text('1')),
                     DropdownMenuItem(value: '2', child: Text('2')),
+                    DropdownMenuItem(value: '3', child: Text('3')),
                   ],
                   onChanged: (value) {
                     setModalState(() {
