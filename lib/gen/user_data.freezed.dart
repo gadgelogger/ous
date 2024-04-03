@@ -27,8 +27,6 @@ mixin _$UserData {
   int get reviewCount => throw _privateConstructorUsedError;
   @DateTimeTimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
-  @DateTimeTimestampConverter()
-  DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,8 +45,7 @@ abstract class $UserDataCopyWith<$Res> {
       String uid,
       String? photoURL,
       int reviewCount,
-      @DateTimeTimestampConverter() DateTime createdAt,
-      @DateTimeTimestampConverter() DateTime updatedAt});
+      @DateTimeTimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -70,7 +67,6 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? photoURL = freezed,
     Object? reviewCount = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
       displayName: null == displayName
@@ -97,10 +93,6 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ) as $Val);
   }
 }
@@ -119,8 +111,7 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String uid,
       String? photoURL,
       int reviewCount,
-      @DateTimeTimestampConverter() DateTime createdAt,
-      @DateTimeTimestampConverter() DateTime updatedAt});
+      @DateTimeTimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -140,7 +131,6 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? photoURL = freezed,
     Object? reviewCount = null,
     Object? createdAt = null,
-    Object? updatedAt = null,
   }) {
     return _then(_$UserDataImpl(
       displayName: null == displayName
@@ -167,10 +157,6 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
     ));
   }
 }
@@ -184,8 +170,7 @@ class _$UserDataImpl implements _UserData {
       required this.uid,
       this.photoURL,
       this.reviewCount = 0,
-      @DateTimeTimestampConverter() required this.createdAt,
-      @DateTimeTimestampConverter() required this.updatedAt});
+      @DateTimeTimestampConverter() required this.createdAt});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
@@ -204,13 +189,10 @@ class _$UserDataImpl implements _UserData {
   @override
   @DateTimeTimestampConverter()
   final DateTime createdAt;
-  @override
-  @DateTimeTimestampConverter()
-  final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'UserData(displayName: $displayName, email: $email, uid: $uid, photoURL: $photoURL, reviewCount: $reviewCount, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'UserData(displayName: $displayName, email: $email, uid: $uid, photoURL: $photoURL, reviewCount: $reviewCount, createdAt: $createdAt)';
   }
 
   @override
@@ -227,15 +209,13 @@ class _$UserDataImpl implements _UserData {
             (identical(other.reviewCount, reviewCount) ||
                 other.reviewCount == reviewCount) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, displayName, email, uid,
-      photoURL, reviewCount, createdAt, updatedAt);
+  int get hashCode => Object.hash(
+      runtimeType, displayName, email, uid, photoURL, reviewCount, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -258,8 +238,7 @@ abstract class _UserData implements UserData {
           required final String uid,
           final String? photoURL,
           final int reviewCount,
-          @DateTimeTimestampConverter() required final DateTime createdAt,
-          @DateTimeTimestampConverter() required final DateTime updatedAt}) =
+          @DateTimeTimestampConverter() required final DateTime createdAt}) =
       _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
@@ -278,9 +257,6 @@ abstract class _UserData implements UserData {
   @override
   @DateTimeTimestampConverter()
   DateTime get createdAt;
-  @override
-  @DateTimeTimestampConverter()
-  DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)
   _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>

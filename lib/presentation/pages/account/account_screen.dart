@@ -1,12 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:ous/domain/user_providers.dart';
 import 'package:ous/gen/assets.gen.dart';
+import 'package:ous/presentation/pages/account/account_screen_edit.dart';
 
 class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
@@ -21,7 +20,7 @@ class AccountScreen extends ConsumerWidget {
         ),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CircleAvatar(
                 radius: 100,
@@ -40,9 +39,15 @@ class AccountScreen extends ConsumerWidget {
               const SizedBox(height: 20),
               const SizedBox(height: 20),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => MyPageEdit(),
+                    ),
+                  );
+                },
                 child: const Text(
-                  'Edit',
+                  '編集',
                   style: TextStyle(fontSize: 20, color: Colors.green),
                 ),
               ),

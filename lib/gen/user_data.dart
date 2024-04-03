@@ -17,7 +17,6 @@ class UserData with _$UserData {
     String? photoURL,
     @Default(0) int reviewCount,
     @DateTimeTimestampConverter() required DateTime createdAt,
-    @DateTimeTimestampConverter() required DateTime updatedAt,
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) =>
