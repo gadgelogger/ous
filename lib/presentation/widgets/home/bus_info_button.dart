@@ -1,14 +1,12 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ous/domain/bus_service_provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-// Project imports:
-import 'package:ous/infrastructure/bus_api.dart';
-
-class BusInfoButton extends StatelessWidget {
+class BusInfoButton extends ConsumerWidget {
   final String label;
   final String url;
 
@@ -19,12 +17,12 @@ class BusInfoButton extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final busService = BusService();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final busInfoState = ref.watch(busServiceProvider);
 
     return SizedBox(
-      width: 170.w, //横幅
-      height: 50.h, //高さ
+      width: 170.w,
+      height: 70.h,
       child: FilledButton.tonal(
         style: FilledButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -32,27 +30,27 @@ class BusInfoButton extends StatelessWidget {
           ),
         ),
         onPressed: () => launchUrlString(url),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FittedBox(
-              child: Text(
-                label,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            FutureBuilder<String>(
-              future: busService.fetchBusApproachCaption(url),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!);
-                } else if (snapshot.hasError) {
-                  return const Text("エラー");
-                }
-                return const LinearProgressIndicator();
-              },
-            ),
-          ],
+        child: busInfoState.when(
+          data: (busInfo) {
+            final info = busInfo[url] ?? '情報なし';
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: Text(
+                    label,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Text(
+                  info,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            );
+          },
+          loading: () => const CircularProgressIndicator(),
+          error: (_, __) => const Text('エラー'),
         ),
       ),
     );
