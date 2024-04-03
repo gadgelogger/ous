@@ -133,6 +133,20 @@ void showFilterModal(
                   },
                 ),
                 const SizedBox(height: 16),
+                ElevatedButton(
+                  child: const Text('リセット'),
+                  onPressed: () {
+                    setModalState(() {
+                      setSelectedBumon('');
+                      setSelectedGakki('');
+                      setSelectedTanni('');
+                      setSelectedZyugyoukeisiki('');
+                      setSelectedSyusseki('');
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                const SizedBox(height: 16),
               ],
             ),
           );
