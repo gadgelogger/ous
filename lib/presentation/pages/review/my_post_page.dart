@@ -17,7 +17,29 @@ class UserPostsScreen extends ConsumerWidget {
       body: reviewAsyncValue.when(
         data: (userPosts) {
           if (userPosts.isEmpty) {
-            return const Center(child: Text('投稿がありません'));
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: Image(
+                      image: AssetImage('assets/icon/found.gif'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    '投稿した講義がありません',
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
           }
 
           return ListView.builder(

@@ -6,10 +6,8 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 // Project imports:
 import 'package:ous/infrastructure/login_auth_service.dart';
 import 'package:ous/infrastructure/tutorial_service.dart';
@@ -31,31 +29,36 @@ class LoginState extends State<Login> {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const HelloOus(),
-              Container(
-                padding: const EdgeInsets.only(
-                  top: 200,
-                  left: 20,
-                  right: 20,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    GoogleSignInButton(authService: _authService),
-                    SizedBox(height: 20.h),
-                    if (!kIsWeb && Platform.isIOS)
-                      AppleSignInButton(authService: _authService),
-                    SizedBox(height: 20.h),
-                    GuestSignInButton(authService: _authService),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const HelloOus(),
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: 200,
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        GoogleSignInButton(authService: _authService),
+                        SizedBox(height: 20.h),
+                        if (!kIsWeb && Platform.isIOS)
+                          AppleSignInButton(authService: _authService),
+                        SizedBox(height: 20.h),
+                        GuestSignInButton(authService: _authService),
+                        SizedBox(height: 20.h),
+                        const PrivacyPolicyButton(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
