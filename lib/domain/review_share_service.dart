@@ -36,8 +36,8 @@ https://ous-unoffical-app.studio.site/
   ''';
 
     await Share.shareFiles(
-      subject: '講義評価をシェアします',
       [file.path],
+      subject: '講義評価をシェアします',
       text: shareText,
     );
   }

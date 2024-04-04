@@ -100,6 +100,12 @@ class AccountScreen extends ConsumerWidget {
                                     backgroundImage: userData?.photoURL != ''
                                         ? NetworkImage(userData?.photoURL ?? '')
                                         : null,
+                                    child: userData?.photoURL == ''
+                                        ? const Icon(
+                                            Icons.person,
+                                            size: 50,
+                                          )
+                                        : null,
                                   ),
                                 ),
                                 Positioned(

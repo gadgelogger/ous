@@ -4,7 +4,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:ous/gen/user_data.dart';
 
@@ -13,6 +12,8 @@ final userStreamProvider = StreamProvider<UserData?>((ref) {
     if (user == null) {
       return null;
     }
+
+    await Future.delayed(const Duration(seconds: 2)); // Add a 2-second delay
 
     final snapshot = await FirebaseFirestore.instance
         .collection('users')

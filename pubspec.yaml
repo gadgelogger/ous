@@ -35,6 +35,7 @@ dependencies:
   intl: ^0.18.0
   flutter_staggered_animations: ^1.1.1
   flutter_speed_dial: ^7.0.0
+  flutter_launcher_icons: ^0.13.1
   slide_to_act: ^2.0.1
   markdown_widget: ^2.2.0
   dio: ^5.3.3
@@ -73,7 +74,7 @@ flutter:
 
 flutter_native_splash:
   color: '#ffffff'
-  image: 'assets/images/icon.png'
+  image: 'assets/icon/icon.png'
   color_dark: '#202124'
   image_dark: 'assets/icon/icon_dark.png'
   fullscreen: true
@@ -83,7 +84,7 @@ flutter_native_splash:
     icon_background_color_dark: '#202124'
     image_dark: 'assets/icon/icon_dark.png'
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon/icon.png"
