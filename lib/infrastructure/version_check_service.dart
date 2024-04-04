@@ -26,73 +26,80 @@ class VersionCheckService {
       if (currentVersion != latestVersion) {
         if (!context.mounted) return;
 
-        _showUpdateDialog(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('アプリのアップデートがあるぞ！'),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: '見てくれ',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text(
+                        "アップデートのお知らせ",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      content: const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image(
+                              image: AssetImage('assets/icon/rocket.gif'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Text(
+                            'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。',
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        // ボタン領域
+                        ElevatedButton(
+                          child: const Text("後で"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        if (!kIsWeb && Platform.isIOS)
+                          ElevatedButton(
+                            child: const Text("おっけー"),
+                            onPressed: () {
+                              launchUrlString(
+                                'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931',
+                              );
+                            },
+                          ),
+                        if (!kIsWeb && Platform.isAndroid)
+                          ElevatedButton(
+                            child: const Text("おっけー"),
+                            onPressed: () {
+                              launchUrlString(
+                                'https://play.google.com/store/apps/details?id=com.ous.unoffical.app',
+                              );
+                            },
+                          ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        );
       }
     } catch (e) {
       debugPrint('Version check failed: $e');
     }
-  }
-
-  void _showUpdateDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(
-            "アップデートのお知らせ",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          content: const Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Image(
-                  image: AssetImage('assets/icon/rocket.gif'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Text(
-                'アプリのアップデートがあります！\n新機能などが追加されたので\nアップデートをよろしくお願いします。',
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            // ボタン領域
-            ElevatedButton(
-              child: const Text("後で"),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            if (!kIsWeb && Platform.isIOS)
-              ElevatedButton(
-                child: const Text("おっけー"),
-                onPressed: () {
-                  launchUrlString(
-                    'https://apps.apple.com/jp/app/%E5%B2%A1%E7%90%86%E3%82%A2%E3%83%97%E3%83%AA/id1671546931',
-                  );
-                },
-              ),
-            if (!kIsWeb && Platform.isAndroid)
-              ElevatedButton(
-                child: const Text("おっけー"),
-                onPressed: () {
-                  launchUrlString(
-                    'https://play.google.com/store/apps/details?id=com.ous.unoffical.app',
-                  );
-                },
-              ),
-          ],
-        );
-      },
-    );
   }
 }

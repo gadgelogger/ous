@@ -12,6 +12,7 @@ import 'package:ous/constant/urls.dart';
 import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/config/analytics_service.dart';
+import 'package:ous/infrastructure/version_check_service.dart';
 import 'package:ous/presentation/widgets/home/bus_info_button.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
 import 'package:share/share.dart';
@@ -26,6 +27,7 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
+  final VersionCheckService _versionCheckService = VersionCheckService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -152,5 +154,10 @@ class _HomeState extends ConsumerState<Home> {
   void initState() {
     super.initState();
     AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
+    _checkVersion();
+  }
+
+  Future<void> _checkVersion() async {
+    await _versionCheckService.checkVersion(context);
   }
 }
