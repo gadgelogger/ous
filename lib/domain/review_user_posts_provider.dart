@@ -13,6 +13,34 @@ final fetchUserReviews = FutureProvider<List<Review>>((ref) async {
 class FetchUserReviews {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  Future<void> deleteReview(Review review) async {
+    List<String> collections = [
+      'keiei',
+      'kiban',
+      'kougakubu',
+      'kyouiku',
+      'kyousyoku',
+      'rigaku',
+      'seibutu',
+      'seimei',
+      'zyouhou',
+      'zyuui',
+    ];
+
+    for (String collection in collections) {
+      final querySnapshot = await _firestore
+          .collection(collection)
+          .where('accountuid', isEqualTo: review.accountuid)
+          .where('ID', isEqualTo: review.ID)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        await querySnapshot.docs.first.reference.delete();
+        break;
+      }
+    }
+  }
+
   Future<List<Review>> fetchReviews(String userId) async {
     List<Review> reviews = [];
     List<String> collections = [

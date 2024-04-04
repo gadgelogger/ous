@@ -124,14 +124,12 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                   ),
                 ),
-                const Card(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Column(
-                      children: [
-                        MyLogStatusButton(),
-                      ],
-                    ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Column(
+                    children: [
+                      MyLogStatusButton(),
+                    ],
                   ),
                 ),
               ],

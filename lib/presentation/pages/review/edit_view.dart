@@ -195,7 +195,28 @@ class _EditScreenState extends ConsumerState<EditScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('削除しますか？'),
+            content: const Text('この操作は取り消せません'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await FetchUserReviews().deleteReview(widget.review);
+                  ref.refresh(fetchUserReviews);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: const Text('削除'),
+              ),
+            ],
+          ),
+        ),
         backgroundColor: Colors.red,
         child: const Icon(Icons.delete),
       ),
