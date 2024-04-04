@@ -45,6 +45,8 @@ dependencies:
   shimmer: ^3.0.0
   fl_chart: ^0.66.2
   share_plus: ^8.0.2
+  font_awesome_flutter: ^10.7.0
+  screenshot: ^2.3.0
 
 dev_dependencies:
   flutter_test:

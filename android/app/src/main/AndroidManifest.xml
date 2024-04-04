@@ -43,6 +43,19 @@
         android:name="com.google.android.gms.ads.APPLICATION_ID"
         android:value="ca-app-pub-1882636743563952~4811722446"/>
 
+        <queries>
+            <intent>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="twitter" />
+            </intent>
+            <intent>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="instagram" />
+            </intent>
+            <intent>
+                <action android:name="android.support.customtabs.action.CustomTabsService" />
+            </intent>
+        </queries>
 
     </application>
 </manifest>
