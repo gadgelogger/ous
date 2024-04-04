@@ -38,6 +38,7 @@ class MyLogStatusButton extends ConsumerWidget {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text('マイログ稼働状況'),
                 Icon(
                   statusMessage.contains('正常') ? Icons.check : Icons.error,
                   size: 50,

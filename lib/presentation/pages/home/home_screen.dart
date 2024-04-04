@@ -80,21 +80,15 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                   ),
                 ),
-                Card(
+                const Card(
                   child: Padding(
-                    padding: const EdgeInsets.only(
+                    padding: EdgeInsets.only(
                       top: 10,
                       bottom: 10,
                     ),
                     child: Column(
                       children: [
-                        Text(
-                          'バス運行情報',
-                          style: TextStyle(
-                            fontSize: 30.sp,
-                          ),
-                        ),
-                        const Row(
+                        Row(
                           children: [
                             ButtonBar(
                               children: [
@@ -110,7 +104,7 @@ class _HomeState extends ConsumerState<Home> {
                             ),
                           ],
                         ),
-                        const Row(
+                        Row(
                           children: [
                             ButtonBar(
                               children: [
@@ -130,14 +124,12 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                   ),
                 ),
-                Card(
+                const Card(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
                     child: Column(
                       children: [
-                        Text('マイログ稼働状況', style: TextStyle(fontSize: 30.sp)),
-                        SizedBox(height: 10.h),
-                        const MyLogStatusButton(),
+                        MyLogStatusButton(),
                       ],
                     ),
                   ),

@@ -28,7 +28,11 @@ class NavBar extends StatelessWidget {
           _buildMenuItem(
             Icons.event_available_outlined,
             '行事予定',
-            () => _launchUrl(context, calendarUrl),
+            () => _launchUrl(
+              context,
+              calendarUrl,
+              mode: LaunchMode.inAppBrowserView,
+            ),
           ),
           _buildMenuItem(
             Icons.public_outlined,
@@ -36,13 +40,17 @@ class NavBar extends StatelessWidget {
             () => _launchUrl(
               context,
               mylogUrl,
-              mode: LaunchMode.externalApplication,
+              mode: LaunchMode.inAppBrowserView,
             ),
           ),
           _buildMenuItem(
             Icons.book_outlined,
             '学生便覧',
-            () => _launchUrl(context, handbookUrl),
+            () => _launchUrl(
+              context,
+              handbookUrl,
+              mode: LaunchMode.inAppBrowserView,
+            ),
           ),
           const Divider(),
           _buildMenuItem(
