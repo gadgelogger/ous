@@ -15,38 +15,41 @@ class CustomYearPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(2100),
-          initialDatePickerMode: DatePickerMode.year,
-        );
-        if (picked != null && onChanged != null) {
-          onChanged!(picked.year.toString());
-        }
-      },
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: labelText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              value.isNotEmpty ? value : '年度を選択',
-              style: TextStyle(
-                fontSize: 16,
-                color: value.isNotEmpty ? Colors.black : Colors.grey,
-              ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: GestureDetector(
+        onTap: () async {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2000),
+            lastDate: DateTime(2100),
+            initialDatePickerMode: DatePickerMode.year,
+          );
+          if (picked != null && onChanged != null) {
+            onChanged!(picked.year.toString());
+          }
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: labelText,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            const Icon(Icons.arrow_drop_down),
-          ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                value.isNotEmpty ? value : '年度を選択',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: value.isNotEmpty ? Colors.black : Colors.grey,
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
         ),
       ),
     );

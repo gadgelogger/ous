@@ -12,6 +12,7 @@ final fetchUserReviews = FutureProvider<List<Review>>((ref) async {
 
 class FetchUserReviews {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<List<Review>> fetchReviews(String userId) async {
     List<Review> reviews = [];
     List<String> collections = [

@@ -14,22 +14,28 @@ class OutdatedPostInfo extends StatelessWidget {
     final years = difference.inDays ~/ 365;
 
     if (years >= 1) {
-      return Container(
-        height: 70,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.red[100],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Icon(Icons.info_outline),
-              Text(
-                'この投稿は投稿日から$years年以上経過しています。\n情報が古い可能性があります。',
-              ),
-            ],
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Container(
+          height: 70,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.red[100],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Icon(Icons.info_outline, color: Colors.black),
+                Text(
+                  'この投稿は投稿日から$years年以上経過しています。\n情報が古い可能性があります。',
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

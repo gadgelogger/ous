@@ -5,8 +5,11 @@ class ShareGaugeSection extends StatelessWidget {
   final String title;
   final double value;
 
-  const ShareGaugeSection(
-      {super.key, required this.title, required this.value});
+  const ShareGaugeSection({
+    super.key,
+    required this.title,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class ShareGaugeSection extends StatelessWidget {
                   RangePointer(
                     value: value,
                     cornerStyle: CornerStyle.bothCurve,
-                    color: Colors.lightGreen,
+                    color: Theme.of(context).colorScheme.primary,
                     width: 0.2,
                     sizeUnit: GaugeSizeUnit.factor,
                   ),

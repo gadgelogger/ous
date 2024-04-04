@@ -38,7 +38,6 @@ class PostPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '投稿する学部を選択してください',
               value: postModel.category,
@@ -56,7 +55,6 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setCategory(value!),
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '投稿する講義のカテゴリを選択してください',
               value: postModel.bumon,
@@ -67,13 +65,11 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setBumon(value!),
             ),
-            const SizedBox(height: 16),
             CustomYearPicker(
               labelText: '開講年度を選択してください',
               value: postModel.nenndo,
               onChanged: (value) => postModel.setNendo(value),
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '開講学期を選択してください',
               value: postModel.gakki,
@@ -87,19 +83,16 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setGakki(value!),
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: '授業名を入力してください',
               hintText: 'FBD00100 フレッシュマンセミナー',
               controller: postModel.zyugyoumeiController,
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: '講師名を入力してください',
               hintText: '太郎田中',
               controller: postModel.kousimeiController,
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '単位数を選択してください',
               value: postModel.tanni,
@@ -110,7 +103,6 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setTanni(value!),
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '授業形式を選択してください',
               value: postModel.zyugyoukeisiki,
@@ -122,7 +114,6 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setZyugyoukeisiki(value!),
             ),
-            const SizedBox(height: 16),
             CustomSlider(
               labelText: '総合評価',
               value: postModel.hyouka,
@@ -138,7 +129,6 @@ class PostPage extends ConsumerWidget {
               value: postModel.toriyasusa,
               onChanged: (value) => postModel.setToriyasusa(value),
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '出席確認の有無を選択してください',
               value: postModel.syusseki,
@@ -150,7 +140,6 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setSyusseki(value!),
             ),
-            const SizedBox(height: 16),
             CustomDropdown(
               labelText: '教科書の有無を選択してください',
               value: postModel.kyoukasyo,
@@ -160,33 +149,28 @@ class PostPage extends ConsumerWidget {
               ],
               onChanged: (value) => postModel.setKyoukasyo(value!),
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: 'レビューを入力してください',
               hintText: 'この講義は楽で〜...',
               maxLines: 5,
               controller: postModel.komentoController,
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: 'テスト形式を入力してください',
               hintText: 'ありorなしorレポートorその他...',
               controller: postModel.tesutokeisikiController,
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: 'テストの傾向を入力してください',
               hintText: 'テストは主に教科書から...',
               maxLines: 5,
               controller: postModel.tesutokeikouController,
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: '投稿者名(公開されます)',
               hintText: 'ニックネーム',
               controller: postModel.nameController,
             ),
-            const SizedBox(height: 16),
             CustomTextField(
               labelText: '宣伝欄です。サークルや組織などの宣伝にご活用ください',
               hintText: '〇〇サークルに属しています！入部よろしく！',

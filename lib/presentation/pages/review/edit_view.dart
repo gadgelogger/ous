@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ous/domain/review_user_posts_provider.dart';
 import 'package:ous/gen/review_data.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_dropdown.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_slider.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_text_field.dart';
+import 'package:ous/presentation/widgets/review/Post/custom_year_picker.dart';
 
 class EditScreen extends ConsumerStatefulWidget {
   final Review review;
@@ -14,11 +18,12 @@ class EditScreen extends ConsumerStatefulWidget {
 class _EditScreenState extends ConsumerState<EditScreen> {
   late TextEditingController _zyugyoumeiController;
   late TextEditingController _kousimeiController;
-  late TextEditingController _nenndoController;
-  late TextEditingController _tannisuuController;
-  late TextEditingController _zyugyoukeisikiController;
-  late TextEditingController _syussekiController;
-  late TextEditingController _kyoukasyoController;
+  late String _nenndo;
+  late String _gakki;
+  late String _tannisuu;
+  late String _zyugyoukeisiki;
+  late String _syusseki;
+  late String _kyoukasyo;
   late TextEditingController _tesutokeisikiController;
   late TextEditingController _komentoController;
   late TextEditingController _tesutokeikouController;
@@ -40,93 +45,111 @@ class _EditScreenState extends ConsumerState<EditScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextFormField(
+            CustomTextField(
+              labelText: '講義名',
               controller: _zyugyoumeiController,
-              decoration: const InputDecoration(labelText: '講義名'),
             ),
-            TextFormField(
+            CustomTextField(
+              labelText: '講師名',
               controller: _kousimeiController,
-              decoration: const InputDecoration(labelText: '講師名'),
             ),
-            TextFormField(
-              controller: _nenndoController,
-              decoration: const InputDecoration(labelText: '年度'),
+            CustomYearPicker(
+              labelText: '開講年度を選択してください',
+              value: _nenndo,
+              onChanged: (value) => setState(() => _nenndo = value),
             ),
-            TextFormField(
-              controller: _tannisuuController,
-              decoration: const InputDecoration(labelText: '単位数'),
+            CustomDropdown(
+              labelText: '開講学期を選択してください',
+              value: _gakki,
+              items: const [
+                MapEntry('春１', '春１'),
+                MapEntry('春２', '春２'),
+                MapEntry('秋１', '秋１'),
+                MapEntry('秋２', '秋２'),
+                MapEntry('春１と２', '春１と２'),
+                MapEntry('秋１と２', '秋１と２'),
+              ],
+              onChanged: (value) => setState(() => _gakki = value!),
             ),
-            TextFormField(
-              controller: _zyugyoukeisikiController,
-              decoration: const InputDecoration(labelText: '授業形式'),
+            CustomDropdown(
+              labelText: '単位数を選択してください',
+              value: _tannisuu,
+              items: const [
+                MapEntry('1', '1'),
+                MapEntry('2', '2'),
+                MapEntry('3', '3'),
+              ],
+              onChanged: (value) => setState(() => _tannisuu = value!),
             ),
-            TextFormField(
-              controller: _syussekiController,
-              decoration: const InputDecoration(labelText: '出席確認の有無'),
+            CustomDropdown(
+              labelText: '授業形式を選択してください',
+              value: _zyugyoukeisiki,
+              items: const [
+                MapEntry('オンライン(VOD)', 'オンライン(VOD)'),
+                MapEntry('オンライン(リアルタイム）', 'オンライン(リアルタイム）'),
+                MapEntry('対面', '対面'),
+                MapEntry('対面とオンライン', '対面とオンライン'),
+              ],
+              onChanged: (value) => setState(() => _zyugyoukeisiki = value!),
             ),
-            TextFormField(
-              controller: _kyoukasyoController,
-              decoration: const InputDecoration(labelText: '教科書の有無'),
+            CustomDropdown(
+              labelText: '出席確認の有無を選択してください',
+              value: _syusseki,
+              items: const [
+                MapEntry('毎日出席を取る', '毎日出席を取る'),
+                MapEntry('ほぼ出席を取る', 'ほぼ出席を取る'),
+                MapEntry('たまに出席を取る', 'たまに出席を取る'),
+                MapEntry('出席確認はなし', '出席確認はなし'),
+              ],
+              onChanged: (value) => setState(() => _syusseki = value!),
             ),
-            TextFormField(
-              controller: _tesutokeisikiController,
-              decoration: const InputDecoration(labelText: 'テスト形式'),
+            CustomDropdown(
+              labelText: '教科書の有無を選択してください',
+              value: _kyoukasyo,
+              items: const [
+                MapEntry('あり', 'あり'),
+                MapEntry('なし', 'なし'),
+              ],
+              onChanged: (value) => setState(() => _kyoukasyo = value!),
             ),
             const SizedBox(height: 16),
-            Text('講義の面白さ: ${_omosirosa.toStringAsFixed(0)}'),
-            Slider(
+            CustomSlider(
+              labelText: '講義の面白さ',
               value: _omosirosa,
-              min: 1,
-              max: 5,
-              divisions: 5,
-              onChanged: (value) {
-                setState(() {
-                  _omosirosa = value;
-                });
-              },
+              onChanged: (value) => setState(() => _omosirosa = value),
             ),
-            Text('単位の取りやすさ: ${_toriyasusa.toStringAsFixed(0)}'),
-            Slider(
+            CustomSlider(
+              labelText: '単位の取りやすさ',
               value: _toriyasusa,
-              min: 1,
-              max: 5,
-              divisions: 5,
-              onChanged: (value) {
-                setState(() {
-                  _toriyasusa = value;
-                });
-              },
+              onChanged: (value) => setState(() => _toriyasusa = value),
             ),
-            Text('総合評価: ${_sougouhyouka.toStringAsFixed(0)}'),
-            Slider(
+            CustomSlider(
+              labelText: '総合評価',
               value: _sougouhyouka,
-              min: 1,
-              max: 5,
-              divisions: 5,
-              onChanged: (value) {
-                setState(() {
-                  _sougouhyouka = value;
-                });
-              },
+              onChanged: (value) => setState(() => _sougouhyouka = value),
             ),
             const SizedBox(height: 16),
-            TextFormField(
+            CustomTextField(
+              labelText: '講義に関するコメント',
               controller: _komentoController,
-              decoration: const InputDecoration(labelText: '講義に関するコメント'),
               maxLines: 5,
             ),
-            TextFormField(
+            CustomTextField(
+              labelText: 'テスト形式',
+              controller: _tesutokeisikiController,
+            ),
+            CustomTextField(
+              labelText: 'テスト傾向',
               controller: _tesutokeikouController,
-              decoration: const InputDecoration(labelText: 'テスト傾向'),
               maxLines: 5,
             ),
-            TextFormField(
+            CustomTextField(
+              labelText: 'ニックネーム',
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'ニックネーム'),
             ),
-            TextFormField(
+            CustomTextField(
+              labelText: '宣伝',
               controller: _sendenController,
-              decoration: const InputDecoration(labelText: '宣伝'),
               maxLines: 5,
             ),
             const SizedBox(height: 16),
@@ -139,23 +162,21 @@ class _EditScreenState extends ConsumerState<EditScreen> {
                   accountuid: widget.review.accountuid,
                   bumon: widget.review.bumon,
                   date: widget.review.date,
-                  gakki: widget.review.gakki,
+                  gakki: _gakki,
                   komento: _komentoController.text,
                   kousimei: _kousimeiController.text,
-                  kyoukasyo: _kyoukasyoController.text,
+                  kyoukasyo: _kyoukasyo,
                   name: _nameController.text,
-                  nenndo: _nenndoController.text,
+                  nenndo: _nenndo,
                   omosirosa: _omosirosa,
                   senden: _sendenController.text,
                   sougouhyouka: _sougouhyouka,
-                  syusseki: _syussekiController.text,
-                  tannisuu: int.tryParse(
-                    _tannisuuController.text,
-                  ),
+                  syusseki: _syusseki,
+                  tannisuu: int.tryParse(_tannisuu),
                   tesutokeikou: _tesutokeikouController.text,
                   tesutokeisiki: _tesutokeisikiController.text,
                   toriyasusa: _toriyasusa,
-                  zyugyoukeisiki: _zyugyoukeisikiController.text,
+                  zyugyoukeisiki: _zyugyoukeisiki,
                   zyugyoumei: _zyugyoumeiController.text,
                 );
 
@@ -173,6 +194,11 @@ class _EditScreenState extends ConsumerState<EditScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {},
+        backgroundColor: Colors.red,
+        child: const Icon(Icons.delete),
+      ),
     );
   }
 
@@ -182,13 +208,12 @@ class _EditScreenState extends ConsumerState<EditScreen> {
     final review = widget.review;
     _zyugyoumeiController = TextEditingController(text: review.zyugyoumei);
     _kousimeiController = TextEditingController(text: review.kousimei);
-    _nenndoController = TextEditingController(text: review.nenndo);
-    _tannisuuController =
-        TextEditingController(text: review.tannisuu?.toString());
-    _zyugyoukeisikiController =
-        TextEditingController(text: review.zyugyoukeisiki);
-    _syussekiController = TextEditingController(text: review.syusseki);
-    _kyoukasyoController = TextEditingController(text: review.kyoukasyo);
+    _nenndo = review.nenndo ?? '';
+    _gakki = review.gakki ?? '春１';
+    _tannisuu = review.tannisuu?.toString() ?? '1';
+    _zyugyoukeisiki = review.zyugyoukeisiki ?? 'オンライン(VOD)';
+    _syusseki = review.syusseki ?? '毎日出席を取る';
+    _kyoukasyo = review.kyoukasyo ?? 'あり';
     _tesutokeisikiController =
         TextEditingController(text: review.tesutokeisiki);
     _komentoController = TextEditingController(text: review.komento);

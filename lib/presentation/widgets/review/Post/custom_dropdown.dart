@@ -17,21 +17,24 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
+        value: value,
+        items: items.map((MapEntry<String, String> item) {
+          return DropdownMenuItem<String>(
+            value: item.key,
+            child: Text(item.value),
+          );
+        }).toList(),
+        onChanged: onChanged,
       ),
-      value: value,
-      items: items.map((MapEntry<String, String> item) {
-        return DropdownMenuItem<String>(
-          value: item.key,
-          child: Text(item.value),
-        );
-      }).toList(),
-      onChanged: onChanged,
     );
   }
 }
