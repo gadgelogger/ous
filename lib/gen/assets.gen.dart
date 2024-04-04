@@ -12,6 +12,10 @@ import 'package:flutter/widgets.dart';
 class $AssetsIconGen {
   const $AssetsIconGen();
 
+  /// File path: assets/icon/accounticon.jpg
+  AssetGenImage get accounticon =>
+      const AssetGenImage('assets/icon/accounticon.jpg');
+
   /// File path: assets/icon/book.png
   AssetGenImage get book => const AssetGenImage('assets/icon/book.png');
 
@@ -52,6 +56,7 @@ class $AssetsIconGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        accounticon,
         book,
         error,
         found,
@@ -102,10 +107,6 @@ class $AssetsImagesGen {
   AssetGenImage get homedark =>
       const AssetGenImage('assets/images/homedark.jpeg');
 
-  /// File path: assets/images/login_background.jpg
-  AssetGenImage get loginBackground =>
-      const AssetGenImage('assets/images/login_background.jpg');
-
   /// File path: assets/images/mockup.PNG
   AssetGenImage get mockup => const AssetGenImage('assets/images/mockup.PNG');
 
@@ -127,7 +128,6 @@ class $AssetsImagesGen {
         facultyOfVeterinaryMedicine,
         home,
         homedark,
-        loginBackground,
         mockup,
         schoolOfBusinessAdministration,
         schoolOfLifeSciences

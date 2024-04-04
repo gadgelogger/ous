@@ -2,16 +2,13 @@
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-
 // Project imports:
 import 'package:ous/domain/review_provider.dart';
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/presentation/pages/review/detail_view.dart';
-import 'package:ous/presentation/pages/review/post.dart';
 import 'package:ous/presentation/widgets/review/filter_modal.dart';
 import 'package:ous/presentation/widgets/review/review_card.dart';
 import 'package:ous/presentation/widgets/review/review_search_delegate.dart';
@@ -146,38 +143,22 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
           },
         ),
       ),
-      floatingActionButton: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          FloatingActionButton(
-            onPressed: () => showFilterModal(
-              context,
-              _selectedBumon,
-              _selectedGakki,
-              _selectedTanni,
-              _selectedZyugyoukeisiki,
-              _selectedSyusseki,
-              (value) => setState(() => _selectedBumon = value),
-              (value) => setState(() => _selectedGakki = value),
-              (value) => setState(() => _selectedTanni = value),
-              (value) => setState(() => _selectedZyugyoukeisiki = value),
-              (value) => setState(() => _selectedSyusseki = value),
-            ),
-            heroTag: 'filter',
-            child: const Icon(Icons.filter_list),
-          ),
-          const SizedBox(height: 16),
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const PostPage()),
-              );
-            },
-            heroTag: 'add',
-            child: const Icon(Icons.add),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showFilterModal(
+          context,
+          _selectedBumon,
+          _selectedGakki,
+          _selectedTanni,
+          _selectedZyugyoukeisiki,
+          _selectedSyusseki,
+          (value) => setState(() => _selectedBumon = value),
+          (value) => setState(() => _selectedGakki = value),
+          (value) => setState(() => _selectedTanni = value),
+          (value) => setState(() => _selectedZyugyoukeisiki = value),
+          (value) => setState(() => _selectedSyusseki = value),
+        ),
+        heroTag: 'filter',
+        child: const Icon(Icons.filter_list),
       ),
     );
   }

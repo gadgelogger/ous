@@ -24,7 +24,7 @@ class UserRepository {
     final docRef = firestore.collection('users').doc(userId);
     final updateData = <String, dynamic>{};
     if (name != null) {
-      updateData['name'] = name;
+      updateData['displayName'] = name;
     }
     if (photoURL != null) {
       updateData['photoURL'] = photoURL;

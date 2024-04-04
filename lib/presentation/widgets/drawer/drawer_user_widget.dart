@@ -1,9 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 // Project imports:
 import 'package:ous/domain/user_providers.dart';
 import 'package:ous/gen/assets.gen.dart';
@@ -63,8 +61,20 @@ class _ErrorView extends StatelessWidget {
 class _LoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return UserAccountsDrawerHeader(
+      accountName: const Text('読み込み中'),
+      accountEmail: const Text(
+        '読み込み中',
+        style: TextStyle(color: Colors.white),
+      ),
+      currentAccountPicture: const CircleAvatar(
+        child: Icon(
+          Icons.person,
+        ),
+      ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+      ),
     );
   }
 }
