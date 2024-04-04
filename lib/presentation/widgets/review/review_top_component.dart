@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 // Project imports:
 import 'package:ous/presentation/pages/review/gpa.dart';
+import 'package:ous/presentation/pages/review/my_post_page.dart';
 import 'package:ous/presentation/pages/review/post.dart';
 import 'package:ous/presentation/pages/review/sabori.dart';
 import 'package:ous/presentation/pages/review/view.dart';
@@ -148,7 +149,14 @@ class FloatingButton extends StatelessWidget {
         SpeedDialChild(
           child: const Icon(Icons.people),
           label: "自分の投稿",
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const UserPostsScreen(),
+              ),
+            );
+          },
         ),
         SpeedDialChild(
           child: const Icon(Icons.info_outline),
