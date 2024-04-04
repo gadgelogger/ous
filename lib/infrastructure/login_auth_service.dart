@@ -65,20 +65,33 @@ class AuthService {
   }
 
   // ユーザープロファイルをFireStoreに保存
-  void _updateUserProfile(User? user) {
+  void _updateUserProfile(User? user) async {
     if (user != null) {
       final userRef =
           FirebaseFirestore.instance.collection('users').doc(user.uid);
-      userRef.set(
-        {
-          'uid': user.uid,
-          'email': user.email ?? '未設定',
-          'displayName': user.displayName ?? '名前未設定',
-          'photoURL': user.photoURL ?? '',
-          'createdAt': DateTime.now(),
-        },
-        SetOptions(merge: true),
-      );
+      final userSnapshot = await userRef.get();
+
+      if (!userSnapshot.exists) {
+        // ユーザーが存在しない場合（初回ログイン）
+        await userRef.set(
+          {
+            'uid': user.uid,
+            'email': user.email ?? '未設定',
+            'displayName': user.displayName ?? '名前未設定',
+            'photoURL': user.photoURL ?? '',
+            'createdAt': DateTime.now(),
+          },
+        );
+      } else {
+        // ユーザーが既に存在する場合（2回目以降のログイン）
+        await userRef.update(
+          {
+            'email': user.email ?? '未設定',
+            'displayName': user.displayName ?? '名前未設定',
+            'photoURL': user.photoURL ?? '',
+          },
+        );
+      }
     }
   }
 }
