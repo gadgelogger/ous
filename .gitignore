@@ -49,3 +49,5 @@ ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
 android/app/key.jks
 lib/apikey.dart
+key.jks
+upload_certificate.pem
