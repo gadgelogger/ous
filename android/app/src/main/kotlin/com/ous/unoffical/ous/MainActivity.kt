@@ -1,4 +1,4 @@
-package com.ous.unoffical.ous
+package com.ous.unoffical.app
 
 import io.flutter.embedding.android.FlutterActivity
 
