@@ -23,10 +23,10 @@ class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends ConsumerState<Home> {
+class HomeState extends ConsumerState<Home> {
   final VersionCheckService _versionCheckService = VersionCheckService();
   @override
   Widget build(BuildContext context) {

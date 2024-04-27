@@ -9,10 +9,10 @@ class ModalWidget extends StatefulWidget {
   const ModalWidget({Key? key, required this.review}) : super(key: key);
 
   @override
-  _ModalWidgetState createState() => _ModalWidgetState();
+  ModalWidgetState createState() => ModalWidgetState();
 }
 
-class _ModalWidgetState extends State<ModalWidget> {
+class ModalWidgetState extends State<ModalWidget> {
   final GlobalKey globalKey = GlobalKey();
 
   @override

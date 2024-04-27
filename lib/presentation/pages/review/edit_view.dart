@@ -182,9 +182,11 @@ class _EditScreenState extends ConsumerState<EditScreen> {
 
                 await FetchUserReviews().updateReview(updatedReview);
 
-                ref.refresh(fetchUserReviews);
+                ref.watch(fetchUserReviews);
 
                 if (mounted) {
+                  if (!context.mounted) return;
+
                   Navigator.pop(context);
                 }
               },
@@ -208,7 +210,10 @@ class _EditScreenState extends ConsumerState<EditScreen> {
               TextButton(
                 onPressed: () async {
                   await FetchUserReviews().deleteReview(widget.review);
-                  ref.refresh(fetchUserReviews);
+                  if (!context.mounted) return;
+
+                  ref.watch(fetchUserReviews);
+
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },

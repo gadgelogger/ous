@@ -187,6 +187,8 @@ abstract class LoginButton extends StatelessWidget {
             onSignInSuccess(context);
           }
         } on Exception catch (e) {
+          if (!context.mounted) return;
+
           onSignInFailure(context, e);
         }
       },
@@ -259,6 +261,8 @@ abstract class LoginButton extends StatelessWidget {
           onSignInSuccess(context);
         }
       } on Exception catch (e) {
+        if (!context.mounted) return;
+
         onSignInFailure(context, e);
       }
     }

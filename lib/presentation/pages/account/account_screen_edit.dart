@@ -62,6 +62,7 @@ class MyPageEdit extends ConsumerWidget {
                             userData?.uid ?? '',
                             name: nameController.text,
                           );
+                      if (!context.mounted) return;
                       ProviderScope.containerOf(context)
                           .refresh(userStreamProvider);
                       ScaffoldMessenger.of(context).showSnackBar(

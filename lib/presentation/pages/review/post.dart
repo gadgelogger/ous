@@ -248,10 +248,14 @@ class PostPage extends ConsumerWidget {
 
     final result = await ref.read(postProvider).submit();
     if (result) {
+      if (!context.mounted) return;
+
       _showSnackBar(context, '投稿が完了しました。');
       _resetForm(ref);
       HapticFeedback.vibrate();
     } else {
+      if (!context.mounted) return;
+
       _showSnackBar(context, '投稿に失敗しました。');
     }
   }

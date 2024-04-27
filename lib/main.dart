@@ -27,9 +27,11 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  //ナビゲーションバーの背景色を透明にしてイケてるようにする(ここから追加)
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-      overlays: [SystemUiOverlay.top]).then((_) {
+  //ナビゲーションバーの背景色を透明にしてイケてるようにする
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.edgeToEdge,
+    overlays: [SystemUiOverlay.top],
+  ).then((_) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.dark.copyWith(
         systemNavigationBarColor: Colors.transparent,
@@ -37,7 +39,6 @@ void main() async {
       ),
     );
   });
-  //ナビゲーションバーの背景色を透明にしてイケてるようにする(ここまで追加)
   runApp(
     const ProviderScope(
       child: MainApp(),

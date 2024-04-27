@@ -9,6 +9,7 @@ part 'review_data.g.dart';
 @freezed
 class Review with _$Review {
   const factory Review({
+    // ignore: non_constant_identifier_names
     required String? ID,
     required String? accountemail,
     required String? accountname,

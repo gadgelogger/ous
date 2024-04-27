@@ -1,8 +1,7 @@
 // Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 
 enum AnalyticsServiceScreenName {
   home,
@@ -32,6 +31,6 @@ class AnalyticsService {
 
   Future<void> setCurrentScreen(AnalyticsServiceScreenName screenName) async {
     debugPrint('Analytics:setCurrentScreen:${screenName.ja}');
-    await firebaseAnalyticsInstance.setCurrentScreen(screenName: screenName.ja);
+    await firebaseAnalyticsInstance.logScreenView(screenName: screenName.ja);
   }
 }

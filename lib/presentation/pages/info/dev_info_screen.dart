@@ -1,18 +1,16 @@
 // Flutter imports:
 
-// Flutter imports:
-import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:uuid/uuid.dart';
-
 // Project imports:
 import 'package:ous/infrastructure/config/apikey.dart';
+import 'package:uuid/uuid.dart';
 
 class DevInfo extends StatefulWidget {
   const DevInfo({Key? key}) : super(key: key);
@@ -336,6 +334,7 @@ class _DevPostState extends State<DevPost> {
   Future<void> _deletePost(String id) async {
     try {
       await FirebaseFirestore.instance.collection('dev_info').doc(id).delete();
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('投稿を削除しました')),
       );
@@ -413,6 +412,7 @@ class _EditPostState extends State<EditPost> {
                           'title': _title,
                           'text': _text,
                         });
+                        if (!context.mounted) return;
                         Navigator.pop(context);
                       }
                     }
