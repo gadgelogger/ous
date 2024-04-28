@@ -51,6 +51,9 @@ class $AssetsIconGen {
   /// File path: assets/icon/rocket.gif
   AssetGenImage get rocket => const AssetGenImage('assets/icon/rocket.gif');
 
+  /// File path: assets/icon/search.gif
+  AssetGenImage get search => const AssetGenImage('assets/icon/search.gif');
+
   /// File path: assets/icon/update.png
   AssetGenImage get update => const AssetGenImage('assets/icon/update.png');
 
@@ -68,6 +71,7 @@ class $AssetsIconGen {
         news,
         password,
         rocket,
+        search,
         update
       ];
 }

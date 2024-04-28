@@ -20,6 +20,7 @@ Review _$ReviewFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Review {
+// ignore: non_constant_identifier_names
   String? get ID => throw _privateConstructorUsedError;
   String? get accountemail => throw _privateConstructorUsedError;
   String? get accountname => throw _privateConstructorUsedError;
@@ -397,6 +398,7 @@ class _$ReviewImpl implements _Review {
   factory _$ReviewImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReviewImplFromJson(json);
 
+// ignore: non_constant_identifier_names
   @override
   final String? ID;
   @override
@@ -558,7 +560,7 @@ abstract class _Review implements Review {
 
   factory _Review.fromJson(Map<String, dynamic> json) = _$ReviewImpl.fromJson;
 
-  @override
+  @override // ignore: non_constant_identifier_names
   String? get ID;
   @override
   String? get accountemail;

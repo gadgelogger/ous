@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:ous/presentation/pages/review/book/book_search_page.dart';
 // Project imports:
 import 'package:ous/presentation/pages/review/gpa.dart';
 import 'package:ous/presentation/pages/review/my_post_page.dart';
@@ -228,6 +229,16 @@ class FloatingButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const Sabori()),
+            );
+          },
+        ),
+        SpeedDialChild(
+          child: const Icon(Icons.directions_run_outlined),
+          label: "教科書の最安値検索",
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BookSearchView()),
             );
           },
         ),
