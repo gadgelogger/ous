@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -16,6 +18,7 @@ class _BookScanViewState extends State<BookScanView> {
   final _scannerController = MobileScannerController();
   String scannedValue = '';
   BookData? bookData;
+  bool _isScanning = true;
 
   Future<void> fetchBookInfo(String isbn) async {
     final dio = Dio();
@@ -145,14 +148,44 @@ class _BookScanViewState extends State<BookScanView> {
                     overlay: const ScannerFrame(scanArea: scanArea),
                     controller: _scannerController,
                     onDetect: (capture) {
-                      final List<Barcode> barcode = capture.barcodes;
-                      final value = barcode[0].rawValue;
-                      if (value != null) {
-                        setState(() {
-                          scannedValue = value;
-                        });
-                        debugPrint(value);
-                        fetchBookInfo(value);
+                      if (_isScanning) {
+                        final List<Barcode> barcode = capture.barcodes;
+                        final value = barcode[0].rawValue;
+                        if (value != null && value.startsWith('9784')) {
+                          setState(() {
+                            scannedValue = value;
+                            _isScanning = false;
+                          });
+                          debugPrint(value);
+                          fetchBookInfo(value);
+                          Timer(const Duration(seconds: 5), () {
+                            setState(() {
+                              _isScanning = true;
+                            });
+                          });
+                        } else if (value != null && !value.startsWith('9784')) {
+                          setState(() {
+                            _isScanning = false;
+                          });
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('対応していないバーコードです'),
+                              content: const Text('9784から始まるバーコードをスキャンしてください。'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      _isScanning = true;
+                                    });
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
                       }
                     },
                   );

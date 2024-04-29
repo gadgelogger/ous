@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ous/gen/book_data.dart';
+import 'package:ous/presentation/widgets/review/book/detail_buttons.dart';
+import 'package:ous/presentation/widgets/review/book/detail_image.dart';
 import 'package:ous/presentation/widgets/review/book/detail_info.dart';
 
 class BookDetailPage extends StatelessWidget {
@@ -16,14 +18,14 @@ class BookDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (bookData.imageUrl.isNotEmpty)
-              Image.network(
-                bookData.imageUrl,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.contain,
+            if (bookData.imageUrl.isNotEmpty) DetailImage(bookData: bookData),
+            if (bookData.imageUrl.isEmpty)
+              Icon(
+                Icons.book,
+                size: 100,
+                color: Colors.grey[500],
               ),
             const SizedBox(height: 30),
             Text(
@@ -33,7 +35,12 @@ class BookDetailPage extends StatelessWidget {
               maxLines: 10,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 20),
+            DetailButtons(bookData: bookData.title),
+            const SizedBox(height: 20),
+            const Divider(),
             DetailInfo(
               icon: Icons.people,
               info: '著者',

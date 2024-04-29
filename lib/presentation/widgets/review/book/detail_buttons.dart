@@ -1,132 +1,115 @@
-// // Flutter imports:
-// import 'package:flutter/material.dart';
-// // Package imports:
-// import 'package:url_launcher/url_launcher_string.dart';
+// Flutter imports:
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-// class DetailButtons extends StatelessWidget {
-//   const DetailButtons({
-//     super.key,
-//     required this.latitude,
-//     required this.longitude,
-//     required this.websiteUrl,
-//     required this.shopName,
-//   });
-
-//   final double latitude;
-//   final double longitude;
-//   final String? websiteUrl;
-//   final String shopName;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceAround,
-//       children: [
-//         IconButton.filledTonal(
-//           icon: const Icon(Icons.map_outlined),
-//           padding: const EdgeInsets.all(20),
-//           onPressed: () => _launchMapApp(context, latitude, longitude),
-//         ),
-//         if (websiteUrl != null)
-//           IconButton.filledTonal(
-//             icon: const Icon(Icons.travel_explore_outlined),
-//             padding: const EdgeInsets.all(20),
-//             onPressed: () => _launchURL(context, websiteUrl ?? ''),
-//           ),
-//         IconButton.filledTonal(
-//           icon: const Icon(Icons.search),
-//           padding: const EdgeInsets.all(20),
-//           onPressed: () => _launchGoogleSearch(context, shopName),
-//         ),
-//       ],
-//     );
-//   }
-
-//   Future<void> _launchMapApp(
-//     BuildContext context,
-//     double lat,
-//     double lng,
-//   ) async {
-//     final availableMaps = await MapLauncher.installedMaps;
-//     if (!context.mounted) {
-//       return;
-//     }
-
-//     if (availableMaps.isNotEmpty) {
-//       await showModalBottomSheet<void>(
-//         context: context,
-//         builder: (BuildContext context) {
-//           return SafeArea(
-//             child: SingleChildScrollView(
-//               child: Wrap(
-//                 children: <Widget>[
-//                   for (final map in availableMaps)
-//                     ListTile(
-//                       onTap: () => map.showMarker(
-//                         coords: Coords(lat, lng),
-//                         title: shopName,
-//                       ),
-//                       title: Text(map.mapName),
-//                       leading: SvgPicture.asset(
-//                         map.icon,
-//                         height: 30,
-//                         width: 30,
-//                       ),
-//                     ),
-//                 ],
-//               ),
-//             ),
-//           );
-//         },
-//       );
-//     } else {
-//       final url =
-//           'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng';
-//       final errorMessage = t.error;
-
-//       if (await canLaunchUrlString(url)) {
-//         await launchUrlString(url);
-//       } else {
-//         if (!context.mounted) {
-//           return;
-//         }
-
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text(errorMessage.map_open_error)),
-//         );
-//       }
-//     }
-//   }
-
-//   Future<void> _launchURL(BuildContext context, String urlString) async {
-//     if (await canLaunchUrlString(urlString)) {
-//       await launchUrlString(urlString);
-//     } else {
-//       final errorMessage = t.error;
-
-//       if (context.mounted) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('$errorMessage $urlString')),
-//         );
-//       }
-//     }
-//   }
-
-//   Future<void> _launchGoogleSearch(
-//     BuildContext context,
-//     String shopName,
-//   ) async {
-//     final query = Uri.encodeComponent(shopName);
-//     final url = 'https://www.google.com/search?q=$query';
-//     final errorMessage = t.error;
-
-//     if (await canLaunchUrlString(url)) {
-//       await launchUrlString(url);
-//     } else {
-//       if (context.mounted) {
-//         ScaffoldMessenger.of(context).showSnackBar(
-//           SnackBar(content: Text('$errorMessage $url')),
-//         );
-//       }
-//     }
-//   }
-// }
+class DetailButtons extends StatelessWidget {
+  const DetailButtons({
+    super.key,
+    required this.bookData,
+  });
+  final String bookData;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      launchUrlString(
+                        'https://www.amazon.co.jp/s?k=$bookData&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=2G0Y4FXZVZ5I&sprefix=test%2Caps%2C199&ref=nb_sb_noss_1',
+                      );
+                    },
+                  ),
+                  const Text('Amazon'),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      launchUrlString(
+                        'https://books.rakuten.co.jp/search?sitem=$bookData&g=000&l-id=pc-search-box',
+                      );
+                    },
+                  ),
+                  const Text('楽天ブックス'),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {},
+                  ),
+                  const Text('ほんやさん'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const Divider(),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0, 28, 8, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      launchUrlString(
+                        'https://www.mercari.com/jp/search/?keyword=$bookData',
+                      );
+                    },
+                  ),
+                  const Text('メルカリ'),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      launchUrlString(
+                        'https://auctions.yahoo.co.jp/search/search?p=$bookData',
+                      );
+                    },
+                  ),
+                  const Text('Yahoo!フリマ'),
+                ],
+              ),
+              Column(
+                children: [
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.shop),
+                    padding: const EdgeInsets.all(20),
+                    onPressed: () {
+                      launchUrlString(
+                        'https://fril.jp/s?query=$bookData',
+                      );
+                    },
+                  ),
+                  const Text('ラクマ'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
