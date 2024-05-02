@@ -130,13 +130,7 @@ class GuestSignInButton extends LoginButton {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: getButtonStyle(context),
-      onPressed: () async {
-        await showConfirmationDialog(context);
-      },
-      child: getButtonChild(context),
-    );
+    return getButtonChild(context);
   }
 
   @override
