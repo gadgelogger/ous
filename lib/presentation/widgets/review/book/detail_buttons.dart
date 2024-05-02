@@ -50,7 +50,58 @@ class DetailButtons extends StatelessWidget {
                   IconButton.filledTonal(
                     icon: const Icon(Icons.shop),
                     padding: const EdgeInsets.all(20),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SizedBox(
+                            height: 250,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    '教科書を今すぐ書いたい人はこちらへお問い合わせください',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  ListTile(
+                                    title: const Text('お店の概要を見る'),
+                                    leading: const Icon(Icons.web),
+                                    onTap: () {
+                                      launchUrlString(
+                                        'https://g.co/kgs/vn5xjc3',
+                                      );
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: const Text('お店へ電話する'),
+                                    leading: const Icon(Icons.phone),
+                                    onTap: () {
+                                      launchUrlString(
+                                        'https://www.honyasan.com/search?keyword=$bookData',
+                                      );
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: const Text('お店への行き方を調べる'),
+                                    leading: const Icon(Icons.map),
+                                    onTap: () {
+                                      launchUrlString(
+                                        'https://www.honyasan.com/search?keyword=$bookData',
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                   const Text('ほんやさん'),
                 ],

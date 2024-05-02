@@ -233,7 +233,7 @@ class FloatingButton extends StatelessWidget {
           },
         ),
         SpeedDialChild(
-          child: const Icon(Icons.directions_run_outlined),
+          child: const Icon(Icons.book_outlined),
           label: "教科書の最安値検索",
           onTap: () async {
             Navigator.push(
