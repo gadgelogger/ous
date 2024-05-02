@@ -166,29 +166,31 @@ class Tutorial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: OverBoard(
-        pages: pages,
-        showBullets: true,
-        skipCallback: () {
-          // when user select SKIP
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              // 遷移先のクラス
-              builder: (BuildContext context) => const Login(),
-            ),
-          );
-        },
-        finishCallback: () {
-          // when user select NEXT
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              // 遷移先のクラス
-              builder: (BuildContext context) => const Login(),
-            ),
-          );
-        },
+      body: SafeArea(
+        child: OverBoard(
+          pages: pages,
+          showBullets: true,
+          skipCallback: () {
+            // when user select SKIP
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                // 遷移先のクラス
+                builder: (BuildContext context) => const Login(),
+              ),
+            );
+          },
+          finishCallback: () {
+            // when user select NEXT
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                // 遷移先のクラス
+                builder: (BuildContext context) => const Login(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
