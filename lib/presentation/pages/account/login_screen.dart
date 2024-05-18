@@ -6,6 +6,7 @@ import 'dart:io';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
@@ -68,5 +69,6 @@ class LoginState extends State<Login> {
   void initState() {
     super.initState();
     TutorialService.showTutorialIfNeeded(context);
+    FlutterNativeSplash.remove();
   }
 }

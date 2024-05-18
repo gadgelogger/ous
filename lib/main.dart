@@ -5,21 +5,36 @@ import 'package:firebase_core/firebase_core.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
 import 'package:ous/controller/firebase_provider.dart';
+import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
+import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'infrastructure/config/firebase_options.dart';
 
 void main() async {
+  final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesInstance.initialize();
+  await dotenv.load(fileName: '.env');
+  final String anonKey = dotenv.env['SUPABASE_ANON'] ?? ''; // Anon keyを.envから取得
+  final String projectUrl = dotenv.env['SUPABASE_URL'] ?? ''; // URLを.envから取得
+
+  await Supabase.initialize(
+    anonKey: anonKey, // プロジェクトAnon key
+    url: projectUrl, // プロジェクトURL
+  );
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -39,9 +54,15 @@ void main() async {
       ),
     );
   });
+  final container = ProviderContainer();
+  await container.read(busServiceProvider.notifier).fetchBusInfo();
+  await container.read(myLogStatusProvider.notifier).fetchMyLogStatus();
+  FlutterNativeSplash.remove();
+
   runApp(
-    const ProviderScope(
-      child: MainApp(),
+    UncontrolledProviderScope(
+      container: container,
+      child: const MainApp(),
     ),
   );
 }

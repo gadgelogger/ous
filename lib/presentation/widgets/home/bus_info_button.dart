@@ -49,7 +49,7 @@ class BusInfoButton extends ConsumerWidget {
               ],
             );
           },
-          loading: () => const CircularProgressIndicator(),
+          loading: () => const LinearProgressIndicator(),
           error: (_, __) => const Text('エラー'),
         ),
       ),

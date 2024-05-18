@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailButtons extends StatelessWidget {
@@ -55,17 +56,21 @@ class DetailButtons extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return SizedBox(
-                            height: 250,
+                            height: 300.h,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Column(
                                 children: [
                                   const Text(
-                                    '教科書を今すぐ書いたい人はこちらへお問い合わせください',
+                                    '教科書を今すぐ書いたい人はこちらへお問い合わせください。',
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                     ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const Text(
+                                    '※勝手に掲載しています。お店側は本アプリとは一切関係ありません',
                                     textAlign: TextAlign.center,
                                   ),
                                   ListTile(
@@ -81,9 +86,7 @@ class DetailButtons extends StatelessWidget {
                                     title: const Text('お店へ電話する'),
                                     leading: const Icon(Icons.phone),
                                     onTap: () {
-                                      launchUrlString(
-                                        'https://www.honyasan.com/search?keyword=$bookData',
-                                      );
+                                      launchUrlString('tel:0862834516	');
                                     },
                                   ),
                                   ListTile(
@@ -91,7 +94,7 @@ class DetailButtons extends StatelessWidget {
                                     leading: const Icon(Icons.map),
                                     onTap: () {
                                       launchUrlString(
-                                        'https://www.honyasan.com/search?keyword=$bookData',
+                                        'https://www.google.com/maps/dir//%E3%81%BB%E3%82%93%E3%82%84%E3%81%95%E3%82%93%E3%80%80%E5%B2%A1%E5%B1%B1%E5%A4%A7%E5%AD%A6/data=!4m6!4m5!1m1!4e2!1m2!1m1!1s0x3554066a2ce3d6b7:0x5042bf4f153aff5b?sa=X&ved=1t:3061&ictx=111',
                                       );
                                     },
                                   ),
