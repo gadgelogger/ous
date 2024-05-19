@@ -1,11 +1,8 @@
 // Flutter imports:
-
 // Package imports:
 import 'package:firebase_core/firebase_core.dart';
-// Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +15,6 @@ import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'infrastructure/config/firebase_options.dart';
 
@@ -27,21 +23,14 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesInstance.initialize();
-  await dotenv.load(fileName: '.env');
-  final String anonKey = dotenv.env['SUPABASE_ANON'] ?? ''; // Anon keyを.envから取得
-  final String projectUrl = dotenv.env['SUPABASE_URL'] ?? ''; // URLを.envから取得
 
-  await Supabase.initialize(
-    anonKey: anonKey, // プロジェクトAnon key
-    url: projectUrl, // プロジェクトURL
-  );
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await initializeFirebase();
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
   //ナビゲーションバーの背景色を透明にしてイケてるようにする
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
@@ -54,6 +43,7 @@ void main() async {
       ),
     );
   });
+
   final container = ProviderContainer();
   await container.read(busServiceProvider.notifier).fetchBusInfo();
   await container.read(myLogStatusProvider.notifier).fetchMyLogStatus();
@@ -65,6 +55,19 @@ void main() async {
       child: const MainApp(),
     ),
   );
+}
+
+Future<void> initializeFirebase() async {
+  try {
+    // Firebaseが初期化されているかどうかを確認
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } catch (e) {
+    print('Error initializing Firebase: $e');
+  }
 }
 
 class MainApp extends ConsumerWidget {

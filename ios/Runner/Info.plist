@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>非公式岡理アプリ</string>
+	<string>岡理アプリ</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.550367521697-bi8fc20atnpnvmtsrrna49tjmed3h83i</string>
+				<string>com.googleusercontent.apps.701179487640-ns65rh2t10ucm8i7lrfgpthba13pa2ki</string>
 			</array>
 		</dict>
 	</array>
