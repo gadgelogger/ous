@@ -60,6 +60,7 @@ dependencies:
   supabase_flutter: ^2.5.3
   flutter_dotenv: ^5.1.0
   image_cropper: ^4.0.1
+  flutter_local_notifications: ^17.2.1+2
 
 dev_dependencies:
   flutter_test:

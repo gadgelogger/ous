@@ -1,8 +1,10 @@
 // Flutter imports:
-// Package imports:
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +14,7 @@ import 'package:ous/controller/firebase_provider.dart';
 import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
+import 'package:ous/infrastructure/notification_service.dart'; // Add this import
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
@@ -49,6 +52,11 @@ void main() async {
   final container = ProviderContainer();
   await container.read(busServiceProvider.notifier).fetchBusInfo();
   await container.read(myLogStatusProvider.notifier).fetchMyLogStatus();
+
+  // Initialize local notifications
+  await LocalNotifications.init(); // Add this line
+  await _requestPermissions(); // Add this line
+
   FlutterNativeSplash.remove();
 
   runApp(
@@ -57,6 +65,36 @@ void main() async {
       child: const MainApp(),
     ),
   );
+}
+
+Future<void> _requestPermissions() async {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  if (Platform.isIOS || Platform.isMacOS) {
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            MacOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
+  } else if (Platform.isAndroid) {
+    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
+        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidImplementation
+        ?.requestNotificationsPermission(); // Update this line
+    // _notificationsEnabled = grantedNotificationPermission ?? false; // Remove this line
+  }
 }
 
 Future<void> initializeFirebase() async {
