@@ -3,19 +3,17 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:settings_ui/settings_ui.dart';
-import 'package:share/share.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-
 // Project imports:
 import 'package:ous/constant/urls.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/infrastructure/setting_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:settings_ui/settings_ui.dart';
+import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingPage extends ConsumerWidget {
   const SettingPage({super.key});
@@ -39,20 +37,18 @@ class SettingPage extends ConsumerWidget {
                   SettingsTile.navigation(
                     title: const Text('テーマモード'),
                     leading: const Icon(Icons.color_lens),
-                    trailing: Text(theme.mode.name),
-                    onPressed: (_) async {
+                    trailing: Text(_getThemeModeName(theme.mode)),
+                    onPressed: (context) async {
                       final selectedMode = await showDialog<ThemeMode>(
                         context: context,
                         builder: (context) => SimpleDialog(
                           title: const Text('テーマモードを選択'),
-                          children: ThemeMode.values
-                              .map(
-                                (mode) => SimpleDialogOption(
-                                  onPressed: () => Navigator.pop(context, mode),
-                                  child: Text(mode.name),
-                                ),
-                              )
-                              .toList(),
+                          children: ThemeMode.values.map((mode) {
+                            return SimpleDialogOption(
+                              onPressed: () => Navigator.pop(context, mode),
+                              child: Text(_getThemeModeName(mode)),
+                            );
+                          }).toList(),
                         ),
                       );
                       if (selectedMode != null) {
@@ -147,6 +143,14 @@ class SettingPage extends ConsumerWidget {
                         context: context,
                         applicationName: packageInfo?.appName ?? 'error',
                         applicationVersion: packageInfo?.version ?? 'error',
+                        applicationIcon: const CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/icon/icon.png',
+                          ), // アイコンのパスを指定
+                          radius: 24,
+                        ),
+                        applicationLegalese:
+                            ('@Gadgelogger\nアイコンは@CutterKnife_製作'),
                       );
                     },
                   ),
@@ -251,5 +255,18 @@ class SettingPage extends ConsumerWidget {
         },
       ),
     );
+  }
+}
+
+String _getThemeModeName(ThemeMode mode) {
+  switch (mode) {
+    case ThemeMode.system:
+      return 'システム設定に従う';
+    case ThemeMode.light:
+      return 'ライト';
+    case ThemeMode.dark:
+      return 'ダーク';
+    default:
+      return '不明';
   }
 }
