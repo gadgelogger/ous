@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatelessWidget {
@@ -6,6 +5,7 @@ class CustomDropdown extends StatelessWidget {
   final List<MapEntry<String, String>> items;
   final String value;
   final void Function(String?)? onChanged;
+  final String? errorText; // 追加
 
   const CustomDropdown({
     Key? key,
@@ -13,6 +13,7 @@ class CustomDropdown extends StatelessWidget {
     required this.items,
     required this.value,
     this.onChanged,
+    this.errorText, // 追加
   }) : super(key: key);
 
   @override
@@ -22,6 +23,7 @@ class CustomDropdown extends StatelessWidget {
       child: DropdownButtonFormField<String>(
         decoration: InputDecoration(
           labelText: labelText,
+          errorText: errorText, // 追加
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

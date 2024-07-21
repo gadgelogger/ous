@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -6,6 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String? hintText;
   final int? maxLines;
   final TextEditingController controller;
+  final String? errorText; // 追加
 
   const CustomTextField({
     Key? key,
@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.maxLines = 1,
     required this.controller,
+    this.errorText, // 追加
   }) : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
+          errorText: errorText, // 追加
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

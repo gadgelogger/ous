@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
 
 class CustomYearPicker extends StatelessWidget {
@@ -6,12 +5,13 @@ class CustomYearPicker extends StatelessWidget {
   final String value;
   final void Function(String)? onChanged;
 
-  const CustomYearPicker({
+  CustomYearPicker({
     Key? key,
     required this.labelText,
-    required this.value,
+    String? value,
     this.onChanged,
-  }) : super(key: key);
+  })  : value = value ?? DateTime.now().year.toString(), // 初期値を現在の年に設定
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

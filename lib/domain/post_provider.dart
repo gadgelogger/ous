@@ -29,6 +29,20 @@ class PostModel extends ChangeNotifier {
   final nameController = TextEditingController();
   final sendenController = TextEditingController();
 
+  Map<String, String> _errorMessages = {};
+
+  Map<String, String> get errorMessages => _errorMessages;
+
+  void setErrorMessages(Map<String, String> errorMessages) {
+    _errorMessages = errorMessages;
+    notifyListeners();
+  }
+
+  void clearErrorMessages() {
+    _errorMessages.clear();
+    notifyListeners();
+  }
+
   void setBumon(String value) {
     bumon = value;
     notifyListeners();
@@ -87,6 +101,7 @@ class PostModel extends ChangeNotifier {
   Future<bool> submit() async {
     final errorMessages = validateForm();
     if (errorMessages.isNotEmpty) {
+      setErrorMessages(_errorMessages); // エラーメッセージを設定
       return false;
     }
 
@@ -131,27 +146,35 @@ class PostModel extends ChangeNotifier {
 
   List<String> validateForm() {
     final List<String> errorMessages = [];
+    _errorMessages.clear();
 
     if (zyugyoumeiController.text.isEmpty) {
       errorMessages.add('授業名が未入力です。');
+      _errorMessages['zyugyoumei'] = '授業名が未入力です。';
     }
     if (kousimeiController.text.isEmpty) {
       errorMessages.add('講師名が未入力です。');
+      _errorMessages['kousimei'] = '講師名が未入力です。';
     }
     if (tesutokeisikiController.text.isEmpty) {
       errorMessages.add('テスト形式が未入力です。');
+      _errorMessages['tesutokeisiki'] = 'テスト形式が未入力です。';
     }
     if (tesutokeikouController.text.isEmpty) {
       errorMessages.add('テストの傾向が未入力です。');
+      _errorMessages['tesutokeikou'] = 'テストの傾向が未入力です。';
     }
     if (nameController.text.isEmpty) {
       errorMessages.add('投稿者名が未入力です。');
+      _errorMessages['name'] = '投稿者名が未入力です。';
     }
     if (nenndo.isEmpty) {
       errorMessages.add('年度が未選択です。');
+      _errorMessages['nenndo'] = '年度が未選択です。';
     }
     if (komentoController.text.isEmpty) {
       errorMessages.add('レビューが未入力です。');
+      _errorMessages['komento'] = 'レビューが未入力です。';
     }
 
     return errorMessages;
