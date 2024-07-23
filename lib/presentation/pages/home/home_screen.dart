@@ -1,14 +1,10 @@
-// Dart imports:
 import 'dart:io';
 
-// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// Project imports:
 import 'package:ous/constant/urls.dart';
 import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/gen/assets.gen.dart';
@@ -29,6 +25,45 @@ class Home extends ConsumerStatefulWidget {
 
 class HomeState extends ConsumerState<Home> {
   final VersionCheckService _versionCheckService = VersionCheckService();
+
+  @override
+  void initState() {
+    super.initState();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
+    await _checkVersion();
+  }
+
+  Future<void> _checkVersion() async {
+    await _versionCheckService.checkVersion(context);
+  }
+
+  Future<void> _showNotification() async {
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'テスト通知',
+      'これはテスト通知です',
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,18 +76,14 @@ class HomeState extends ConsumerState<Home> {
             IconButton(
               icon: const Icon(Icons.ios_share),
               onPressed: () {
-                Share.share(
-                  StoreUrls.ios,
-                );
+                Share.share(StoreUrls.ios);
               },
             ),
           if (!kIsWeb && Platform.isAndroid)
             IconButton(
               icon: const Icon(Icons.ios_share),
               onPressed: () {
-                Share.share(
-                  StoreUrls.android,
-                );
+                Share.share(StoreUrls.android);
               },
             ),
         ],
@@ -61,8 +92,15 @@ class HomeState extends ConsumerState<Home> {
         canPop: false,
         child: RefreshIndicator(
           onRefresh: () async {
-            await ref.read(busServiceProvider.notifier).fetchBusInfo();
-            await ref.read(myLogStatusProvider.notifier).fetchMyLogStatus();
+            try {
+              await ref.read(busServiceProvider.notifier).fetchBusInfo();
+              await ref.read(myLogStatusProvider.notifier).fetchMyLogStatus();
+            } catch (e) {
+              // エラーハンドリング
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('データの取得に失敗しました: $e')),
+              );
+            }
           },
           child: SingleChildScrollView(
             child: Column(
@@ -144,40 +182,6 @@ class HomeState extends ConsumerState<Home> {
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    AnalyticsService().setCurrentScreen(AnalyticsServiceScreenName.home);
-    _checkVersion();
-  }
-
-  Future<void> _checkVersion() async {
-    await _versionCheckService.checkVersion(context);
-  }
-
-  Future<void> _showNotification() async {
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'テスト通知',
-      'これはテスト通知です',
-      platformChannelSpecifics,
-      payload: 'item x',
     );
   }
 }

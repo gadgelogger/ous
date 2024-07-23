@@ -18,9 +18,9 @@ class DrawerUserHeader extends ConsumerWidget {
         displayName: userData?.displayName ?? 'Guest',
         email: userData?.email ?? 'guest@example.com',
         photoUrl: userData?.photoURL,
-        onTap: () => _navigateToAccountScreen(context), // 追加
+        onTap: () => _navigateToAccountScreen(context),
       ),
-      loading: () => _LoadingView(),
+      loading: () => const _LoadingView(),
       error: (error, _) => _ErrorView(error: error.toString()),
     );
   }
@@ -51,7 +51,7 @@ class _ErrorView extends StatelessWidget {
             Assets.icon.error.path,
             width: 150.0,
           ),
-          Text('エラー: $error'),
+          Text('エラーが発生しました: $error'),
         ],
       ),
     );
@@ -59,6 +59,8 @@ class _ErrorView extends StatelessWidget {
 }
 
 class _LoadingView extends StatelessWidget {
+  const _LoadingView();
+
   @override
   Widget build(BuildContext context) {
     return UserAccountsDrawerHeader(

@@ -26,55 +26,47 @@ class NavBar extends StatelessWidget {
         children: [
           const DrawerUserHeader(),
           _buildMenuItem(
-            Icons.event_available_outlined,
-            '行事予定',
-            () => _launchUrl(
-              context,
-              calendarUrl,
-              mode: LaunchMode.inAppBrowserView,
-            ),
+            icon: Icons.event_available_outlined,
+            title: '行事予定',
+            onTap: () => _launchUrl(context, calendarUrl),
           ),
           _buildMenuItem(
-            Icons.public_outlined,
-            'マイログ',
-            () => _launchUrl(
-              context,
-              mylogUrl,
-              mode: LaunchMode.inAppBrowserView,
-            ),
+            icon: Icons.public_outlined,
+            title: 'マイログ',
+            onTap: () => _launchUrl(context, mylogUrl),
           ),
           _buildMenuItem(
-            Icons.book_outlined,
-            '学生便覧',
-            () => _launchUrl(
-              context,
-              handbookUrl,
-              mode: LaunchMode.inAppBrowserView,
-            ),
+            icon: Icons.book_outlined,
+            title: '学生便覧',
+            onTap: () => _launchUrl(context, handbookUrl),
           ),
           const Divider(),
           _buildMenuItem(
-            Icons.link_outlined,
-            '各種リンク集',
-            () => _navigateToPage(context, const Link()),
+            icon: Icons.link_outlined,
+            title: '各種リンク集',
+            onTap: () => _navigateToPage(context, const Link()),
           ),
           _buildMenuItem(
-            Icons.call_outlined,
-            '各種連絡先',
-            () => _navigateToPage(context, const Call()),
+            icon: Icons.call_outlined,
+            title: '各種連絡先',
+            onTap: () => _navigateToPage(context, const Call()),
           ),
           const Divider(),
           _buildMenuItem(
-            Icons.settings_outlined,
-            '設定/その他',
-            () => _navigateToPage(context, const SettingPage()),
+            icon: Icons.settings_outlined,
+            title: '設定/その他',
+            onTap: () => _navigateToPage(context, const SettingPage()),
           ),
         ],
       ),
     );
   }
 
-  ListTile _buildMenuItem(IconData icon, String title, VoidCallback onTap) {
+  ListTile _buildMenuItem({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
     return ListTile(
       leading: Icon(icon),
       title: Text(title),
@@ -82,9 +74,9 @@ class NavBar extends StatelessWidget {
     );
   }
 
-  void _launchUrl(BuildContext context, String url, {LaunchMode? mode}) {
+  void _launchUrl(BuildContext context, String url) {
     Navigator.of(context).pop();
-    launchUrl(Uri.parse(url), mode: mode ?? LaunchMode.externalApplication);
+    launchUrl(Uri.parse(url), mode: LaunchMode.inAppBrowserView);
   }
 
   void _navigateToPage(BuildContext context, Widget page) {

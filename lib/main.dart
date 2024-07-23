@@ -16,7 +16,7 @@ import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
-import 'package:ous/infrastructure/notification_service.dart'; // Add this import
+import 'package:ous/infrastructure/notification_service.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
@@ -24,47 +24,56 @@ import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
 import 'infrastructure/config/firebase_options.dart';
 
 void main() async {
+  // Flutterの初期化
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  WidgetsFlutterBinding.ensureInitialized();
+
+  // SharedPreferencesの初期化
   await SharedPreferencesInstance.initialize();
 
-  await Firebase.initializeApp(
-    name: 'ous-app-8b971',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Firebaseの初期化
+  await initializeFirebase();
+
+  // Firestoreの設定
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,
   );
 
+  // 画面の向きを縦固定に設定
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  //ナビゲーションバーの背景色を透明にしてイケてるようにする
+  // ナビゲーションバーの背景色を透明に設定
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
     overlays: [SystemUiOverlay.top],
-  ).then((_) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.dark.copyWith(
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarDividerColor: Colors.transparent,
-      ),
-    );
-  });
+  );
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.dark.copyWith(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ),
+  );
 
+  // Providerの初期化
   final container = ProviderContainer();
   await container.read(busServiceProvider.notifier).fetchBusInfo();
   await container.read(myLogStatusProvider.notifier).fetchMyLogStatus();
 
-  // Initialize local notifications
-  await LocalNotifications.init(); // Add this line
-  await _requestPermissions(); // Add this line
+  // ローカル通知の初期化と権限のリクエスト
+  try {
+    await LocalNotifications.init();
+    await _requestPermissions();
+  } catch (e) {
+    print('Error initializing notifications: $e');
+  }
 
+  // スプラッシュスクリーンの削除
   FlutterNativeSplash.remove();
 
+  // アプリの起動
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -73,6 +82,7 @@ void main() async {
   );
 }
 
+// ローカル通知の権限をリクエスト
 Future<void> _requestPermissions() async {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -97,15 +107,13 @@ Future<void> _requestPermissions() async {
     final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
         flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
-    await androidImplementation
-        ?.requestNotificationsPermission(); // Update this line
-    // _notificationsEnabled = grantedNotificationPermission ?? false; // Remove this line
+    await androidImplementation?.requestNotificationsPermission();
   }
 }
 
+// Firebaseの初期化
 Future<void> initializeFirebase() async {
   try {
-    // Firebaseが初期化されているかどうかを確認
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
