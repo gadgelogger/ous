@@ -44,7 +44,11 @@ class CustomYearPicker extends StatelessWidget {
                 value.isNotEmpty ? value : '年度を選択',
                 style: TextStyle(
                   fontSize: 16,
-                  color: value.isNotEmpty ? Colors.black : Colors.grey,
+                  color: value.isNotEmpty
+                      ? (Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black)
+                      : Colors.grey,
                 ),
               ),
               const Icon(Icons.arrow_drop_down),

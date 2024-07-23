@@ -1,11 +1,6 @@
-// ... import statements ...
-
-// Flutter imports:
 import 'package:flutter/material.dart';
-// Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-// Project imports:
 import 'package:ous/domain/review_provider.dart';
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/presentation/pages/review/detail_view.dart';
@@ -30,6 +25,7 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
   String _selectedTanni = '';
   String _selectedZyugyoukeisiki = '';
   String _selectedSyusseki = '';
+  String _selectedDateOrder = ''; // 追加
   String _searchQuery = '';
 
   @override
@@ -44,6 +40,7 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
           _selectedZyugyoukeisiki,
           _selectedSyusseki,
           _searchQuery,
+          _selectedDateOrder, // 追加
         ),
       ),
     );
@@ -64,6 +61,7 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
                   tanni: _selectedTanni,
                   zyugyoukeisiki: _selectedZyugyoukeisiki,
                   syusseki: _selectedSyusseki,
+                  selectedDateOrder: _selectedDateOrder,
                 ),
               );
               if (result != null) {
@@ -160,11 +158,13 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
           _selectedTanni,
           _selectedZyugyoukeisiki,
           _selectedSyusseki,
+          _selectedDateOrder, // 追加
           (value) => setState(() => _selectedBumon = value),
           (value) => setState(() => _selectedGakki = value),
           (value) => setState(() => _selectedTanni = value),
           (value) => setState(() => _selectedZyugyoukeisiki = value),
           (value) => setState(() => _selectedSyusseki = value),
+          (value) => setState(() => _selectedDateOrder = value), // 追加
         ),
         heroTag: 'filter',
         child: const Icon(Icons.filter_list),

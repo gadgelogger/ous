@@ -1,11 +1,19 @@
-// Package imports:
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// Project imports:
 import 'package:ous/gen/review_data.dart';
 
-final reviewsProvider = StreamProvider.family<List<Review>,
-    (String, String, String, String, String, String, String)>((ref, params) {
+final reviewsProvider = StreamProvider.family<
+    List<Review>,
+    (
+      String,
+      String,
+      String,
+      String,
+      String,
+      String,
+      String,
+      String
+    )>((ref, params) {
   final (
     gakubu,
     selectedBumon,
@@ -13,13 +21,13 @@ final reviewsProvider = StreamProvider.family<List<Review>,
     selectedTanni,
     selectedZyugyoukeisiki,
     selectedSyusseki,
-    searchQuery
+    searchQuery,
+    selectedDateOrder // 追加
   ) = params;
 
   Query<Map<String, dynamic>> query =
       FirebaseFirestore.instance.collection(gakubu);
 
-  // インデックスを作成してクエリのパフォーマンスを向上
   if (selectedBumon.isNotEmpty) {
     query = query.where('bumon', isEqualTo: selectedBumon);
   }
@@ -44,6 +52,12 @@ final reviewsProvider = StreamProvider.family<List<Review>,
     query = query
         .where('zyugyoumei', isGreaterThanOrEqualTo: searchQuery)
         .where('zyugyoumei', isLessThan: '${searchQuery}z');
+  }
+
+  if (selectedDateOrder == 'newest') {
+    query = query.orderBy('date', descending: true);
+  } else if (selectedDateOrder == 'oldest') {
+    query = query.orderBy('date', descending: false);
   }
 
   return query.snapshots().map(

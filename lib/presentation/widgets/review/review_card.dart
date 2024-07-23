@@ -1,8 +1,6 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Project imports:
 import 'package:ous/gen/review_data.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 class ReviewCard extends StatelessWidget {
   final Review review;
@@ -11,15 +9,17 @@ class ReviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 背景の明るさをチェック
     final isBackgroundBright = Theme.of(context).brightness == Brightness.light;
-
-    // 明るい背景の場合は黒、暗い背景の場合は白
     final textColor = isBackgroundBright ? Colors.white : Colors.black;
+
+    // 現在の日付と投稿日の差を計算
+    final now = DateTime.now();
+    final postDate = DateTime.parse(review.date.toString());
+    final isNew = now.difference(postDate).inDays <= 365;
 
     return SizedBox(
       width: 200,
-      height: 30,
+      height: 300,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -81,6 +81,25 @@ class ReviewCard extends StatelessWidget {
                 ),
               ),
             ),
+            if (isNew)
+              Container(
+                foregroundDecoration: RotatedCornerDecoration.withColor(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                  spanBaselineShift: 4,
+                  badgeSize: const Size(50, 50),
+                  badgeCornerRadius: const Radius.circular(8),
+                  badgePosition: BadgePosition.topEnd,
+                  textSpan: const TextSpan(
+                    text: 'NEW',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      letterSpacing: 1,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

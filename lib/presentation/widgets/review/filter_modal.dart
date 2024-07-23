@@ -1,5 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void showFilterModal(
   BuildContext context,
@@ -8,24 +8,28 @@ void showFilterModal(
   String selectedTanni,
   String selectedZyugyoukeisiki,
   String selectedSyusseki,
+  String selectedDateOrder,
   void Function(String) setSelectedBumon,
   void Function(String) setSelectedGakki,
   void Function(String) setSelectedTanni,
   void Function(String) setSelectedZyugyoukeisiki,
   void Function(String) setSelectedSyusseki,
+  void Function(String) setSelectedDateOrder,
 ) {
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     builder: (context) {
       return StatefulBuilder(
         builder: (context, setModalState) {
           return Container(
+            height: 550.h,
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  '絞り込み条件',
+                  '絞り込み',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -133,6 +137,20 @@ void showFilterModal(
                   },
                 ),
                 const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: selectedDateOrder,
+                  items: const [
+                    DropdownMenuItem(value: '', child: Text('投稿日順')),
+                    DropdownMenuItem(value: 'newest', child: Text('新しい順')),
+                    DropdownMenuItem(value: 'oldest', child: Text('古い順')),
+                  ],
+                  onChanged: (value) {
+                    setModalState(() {
+                      setSelectedDateOrder(value!);
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   child: const Text('リセット'),
                   onPressed: () {
@@ -142,6 +160,7 @@ void showFilterModal(
                       setSelectedTanni('');
                       setSelectedZyugyoukeisiki('');
                       setSelectedSyusseki('');
+                      setSelectedDateOrder(''); // 追加
                     });
                     Navigator.pop(context);
                   },

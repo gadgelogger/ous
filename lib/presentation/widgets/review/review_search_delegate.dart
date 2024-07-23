@@ -14,6 +14,7 @@ class ReviewSearchDelegate extends SearchDelegate<String> {
   final String tanni;
   final String zyugyoukeisiki;
   final String syusseki;
+  final String selectedDateOrder;
 
   ReviewSearchDelegate({
     required this.gakubu,
@@ -22,6 +23,7 @@ class ReviewSearchDelegate extends SearchDelegate<String> {
     required this.tanni,
     required this.zyugyoukeisiki,
     required this.syusseki,
+    required this.selectedDateOrder,
   });
 
   @override
@@ -60,6 +62,7 @@ class ReviewSearchDelegate extends SearchDelegate<String> {
               zyugyoukeisiki,
               syusseki,
               query,
+              selectedDateOrder,
             ),
           ),
         );
