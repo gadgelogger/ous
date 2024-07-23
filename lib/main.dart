@@ -1,6 +1,7 @@
 // Flutter imports:
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 // Project imports:
 import 'package:ous/controller/firebase_provider.dart';
 import 'package:ous/domain/bus_service_provider.dart';
+import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/infrastructure/notification_service.dart'; // Add this import
@@ -31,6 +33,10 @@ void main() async {
     name: 'ous-app-8b971',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+  );
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

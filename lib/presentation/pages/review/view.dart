@@ -78,7 +78,16 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
       body: Center(
         child: reviewsAsync.when(
           loading: () => const CircularProgressIndicator(),
-          error: (error, stack) => Text('Error: $error'),
+          error: (error, stack) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Error: $error'),
+              ElevatedButton(
+                onPressed: () => setState(() {}),
+                child: const Text('再試行'),
+              ),
+            ],
+          ),
           data: (reviews) {
             if (reviews.isEmpty) {
               return Center(
