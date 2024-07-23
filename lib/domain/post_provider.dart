@@ -11,7 +11,7 @@ final postProvider = ChangeNotifierProvider((ref) => PostModel());
 class PostModel extends ChangeNotifier {
   String category = 'rigaku';
   String bumon = 'ラク単';
-  String nenndo = '';
+  String nenndo = DateTime.now().year.toString(); // 初期値を現在の年に設定
   String gakki = '春１';
   String tanni = '1';
   String zyugyoukeisiki = 'オンライン(VOD)';

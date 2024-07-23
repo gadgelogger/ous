@@ -163,6 +163,13 @@ class _PostPageState extends ConsumerState<PostPage> {
                 onChanged: (value) => postModel.setKyoukasyo(value!),
               ),
               CustomTextField(
+                labelText: 'レビューを入力してください',
+                hintText: 'この講義は楽で〜...',
+                maxLines: 5,
+                controller: postModel.komentoController,
+                errorText: postModel.errorMessages['komento'],
+              ),
+              CustomTextField(
                 labelText: 'テスト形式を入力してください',
                 hintText: 'ありorなしorレポートorその他...',
                 controller: postModel.tesutokeisikiController,
