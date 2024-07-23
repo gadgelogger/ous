@@ -16,7 +16,7 @@ class MyPageEdit extends ConsumerWidget {
     ImageSource source,
     WidgetRef ref,
     UserData? userData,
-    BuildContext context, // contextを追加
+    BuildContext context,
   ) async {
     final image = await _picker.pickImage(source: source);
     if (image != null) {
@@ -24,9 +24,9 @@ class MyPageEdit extends ConsumerWidget {
         sourcePath: image.path,
         aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         cropStyle: CropStyle.circle,
-        compressQuality: 100,
-        maxWidth: 800,
-        maxHeight: 800,
+        compressQuality: 70, // 圧縮品質を70に設定
+        maxWidth: 512, // 最大幅を512に設定
+        maxHeight: 512, // 最大高さを512に設定
         uiSettings: [
           AndroidUiSettings(
             toolbarTitle: '画像をトリミング',
@@ -54,10 +54,8 @@ class MyPageEdit extends ConsumerWidget {
                 userData?.uid ?? '',
                 photoURL: imageUrl,
               );
-          // ユーザーストリームを更新
           ref.refresh(userStreamProvider);
 
-          // 成功メッセージを表示
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('プロフィール画像が更新されました。')),
           );
@@ -109,7 +107,7 @@ class MyPageEdit extends ConsumerWidget {
                                             ImageSource.gallery,
                                             ref,
                                             userData,
-                                            context, // contextを渡す
+                                            context,
                                           );
                                         },
                                       ),
@@ -122,7 +120,7 @@ class MyPageEdit extends ConsumerWidget {
                                             ImageSource.camera,
                                             ref,
                                             userData,
-                                            context, // contextを渡す
+                                            context,
                                           );
                                         },
                                       ),
