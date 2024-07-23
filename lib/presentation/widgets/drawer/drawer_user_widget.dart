@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,7 +106,9 @@ class _UserAccountsDrawerHeader extends StatelessWidget {
           style: const TextStyle(color: Colors.white),
         ),
         currentAccountPicture: CircleAvatar(
-          backgroundImage: photoUrl != '' ? NetworkImage(photoUrl ?? '') : null,
+          backgroundImage: photoUrl != ''
+              ? CachedNetworkImageProvider(photoUrl ?? '')
+              : null,
           child: photoUrl == ''
               ? const Icon(
                   Icons.person,

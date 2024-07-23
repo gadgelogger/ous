@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,7 +99,8 @@ class AccountScreen extends ConsumerWidget {
                                   },
                                   child: CircleAvatar(
                                     backgroundImage: userData?.photoURL != ''
-                                        ? NetworkImage(userData?.photoURL ?? '')
+                                        ? CachedNetworkImageProvider(
+                                            userData?.photoURL ?? '')
                                         : null,
                                     child: userData?.photoURL == ''
                                         ? const Icon(

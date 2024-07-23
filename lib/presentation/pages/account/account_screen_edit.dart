@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -133,7 +134,9 @@ class MyPageEdit extends ConsumerWidget {
                           },
                           child: CircleAvatar(
                             backgroundImage: userData?.photoURL != ''
-                                ? NetworkImage(userData?.photoURL ?? '')
+                                ? CachedNetworkImageProvider(
+                                    userData?.photoURL ?? '',
+                                  )
                                 : null,
                             child: userData?.photoURL == ''
                                 ? const Icon(Icons.person, size: 100)
