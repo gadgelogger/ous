@@ -49,8 +49,8 @@ class UserPostsScreen extends ConsumerWidget {
               return ListTile(
                 title: Text(post.zyugyoumei ?? ''),
                 subtitle: Text(post.kousimei ?? ''),
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => EditScreen(
@@ -58,13 +58,19 @@ class UserPostsScreen extends ConsumerWidget {
                       ),
                     ),
                   );
+                  // 投稿後にデータを再取得
+                  ref.refresh(fetchUserReviews);
                 },
               );
             },
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => const Center(child: Text('エラーが発生しました')),
+        error: (error, stackTrace) {
+          debugPrint('エラーが発生しました: $error');
+          debugPrint('スタックトレース: $stackTrace');
+          return Center(child: Text('エラーが発生しました: $error'));
+        },
       ),
     );
   }

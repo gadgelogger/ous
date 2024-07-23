@@ -1,6 +1,5 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Project imports:
 import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/presentation/pages/info/dev_info_screen.dart';

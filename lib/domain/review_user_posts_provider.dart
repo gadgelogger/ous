@@ -55,12 +55,21 @@ class FetchUserReviews {
       'zyouhou',
       'zyuui',
     ];
-    for (String collection in collections) {
-      var querySnapshot = await _firestore
+
+    final futures = collections.map((collection) {
+      return _firestore
           .collection(collection)
           .where('accountuid', isEqualTo: userId)
           .get();
+    }).toList();
+
+    final querySnapshots = await Future.wait(futures);
+
+    for (var querySnapshot in querySnapshots) {
+      // デバッグ用にクエリ結果を出力
+      print('クエリ結果のドキュメント数: ${querySnapshot.docs.length}');
       for (var doc in querySnapshot.docs) {
+        print('ドキュメントデータ: ${doc.data()}');
         reviews.add(Review.fromJson(doc.data()));
       }
     }
@@ -80,12 +89,14 @@ class FetchUserReviews {
       'zyouhou',
       'zyuui',
     ];
+
     for (String collection in collections) {
       final querySnapshot = await _firestore
           .collection(collection)
           .where('accountuid', isEqualTo: review.accountuid)
           .where('ID', isEqualTo: review.ID)
           .get();
+
       if (querySnapshot.docs.isNotEmpty) {
         await querySnapshot.docs.first.reference.update(review.toJson());
         break;
