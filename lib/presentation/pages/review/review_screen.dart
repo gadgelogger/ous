@@ -76,8 +76,7 @@ class _ReviewState extends State<ReviewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CustomCard(
-                    imagePath: Assets
-                        .images.facultyOfInformationScienceAndTechnology.path,
+                    imagePath: Assets.images.facultyOfEducation.path,
                     title: '教育学部',
                     collection: 'kyouiku',
                   ),
@@ -102,6 +101,19 @@ class _ReviewState extends State<ReviewScreen> {
                     title: '生命科学部',
                     collection: 'seimei',
                   ),
+                ],
+              ),
+              //ここにアクティブラーナーズを追加したい
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceAround, // 他のカードと同じ配置に設定
+                children: [
+                  CustomCard(
+                    imagePath: Assets.images.img0669.path,
+                    title: 'アクティブ',
+                    collection: 'active',
+                  ),
+                  const TransparentCard(),
                 ],
               ),
               const Divider(), //区切り線

@@ -23,6 +23,7 @@ class FetchUserReviews {
       'rigaku',
       'seibutu',
       'seimei',
+      'active',
       'zyouhou',
       'zyuui',
     ];
@@ -52,6 +53,7 @@ class FetchUserReviews {
       'rigaku',
       'seibutu',
       'seimei',
+      'active',
       'zyouhou',
       'zyuui',
     ];
@@ -86,6 +88,7 @@ class FetchUserReviews {
       'rigaku',
       'seibutu',
       'seimei',
+      'active',
       'zyouhou',
       'zyuui',
     ];

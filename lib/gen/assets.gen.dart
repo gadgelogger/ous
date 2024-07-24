@@ -79,6 +79,14 @@ class $AssetsIconGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/IMG_0669.jpg
+  AssetGenImage get img0669 =>
+      const AssetGenImage('assets/images/IMG_0669.jpg');
+
+  /// File path: assets/images/Na_April_08.jpg
+  AssetGenImage get naApril08 =>
+      const AssetGenImage('assets/images/Na_April_08.jpg');
+
   /// File path: assets/images/faculty_of_biology_and_earth_science.jpg
   AssetGenImage get facultyOfBiologyAndEarthScience => const AssetGenImage(
       'assets/images/faculty_of_biology_and_earth_science.jpg');
@@ -124,6 +132,8 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        img0669,
+        naApril08,
         facultyOfBiologyAndEarthScience,
         facultyOfEducation,
         facultyOfEngineering,

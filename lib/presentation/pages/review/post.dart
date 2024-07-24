@@ -59,6 +59,7 @@ class _PostPageState extends ConsumerState<PostPage> {
                   MapEntry('keiei', '経営学部'),
                   MapEntry('zyuui', '獣医学部'),
                   MapEntry('seimei', '生命科学部'),
+                  MapEntry('active', 'アクティブラーナーズ'),
                   MapEntry('kiban', '基盤教育科目'),
                   MapEntry('kyousyoku', '教職関連科目'),
                 ],

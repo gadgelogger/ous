@@ -118,6 +118,22 @@ class CustomCard extends StatelessWidget {
   }
 }
 
+class TransparentCard extends StatelessWidget {
+  const TransparentCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 170.h,
+      width: 170.w,
+      child: const Card(
+        color: Colors.transparent,
+        elevation: 0,
+      ),
+    );
+  }
+}
+
 class FloatingButton extends StatelessWidget {
   const FloatingButton({Key? key}) : super(key: key);
 
