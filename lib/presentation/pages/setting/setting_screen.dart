@@ -12,7 +12,7 @@ import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/infrastructure/setting_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SettingPage extends ConsumerWidget {

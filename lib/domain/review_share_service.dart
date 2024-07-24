@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ous/gen/review_data.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ShareService {
   static Future<void> shareReview(Review review, GlobalKey globalKey) async {
@@ -35,8 +35,9 @@ https://ous-unoffical-app.studio.site/
 #岡理アプリ
   ''';
 
-    await Share.shareFiles(
-      [file.path],
+    final XFile xFile = XFile(file.path);
+    await Share.shareXFiles(
+      [xFile],
       subject: '講義評価をシェアします',
       text: shareText,
     );

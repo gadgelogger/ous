@@ -11,7 +11,7 @@ import 'package:ous/infrastructure/config/analytics_service.dart';
 import 'package:ous/infrastructure/version_check_service.dart';
 import 'package:ous/presentation/widgets/home/bus_info_button.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../widgets/drawer/drawer.dart';
 

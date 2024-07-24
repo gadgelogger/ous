@@ -1,7 +1,7 @@
 name: ous
 description: 岡山理科大学の非公式アプリ
 publish_to: 'none' 
-version: 2.2.0+1
+version: 2.3.1+1
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -23,13 +23,12 @@ dependencies:
   cloud_firestore: ^4.17.3
   shared_preferences: ^2.1.0
   syncfusion_flutter_gauges: ^20.4.54
-  package_info_plus: ^3.1.0
+  package_info_plus: ^8.0.0
   fluttertoast: ^8.2.6
   sign_in_with_apple: ^6.1.0
   flutter_native_splash: ^2.2.0+1
   flutter_overboard: ^3.1.1
   uuid: ^3.0.7
-  share: ^2.0.4
   flutter_localizations:
     sdk: flutter
   intl: ^0.19.0

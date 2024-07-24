@@ -960,7 +960,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.32):
     - BoringSSL-GRPC/Interface (= 0.0.32)
   - BoringSSL-GRPC/Interface (0.0.32)
-  - cloud_firestore (4.17.3):
+  - cloud_firestore (4.17.5):
     - Firebase/Firestore (= 10.23.1)
     - firebase_core
     - Flutter
@@ -983,22 +983,22 @@ PODS:
   - Firebase/Storage (10.23.1):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.23.0)
-  - firebase_analytics (10.10.5):
+  - firebase_analytics (10.10.7):
     - Firebase/Analytics (= 10.23.1)
     - firebase_core
     - Flutter
-  - firebase_auth (4.19.5):
+  - firebase_auth (4.20.0):
     - Firebase/Auth (= 10.23.1)
     - firebase_core
     - Flutter
-  - firebase_core (2.31.0):
+  - firebase_core (2.32.0):
     - Firebase/CoreOnly (= 10.23.1)
     - Flutter
-  - firebase_remote_config (4.4.5):
+  - firebase_remote_config (4.4.7):
     - Firebase/RemoteConfig (= 10.23.1)
     - firebase_core
     - Flutter
-  - firebase_storage (11.7.5):
+  - firebase_storage (11.7.7):
     - Firebase/Storage (= 10.23.1)
     - firebase_core
     - Flutter
@@ -1298,8 +1298,6 @@ PODS:
     - FlutterMacOS
   - PromisesObjC (2.4.0)
   - RecaptchaInterop (100.0.0)
-  - share (0.0.1):
-    - Flutter
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -1337,7 +1335,6 @@ DEPENDENCIES:
   - mobile_scanner (from `.symlinks/plugins/mobile_scanner/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
-  - share (from `.symlinks/plugins/share/ios`)
   - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -1428,8 +1425,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
-  share:
-    :path: ".symlinks/plugins/share/ios"
   share_plus:
     :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
@@ -1448,13 +1443,13 @@ SPEC CHECKSUMS:
   app_links: e70ca16b4b0f88253b3b3660200d4a10b4ea9795
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   BoringSSL-GRPC: 1e2348957acdbcad360b80a264a90799984b2ba6
-  cloud_firestore: 379bc544040b2b5ce202e073df6b3d5e2ad27642
+  cloud_firestore: ffdc36fc94b52610a129082d451d4b7a5347bfaa
   Firebase: cf09623f98ae25a3ad484e23c7e0e5f464152d80
-  firebase_analytics: acdeff617ce19f6ee2c8226d476e93bad527c470
-  firebase_auth: 974f67824edb7a5151b6744b2be53c2e6515bda8
-  firebase_core: 5efac7776850aef632695ef8526169d9b11f3ee0
-  firebase_remote_config: b2c9eb4701b435f5eccc39db7743c35ef9f82da5
-  firebase_storage: 370225f1d18dafa8564abc64163acaefa61dc173
+  firebase_analytics: 59bae3e33b8841b18ed6d2acb3c8622b81e2d602
+  firebase_auth: 34e650c385da36b01b940f163fe46daf9fbddbeb
+  firebase_core: a4ccd58eb5e8277346c35a9c2fb0bebb524dacde
+  firebase_remote_config: 61826c12693b5dd3d54e07f32e717201537f4041
+  firebase_storage: 7aab2f5f13b583d0704e38fe595f55a82be89752
   FirebaseABTesting: d87f56707159bae64e269757a6e963d490f2eebe
   FirebaseAnalytics: fd35d51e6da86ef1aa2c3fe1f64ab2482cc01ba5
   FirebaseAppCheckInterop: 6a1757cfd4067d8e00fccd14fcc1b8fd78cfac07
@@ -1498,11 +1493,10 @@ SPEC CHECKSUMS:
   mobile_scanner: 38dcd8a49d7d485f632b7de65e4900010187aef2
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
+  package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   share_plus: 8875f4f2500512ea181eef553c3e27dba5135aad
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440

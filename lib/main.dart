@@ -1,11 +1,8 @@
 // Flutter imports:
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +13,6 @@ import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
-import 'package:ous/infrastructure/notification_service.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
@@ -62,14 +58,6 @@ void main() async {
   await container.read(busServiceProvider.notifier).fetchBusInfo();
   await container.read(myLogStatusProvider.notifier).fetchMyLogStatus();
 
-  // ローカル通知の初期化と権限のリクエスト
-  try {
-    await LocalNotifications.init();
-    await _requestPermissions();
-  } catch (e) {
-    print('Error initializing notifications: $e');
-  }
-
   // スプラッシュスクリーンの削除
   FlutterNativeSplash.remove();
 
@@ -80,35 +68,6 @@ void main() async {
       child: const MainApp(),
     ),
   );
-}
-
-// ローカル通知の権限をリクエスト
-Future<void> _requestPermissions() async {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  if (Platform.isIOS || Platform.isMacOS) {
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            MacOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-  } else if (Platform.isAndroid) {
-    final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-        flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    await androidImplementation?.requestNotificationsPermission();
-  }
 }
 
 // Firebaseの初期化
