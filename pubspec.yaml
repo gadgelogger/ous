@@ -24,7 +24,7 @@ dependencies:
   shared_preferences: ^2.1.0
   syncfusion_flutter_gauges: ^20.4.54
   package_info_plus: ^3.1.0
-  fluttertoast: ^8.2.1
+  fluttertoast: ^8.2.6
   sign_in_with_apple: ^6.1.0
   flutter_native_splash: ^2.2.0+1
   flutter_overboard: ^3.1.1
