@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ous/constant/urls.dart';
@@ -39,29 +38,6 @@ class HomeState extends ConsumerState<Home> {
 
   Future<void> _checkVersion() async {
     await _versionCheckService.checkVersion(context);
-  }
-
-  Future<void> _showNotification() async {
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'テスト通知',
-      'これはテスト通知です',
-      platformChannelSpecifics,
-      payload: 'item x',
-    );
   }
 
   @override
@@ -170,12 +146,6 @@ class HomeState extends ConsumerState<Home> {
                       MyLogStatusButton(),
                     ],
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await _showNotification();
-                  },
-                  child: const Text('通知を発火'),
                 ),
               ],
             ),

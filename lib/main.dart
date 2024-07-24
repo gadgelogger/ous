@@ -158,7 +158,7 @@ class MainApp extends ConsumerWidget {
             if (user == null) {
               return const Login();
             } else {
-              return MainScreen();
+              return const MainScreen();
             }
           },
           loading: () => const Scaffold(
