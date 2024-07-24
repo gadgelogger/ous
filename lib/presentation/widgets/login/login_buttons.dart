@@ -151,7 +151,12 @@ class GuestSignInButton extends LoginButton {
   }
 
   @override
-  ButtonStyle getButtonStyle(BuildContext context) => const ButtonStyle();
+  ButtonStyle getButtonStyle(BuildContext context) {
+    return ElevatedButton.styleFrom(
+      fixedSize: const Size.fromWidth(double.maxFinite),
+      shape: const StadiumBorder(),
+    );
+  }
 
   @override
   String getFailureMessage(Exception e) {
@@ -214,7 +219,7 @@ abstract class LoginButton extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return MainScreen();
+          return const MainScreen();
         },
       ),
     );
