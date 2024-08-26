@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:ous/domain/bus_service_provider.dart';
 import 'package:ous/domain/converters/date_time_timestamp_converter.dart';
 import 'package:ous/domain/share_preferences_instance.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
+import 'package:ous/infrastructure/admobHelper.dart';
 import 'package:ous/presentation/pages/account/login_screen.dart';
 import 'package:ous/presentation/pages/main_screen.dart';
 import 'package:ous/presentation/widgets/home/mylog_status_button.dart';
@@ -23,6 +25,10 @@ void main() async {
   // Flutterの初期化
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //Admobの初期化
+  AdmobHelper.initialization();
+  //トラッキングの初期化
+  WidgetsBinding.instance.addPostFrameCallback((_) => initTracking());
 
   // SharedPreferencesの初期化
   await SharedPreferencesInstance.initialize();
@@ -80,6 +86,14 @@ Future<void> initializeFirebase() async {
     }
   } catch (e) {
     print('Error initializing Firebase: $e');
+  }
+}
+
+Future<void> initTracking() async {
+  final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+  if (status == TrackingStatus.notDetermined) {
+    await Future.delayed(const Duration(milliseconds: 200));
+    await AppTrackingTransparency.requestTrackingAuthorization();
   }
 }
 
