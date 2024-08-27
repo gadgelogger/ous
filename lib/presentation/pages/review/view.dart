@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ous/domain/review_provider.dart';
 import 'package:ous/gen/assets.gen.dart';
+import 'package:ous/infrastructure/admobHelper.dart';
 import 'package:ous/presentation/pages/review/detail_view.dart';
 import 'package:ous/presentation/widgets/review/filter_modal.dart';
 import 'package:ous/presentation/widgets/review/review_card.dart';
@@ -118,25 +122,51 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                   ),
-                  itemCount: reviews.length,
+                  itemCount: reviews.length + (reviews.length ~/ 5),
                   itemBuilder: (context, index) {
-                    final review = reviews[index];
+                    if (index % 6 == 5) {
+                      return SizedBox(
+                        height: 100,
+                        child: AdWidget(
+                          ad: BannerAd(
+                            adUnitId: Platform.isAndroid
+                                ? 'ca-app-pub-1882636743563952/8213072176' // Androidの広告ID
+                                : 'ca-app-pub-1882636743563952/9285582901', // iOSの広告ID
+                            size: AdSize.banner,
+                            request: const AdRequest(),
+                            listener: BannerAdListener(
+                              onAdLoaded: (Ad ad) => debugPrint('Ad loaded.'),
+                              onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                                ad.dispose();
+                                debugPrint('Ad failed to load: $error');
+                              },
+                              onAdClosed: (Ad ad) {
+                                ad.dispose();
+                              },
+                            ),
+                          )..load(),
+                        ),
+                      );
+                    }
+
+                    final reviewIndex = index - (index ~/ 6);
+                    final review = reviews[reviewIndex];
                     return AnimationConfiguration.staggeredList(
-                      position: index,
+                      position: reviewIndex,
                       duration: const Duration(milliseconds: 375),
                       child: ScaleAnimation(
                         child: FadeInAnimation(
                           child: GestureDetector(
                             onTap: () {
-                              //Detail画面に遷移
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DetailScreen(
-                                    review: review,
-                                  ),
+                                  builder: (context) =>
+                                      DetailScreen(review: review),
                                 ),
-                              );
+                              ).then((_) {
+                                AdmobHelper.handleNavigation();
+                              });
                             },
                             child: ReviewCard(review: review),
                           ),
@@ -151,21 +181,24 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showFilterModal(
-          context,
-          _selectedBumon,
-          _selectedGakki,
-          _selectedTanni,
-          _selectedZyugyoukeisiki,
-          _selectedSyusseki,
-          _selectedDateOrder, // 追加
-          (value) => setState(() => _selectedBumon = value),
-          (value) => setState(() => _selectedGakki = value),
-          (value) => setState(() => _selectedTanni = value),
-          (value) => setState(() => _selectedZyugyoukeisiki = value),
-          (value) => setState(() => _selectedSyusseki = value),
-          (value) => setState(() => _selectedDateOrder = value), // 追加
-        ),
+        onPressed: () {
+          AdmobHelper.handleNavigation();
+          showFilterModal(
+            context,
+            _selectedBumon,
+            _selectedGakki,
+            _selectedTanni,
+            _selectedZyugyoukeisiki,
+            _selectedSyusseki,
+            _selectedDateOrder, // 追加
+            (value) => setState(() => _selectedBumon = value),
+            (value) => setState(() => _selectedGakki = value),
+            (value) => setState(() => _selectedTanni = value),
+            (value) => setState(() => _selectedZyugyoukeisiki = value),
+            (value) => setState(() => _selectedSyusseki = value),
+            (value) => setState(() => _selectedDateOrder = value), // 追加
+          );
+        },
         heroTag: 'filter',
         child: const Icon(Icons.filter_list),
       ),

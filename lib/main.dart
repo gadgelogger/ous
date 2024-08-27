@@ -25,9 +25,9 @@ void main() async {
   // Flutterの初期化
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  //Admobの初期化
+  // Admobの初期化
   AdmobHelper.initialization();
-  //トラッキングの初期化
+  // トラッキングの初期化
   WidgetsBinding.instance.addPostFrameCallback((_) => initTracking());
 
   // SharedPreferencesの初期化
@@ -85,7 +85,7 @@ Future<void> initializeFirebase() async {
       );
     }
   } catch (e) {
-    print('Error initializing Firebase: $e');
+    debugPrint('Error initializing Firebase: $e');
   }
 }
 

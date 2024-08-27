@@ -51,3 +51,5 @@ android/app/key.jks
 lib/apikey.dart
 key.jks
 upload_certificate.pem
+**/*.jks
+**/*.pem

@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
     <application
         android:label="岡理アプリ"
         android:name="${applicationName}"
@@ -16,8 +17,8 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1882636743563952~4811722446"/>
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-1882636743563952~4811722446"/> <!-- ここに正しいAdMobアプリケーションIDを入力 -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
@@ -45,6 +46,11 @@
             android:name="android.support.FILE_PROVIDER_PATHS"
             android:resource="@xml/file_paths"/>
     </provider>
+    <!-- 競合を解決するための属性を追加 -->
+    <property
+        android:name="android.adservices.AD_SERVICES_CONFIG"
+        android:resource="@xml/ga_ad_services_config"
+        tools:replace="android:resource"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and

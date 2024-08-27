@@ -1,10 +1,10 @@
-// Dart imports:
 import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,9 +47,35 @@ class NewsPageState extends State<NewsPage> {
           child: (_articles.isEmpty)
               ? const CircularProgressIndicator()
               : ListView.builder(
-                  itemCount: _articles.length + 1,
+                  itemCount: _articles.length + (_articles.length ~/ 5) + 1,
                   itemBuilder: (context, index) {
-                    if (index == _articles.length) {
+                    if (index % 6 == 5) {
+                      return SizedBox(
+                        height: 100,
+                        child: AdWidget(
+                          ad: BannerAd(
+                            adUnitId: Platform.isAndroid
+                                ? 'ca-app-pub-1882636743563952/9882211213' // Androidの広告ID
+                                : 'ca-app-pub-1882636743563952/9882211213', // iOSの広告ID
+                            size: AdSize.banner,
+                            request: const AdRequest(),
+                            listener: BannerAdListener(
+                              onAdLoaded: (Ad ad) => print('Ad loaded.'),
+                              onAdFailedToLoad: (Ad ad, LoadAdError error) {
+                                ad.dispose();
+                                print('Ad failed to load: $error');
+                              },
+                              onAdClosed: (Ad ad) {
+                                ad.dispose();
+                              },
+                            ),
+                          )..load(),
+                        ),
+                      );
+                    }
+
+                    final articleIndex = index - (index ~/ 6);
+                    if (articleIndex >= _articles.length) {
                       if (_isLoading) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -61,7 +87,8 @@ class NewsPageState extends State<NewsPage> {
                         );
                       }
                     }
-                    final article = _articles[index];
+
+                    final article = _articles[articleIndex];
                     return Column(
                       children: [
                         ListTile(
@@ -89,7 +116,6 @@ class NewsPageState extends State<NewsPage> {
                           },
                         ),
                         const Divider(),
-                        //区切り線
                       ],
                     );
                   },
@@ -111,15 +137,14 @@ class NewsPageState extends State<NewsPage> {
   }
 
   Future<void> _getWebsiteData() async {
-    if (_isLoading) return; // 既にデータ取得中の場合は処理をスキップ
+    if (_isLoading) return;
     setState(() {
-      _isLoading = true; // データ取得開始
+      _isLoading = true;
     });
 
     try {
-      // URLにページ番号を追加して更新
       final url = "${widget.categoryUrl}=$_page";
-      debugPrint('Fetching data from: $url'); // デバッグ情報としてURLを表示
+      debugPrint('Fetching data from: $url');
 
       HttpClient client = HttpClient();
       client.badCertificateCallback =
@@ -140,7 +165,7 @@ class NewsPageState extends State<NewsPage> {
         final urls = document.querySelectorAll("dl > dd > a").map((element) {
           var href = element.attributes["href"]!;
           if (!href.startsWith('http')) {
-            href = 'https://www.ous.ac.jp$href'; // 相対パスを絶対URLに変換
+            href = 'https://www.ous.ac.jp$href';
           }
           return href;
         }).toList();
@@ -158,22 +183,20 @@ class NewsPageState extends State<NewsPage> {
           if (_page == 1) {
             _articles = newArticles;
           } else {
-            _articles.addAll(newArticles); // 既存のリストに新しい記事を追加
+            _articles.addAll(newArticles);
           }
         });
       } else {
-        // エラーハンドリング: 応答コードが200以外の場合
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      // 例外が発生した場合のエラーハンドリング
       debugPrint('An error occurred: $e');
     } finally {
       if (mounted) {
         setState(() {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            _isLoading = false; // データ取得終了
-            _page++; // 次のページを取得する準備
+            _isLoading = false;
+            _page++;
           });
         });
       }
@@ -183,14 +206,13 @@ class NewsPageState extends State<NewsPage> {
   Future<void> _onLoadMore() async {
     if (!_isLoading) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // 追加のデータ取得中でなければ
-        _getWebsiteData(); // 次のページのデータを取得
+        _getWebsiteData();
       });
     }
   }
 
   Future<void> _onRefresh() async {
-    _page = 1; // リフレッシュ時は1ページ目から再取得
+    _page = 1;
     _articles.clear();
     await _getWebsiteData();
   }
