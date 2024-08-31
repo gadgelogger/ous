@@ -30,14 +30,27 @@ String getAdBannerUnitId() {
   return bannerUnitId;
 }
 
+String getReviewBottomBannerAdUnitId() {
+  if (Platform.isAndroid) {
+    return "ca-app-pub-1882636743563952/7078564841"; // Androidの広告ID
+  } else if (Platform.isIOS) {
+    return "ca-app-pub-1882636743563952/6445002425"; // iOSの広告ID
+  }
+  return "";
+}
+
 class AdmobHelper {
   static int _navigationCount = 0;
+  static int _rewardNavigationCount = 0; // 追加
   static InterstitialAd? _interstitialAd;
+  static RewardedInterstitialAd? _rewardedInterstitialAd; // 追加
   static bool _isAdLoaded = false;
+  static bool _isRewardedAdLoaded = false; // 追加
 
   static void initialization() {
     MobileAds.instance.initialize();
     createInterstitialAd();
+    createRewardedInterstitialAd(); // 追加
   }
 
   static void createInterstitialAd() {
@@ -56,6 +69,28 @@ class AdmobHelper {
           debugPrint('Interstitial ad failed to load: $error');
           _interstitialAd = null;
           _isAdLoaded = false;
+        },
+      ),
+    );
+  }
+
+  static void createRewardedInterstitialAd() {
+    // 追加
+    RewardedInterstitialAd.load(
+      adUnitId: Platform.isAndroid
+          ? 'ca-app-pub-1882636743563952/6208336308' // Androidの広告ID
+          : 'ca-app-pub-1882636743563952/6128445254', // iOSの広告ID
+      request: const AdRequest(),
+      rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
+        onAdLoaded: (RewardedInterstitialAd ad) {
+          _rewardedInterstitialAd = ad;
+          _isRewardedAdLoaded = true;
+          debugPrint('Rewarded interstitial ad loaded.');
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          debugPrint('Rewarded interstitial ad failed to load: $error');
+          _rewardedInterstitialAd = null;
+          _isRewardedAdLoaded = false;
         },
       ),
     );
@@ -81,13 +116,67 @@ class AdmobHelper {
     }
   }
 
+  static BannerAd getReviewBottomBannerAd() {
+    BannerAd bAd = BannerAd(
+      adUnitId: getReviewBottomBannerAdUnitId(),
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) => debugPrint('Bottom banner ad loaded.'),
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+          debugPrint('Bottom banner ad failed to load: $error');
+        },
+        onAdClosed: (Ad ad) {
+          debugPrint('Bottom banner ad disposed.');
+          ad.dispose();
+        },
+      ),
+    );
+    return bAd;
+  }
+
+  static void showRewardedInterstitialAd() {
+    // 追加
+    if (_isRewardedAdLoaded && _rewardedInterstitialAd != null) {
+      _rewardedInterstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (RewardedInterstitialAd ad) {
+          ad.dispose();
+          createRewardedInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent:
+            (RewardedInterstitialAd ad, AdError error) {
+          ad.dispose();
+          createRewardedInterstitialAd();
+        },
+      );
+      _rewardedInterstitialAd!.show(
+        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+          debugPrint('User earned reward: ${reward.amount} ${reward.type}');
+        },
+      );
+      _rewardedInterstitialAd = null;
+      _isRewardedAdLoaded = false;
+    } else {
+      debugPrint('Rewarded interstitial ad is not yet loaded.');
+    }
+  }
+
   static void handleNavigation() {
     _navigationCount++;
+    _rewardNavigationCount++; // 追加
     debugPrint('Navigation count: $_navigationCount'); // デバッグ用のログ
+    debugPrint('Reward navigation count: $_rewardNavigationCount'); // デバッグ用のログ
     if (_navigationCount >= Random().nextInt(20) + 1) {
       // 1-20回の間でランダムに広告を表示
       showInterstitialAd();
       _navigationCount = 0;
+    }
+    if (_rewardNavigationCount >= Random().nextInt(30) + 1) {
+      // 1-30回の間でランダムにリワード広告を表示
+      showRewardedInterstitialAd();
+      _rewardNavigationCount = 0;
     }
   }
 
