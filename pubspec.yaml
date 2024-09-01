@@ -1,7 +1,7 @@
 name: ous
 description: 岡山理科大学の非公式アプリ
 publish_to: 'none' 
-version: 2.3.2+1
+version: 2.3.3+1
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
@@ -63,13 +63,16 @@ dependencies:
   cached_network_image: ^3.3.1
   google_mobile_ads: ^5.1.0
   app_tracking_transparency: ^2.0.6
+  purchases_flutter: ^8.1.0
+  firebase_messaging: ^14.9.4
+  envied: ^0.5.4+1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   dependency_validator: any
   riverpod_generator: ^2.4.0
-  build_runner: ^2.4.8
+  build_runner: ^2.4.11
   custom_lint: ^0.6.2
   riverpod_lint: ^2.3.10
   freezed: ^2.4.7  
@@ -79,6 +82,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.4.0
   import_sorter: ^4.6.0
   flutter_lints: ^2.0.1
+  envied_generator: ^0.5.4+1
   
 flutter:
   uses-material-design: true

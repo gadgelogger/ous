@@ -2,11 +2,14 @@ import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Package imports:
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
+import 'package:ous/env.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Article {
@@ -22,7 +25,7 @@ class Article {
 }
 
 // 共通ウィジェット
-class NewsPage extends StatefulWidget {
+class NewsPage extends ConsumerStatefulWidget {
   final String categoryUrl;
   const NewsPage({
     Key? key,
@@ -33,13 +36,15 @@ class NewsPage extends StatefulWidget {
   NewsPageState createState() => NewsPageState();
 }
 
-class NewsPageState extends State<NewsPage> {
+class NewsPageState extends ConsumerState<NewsPage> {
   List<Article> _articles = [];
   int _page = 1;
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    final isAdFree = ref.watch(inAppPurchaseManager).isAdFree; // 追加
+
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _onRefresh,
@@ -49,14 +54,14 @@ class NewsPageState extends State<NewsPage> {
               : ListView.builder(
                   itemCount: _articles.length + (_articles.length ~/ 5) + 1,
                   itemBuilder: (context, index) {
-                    if (index % 6 == 5) {
+                    if (!isAdFree && index % 6 == 5) {
                       return SizedBox(
                         height: 100,
                         child: AdWidget(
                           ad: BannerAd(
                             adUnitId: Platform.isAndroid
-                                ? 'ca-app-pub-1882636743563952/9882211213' // Androidの広告ID
-                                : 'ca-app-pub-1882636743563952/9882211213', // iOSの広告ID
+                                ? Env.adNewspageIdAndroid // Androidの広告ID
+                                : Env.adNewspageIdIos, // iOSの広告ID
                             size: AdSize.banner,
                             request: const AdRequest(),
                             listener: BannerAdListener(

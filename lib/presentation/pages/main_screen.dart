@@ -6,6 +6,7 @@ import 'package:ous/infrastructure/admobHelper.dart';
 import 'package:ous/presentation/pages/home/home_screen.dart';
 import 'package:ous/presentation/pages/info/info_screen.dart';
 import 'package:ous/presentation/pages/review/review_screen.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 
 final baseTabViewProvider = StateProvider<ViewType>((ref) => ViewType.home);
 
@@ -21,6 +22,8 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewState = ref.watch(baseTabViewProvider);
+    final isAdFree = ref.watch(inAppPurchaseManager).isAdFree; // 追加
+
     return Scaffold(
       body: Center(
         child: _widgets[viewState.index],
@@ -28,12 +31,13 @@ class MainScreen extends ConsumerWidget {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: 50, // バナー広告の高さを指定
-            child: AdWidget(
-              ad: AdmobHelper.getLargeBannerAd()..load(),
+          if (!isAdFree) // 追加
+            SizedBox(
+              height: 50, // バナー広告の高さを指定
+              child: AdWidget(
+                ad: AdmobHelper.getLargeBannerAd()..load(),
+              ),
             ),
-          ),
           NavigationBar(
             selectedIndex: viewState.index,
             onDestinationSelected: (int index) {

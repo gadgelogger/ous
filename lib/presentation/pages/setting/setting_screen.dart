@@ -10,6 +10,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:ous/constant/urls.dart';
 import 'package:ous/domain/theme_mode_provider.dart';
 import 'package:ous/infrastructure/setting_service.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:share_plus/share_plus.dart';
@@ -136,25 +137,6 @@ class SettingPage extends ConsumerWidget {
                     },
                   ),
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.terminal),
-                    title: const Text('ライセンスについて'),
-                    onPressed: (context) {
-                      showLicensePage(
-                        context: context,
-                        applicationName: packageInfo?.appName ?? 'error',
-                        applicationVersion: packageInfo?.version ?? 'error',
-                        applicationIcon: const CircleAvatar(
-                          backgroundImage: AssetImage(
-                            'assets/icon/icon.png',
-                          ), // アイコンのパスを指定
-                          radius: 24,
-                        ),
-                        applicationLegalese:
-                            ('@Gadgelogger\nアイコンは@CutterKnife_製作'),
-                      );
-                    },
-                  ),
-                  SettingsTile.navigation(
                     leading: const Icon(Icons.description),
                     title: const Text('開発ロードマップ'),
                     onPressed: (context) {
@@ -205,6 +187,29 @@ class SettingPage extends ConsumerWidget {
                     ),
                 ],
               ),
+              if (Platform.isIOS)
+                SettingsSection(
+                  title: Text(
+                    '開発者に飯を奢る',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  tiles: [
+                    SettingsTile.navigation(
+                      leading: const Icon(Icons.payment),
+                      title: const Text('広告を非表示にする'),
+                      onPressed: (context) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const IAPScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               SettingsSection(
                 title: Text(
                   'アプリについて',
@@ -217,6 +222,25 @@ class SettingPage extends ConsumerWidget {
                     title: const Text('バージョン'),
                     leading: const Icon(Icons.info_outline),
                     value: Text(packageInfo?.version ?? 'error'),
+                  ),
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.terminal),
+                    title: const Text('ライセンスについて'),
+                    onPressed: (context) {
+                      showLicensePage(
+                        context: context,
+                        applicationName: packageInfo?.appName ?? 'error',
+                        applicationVersion: packageInfo?.version ?? 'error',
+                        applicationIcon: const CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/icon/icon.png',
+                          ), // アイコンのパスを指定
+                          radius: 24,
+                        ),
+                        applicationLegalese:
+                            ('@Gadgelogger\nアイコンは@CutterKnife_製作'),
+                      );
+                    },
                   ),
                 ],
               ),

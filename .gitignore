@@ -53,3 +53,8 @@ key.jks
 upload_certificate.pem
 **/*.jks
 **/*.pem
+
+
+#.env
+*.env
+*env.g.dart

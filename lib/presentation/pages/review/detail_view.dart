@@ -1,10 +1,9 @@
-// Dart imports:
-// Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // 追加
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-// Project imports:
 import 'package:ous/gen/review_data.dart';
 import 'package:ous/infrastructure/admobHelper.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 import 'package:ous/presentation/widgets/review/detail/date_section.dart';
 import 'package:ous/presentation/widgets/review/detail/gauge_section.dart';
 import 'package:ous/presentation/widgets/review/detail/modal_widget.dart';
@@ -12,26 +11,34 @@ import 'package:ous/presentation/widgets/review/detail/outdated_post_info.dart';
 import 'package:ous/presentation/widgets/review/detail/report_button.dart';
 import 'package:ous/presentation/widgets/review/detail/text_section.dart';
 
-class DetailScreen extends StatefulWidget {
+class DetailScreen extends ConsumerStatefulWidget {
+  // 修正: ConsumerStatefulWidgetに変更
   final Review review;
   const DetailScreen({super.key, required this.review});
 
   @override
-  State<DetailScreen> createState() => _DetailScreenState();
+  _DetailScreenState createState() => _DetailScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
+class _DetailScreenState extends ConsumerState<DetailScreen> {
+  // 修正: ConsumerStateに変更
   late BannerAd _bannerAd;
+  bool _isAdFree = false;
 
   @override
   void initState() {
     super.initState();
-    _bannerAd = AdmobHelper.getReviewBottomBannerAd()..load();
+    _isAdFree = ref.read(inAppPurchaseManager).isAdFree; // 修正: ref.readを使用
+    if (!_isAdFree) {
+      _bannerAd = AdmobHelper.getReviewBottomBannerAd()..load();
+    }
   }
 
   @override
   void dispose() {
-    _bannerAd.dispose();
+    if (!_isAdFree) {
+      _bannerAd.dispose();
+    }
     super.dispose();
   }
 
@@ -90,12 +97,13 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
           ),
-          SafeArea(
-            child: SizedBox(
-              height: 100, // バナー広告の高さを指定
-              child: AdWidget(ad: _bannerAd),
+          if (!_isAdFree)
+            SafeArea(
+              child: SizedBox(
+                height: 50,
+                child: AdWidget(ad: _bannerAd),
+              ),
             ),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

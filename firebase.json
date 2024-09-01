@@ -1,15 +1,16 @@
 {
   "hosting": {
-    "public": "y",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
+    "redirects": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/",
+        "destination": "https://ous-unoffical-app.studio.site/",
+        "type": 301
       }
     ]
   },

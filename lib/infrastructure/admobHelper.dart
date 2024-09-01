@@ -2,17 +2,20 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:ous/env.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 
 //プラットホームごとのテスト広告IDを取得するメソッド
 String getTestAdBannerUnitId() {
   String testBannerUnitId = "";
   if (Platform.isAndroid) {
     // Android のとき
-    testBannerUnitId = "ca-app-pub-3940256099942544/6300978111";
+    testBannerUnitId = Env.testAdBannerIdAndroid;
   } else if (Platform.isIOS) {
     // iOSのとき
-    testBannerUnitId = "ca-app-pub-3940256099942544/2934735716";
+    testBannerUnitId = Env.testAdBannerIdIos;
   }
   return testBannerUnitId;
 }
@@ -22,19 +25,19 @@ String getAdBannerUnitId() {
   String bannerUnitId = "";
   if (Platform.isAndroid) {
     // Android のとき
-    bannerUnitId = "ca-app-pub-1882636743563952/1997920139";
+    bannerUnitId = Env.adBannerIdAndroid;
   } else if (Platform.isIOS) {
     // iOSのとき
-    bannerUnitId = "ca-app-pub-1882636743563952/9876410154";
+    bannerUnitId = Env.adBannerIdIos;
   }
   return bannerUnitId;
 }
 
 String getReviewBottomBannerAdUnitId() {
   if (Platform.isAndroid) {
-    return "ca-app-pub-1882636743563952/7078564841"; // Androidの広告ID
+    return Env.adBannerReviewBottomIdAndroid; // Androidの広告ID
   } else if (Platform.isIOS) {
-    return "ca-app-pub-1882636743563952/6445002425"; // iOSの広告ID
+    return Env.adBannerReviewBottomIdIos; // iOSの広告ID
   }
   return "";
 }
@@ -56,8 +59,8 @@ class AdmobHelper {
   static void createInterstitialAd() {
     InterstitialAd.load(
       adUnitId: Platform.isAndroid
-          ? 'ca-app-pub-1882636743563952/5831285568' // Androidの広告ID
-          : 'ca-app-pub-1882636743563952/4895847539', // iOSの広告ID
+          ? Env.adInterReviewIdAndroid // Androidの広告ID
+          : Env.adInterReviewIdIos, // iOSの広告ID
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (InterstitialAd ad) {
@@ -78,8 +81,8 @@ class AdmobHelper {
     // 追加
     RewardedInterstitialAd.load(
       adUnitId: Platform.isAndroid
-          ? 'ca-app-pub-1882636743563952/6208336308' // Androidの広告ID
-          : 'ca-app-pub-1882636743563952/6128445254', // iOSの広告ID
+          ? Env.adRewardInterReviewIdAndroid // Androidの広告ID
+          : Env.adRewardInterReviewIdIos, // iOSの広告ID
       request: const AdRequest(),
       rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
         onAdLoaded: (RewardedInterstitialAd ad) {
@@ -163,7 +166,11 @@ class AdmobHelper {
     }
   }
 
-  static void handleNavigation() {
+  static void handleNavigation(WidgetRef ref) {
+    // 修正: WidgetRefを引数に追加
+    final isAdFree = ref.read(inAppPurchaseManager).isAdFree; // 追加
+    if (isAdFree) return; // 追加: 広告が非表示の場合はカウントしない
+
     _navigationCount++;
     _rewardNavigationCount++; // 追加
     debugPrint('Navigation count: $_navigationCount'); // デバッグ用のログ

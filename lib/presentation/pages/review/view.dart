@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:ous/domain/review_provider.dart';
+import 'package:ous/env.dart';
 import 'package:ous/gen/assets.gen.dart';
 import 'package:ous/infrastructure/admobHelper.dart';
 import 'package:ous/presentation/pages/review/detail_view.dart';
+import 'package:ous/presentation/pages/setting/iap_screen.dart';
 import 'package:ous/presentation/widgets/review/filter_modal.dart';
 import 'package:ous/presentation/widgets/review/review_card.dart';
 import 'package:ous/presentation/widgets/review/review_search_delegate.dart';
@@ -34,6 +36,10 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
 
   @override
   Widget build(BuildContext context) {
+    final isBackgroundBright = Theme.of(context).brightness == Brightness.light;
+    final textColor = isBackgroundBright ? Colors.white : Colors.black;
+    final isAdFree = ref.watch(inAppPurchaseManager).isAdFree; // 追加
+
     final reviewsAsync = ref.watch(
       reviewsProvider(
         (
@@ -124,31 +130,71 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
                   ),
                   itemCount: reviews.length + (reviews.length ~/ 5),
                   itemBuilder: (context, index) {
-                    if (index % 6 == 5) {
+                    if (index % 6 == 5 && !isAdFree) {
+                      // 追加
                       return SizedBox(
                         height: 100,
-                        child: AdWidget(
-                          ad: BannerAd(
-                            adUnitId: Platform.isAndroid
-                                ? 'ca-app-pub-1882636743563952/8213072176' // Androidの広告ID
-                                : 'ca-app-pub-1882636743563952/9285582901', // iOSの広告ID
-                            size: AdSize.banner,
-                            request: const AdRequest(),
-                            listener: BannerAdListener(
-                              onAdLoaded: (Ad ad) => debugPrint('Ad loaded.'),
-                              onAdFailedToLoad: (Ad ad, LoadAdError error) {
-                                ad.dispose();
-                                debugPrint('Ad failed to load: $error');
-                              },
-                              onAdClosed: (Ad ad) {
-                                ad.dispose();
-                              },
-                            ),
-                          )..load(),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Stack(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(0.0),
+                                child: AdWidget(
+                                  ad: BannerAd(
+                                    adUnitId: Platform.isAndroid
+                                        ? Env
+                                            .adReviewListIdAndroid // Androidの広告ID
+                                        : Env.adReviewListIdIos, // iOSの広告ID
+                                    size: AdSize.banner,
+                                    request: const AdRequest(),
+                                    listener: BannerAdListener(
+                                      onAdLoaded: (Ad ad) =>
+                                          debugPrint('Ad loaded.'),
+                                      onAdFailedToLoad:
+                                          (Ad ad, LoadAdError error) {
+                                        ad.dispose();
+                                        debugPrint('Ad failed to load: $error');
+                                      },
+                                      onAdClosed: (Ad ad) {
+                                        ad.dispose();
+                                      },
+                                    ),
+                                  )..load(),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    '広告',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }
-
                     final reviewIndex = index - (index ~/ 6);
                     final review = reviews[reviewIndex];
                     return AnimationConfiguration.staggeredList(
@@ -165,7 +211,8 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
                                       DetailScreen(review: review),
                                 ),
                               ).then((_) {
-                                AdmobHelper.handleNavigation();
+                                AdmobHelper.handleNavigation(ref); // 修正
+// 修正
                               });
                             },
                             child: ReviewCard(review: review),
@@ -182,7 +229,7 @@ class _ReviewViewState extends ConsumerState<ReviewView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          AdmobHelper.handleNavigation();
+          AdmobHelper.handleNavigation(ref); // 修正
           showFilterModal(
             context,
             _selectedBumon,
