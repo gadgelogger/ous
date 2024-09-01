@@ -58,3 +58,4 @@ upload_certificate.pem
 #.env
 *.env
 *env.g.dart
+lib/env.dart
