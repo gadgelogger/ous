@@ -49,19 +49,16 @@ final reviewsProvider = StreamProvider.family<
   }
 
   if (searchQuery.isNotEmpty) {
-    query = query
-        .where('zyugyoumei', isGreaterThanOrEqualTo: searchQuery)
-        .where('zyugyoumei', isLessThan: '${searchQuery}z');
+    query = query.where('zyugyoumei', isEqualTo: searchQuery);
   }
 
-  if (selectedDateOrder == 'newest') {
-    query = query.orderBy('date', descending: true);
-  } else if (selectedDateOrder == 'oldest') {
-    query = query.orderBy('date', descending: false);
+  if (selectedDateOrder.isNotEmpty) {
+    query = query.orderBy('date', descending: selectedDateOrder == 'desc');
   }
 
-  return query.snapshots().map(
-        (snapshot) =>
-            snapshot.docs.map((doc) => Review.fromJson(doc.data())).toList(),
-      );
+  return query.snapshots().map((snapshot) {
+    return snapshot.docs.map((doc) {
+      return Review.fromJson(doc.data());
+    }).toList();
+  });
 });
