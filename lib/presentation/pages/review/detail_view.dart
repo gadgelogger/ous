@@ -97,13 +97,6 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
               ),
             ),
           ),
-          if (!_isAdFree)
-            SafeArea(
-              child: SizedBox(
-                height: 50,
-                child: AdWidget(ad: _bannerAd),
-              ),
-            ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -117,6 +110,14 @@ class _DetailScreenState extends ConsumerState<DetailScreen> {
         },
         child: const Icon(Icons.share),
       ),
+      bottomNavigationBar: !_isAdFree
+          ? SafeArea(
+              child: SizedBox(
+                height: 50,
+                child: AdWidget(ad: _bannerAd),
+              ),
+            )
+          : null,
     );
   }
 }
